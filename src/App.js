@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import All from './components/allCharacters';
+import Details from './components/cardDetails';
+import Links from './components/cardLinks';
+import Suggested from './components/suggested';
+import Web from './components/teamWeb';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="grid grid-cols-3 gap-3 bg-slate-800">
+      <div className="py-4 ml-4 grid grid-rows-6 bg-slate-800 h-screen gap-4">
+      <All/>
+      </div>
+      <div className="py-4 grid grid-rows-6 bg-slate-800 h-screen gap-4 ">
+      <Details/>
+      <Links />
+      <Suggested />
+      </div>
+      <div className="py-4 mr-4 grid grid-rows-6 bg-slate-800 h-screen gap-4">
+      <Web />
+      </div>
     </div>
   );
 }
