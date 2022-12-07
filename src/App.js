@@ -9,7 +9,7 @@ import Web from './components/teamWeb';
 function App() {
   return (
     <div className="grid grid-cols-3 gap-3 bg-slate-800">
-      <div className="py-4 ml-4 grid grid-rows-6 bg-slate-800 h-screen gap-4">
+      <div className="py-4 ml-4 grid bg-slate-800 h-screen gap-4">
       <All/>
       </div>
       <div className="py-4 grid grid-rows-6 bg-slate-800 h-screen gap-4 ">
