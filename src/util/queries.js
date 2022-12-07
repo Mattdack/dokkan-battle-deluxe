@@ -9,3 +9,12 @@ export const QUERY_CHARACTERS = gql`
     }
   }
 `;
+
+export const QUERY_LINKS = gql`
+query CharactersLink($linkskill: String) {
+    charactersLink(linkskill: $linkskill) {
+      id
+      link_skill
+    }
+  }
+`;
