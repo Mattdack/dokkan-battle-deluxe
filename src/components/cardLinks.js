@@ -2,7 +2,11 @@ import React from "react";
 
 function Links() {
     return (
-        <h2 className="bg-slate-700 rounded-md">This is the Card Links Div</h2>
+        <div className="bg-lime-800 rounded-md m-1 relative border-4 border-blue-900">
+            <div className="bg-lime-600 rounded-md m-2 relative border-2 border-lime-700 h-[91%]">
+                <div className="bg-lime-400 rounded-md m-2 relative border-2 border-lime-500 h-[90%]"></div>
+            </div>
+        </div>
     );
 }
 
