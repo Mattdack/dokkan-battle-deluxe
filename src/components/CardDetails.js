@@ -12,18 +12,17 @@ function Details() {
           }}
             ></div>
             <div className="flex justify-between">
-            <h2 className="m-2">Character Name</h2>
-            <h3 className="m-2">Leader Ability</h3>
+            <h2 className="m-2 h-24 bg-slate-500">Character Name</h2>
+            <h3 className="m-2 h-24 bg-slate-500">Leader Ability</h3>
             </div>
       </div>
       <div className="flex flex-row p-4 justify-between">
-        <h4 className="m-2">Super Skill</h4>
-        <h4 className="m-2"> HP Stat </h4>
-        <h4 className="m-2"> Atk Stat </h4>
-        <h4 className="m-2"> Def Stat </h4>
-        <h4 className="m-2"> Cost Stat </h4>
+        <h4 className="m-2 h-24 w-24 bg-slate-500">Super Skill</h4>
+        <h4 className="m-2 h-24 w-24 bg-slate-500"> HP Stat </h4>
+        <h4 className="m-2 h-24 w-24 bg-slate-500"> Atk Stat </h4>
+        <h4 className="m-2 h-24 w-24 bg-slate-500"> Def Stat </h4>
+        <h4 className="m-2 h-24 w-24 bg-slate-500"> Cost Stat </h4>
       </div>
-
     </div>
   );
 }
