@@ -10,6 +10,40 @@ export const QUERY_CHARACTERS = gql`
   }
 `;
 
+export const QUERY_ONECHARACTER = gql`
+query Character($dokkanId: Int) {
+  character(dokkanId: $dokkanId) {
+    name
+    title
+    rarity
+    type
+    cost
+    ls_description
+    ls_description_eza
+    sa_type
+    sa_name
+    sa_description
+    sa_description_eza
+    ultra_sa_name
+    ultra_sa_description
+    ultra_sa_description_eza
+    ps_name
+    ps_description
+    ps_description_eza
+    sa_type_active
+    active_skill_name
+    active_skill
+    active_skill_condition
+    active_skill_condition_eza
+    transform_type
+    transform_condition
+    transform_condition_eza
+    link_skill
+    category
+  }
+}
+`;
+
 export const QUERY_LINKS = gql`
 query CharactersLink($linkskill: String) {
     charactersLink(linkskill: $linkskill) {
