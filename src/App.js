@@ -9,27 +9,26 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 
 const client = new ApolloClient({
-  // uri: '/graphql',
-  uri: 'https://git-dokkan-api.herokuapp.com/graphql',
+  uri: 'https://dokkan-api.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 
 function App() {
   return (
     <ApolloProvider client={client}>
-    <div className="grid lg:grid-cols-3 md:grid-cols-1 gap-3 bg-slate-800 min-h-fit">
-      <div className="py-4 ml-4 mr-4 lg:mr-0 grid bg-slate-800 h-screen sm-h-96 gap-4 min-h-fit">
-      <All/>
+      <div className="bg-gradient-radial from-slate-600 via-slate-700 to-slate-800 h-screen flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col">
+        <div className="md:w-1/3 xs:w-full rounded-md m-2">
+          <All />
+        </div>
+        <div className="md:w-1/3 xs:w-full my-2">
+          <Details />
+          <Links />
+          <Suggested />
+        </div>
+        <div className="md:w-1/3 xs:w-full m-2">
+          <Web />
+        </div>
       </div>
-      <div className="py-4 ml-4 mr-4 lg:mr-0 lg:ml-0 grid grid-rows-6 bg-slate-800 h-screen gap-4 min-h-fit">
-      <Details/>
-      <Links />
-      <Suggested />
-      </div>
-      <div className="py-4 mr-4 ml-4 lg:ml-0 grid grid-rows-6 bg-slate-800 h-screen gap-4 min-h-fit">
-      <Web />
-      </div>
-    </div>
     </ApolloProvider>
   );
 }
