@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useState }from "react";
+import SingleCard from './SingleCard';
+import SuggestToWeb from './SuggestToWeb';
+
+
+
 import { useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS } from "../util/queries";
+import CardDetails from "./CardDetails";
 
-function AllCharacters() {
+function AllComponents() {
   const { loading, data } = useQuery(QUERY_CHARACTERS);
-  const characters = data?.characters || [];
+  const allCharacters = data?.characters || [];
+
+  const [cardDetails, setCardDetails] = useState({})
+  const [suggestion, setSuggestion] = useState([])
+
+  let suggestionArr = []
+  function arraySuggestion (character) {
+    suggestionArr.push(character.id)
+    suggestionArr.push(character.link_skill)
+    setSuggestion(suggestionArr)
+  }
 
   return (
+    <div className="grid lg:grid-cols-3 md:grid-cols-1 gap-3 bg-slate-800 min-h-fit">
+      <div className="py-4 ml-4 mr-4 lg:mr-0 grid bg-slate-800 h-screen sm-h-96 gap-4 min-h-fit">
     <div className="bg-slate-700 rounded-md p-4 h-full">
+      {/* collapse this div */}
       <div className="bg-slate-600 rounded-md mb-2 py-4 text-center relative">
                 Search by Filters:
                 <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900 relative" id="categories">
@@ -128,20 +147,29 @@ function AllCharacters() {
             <div>Loading...</div>
           ) : (
             <div className="my-4 overflow-auto grid grid-cols-4 md:grid-cols-5 max-h-96 md:max-h-96 xl:max-h-96 2xl:max-h-128">
-              {characters &&
-                characters.map((character) => (
-                  <div key={character.id} className="h-12 md:h-28 lg:h-14 w-12 md:w-28 lg:w-14 m-2 gap-4 bg-no-repeat" style = {{backgroundImage: `url("https://placedog.net/50/50?random")`, backgroundSize: `100%`}}>
-                    <div className="">
-                      <h4 className=""  >{character.id}</h4>
-                    </div>
-                  </div>
-                ))}
+              {allCharacters && allCharacters.map((character) => (
+                <div key={character.id} onClick={() => {
+                  setCardDetails(character)
+                  arraySuggestion(character)
+                  console.log(character.artwork)
+                  }}>
+                  <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art}/>
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
     </div>
+      </div>
+      <div className="py-4 ml-4 mr-4 lg:mr-0 lg:ml-0 grid grid-rows-6 bg-slate-800 h-screen gap-4 min-h-fit">
+        <CardDetails cardDetails={cardDetails}/>
+      </div>
+      <div className="py-4 mr-4 ml-4 lg:ml-0 bg-slate-800 h-screen gap-4 min-h-fit">
+        <SuggestToWeb suggestion={suggestion}/>
+      </div>
+    </div>
   );
 }
 
-export default AllCharacters;
+export default AllComponents;
