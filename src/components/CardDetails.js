@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-function Details() {
+function CardDetails({ cardDetails }) {
+  let characterId = cardDetails.id;
+  let prevCharacterId = useRef(characterId);
+  let characterLinks = cardDetails.link_skill;
+
+  const [characterLinksLength, setCharacterLinksLength] = useState([]);
+
+  useEffect(() => {
+    // Only run the query if the "characterId" value changes.
+    if (
+      characterId !== prevCharacterId &&
+      typeof characterLinks !== "undefined"
+    ) {
+      // Run the query and update the "data" state.
+      console.log("change detected");
+      if (characterLinks.length === 7) {
+        console.log("seven links");
+      } else if (characterLinks.length === 6) {
+        console.log("six links");
+      } else {
+        console.log("five links or under");
+      }
+    }
+    // Update the "prevCharacter" variable with the current props
+    prevCharacterId = characterId;
+    console.log(prevCharacterId);
+  }, [cardDetails]);
+
   return (
     <div className="bg-gradient-radial from-purple-300 via-purple-400 to-purple-800 rounded-md m-2 border-2 border-black">
       <div className="rounded-md m-2 flex">
@@ -43,4 +70,4 @@ function Details() {
 };
 
 
-export default Details;
+export default CardDetails;
