@@ -6,7 +6,10 @@ module.exports = {
       spacing: {
         128: "32rem",
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
     },
   },
   plugins: [],
+}
 };
