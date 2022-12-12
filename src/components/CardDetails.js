@@ -6,9 +6,11 @@ function CardDetails({ cardDetails }) {
   let characterLinks = cardDetails.link_skill;
 
   const [characterLinksLength, setCharacterLinksLength] = useState([]);
+  const [characterThumb, setCharacterThumb] = useState([]);
 
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
+    console.log(cardDetails)
     if (
       characterId !== prevCharacterId &&
       typeof characterLinks !== "undefined"
@@ -23,6 +25,14 @@ function CardDetails({ cardDetails }) {
         console.log("five links or under");
       }
     }
+
+    if (cardDetails.characterThumb === null) {
+      console.log("Thumb for selected toon is not present");
+      setCharacterThumb(cardDetails.art)
+    } else {
+      console.log('thumb is present for selected toon')
+      setCharacterThumb(cardDetails.thumb)
+    }
     // Update the "prevCharacter" variable with the current props
     prevCharacterId = characterId;
     console.log(prevCharacterId);
@@ -32,14 +42,20 @@ function CardDetails({ cardDetails }) {
     <div className="bg-gradient-radial from-purple-300 via-purple-400 to-purple-800 rounded-md m-2 border-2 border-black">
       <div className="rounded-md m-2 flex">
         <div>
-          <img
-            className="h-24 w-24 m-8 border-2 border-black"
-            style={{
-              backgroundImage: `url("https://placedog.net/50/50?random")`,
-              backgroundSize: `100%`,
-            }}
-          >
-          </img>
+          {characterThumb && (
+                  <div
+                  onClick={() => {}}
+                  className="h-24 md:h-32 lg:h-48 w-28 md:w-36 lg:w-48 m-2 gap-4 bg-no-repeat"
+                  style={{
+                    backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterThumb}_thumb.png")`,
+                    backgroundSize: `100%`,
+                  }}
+                >
+                  <div className="">
+                    <h4 className="">{cardDetails.characterId}</h4>
+                  </div>
+                </div>
+          )}
         </div>
         <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-40 mt-4 ml-14">
           <h2 className="ml-1 mt-2 text-center">Name</h2>
