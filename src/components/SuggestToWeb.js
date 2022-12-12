@@ -61,7 +61,10 @@ function SuggestToWeb(props) {
       // Create a copy of the `link_skill` array
       let linkSkills = array.link_skill.slice();
       // Use the `unshift()` method to add the `id` at the beginning of the `link_skill` array
+      linkSkills.unshift(array.art);
+      linkSkills.unshift(array.thumb);
       linkSkills.unshift(array.id);
+
       // Use the `push()` method to add the modified `link_skill` array to `combineCharacterInfo`
       combineCharacterInfo.push(linkSkills);
     }
@@ -88,19 +91,19 @@ function SuggestToWeb(props) {
     matches.forEach((match, index) => {
       if (match === 7) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll7Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll7Matches.push(combineCharacterInfo[index]);
       } else if (match === 6) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll6Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll6Matches.push(combineCharacterInfo[index]);
       } else if (match === 5) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll5Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll5Matches.push(combineCharacterInfo[index]);
       } else if (match === 4) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll4Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll4Matches.push(combineCharacterInfo[index]);
       } else if (match === 3) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll3Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll3Matches.push(combineCharacterInfo[index]);
       } else {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match} :(`)
       }
@@ -123,7 +126,7 @@ function SuggestToWeb(props) {
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -132,7 +135,7 @@ function SuggestToWeb(props) {
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -141,7 +144,7 @@ function SuggestToWeb(props) {
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -150,7 +153,7 @@ function SuggestToWeb(props) {
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -159,7 +162,7 @@ function SuggestToWeb(props) {
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
