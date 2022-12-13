@@ -30,7 +30,7 @@ function CardDetails({ cardDetails }) {
 
   return (
     <div className="bg-pink-500 rounded-md p-5 border-2 border-black h-screen m-2">
-      <div className="flex flex-row items-center justify-evenly">
+      <div className="flex flex-wrap justify-center justify-evenly">
         <img
           className="h-24 w-24 border-2 border-black"
           style={{

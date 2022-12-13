@@ -112,7 +112,7 @@ function SuggestToWeb(props) {
     setCharactersWith3Matches(arrayOfAll3Matches);
   }
   return (
-    <div className="h-full m-2">
+    <div className="h-full my-2">
 
       <Web />
 

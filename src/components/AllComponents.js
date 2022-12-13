@@ -27,9 +27,9 @@ function AllComponents() {
     <div className="bg-slate-800 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen">
       <div className="basis-1/3 rounded-md flex-col m-2">
         {/* collapse this div */}
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
+        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2 flex flex-wrap justify-center">
           Search by Filters:
-          <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900 relative" id="categories">
+          <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900" id="categories">
             <option>Categories:</option>
             <option>Fusion</option>
             <option>Shadow Dragon Saga</option>
@@ -120,7 +120,7 @@ function AllComponents() {
             <option>Bond of Parent and Child</option>
             <option>Warriors Raised on Earth</option>
           </select>
-          <div className="bg-orange-300 w-[75%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-1">
+          <div className="bg-orange-300 w-[75%] m-5 p-2 rounded-md border-2 border-blue-900" id="box-1">
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">N</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">R</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">SR</button>
@@ -128,7 +128,7 @@ function AllComponents() {
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">UR</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">LR</button>
           </div>
-          <div className="bg-orange-300 w-[70%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-2">
+          <div className="bg-orange-300 w-[70%] m-5 p-2 rounded-md border-2 border-blue-900" id="box-2">
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">AGL</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">TEQ</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">INT</button>
@@ -146,7 +146,7 @@ function AllComponents() {
             {loading ? (
               <div>Loading...</div>
             ) : (
-              <div className="overflow-auto max-h-96 md:max-h-96 xl:max-h-96 2xl:max-h-128 border-2 border-black flex flex-wrap">
+              <div className="overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96">
                 {allCharacters && allCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
