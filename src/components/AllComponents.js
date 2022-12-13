@@ -8,51 +8,70 @@ import { QUERY_CHARACTERS } from "../util/queries";
 import CardDetails from "./CardDetails";
 
 function AllComponents() {
-  const categorySelect = document.getElementById('categories');
-  
+  const categorySelect = document.getElementById("categories");
+
   const [search, setSearch] = useState("");
   const [characters, setCharacters] = useState([]);
-  const [characterCategory, setCharacterCategory]= useState('');
- 
-  const [rarityCategory, setRarityCategory] = useState('ALL');
-  const [filteredCharacters, setFilteredCharacters]= useState([]);
+  const [characterCategory, setCharacterCategory] = useState("");
+
+  const [rarityCategory, setRarityCategory] = useState("ALL");
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [typeCharacters, setTypeCharacters] = useState([
+    "AGL",
+    "TEQ",
+    "INT",
+    "STR",
+    "PHY",
+  ]);
   const [cardDetails, setCardDetails] = useState({});
   const [suggestion, setSuggestion] = useState([]);
 
-  const [urActive, setUrActive] = useState(true);
-  const [lrActive, setLrActive] = useState(true);
+  const [urActive, setUrActive] = useState(false);
+  const [lrActive, setLrActive] = useState(false);
 
-  // const [aglActive, setAglActive] = useState(true);
-  // const [teqActive, setTeqActive] = useState(true);
-  // const [intActive, setIntActive] = useState(true);
-  // const [strActive, setStrActive] = useState(true);
-  // const [phyActive, setPhyActive] = useState(true);
+  const [aglActive, setAglActive] = useState(true);
+  const [teqActive, setTeqActive] = useState(true);
+  const [intActive, setIntActive] = useState(true);
+  const [strActive, setStrActive] = useState(true);
+  const [phyActive, setPhyActive] = useState(true);
 
-  
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
 
   useEffect(() => {
     setCharacters(allCharacters);
-    setFilteredCharacters(allCharacters)
+    setFilteredCharacters(allCharacters);
   }, [allCharacters]);
+  
+  function reset() {
+    setFilteredCharacters(characters);
+  }
+
 
   useEffect(() => {
-    setFilteredCharacters(allCharacters)
-    if(!(search === '' || search === null)) {
-      setFilteredCharacters(filteredCharacters.filter(character => character.name.includes(search)));
+    if (!(search === "" || search === null)) {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.name.includes(search)
+        )
+      );
     }
-    if(!(characterCategory === "" || characterCategory === "All Categories")) {
-      setFilteredCharacters(filteredCharacters.filter(character => character.category.includes(characterCategory)));
+    if (!(characterCategory === "" || characterCategory === "All Categories")) {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.category.includes(characterCategory)
+        )
+      );
     }
-    if(rarityCategory !== "ALL") {
-      if(rarityCategory !== "NONE") {
-        setFilteredCharacters(filteredCharacters.filter(character => character.rarity === rarityCategory ))
-      } else {
-        setFilteredCharacters([]);
-      }
+    if (rarityCategory !== "ALL") {
+        setFilteredCharacters(
+          filteredCharacters.filter(
+            (character) => character.rarity === rarityCategory
+          )
+        );
     }
   }, [search, characterCategory, rarityCategory]);
+  
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -61,41 +80,107 @@ function AllComponents() {
     const inputType = target.name;
     const inputValue = target.value;
     if (inputType === "characterName") {
+      setFilteredCharacters(characters);
       setSearch(inputValue);
     }
   };
-  
+
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    const categoryType = categorySelect.options[categorySelect.selectedIndex].text;
+    const categoryType =
+      categorySelect.options[categorySelect.selectedIndex].text;
     // console.log(target.selectedOptions[0])
+    setFilteredCharacters(characters);
     setCharacterCategory(categoryType);
-  }
+  };
 
   const handleRarityChange = (e) => {
     e.preventDefault();
     const { target } = e;
     const rarityType = target.name;
-  
+
     if (rarityType === "LR") {
       lrActive ? setLrActive(false) : setLrActive(true);
-      console.log("Swapping LR Status")
+      console.log("Swapping LR Status");
     }
     if (rarityType === "UR") {
       urActive ? setUrActive(false) : setUrActive(true);
-      console.log("Swapping UR Status")
+      console.log("Swapping UR Status");
     }
-  
+
+
+  };
+
+  useEffect(() => {
     if (lrActive && urActive) {
+      setFilteredCharacters(characters);
       setRarityCategory("ALL");
     } else if (lrActive) {
+      setFilteredCharacters(characters);
       setRarityCategory("LR");
     } else if (urActive) {
+      setFilteredCharacters(characters);
       setRarityCategory("UR");
     } else {
-      setRarityCategory("NONE");
+      setFilteredCharacters(characters);
+      setRarityCategory("ALL");
     }
-  }
+  }, [lrActive, urActive])
+
+  const handleTypeChange = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    const typeType = target.name;
+    console.log(typeCharacters);
+
+    if (typeType === "AGL") {
+      if(aglActive === true) {
+        typeCharacters.filter(type => (type !== "AGL"));
+        setAglActive(false)
+      } else {
+        typeCharacters.push('AGL')
+        setAglActive(true);
+      }
+    }
+    if (typeType === "TEQ") {
+      if(teqActive === true) {
+        typeCharacters.filter(type => type !== "TEQ");
+        setTeqActive(false)
+      } else {
+        typeCharacters.push('TEQ')
+        setTeqActive(true);
+      }
+    }
+    if (typeType === "INT") {
+      if(intActive === true) {
+        typeCharacters.filter(type => type !== "INT");
+        setIntActive(false)
+      } else {
+        typeCharacters.push('INT')
+        setIntActive(true);
+      }
+    }
+    if (typeType === "STR") {
+      if(strActive === true) {
+        typeCharacters.filter(type => type !== "STR");
+        setStrActive(false)
+      } else {
+        typeCharacters.push('STR')
+        setStrActive(true);
+      }
+    }
+    if (typeType === "PHY") {
+      if(phyActive === true) {
+        typeCharacters.filter(type => type !== "PHY");
+        setPhyActive(false)
+      } else {
+        typeCharacters.push('PHY')
+        setPhyActive(true);
+      }
+    }
+    console.log(aglActive + " " + teqActive +  " " + intActive +  " " + strActive +  " " + phyActive)
+    console.log(typeCharacters)
+  };
 
   let suggestionArr = [];
 
@@ -124,7 +209,8 @@ function AllComponents() {
             </div>
             <select
               className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900 relative"
-              id="categories" onChange={handleCategoryChange}
+              id="categories"
+              onChange={handleCategoryChange}
             >
               <option>All Categories</option>
               <option>Fusion</option>
@@ -218,32 +304,39 @@ function AllComponents() {
             </select>
             <div
               className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-1" onClick={handleRarityChange}
+              id="box-1"
+              onClick={handleRarityChange}
             >
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name="UR">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400"
+                name="UR"
+              >
                 UR
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name="LR">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400"
+                name="LR"
+              >
                 LR
               </button>
             </div>
             <div
               className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-2"
+              id="box-2" onClick = {handleTypeChange}
             >
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "AGL">
                 AGL
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "TEQ">
                 TEQ
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "INT">
                 INT
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "STR">
                 STR
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "PHY">
                 PHY
               </button>
             </div>
