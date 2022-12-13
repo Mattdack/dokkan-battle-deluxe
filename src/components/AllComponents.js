@@ -11,20 +11,23 @@ function AllComponents() {
   //search state == null
   const [search, setSearch] = useState("");
   const [characters, setCharacters] = useState([]);
+  const [filteredCharacters, setFilteredCharacters]= useState([]);
 
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
 
   useEffect(() => {
     setCharacters(allCharacters);
-  }, []);
+    setFilteredCharacters(allCharacters)
+  }, [allCharacters]);
 
   // use effect for when search changes that filters the characters based off of search and then updates state
   useEffect(() => {
     if(search === '' || search === null) {
-      return setCharacters(allCharacters);
+      return setFilteredCharacters(allCharacters);
     }
-    setCharacters(characters.filter(character => character.name.includes(search)));
+    setCharacters(allCharacters);
+    setFilteredCharacters(characters.filter(character => character.name.includes(search)));
   }, [search]);
 
   const handleSearchChange = (e) => {
@@ -223,8 +226,8 @@ function AllComponents() {
                 <div>Loading...</div>
               ) : (
                 <div className="my-4 overflow-auto grid grid-cols-4 md:grid-cols-5 max-h-96 md:max-h-96 xl:max-h-96 2xl:max-h-128">
-                  {characters &&
-                    characters.map((character) => (
+                  {filteredCharacters &&
+                    filteredCharacters.map((character) => (
                       <div
                         key={character.id}
                         onClick={() => {
