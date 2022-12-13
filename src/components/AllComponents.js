@@ -25,9 +25,9 @@ function AllComponents() {
   return (
     //Creates all three columns for the app & sets up window-size transitions
     <div className="bg-slate-800 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen">
-      <div className="basis-1/3 rounded-md flex-col">
+      <div className="basis-1/3 rounded-md flex-col m-2">
         {/* collapse this div */}
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2">
+        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
           Search by Filters:
           <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900 relative" id="categories">
             <option>Categories:</option>
@@ -140,13 +140,13 @@ function AllComponents() {
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Extreme</button>
           </div>
         </div>
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2">
+        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
           <h2 className="p-3 mt-3">Main Character Selection</h2>
-          <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50">
+          <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-2">
             {loading ? (
               <div>Loading...</div>
             ) : (
-              <div className="overflow-auto max-h-96 md:max-h-96 xl:max-h-96 2xl:max-h-128 border-2 border-black">
+              <div className="overflow-auto max-h-96 md:max-h-96 xl:max-h-96 2xl:max-h-128 border-2 border-black flex flex-wrap">
                 {allCharacters && allCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
@@ -162,11 +162,11 @@ function AllComponents() {
         </div>
       </div>
 
-      <div className="basis-1/3">
+      <div className="basis-1/3 m-2">
         <CardDetails cardDetails={cardDetails} />
         {/* <Links links={links}/> */}
       </div>
-      <div className="basis-1/3">
+      <div className="basis-1/3 m-2">
         <SuggestToWeb suggestion={suggestion} />
       </div>
     </div>
