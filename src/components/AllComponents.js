@@ -1,20 +1,34 @@
 import React, { useEffect, useState } from "react";
 import SingleCard from "./SingleCard";
 import SuggestToWeb from "./SuggestToWeb";
+import { handleRarityChange } from "../util/helpers";
 
 import { useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS } from "../util/queries";
 import CardDetails from "./CardDetails";
 
 function AllComponents() {
-  // charcters state = null
-  //search state == null
+  const categorySelect = document.getElementById('categories');
+  
   const [search, setSearch] = useState("");
   const [characters, setCharacters] = useState([]);
   const [characterCategory, setCharacterCategory]= useState('');
+ 
+  const [rarityCategory, setRarityCategory] = useState('ALL');
   const [filteredCharacters, setFilteredCharacters]= useState([]);
-  const categorySelect = document.getElementById('categories');
+  const [cardDetails, setCardDetails] = useState({});
+  const [suggestion, setSuggestion] = useState([]);
 
+  const [urActive, setUrActive] = useState(true);
+  const [lrActive, setLrActive] = useState(true);
+
+  // const [aglActive, setAglActive] = useState(true);
+  // const [teqActive, setTeqActive] = useState(true);
+  // const [intActive, setIntActive] = useState(true);
+  // const [strActive, setStrActive] = useState(true);
+  // const [phyActive, setPhyActive] = useState(true);
+
+  
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
 
@@ -23,20 +37,22 @@ function AllComponents() {
     setFilteredCharacters(allCharacters)
   }, [allCharacters]);
 
-  // use effect for when search changes that filters the characters based off of search and then updates state
   useEffect(() => {
-    if((search === '' || search === null) && (characterCategory === "" || characterCategory === "All Categories")) {
-      return setFilteredCharacters(allCharacters);
+    setFilteredCharacters(allCharacters)
+    if(!(search === '' || search === null)) {
+      setFilteredCharacters(filteredCharacters.filter(character => character.name.includes(search)));
     }
-    console.log(characters[0]);
-    if(characterCategory === "" || characterCategory === "All Categories") {
-      setFilteredCharacters(allCharacters);
-      setFilteredCharacters(characters.filter(character => character.name.includes(search)));
-    } else {
-      const catFilteredCharacters = characters.filter(character => character.category.includes(characterCategory));
-      setFilteredCharacters(catFilteredCharacters.filter(character => character.name.includes(search)));
+    if(!(characterCategory === "" || characterCategory === "All Categories")) {
+      setFilteredCharacters(filteredCharacters.filter(character => character.category.includes(characterCategory)));
     }
-  }, [search]);
+    if(rarityCategory !== "ALL") {
+      if(rarityCategory !== "NONE") {
+        setFilteredCharacters(filteredCharacters.filter(character => character.rarity === rarityCategory ))
+      } else {
+        setFilteredCharacters([]);
+      }
+    }
+  }, [search, characterCategory, rarityCategory]);
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -48,15 +64,7 @@ function AllComponents() {
       setSearch(inputValue);
     }
   };
-
-  useEffect(() => {
-    if(characterCategory === "" || characterCategory === "All Categories") {
-      setFilteredCharacters(allCharacters);
-    } else {
-      setFilteredCharacters(characters.filter(character => character.category.includes(characterCategory)));
-    }
-  }, [characterCategory])
-
+  
   const handleCategoryChange = (e) => {
     e.preventDefault();
     const categoryType = categorySelect.options[categorySelect.selectedIndex].text;
@@ -64,12 +72,33 @@ function AllComponents() {
     setCharacterCategory(categoryType);
   }
 
-  // if string is empty set state of characters back to all characters
-
-  const [cardDetails, setCardDetails] = useState({});
-  const [suggestion, setSuggestion] = useState([]);
+  const handleRarityChange = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    const rarityType = target.name;
+  
+    if (rarityType === "LR") {
+      lrActive ? setLrActive(false) : setLrActive(true);
+      console.log("Swapping LR Status")
+    }
+    if (rarityType === "UR") {
+      urActive ? setUrActive(false) : setUrActive(true);
+      console.log("Swapping UR Status")
+    }
+  
+    if (lrActive && urActive) {
+      setRarityCategory("ALL");
+    } else if (lrActive) {
+      setRarityCategory("LR");
+    } else if (urActive) {
+      setRarityCategory("UR");
+    } else {
+      setRarityCategory("NONE");
+    }
+  }
 
   let suggestionArr = [];
+
   function arraySuggestion(character) {
     suggestionArr.push(character.id);
     suggestionArr.push(character.link_skill);
@@ -81,7 +110,7 @@ function AllComponents() {
       <div className="py-4 ml-4 mr-4 lg:mr-0 grid bg-slate-800 h-screen sm-h-96 gap-4 min-h-fit">
         <div className="bg-slate-700 rounded-md p-4 h-full">
           {/* collapse this div */}
-          <div className="bg-slate-600 rounded-md mb-2 py-4 text-center relative">
+          <div className="bg-slate-600 rounded-md mb-1 py-4 text-center relative">
             Search by Filters:
             <div>
               <form>
@@ -188,30 +217,18 @@ function AllComponents() {
               <option>Warriors Raised on Earth</option>
             </select>
             <div
-              className="bg-orange-300 w-[75%] m-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-1"
+              className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
+              id="box-1" onClick={handleRarityChange}
             >
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
-                N
-              </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
-                R
-              </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
-                SR
-              </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
-                SSR
-              </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name="UR">
                 UR
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
+              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name="LR">
                 LR
               </button>
             </div>
             <div
-              className="bg-orange-300 w-[70%] m-5 p-2 relative rounded-md border-2 border-blue-900"
+              className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
               id="box-2"
             >
               <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">
@@ -231,7 +248,7 @@ function AllComponents() {
               </button>
             </div>
             <div
-              className="bg-orange-300 w-[40%] m-5 p-2 relative rounded-md border-2 border-blue-900"
+              className="bg-orange-300 w-[80%] m-5 p-2 relative rounded-md border-2 border-blue-900"
               id="box-3"
             >
               <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">

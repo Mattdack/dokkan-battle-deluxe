@@ -16,7 +16,6 @@ function CardDetails({ cardDetails }) {
       typeof characterLinks !== "undefined"
     ) {
       // Run the query and update the "data" state.
-      console.log("change detected");
       if (characterLinks.length === 7) {
         console.log("seven links");
       } else if (characterLinks.length === 6) {
@@ -35,7 +34,6 @@ function CardDetails({ cardDetails }) {
     }
     // Update the "prevCharacter" variable with the current props
     prevCharacterId = characterId;
-    console.log(prevCharacterId);
   }, [cardDetails]);
 
   return (
