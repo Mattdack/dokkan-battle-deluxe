@@ -116,9 +116,9 @@ function SuggestToWeb(props) {
 
       <Web />
 
-      <div className="h-1/2 row-span-2 bg-slate-700 rounded-md">
+      <div className="bg-blue-500 h-1/2 row-span-2 rounded-md p-2 border-2 border-black">
         <div className="flex flex-col h-full">
-          <div className="flex flex-row h-1/5 bg-blue-500">
+          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 7 links
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
@@ -127,7 +127,7 @@ function SuggestToWeb(props) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-blue-500">
+          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 6 links
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
@@ -136,7 +136,7 @@ function SuggestToWeb(props) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-blue-500">
+          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 5 links
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
@@ -145,7 +145,7 @@ function SuggestToWeb(props) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-blue-500">
+          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 4 links
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
@@ -154,7 +154,7 @@ function SuggestToWeb(props) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-blue-500">
+          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 3 links
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
