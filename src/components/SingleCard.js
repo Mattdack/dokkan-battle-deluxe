@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
 function SingleCard(props) {
-  console.log(props.characterArt);
   let characterId = props.characterId;
   let prevCharacterId = useRef(characterId);
   let characterLinks = props.link_skill;

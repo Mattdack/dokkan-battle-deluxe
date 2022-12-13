@@ -11,7 +11,9 @@ function AllComponents() {
   //search state == null
   const [search, setSearch] = useState("");
   const [characters, setCharacters] = useState([]);
+  const [characterCategory, setCharacterCategory]= useState('');
   const [filteredCharacters, setFilteredCharacters]= useState([]);
+  const categorySelect = document.getElementById('categories');
 
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
@@ -23,11 +25,17 @@ function AllComponents() {
 
   // use effect for when search changes that filters the characters based off of search and then updates state
   useEffect(() => {
-    if(search === '' || search === null) {
+    if((search === '' || search === null) && (characterCategory === "" || characterCategory === "All Categories")) {
       return setFilteredCharacters(allCharacters);
     }
-    setCharacters(allCharacters);
-    setFilteredCharacters(characters.filter(character => character.name.includes(search)));
+    console.log(characters[0]);
+    if(characterCategory === "" || characterCategory === "All Categories") {
+      setFilteredCharacters(allCharacters);
+      setFilteredCharacters(characters.filter(character => character.name.includes(search)));
+    } else {
+      const catFilteredCharacters = characters.filter(character => character.category.includes(characterCategory));
+      setFilteredCharacters(catFilteredCharacters.filter(character => character.name.includes(search)));
+    }
   }, [search]);
 
   const handleSearchChange = (e) => {
@@ -40,6 +48,21 @@ function AllComponents() {
       setSearch(inputValue);
     }
   };
+
+  useEffect(() => {
+    if(characterCategory === "" || characterCategory === "All Categories") {
+      setFilteredCharacters(allCharacters);
+    } else {
+      setFilteredCharacters(characters.filter(character => character.category.includes(characterCategory)));
+    }
+  }, [characterCategory])
+
+  const handleCategoryChange = (e) => {
+    e.preventDefault();
+    const categoryType = categorySelect.options[categorySelect.selectedIndex].text;
+    // console.log(target.selectedOptions[0])
+    setCharacterCategory(categoryType);
+  }
 
   // if string is empty set state of characters back to all characters
 
@@ -72,9 +95,9 @@ function AllComponents() {
             </div>
             <select
               className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900 relative"
-              id="categories"
+              id="categories" onChange={handleCategoryChange}
             >
-              <option>Categories:</option>
+              <option>All Categories</option>
               <option>Fusion</option>
               <option>Shadow Dragon Saga</option>
               <option>World Tournament</option>
