@@ -12,7 +12,6 @@ function SuggestToWeb(props) {
   const [charactersWith7Matches, setCharactersWith7Matches] = useState([]);
 
   let characterId = props.suggestion.shift();
-  console.log(characterId + "OLD ID")
   let characterLink = props.suggestion[0];
 
   let prevCharacterId = useRef(characterId);
@@ -32,11 +31,9 @@ function SuggestToWeb(props) {
   // }
   
 function newArraySuggestion(character) {
-  console.log("clicked");
   console.log(character);
   // Updated the character link array
   characterId = character[0]
-  console.log(characterId + "NEW ID BITCH")
   characterLink = [];
   const characterArray = character;
 
@@ -147,7 +144,7 @@ function newArraySuggestion(character) {
   return (
     <div className="h-full">
 
-      <Web />
+      <Web webOfTeam = {props.webOfTeam}/>
 
       <div className="bg-blue-500 h-1/2 row-span-2 rounded-md p-2 border-2 border-black">
         <div className="flex flex-col h-full">

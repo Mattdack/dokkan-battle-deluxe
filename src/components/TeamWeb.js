@@ -1,6 +1,8 @@
 import React from "react";
 
-function Web() {
+function Web(props) {
+
+    
     return (
         <div>
             <div className="bg-gradient-radial from-gray-400 to via-gray-600 to-gray-800 border-2 border-black m-2 rounded-md">

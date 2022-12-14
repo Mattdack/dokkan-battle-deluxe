@@ -26,10 +26,10 @@ function CardDetails({ cardDetails }) {
     }
 
     if (cardDetails.thumb === null) {
-      console.log("Thumb for selected toon is not present");
+      // console.log("Thumb for selected toon is not present");
       setCharacterThumb(cardDetails.art)
     } else {
-      console.log('thumb is present for selected toon')
+      // console.log('thumb is present for selected toon')
       setCharacterThumb(cardDetails.thumb)
     }
     // Update the "prevCharacter" variable with the current props

@@ -19,6 +19,7 @@ function AllComponents() {
   const [typeCharacters, setTypeCharacters] = useState("ALL");
   const [cardDetails, setCardDetails] = useState({});
   const [suggestion, setSuggestion] = useState([]);
+  const [webOfTeam, setWebOfTeam] = useState([]);
 
   const [urActive, setUrActive] = useState(false);
   const [lrActive, setLrActive] = useState(false);
@@ -238,6 +239,12 @@ function AllComponents() {
     console.log(cardDetails);
   }
 
+  function addToTeam(character) {
+    webOfTeam.push(character)
+    setWebOfTeam(webOfTeam)
+    console.log(webOfTeam);
+  }
+
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-1 gap-3 bg-slate-800 min-h-fit">
       <div className="py-4 ml-4 mr-4 lg:mr-0 grid bg-slate-800 h-screen sm-h-96 gap-4 min-h-fit">
@@ -368,7 +375,7 @@ function AllComponents() {
                   setCardDetails(character)
                   arraySuggestion(character)
                   console.log(character.artwork)
-                  }}>
+                  }} onDoubleClick = {() => {addToTeam(character)}}>
                   <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art}/>
                 </div>
               ))}
@@ -382,7 +389,7 @@ function AllComponents() {
         <CardDetails cardDetails={cardDetails}/>
       </div>
       <div className="py-4 mr-4 ml-4 lg:ml-0 bg-slate-800 h-screen gap-4 min-h-fit">
-        <SuggestToWeb suggestion={suggestion}/>
+        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam}/>
       </div>
     </div>
   );
