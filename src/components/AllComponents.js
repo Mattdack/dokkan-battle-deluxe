@@ -375,7 +375,7 @@ function AllComponents() {
                     setCardDetails(character)
                     arraySuggestion(character)
                     console.log(character.artwork)
-                  }}>
+                  }} onDoubleClick = {addToTeam}>
                     <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
                   </div>
                 ))}
@@ -390,7 +390,7 @@ function AllComponents() {
         {/* <Links links={links}/> */}
       </div>
       <div className="basis-1/3 m-2">
-        <SuggestToWeb suggestion={suggestion} />
+        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam}/>
       </div>
     </div>
   );
