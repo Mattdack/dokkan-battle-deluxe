@@ -37,20 +37,6 @@ function CardDetails({ cardDetails }) {
   }, [cardDetails]);
 
   return (
-<<<<<<< HEAD
-    <div className="bg-pink-500 rounded-md p-5 border-2 border-black h-screen m-2">
-      <div className="flex flex-wrap justify-center justify-evenly">
-        <img
-          className="h-24 w-24 border-2 border-black"
-          style={{
-            backgroundImage: `url("https://placedog.net/50/50?random")`,
-            backgroundSize: `100%`,
-          }}
-        >
-        </img>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black">
-          <h2 className="text-center">Name</h2>
-=======
     <div className="bg-gradient-radial from-purple-300 via-purple-400 to-purple-800 rounded-md m-2 border-2 border-black">
       <div className="rounded-md m-2 flex">
         <div>
@@ -68,7 +54,6 @@ function CardDetails({ cardDetails }) {
                   </div>
                 </div>
           )}
->>>>>>> dev
         </div>
         <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-40 mt-4 ml-14">
           <h2 className="ml-1 mt-2 text-center">{cardDetails.name}</h2>
