@@ -12,9 +12,39 @@ function SuggestToWeb(props) {
   const [charactersWith7Matches, setCharactersWith7Matches] = useState([]);
 
   let characterId = props.suggestion.shift();
+  console.log(characterId + "OLD ID")
   let characterLink = props.suggestion[0];
 
   let prevCharacterId = useRef(characterId);
+
+  // const handleSuggestionClick = (e) => {
+  //   console.log("clicked");
+  //   const { target } = e;
+  //   // Updated the character link array
+  //   characterId = target.characterId;
+  //   console.log(target);
+  //   characterLink = [];
+  //   const characterArray = target.entirecharacter;
+  //   console.log(characterArray);
+  //   for (let index = 3 ; index < characterArray.length; index++) {
+  //     characterLink.push(characterArray[index])
+  //   }
+  // }
+  
+function newArraySuggestion(character) {
+  console.log("clicked");
+  console.log(character);
+  // Updated the character link array
+  characterId = character[0]
+  console.log(characterId + "NEW ID BITCH")
+  characterLink = [];
+  const characterArray = character;
+
+  for (let index = 3 ; index < characterArray.length; index++) {
+    characterLink.push(characterArray[index])
+  }
+  qeuryAllCharacters();
+}
 
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
@@ -61,7 +91,10 @@ function SuggestToWeb(props) {
       // Create a copy of the `link_skill` array
       let linkSkills = array.link_skill.slice();
       // Use the `unshift()` method to add the `id` at the beginning of the `link_skill` array
+      linkSkills.unshift(array.art);
+      linkSkills.unshift(array.thumb);
       linkSkills.unshift(array.id);
+
       // Use the `push()` method to add the modified `link_skill` array to `combineCharacterInfo`
       combineCharacterInfo.push(linkSkills);
     }
@@ -88,19 +121,19 @@ function SuggestToWeb(props) {
     matches.forEach((match, index) => {
       if (match === 7) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll7Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll7Matches.push(combineCharacterInfo[index]);
       } else if (match === 6) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll6Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll6Matches.push(combineCharacterInfo[index]);
       } else if (match === 5) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll5Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll5Matches.push(combineCharacterInfo[index]);
       } else if (match === 4) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll4Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll4Matches.push(combineCharacterInfo[index]);
       } else if (match === 3) {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
-        arrayOfAll3Matches.push(combineCharacterInfo[index][0]);
+        arrayOfAll3Matches.push(combineCharacterInfo[index]);
       } else {
         // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match} :(`)
       }
@@ -122,8 +155,11 @@ function SuggestToWeb(props) {
             these characters share 7 links
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
-                <div key={character}>
-                  <SingleCard characterId={character} />
+                <div key={character} onClick= {() => {
+                  newArraySuggestion(character);
+                  props.handleNewDetails(character);
+                }}>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -131,8 +167,11 @@ function SuggestToWeb(props) {
             these characters share 6 links
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
-                <div key={character}>
-                  <SingleCard characterId={character} />
+                <div key={character} onClick= {() => {
+                  newArraySuggestion(character)
+                  props.handleNewDetails(character);
+                }}>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -140,8 +179,11 @@ function SuggestToWeb(props) {
             these characters share 5 links
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
-                <div key={character}>
-                  <SingleCard characterId={character} />
+                <div key={character} onClick= {() => {
+                  newArraySuggestion(character)
+                  props.handleNewDetails(character);
+                }}>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -149,8 +191,11 @@ function SuggestToWeb(props) {
             these characters share 4 links
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
-                <div key={character}>
-                  <SingleCard characterId={character} />
+                <div key={character} onClick= {() => {
+                  newArraySuggestion(character)
+                  props.handleNewDetails(character);
+                }}>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
           </div>
@@ -158,8 +203,11 @@ function SuggestToWeb(props) {
             these characters share 3 links
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
-                <div key={character}>
-                  <SingleCard characterId={character} />
+                <div key={character} onClick= {() => {
+                  newArraySuggestion(character)
+                  props.handleNewDetails(character);
+                }}>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} />
                 </div>
               ))}
           </div>
