@@ -25,7 +25,7 @@ function CardDetails({ cardDetails }) {
       }
     }
 
-    if (cardDetails.characterThumb === null) {
+    if (cardDetails.thumb === null) {
       console.log("Thumb for selected toon is not present");
       setCharacterThumb(cardDetails.art)
     } else {

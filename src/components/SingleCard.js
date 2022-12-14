@@ -10,12 +10,9 @@ function SingleCard(props) {
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
     // Run the query and update the "data" state.
-    console.log("change detected");
     if (props.characterThumb === null) {
-      console.log("Thumb isnot present");
       setCharacterThumb(props.characterArt);
     } else {
-      console.log("thumb is present");
       setCharacterThumb(props.characterThumb);
     }
     // Update the "prevCharacter" variable with the current props

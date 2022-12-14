@@ -44,6 +44,9 @@ query Characters {
 export const QUERY_ONECHARACTER = gql`
 query Character($dokkanId: Int) {
   character(dokkanId: $dokkanId) {
+    id
+    thumb
+    art
     name
     title
     rarity
@@ -71,6 +74,10 @@ query Character($dokkanId: Int) {
     transform_condition_eza
     link_skill
     category
+    jp_date
+    glb_date
+    jp_date_eza
+    glb_date_eza
   }
 }
 `;

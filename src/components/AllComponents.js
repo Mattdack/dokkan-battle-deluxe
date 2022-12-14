@@ -3,8 +3,8 @@ import SingleCard from "./SingleCard";
 import SuggestToWeb from "./SuggestToWeb";
 import { handleRarityChange } from "../util/helpers";
 
-import { useQuery } from "@apollo/client";
-import { QUERY_CHARACTERS } from "../util/queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { QUERY_CHARACTERS, QUERY_ONECHARACTER } from "../util/queries";
 import CardDetails from "./CardDetails";
 
 function AllComponents() {
@@ -16,18 +16,19 @@ function AllComponents() {
 
   const [rarityCategory, setRarityCategory] = useState("ALL");
   const [filteredCharacters, setFilteredCharacters] = useState([]);
-  const [typeCharacters, setTypeCharacters] = useState(["AGL", "INT", "TEQ", "STR", "PHY"]);
+  const [typeCharacters, setTypeCharacters] = useState("ALL");
   const [cardDetails, setCardDetails] = useState({});
   const [suggestion, setSuggestion] = useState([]);
 
   const [urActive, setUrActive] = useState(false);
   const [lrActive, setLrActive] = useState(false);
 
-  const [aglActive, setAglActive] = useState(true);
-  const [teqActive, setTeqActive] = useState(true);
-  const [intActive, setIntActive] = useState(true);
-  const [strActive, setStrActive] = useState(true);
-  const [phyActive, setPhyActive] = useState(true);
+  const [aglActive, setAglActive] = useState(false);
+  const [teqActive, setTeqActive] = useState(false);
+  const [intActive, setIntActive] = useState(false);
+  const [strActive, setStrActive] = useState(false);
+  const [phyActive, setPhyActive] = useState(false);
+  const [allTypeActive, setAllTypeActive] = useState(true);
 
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
@@ -36,20 +37,8 @@ function AllComponents() {
     setCharacters(allCharacters);
     setFilteredCharacters(allCharacters);
   }, [allCharacters]);
-  
-  function reset() {
-    setFilteredCharacters(characters);
-  }
-
 
   useEffect(() => {
-    if (!(search === "" || search === null)) {
-      setFilteredCharacters(
-        filteredCharacters.filter((character) =>
-          character.name.includes(search)
-        )
-      );
-    }
     if (!(characterCategory === "" || characterCategory === "All Categories")) {
       setFilteredCharacters(
         filteredCharacters.filter((character) =>
@@ -58,22 +47,27 @@ function AllComponents() {
       );
     }
     if (rarityCategory !== "ALL") {
-        setFilteredCharacters(
-          filteredCharacters.filter(
-            (character) => character.rarity === rarityCategory
-          )
-        );
+      setFilteredCharacters(
+        filteredCharacters.filter(
+          (character) => character.rarity === rarityCategory
+        )
+      );
     }
-    // console.log("Length: " + typeCharacters.join().length);
-    // if (typeCharacters.join().length !== 19) {
-    //     setFilteredCharacters(
-    //       filteredCharacters.filter(
-    //         (character) =>  typeCharacters.some((test) => character.type.includes(test))
-    //       )
-    //     );
-    // }
+    if (typeCharacters !== "ALL") {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.type.includes(typeCharacters)
+        )
+      );
+    }
+    if (!(search === "" || search === null)) {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.name.includes(search)
+        )
+      );
+    }
   }, [search, characterCategory, rarityCategory, typeCharacters]);
-  
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -91,7 +85,6 @@ function AllComponents() {
     e.preventDefault();
     const categoryType =
       categorySelect.options[categorySelect.selectedIndex].text;
-    // console.log(target.selectedOptions[0])
     setFilteredCharacters(characters);
     setCharacterCategory(categoryType);
   };
@@ -109,8 +102,6 @@ function AllComponents() {
       urActive ? setUrActive(false) : setUrActive(true);
       console.log("Swapping UR Status");
     }
-
-
   };
 
   useEffect(() => {
@@ -127,65 +118,98 @@ function AllComponents() {
       setFilteredCharacters(characters);
       setRarityCategory("ALL");
     }
-  }, [lrActive, urActive])
+  }, [lrActive, urActive]);
 
   const handleTypeChange = (e) => {
     e.preventDefault();
     const { target } = e;
     const typeType = target.name;
-    console.log(typeCharacters);
 
     if (typeType === "AGL") {
-      if(aglActive === true) {
-        const toRemove = typeCharacters.indexOf("AGL")
-        typeCharacters.splice(toRemove, 1);
-        setAglActive(false)
-      } else {
-        typeCharacters.push('AGL')
-        setAglActive(true);
-      }
+      setAglActive(true);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("AGL");
     }
     if (typeType === "TEQ") {
-      if(teqActive === true) {
-        const toRemove = typeCharacters.indexOf("TEQ")
-        typeCharacters.splice(toRemove, 1);
-        setTeqActive(false)
-      } else {
-        typeCharacters.push('TEQ')
-        setTeqActive(true);
-      }
+      setAglActive(false);
+      setTeqActive(true);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("TEQ");
     }
     if (typeType === "INT") {
-      if(intActive === true) {
-        const toRemove = typeCharacters.indexOf("INT")
-        typeCharacters.splice(toRemove, 1);
-        setIntActive(false)
-      } else {
-        typeCharacters.push('INT')
-        setIntActive(true);
-      }
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(true);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("INT");
     }
     if (typeType === "STR") {
-      if(strActive === true) {
-        const toRemove = typeCharacters.indexOf("STR")
-        typeCharacters.splice(toRemove, 1);
-        setStrActive(false)
-      } else {
-        typeCharacters.push('STR')
-        setStrActive(true);
-      }
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(true);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("STR");
     }
     if (typeType === "PHY") {
-      if(phyActive === true) {
-        const toRemove = typeCharacters.indexOf("PHY")
-        typeCharacters.splice(toRemove, 1);
-        setPhyActive(false)
-      } else {
-        setPhyActive(true);
-      }
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(true);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("PHY");
     }
-    setFilteredCharacters(characters);
-    setTypeCharacters(typeCharacters);
+    if (typeType === "ALL") {
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(true);
+      setFilteredCharacters(characters);
+      setTypeCharacters("ALL");
+    }
+  };
+
+  const lrStyle = {
+    backgroundColor: lrActive ? "DarkOrange" : "Orange",
+  };
+  const urStyle = {
+    backgroundColor: urActive ? "DarkOrange" : "Orange",
+  };
+  const aglStyle = {
+    backgroundColor: aglActive ? "DarkOrange" : "Orange",
+  };
+  const teqStyle = {
+    backgroundColor: teqActive ? "DarkOrange" : "Orange",
+  };
+  const intStyle = {
+    backgroundColor: intActive ? "DarkOrange" : "Orange",
+  };
+  const strStyle = {
+    backgroundColor: strActive ? "DarkOrange" : "Orange",
+  };
+  const phyStyle = {
+    backgroundColor: phyActive ? "DarkOrange" : "Orange",
+  };
+  const allStyle = {
+    backgroundColor: allTypeActive ? "DarkOrange" : "Orange",
   };
 
   let suggestionArr = [];
@@ -194,6 +218,27 @@ function AllComponents() {
     suggestionArr.push(character.id);
     suggestionArr.push(character.link_skill);
     setSuggestion(suggestionArr);
+  }
+
+  const [getOneCharacter, { loading:loading2, data:data2 }] = useLazyQuery(QUERY_ONECHARACTER);
+
+
+
+  function newCardDetails(character) {
+    const newToon = character[0];
+    console.log(newToon);
+
+    getOneCharacter({
+      variables: {
+        dokkanId: newToon
+      },
+    }).then((result) => {
+      console.log("8========================D")
+      console.log(result.data.character)
+      setCardDetails(result.data.character)
+    })
+    console.log(" ( . Y . )")
+    console.log(cardDetails);
   }
 
   return (
@@ -314,36 +359,66 @@ function AllComponents() {
               onClick={handleRarityChange}
             >
               <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400"
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
                 name="UR"
+                style={urStyle}
               >
                 UR
               </button>
               <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400"
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
                 name="LR"
+                style={lrStyle}
               >
                 LR
               </button>
             </div>
             <div
               className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-2" onClick = {handleTypeChange}
+              id="box-2"
+              onClick={handleTypeChange}
             >
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "AGL">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="AGL"
+                style={aglStyle}
+              >
                 AGL
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "TEQ">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="TEQ"
+                style={teqStyle}
+              >
                 TEQ
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "INT">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="INT"
+                style={intStyle}
+              >
                 INT
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "STR">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="STR"
+                style={strStyle}
+              >
                 STR
               </button>
-              <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400" name= "PHY">
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="PHY"
+                style={phyStyle}
+              >
                 PHY
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="ALL"
+                style={allStyle}
+              >
+                ALL
               </button>
             </div>
             <div
@@ -393,7 +468,7 @@ function AllComponents() {
         <CardDetails cardDetails={cardDetails} />
       </div>
       <div className="py-4 mr-4 ml-4 lg:ml-0 bg-slate-800 h-screen gap-4 min-h-fit">
-        <SuggestToWeb suggestion={suggestion} />
+        <SuggestToWeb suggestion={suggestion} handleNewDetails = {newCardDetails}/>
       </div>
     </div>
   );
