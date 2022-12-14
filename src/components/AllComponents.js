@@ -252,6 +252,7 @@ function AllComponents() {
         {/* collapse this div */}
         <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2 flex flex-wrap justify-center">
           Search by Filters:
+          
           <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900" id="categories">
             <option>Categories:</option>
             <option>Fusion</option>
@@ -375,7 +376,7 @@ function AllComponents() {
                     setCardDetails(character)
                     arraySuggestion(character)
                     console.log(character.artwork)
-                  }} onDoubleClick = {addToTeam}>
+                  }} onDoubleClick = {() => {addToTeam(character)}}>
                     <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
                   </div>
                 ))}
@@ -390,7 +391,7 @@ function AllComponents() {
         {/* <Links links={links}/> */}
       </div>
       <div className="basis-1/3 m-2">
-        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam}/>
+        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails = {newCardDetails}/>
       </div>
     </div>
   );
