@@ -233,11 +233,8 @@ function AllComponents() {
         dokkanId: newToon
       },
     }).then((result) => {
-      console.log("8========================D")
-      console.log(result.data.character)
       setCardDetails(result.data.character)
     })
-    console.log(" ( . Y . )")
     console.log(cardDetails);
   }
 
