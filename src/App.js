@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import AllComponents from "./components/AllComponents";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import React from "react";
+import AllComponents from "./components/AllComponents"
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
