@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/dokkan-battle-deluxe/static/css/main.773b67f8.css",
+    "main.js": "/dokkan-battle-deluxe/static/js/main.09665dfd.js",
+    "index.html": "/dokkan-battle-deluxe/index.html",
+    "main.773b67f8.css.map": "/dokkan-battle-deluxe/static/css/main.773b67f8.css.map",
+    "main.09665dfd.js.map": "/dokkan-battle-deluxe/static/js/main.09665dfd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.773b67f8.css",
+    "static/js/main.09665dfd.js"
+  ]
+}
