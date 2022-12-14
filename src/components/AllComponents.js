@@ -16,13 +16,7 @@ function AllComponents() {
 
   const [rarityCategory, setRarityCategory] = useState("ALL");
   const [filteredCharacters, setFilteredCharacters] = useState([]);
-  const [typeCharacters, setTypeCharacters] = useState([
-    "AGL",
-    "TEQ",
-    "INT",
-    "STR",
-    "PHY",
-  ]);
+  const [typeCharacters, setTypeCharacters] = useState(["AGL", "INT", "TEQ", "STR", "PHY"]);
   const [cardDetails, setCardDetails] = useState({});
   const [suggestion, setSuggestion] = useState([]);
 
@@ -70,7 +64,15 @@ function AllComponents() {
           )
         );
     }
-  }, [search, characterCategory, rarityCategory]);
+    // console.log("Length: " + typeCharacters.join().length);
+    // if (typeCharacters.join().length !== 19) {
+    //     setFilteredCharacters(
+    //       filteredCharacters.filter(
+    //         (character) =>  typeCharacters.some((test) => character.type.includes(test))
+    //       )
+    //     );
+    // }
+  }, [search, characterCategory, rarityCategory, typeCharacters]);
   
 
   const handleSearchChange = (e) => {
@@ -135,7 +137,8 @@ function AllComponents() {
 
     if (typeType === "AGL") {
       if(aglActive === true) {
-        typeCharacters.filter(type => (type !== "AGL"));
+        const toRemove = typeCharacters.indexOf("AGL")
+        typeCharacters.splice(toRemove, 1);
         setAglActive(false)
       } else {
         typeCharacters.push('AGL')
@@ -144,7 +147,8 @@ function AllComponents() {
     }
     if (typeType === "TEQ") {
       if(teqActive === true) {
-        typeCharacters.filter(type => type !== "TEQ");
+        const toRemove = typeCharacters.indexOf("TEQ")
+        typeCharacters.splice(toRemove, 1);
         setTeqActive(false)
       } else {
         typeCharacters.push('TEQ')
@@ -153,7 +157,8 @@ function AllComponents() {
     }
     if (typeType === "INT") {
       if(intActive === true) {
-        typeCharacters.filter(type => type !== "INT");
+        const toRemove = typeCharacters.indexOf("INT")
+        typeCharacters.splice(toRemove, 1);
         setIntActive(false)
       } else {
         typeCharacters.push('INT')
@@ -162,7 +167,8 @@ function AllComponents() {
     }
     if (typeType === "STR") {
       if(strActive === true) {
-        typeCharacters.filter(type => type !== "STR");
+        const toRemove = typeCharacters.indexOf("STR")
+        typeCharacters.splice(toRemove, 1);
         setStrActive(false)
       } else {
         typeCharacters.push('STR')
@@ -171,15 +177,15 @@ function AllComponents() {
     }
     if (typeType === "PHY") {
       if(phyActive === true) {
-        typeCharacters.filter(type => type !== "PHY");
+        const toRemove = typeCharacters.indexOf("PHY")
+        typeCharacters.splice(toRemove, 1);
         setPhyActive(false)
       } else {
-        typeCharacters.push('PHY')
         setPhyActive(true);
       }
     }
-    console.log(aglActive + " " + teqActive +  " " + intActive +  " " + strActive +  " " + phyActive)
-    console.log(typeCharacters)
+    setFilteredCharacters(characters);
+    setTypeCharacters(typeCharacters);
   };
 
   let suggestionArr = [];

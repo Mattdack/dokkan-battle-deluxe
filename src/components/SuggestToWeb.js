@@ -125,7 +125,7 @@ function SuggestToWeb(props) {
             these characters share 7 links
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
-                <div key={character}>
+                <div key={character} >
                   <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
                 </div>
               ))}
