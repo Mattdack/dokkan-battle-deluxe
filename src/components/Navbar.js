@@ -55,44 +55,47 @@ const AppNavbar = () => {
 
   return (
     <div className="h-12 w-screen">
-      <form noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <input
-          onChange={handleInputChange}
-          className="w-50 h-full border-2 border-black"
-          type='text'
-          placeholder='Your username'
-          name='username'
-          value={userFormData.username}
-        ></input>
-        <input
-          onChange={handleInputChange}
-          className="w-50 h-full border-2 border-black"
-          type='text'
-          placeholder='Your email'
-          name='email'
-          value={userFormData.email}
-        ></input>
-        <input
-          onChange={handleInputChange}
-          className="w-50 h-full border-2 border-black"
-          type='text'
-          placeholder='Your password'
-          name='password'
-          value={userFormData.password}
-        ></input>
-        <button
-          disabled={
-            !(
-              userFormData.username &&
-              userFormData.email &&
-              userFormData.password
-            )
-          }
-          type="submit"
-          variant="success">
-          Submit
-        </button>
-      </form>
+      <div>
+        <form noValidate validated={validated} onSubmit={handleFormSubmit}>
+          <input
+            onChange={handleInputChange}
+            className="w-50 h-full border-2 border-black"
+            type='text'
+            placeholder='Your username'
+            name='username'
+            value={userFormData.username}
+          ></input>
+          <input
+            onChange={handleInputChange}
+            className="w-50 h-full border-2 border-black"
+            type='text'
+            placeholder='Your email'
+            name='email'
+            value={userFormData.email}
+          ></input>
+          <input
+            onChange={handleInputChange}
+            className="w-50 h-full border-2 border-black"
+            type='text'
+            placeholder='Your password'
+            name='password'
+            value={userFormData.password}
+          ></input>
+          <button
+            disabled={
+              !(
+                userFormData.username &&
+                userFormData.email &&
+                userFormData.password
+              )
+            }
+            type="submit"
+            variant="success">
+            Submit
+          </button>
+        </form>
+      </div>
+
     </div>
     // <>
     //   <Navbar bg='dark' variant='dark' expand='lg'>
