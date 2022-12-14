@@ -12,7 +12,6 @@ function SuggestToWeb(props) {
   const [charactersWith7Matches, setCharactersWith7Matches] = useState([]);
 
   let characterId = props.suggestion.shift();
-  console.log(characterId + "OLD ID")
   let characterLink = props.suggestion[0];
 
   let prevCharacterId = useRef(characterId);
@@ -32,11 +31,9 @@ function SuggestToWeb(props) {
   // }
   
 function newArraySuggestion(character) {
-  console.log("clicked");
   console.log(character);
   // Updated the character link array
   characterId = character[0]
-  console.log(characterId + "NEW ID BITCH")
   characterLink = [];
   const characterArray = character;
 
@@ -145,11 +142,11 @@ function newArraySuggestion(character) {
     setCharactersWith3Matches(arrayOfAll3Matches);
   }
   return (
-    <div className="h-full">
+    <div className="h-full my-2">
 
-      <Web />
+      <Web webOfTeam = {props.webOfTeam}/>
 
-      <div className="bg-blue-500 h-1/2 row-span-2 rounded-md p-2 border-2 border-black">
+      <div className="bg-blue-500 h-1/2 row-span-2 rounded-md p-2 border-2 border-black m-2">
         <div className="flex flex-col h-full">
           <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 7 links
