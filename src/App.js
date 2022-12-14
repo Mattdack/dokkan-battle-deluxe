@@ -1,20 +1,26 @@
-import React, { useState }from "react";
-import AllComponents from "./components/AllComponents"
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import React, { useState } from "react";
+import AllComponents from "./components/AllComponents";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
 
 const client = new ApolloClient({
   // uri: 'http://localhost:3001/graphql',
-  uri: 'https://dokkan-api.herokuapp.com/graphql',
+  uri: "https://dokkan-api.herokuapp.com/graphql",
   cache: new InMemoryCache(),
 });
 
 function App() {
-  
   return (
     <ApolloProvider client={client}>
-      <AllComponents />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<AllComponents/>}/>
+        </Routes>
+      </Router>
     </ApolloProvider>
   );
 }

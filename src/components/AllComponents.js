@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import SingleCard from './SingleCard';
 import SuggestToWeb from './SuggestToWeb';
 
-
-
 import { useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS } from "../util/queries";
 import CardDetails from "./CardDetails";

@@ -16,6 +16,11 @@ function SuggestToWeb(props) {
 
   let prevCharacterId = useRef(characterId);
 
+  const handleSuggestionClick = (e) => {
+    const {target} = e
+    characterId = target.characterId
+  }
+
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
     if (
@@ -123,7 +128,7 @@ function SuggestToWeb(props) {
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character} onClick={handleSuggestionClick} />
                 </div>
               ))}
           </div>
@@ -132,7 +137,7 @@ function SuggestToWeb(props) {
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character} onClick={handleSuggestionClick}/>
                 </div>
               ))}
           </div>
@@ -141,7 +146,7 @@ function SuggestToWeb(props) {
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character} onClick={handleSuggestionClick}/>
                 </div>
               ))}
           </div>
@@ -150,7 +155,7 @@ function SuggestToWeb(props) {
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
                 <div key={character}>
-                  <SingleCard characterId={character} />
+                  <SingleCard characterId={character} onClick={handleSuggestionClick}/>
                 </div>
               ))}
           </div>
@@ -158,7 +163,7 @@ function SuggestToWeb(props) {
             these characters share 3 links
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
-                <div key={character}>
+                <div key={character} onClick={handleSuggestionClick}>
                   <SingleCard characterId={character} />
                 </div>
               ))}
