@@ -252,8 +252,18 @@ function AllComponents() {
         {/* collapse this div */}
         <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2 flex flex-wrap justify-center">
           Search by Filters:
+          <div>
+              <form>
+                <input
+                  type="text"
+                  name="characterName"
+                  onChange={handleSearchChange}
+                  value={search}
+                />
+              </form>
+            </div>
           
-          <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900" id="categories">
+          <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900" id="categories" onChange={handleCategoryChange}>
             <option>Categories:</option>
             <option>Fusion</option>
             <option>Shadow Dragon Saga</option>
@@ -344,21 +354,74 @@ function AllComponents() {
             <option>Bond of Parent and Child</option>
             <option>Warriors Raised on Earth</option>
           </select>
-          <div className="bg-orange-300 w-[75%] m-5 p-2 rounded-md border-2 border-blue-900" id="box-1">
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">N</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">R</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">SR</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">SSR</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">UR</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">LR</button>
-          </div>
-          <div className="bg-orange-300 w-[70%] m-5 p-2 rounded-md border-2 border-blue-900" id="box-2">
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">AGL</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">TEQ</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">INT</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">STR</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">PHY</button>
-          </div>
+          <div
+              className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
+              id="box-1"
+              onClick={handleRarityChange}
+            >
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="UR"
+                style={urStyle}
+              >
+                UR
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="LR"
+                style={lrStyle}
+              >
+                LR
+              </button>
+            </div>
+            <div
+              className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
+              id="box-2"
+              onClick={handleTypeChange}
+            >
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="AGL"
+                style={aglStyle}
+              >
+                AGL
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="TEQ"
+                style={teqStyle}
+              >
+                TEQ
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="INT"
+                style={intStyle}
+              >
+                INT
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="STR"
+                style={strStyle}
+              >
+                STR
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="PHY"
+                style={phyStyle}
+              >
+                PHY
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="ALL"
+                style={allStyle}
+              >
+                ALL
+              </button>
+            </div>
           <div className="bg-orange-300 w-[40%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-3">
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Super</button>
             <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Extreme</button>
@@ -371,7 +434,7 @@ function AllComponents() {
               <div>Loading...</div>
             ) : (
               <div className="overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96">
-                {allCharacters && allCharacters.map((character) => (
+                {filteredCharacters && filteredCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
                     arraySuggestion(character)
