@@ -1,25 +1,248 @@
-import React, { useState } from "react";
-import SingleCard from './SingleCard';
-import SuggestToWeb from './SuggestToWeb';
+import React, { useEffect, useState } from "react";
+import SingleCard from "./SingleCard";
+import SuggestToWeb from "./SuggestToWeb";
+import { handleRarityChange } from "../util/helpers";
 
-
-
-import { useQuery } from "@apollo/client";
-import { QUERY_CHARACTERS } from "../util/queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { QUERY_CHARACTERS, QUERY_ONECHARACTER } from "../util/queries";
 import CardDetails from "./CardDetails";
 
 function AllComponents() {
+  const categorySelect = document.getElementById("categories");
+
+  const [search, setSearch] = useState("");
+  const [characters, setCharacters] = useState([]);
+  const [characterCategory, setCharacterCategory] = useState("");
+
+  const [rarityCategory, setRarityCategory] = useState("ALL");
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [typeCharacters, setTypeCharacters] = useState("ALL");
+  const [cardDetails, setCardDetails] = useState({});
+  const [suggestion, setSuggestion] = useState([]);
+  const [webOfTeam, setWebOfTeam] = useState([]);
+
+  const [urActive, setUrActive] = useState(false);
+  const [lrActive, setLrActive] = useState(false);
+
+  const [aglActive, setAglActive] = useState(false);
+  const [teqActive, setTeqActive] = useState(false);
+  const [intActive, setIntActive] = useState(false);
+  const [strActive, setStrActive] = useState(false);
+  const [phyActive, setPhyActive] = useState(false);
+  const [allTypeActive, setAllTypeActive] = useState(true);
+
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
 
-  const [cardDetails, setCardDetails] = useState({})
-  const [suggestion, setSuggestion] = useState([])
+  useEffect(() => {
+    setCharacters(allCharacters);
+    setFilteredCharacters(allCharacters);
+  }, [allCharacters]);
 
-  let suggestionArr = []
+  useEffect(() => {
+    if (!(characterCategory === "" || characterCategory === "All Categories")) {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.category.includes(characterCategory)
+        )
+      );
+    }
+    if (rarityCategory !== "ALL") {
+      setFilteredCharacters(
+        filteredCharacters.filter(
+          (character) => character.rarity === rarityCategory
+        )
+      );
+    }
+    if (typeCharacters !== "ALL") {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.type.includes(typeCharacters)
+        )
+      );
+    }
+    if (!(search === "" || search === null)) {
+      setFilteredCharacters(
+        filteredCharacters.filter((character) =>
+          character.name.includes(search)
+        )
+      );
+    }
+  }, [search, characterCategory, rarityCategory, typeCharacters]);
+
+  const handleSearchChange = (e) => {
+    e.preventDefault();
+
+    const { target } = e;
+    const inputType = target.name;
+    const inputValue = target.value;
+    if (inputType === "characterName") {
+      setFilteredCharacters(characters);
+      setSearch(inputValue);
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    e.preventDefault();
+    const categoryType =
+      categorySelect.options[categorySelect.selectedIndex].text;
+    setFilteredCharacters(characters);
+    setCharacterCategory(categoryType);
+  };
+
+  const handleRarityChange = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    const rarityType = target.name;
+
+    if (rarityType === "LR") {
+      lrActive ? setLrActive(false) : setLrActive(true);
+      console.log("Swapping LR Status");
+    }
+    if (rarityType === "UR") {
+      urActive ? setUrActive(false) : setUrActive(true);
+      console.log("Swapping UR Status");
+    }
+  };
+
+  useEffect(() => {
+    if (lrActive && urActive) {
+      setFilteredCharacters(characters);
+      setRarityCategory("ALL");
+    } else if (lrActive) {
+      setFilteredCharacters(characters);
+      setRarityCategory("LR");
+    } else if (urActive) {
+      setFilteredCharacters(characters);
+      setRarityCategory("UR");
+    } else {
+      setFilteredCharacters(characters);
+      setRarityCategory("ALL");
+    }
+  }, [lrActive, urActive]);
+
+  const handleTypeChange = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    const typeType = target.name;
+
+    if (typeType === "AGL") {
+      setAglActive(true);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("AGL");
+    }
+    if (typeType === "TEQ") {
+      setAglActive(false);
+      setTeqActive(true);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("TEQ");
+    }
+    if (typeType === "INT") {
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(true);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("INT");
+    }
+    if (typeType === "STR") {
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(true);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("STR");
+    }
+    if (typeType === "PHY") {
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(true);
+      setAllTypeActive(false);
+      setFilteredCharacters(characters);
+      setTypeCharacters("PHY");
+    }
+    if (typeType === "ALL") {
+      setAglActive(false);
+      setTeqActive(false);
+      setStrActive(false);
+      setIntActive(false);
+      setPhyActive(false);
+      setAllTypeActive(true);
+      setFilteredCharacters(characters);
+      setTypeCharacters("ALL");
+    }
+  };
+
+  const lrStyle = {
+    backgroundColor: lrActive ? "DarkOrange" : "Orange",
+  };
+  const urStyle = {
+    backgroundColor: urActive ? "DarkOrange" : "Orange",
+  };
+  const aglStyle = {
+    backgroundColor: aglActive ? "DarkOrange" : "Orange",
+  };
+  const teqStyle = {
+    backgroundColor: teqActive ? "DarkOrange" : "Orange",
+  };
+  const intStyle = {
+    backgroundColor: intActive ? "DarkOrange" : "Orange",
+  };
+  const strStyle = {
+    backgroundColor: strActive ? "DarkOrange" : "Orange",
+  };
+  const phyStyle = {
+    backgroundColor: phyActive ? "DarkOrange" : "Orange",
+  };
+  const allStyle = {
+    backgroundColor: allTypeActive ? "DarkOrange" : "Orange",
+  };
+
+  let suggestionArr = [];
+
   function arraySuggestion(character) {
-    suggestionArr.push(character.id)
-    suggestionArr.push(character.link_skill)
-    setSuggestion(suggestionArr)
+    suggestionArr.push(character.id);
+    suggestionArr.push(character.link_skill);
+    setSuggestion(suggestionArr);
+  }
+
+  const [getOneCharacter, { loading:loading2, data:data2 }] = useLazyQuery(QUERY_ONECHARACTER);
+
+
+
+  function newCardDetails(character) {
+    const newToon = character[0];
+    console.log(newToon);
+
+    getOneCharacter({
+      variables: {
+        dokkanId: newToon
+      },
+    }).then((result) => {
+      setCardDetails(result.data.character)
+    })
+    console.log(cardDetails);
+  }
+
+  function addToTeam(character) {
+    webOfTeam.push(character)
+    setWebOfTeam(webOfTeam)
+    console.log(webOfTeam);
   }
 
   return (
