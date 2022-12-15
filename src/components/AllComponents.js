@@ -258,7 +258,7 @@ function AllComponents() {
   return (
     
     // stages formatting
-    <div className="bg-slate-700 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen w-screen">
+    <div className="bg-slate-700 flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col h-screen w-screen">
 
       {/* //left column styling */}
       <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex flex-col mx-2 my-4 border-4 border-black basis-1/3">
@@ -423,7 +423,7 @@ function AllComponents() {
 
           {/* //rarity buttons */}
           <div
-            className="order-4 bg-orange-300 rounded-md border-2 border-black flex"
+            className="order-4 bg-orange-300 rounded-md border-2 border-black flex 2xl:h-12 2xl:mt-5"
             id="box-1"
             onClick={handleRarityChange}
           >
@@ -443,17 +443,16 @@ function AllComponents() {
             </button>
 
           </div>
-
         </div>
 
           <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
           
           {/* //character select box */}
-          <div className="m-10 border-4 border-black overflow-x-auto">
+          <div className="h-fit m-10 border-4 border-black overflow-auto">
             {loading ? (
               <div>Loading...</div>
             ) : (
-              <div className="bg-orange-200 grid grid-cols-5 justify-self-center">
+              <div className="bg-orange-200 grid grid-cols-5 grid-rows-5 justify-self-center">
                 {filteredCharacters && filteredCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
