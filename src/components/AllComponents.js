@@ -120,6 +120,14 @@ function AllComponents() {
     }
   };
 
+  const handleDeckSelection = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    if(target.name === "DECK") {
+      setFilteredCharacters(userCharacters);
+    }
+  }
+
   useEffect(() => {
     if (lrActive && urActive) {
       setFilteredCharacters(characters);
@@ -424,7 +432,7 @@ function AllComponents() {
 
           {/* //rarity buttons */}
           <div
-            className="order-4 bg-orange-300 rounded-md border-2 border-black flex 2xl:h-12 2xl:mt-5"
+            className="order-4 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5"
             id="box-1"
             onClick={handleRarityChange}
           >
@@ -444,6 +452,16 @@ function AllComponents() {
             </button>
 
           </div>
+
+        <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5" onClick = {handleDeckSelection}>
+        <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="DECK"
+            >
+              My Deck
+        </button>
+        </div>
+
         </div>
 
           <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
