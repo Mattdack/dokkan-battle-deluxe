@@ -221,7 +221,7 @@ function AllComponents() {
     setSuggestion(suggestionArr);
   }
 
-  const [getOneCharacter, { loading:loading2, data:data2 }] = useLazyQuery(QUERY_ONECHARACTER);
+  const [getOneCharacter, { loading: loading2, data: data2 }] = useLazyQuery(QUERY_ONECHARACTER);
 
 
 
@@ -246,24 +246,15 @@ function AllComponents() {
   }
 
   return (
-    //Creates all three columns for the app & sets up window-size transitions
-    <div className="bg-slate-800 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen">
-      <div className="basis-1/3 rounded-md flex-col m-2">
-        {/* collapse this div */}
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2 flex flex-wrap justify-center">
-          Search by Filters:
-          <div>
-              <form>
-                <input
-                  type="text"
-                  name="characterName"
-                  onChange={handleSearchChange}
-                  value={search}
-                />
-              </form>
-            </div>
-          
-          <select className="m-5 p-2.5 text-black bg-white border-2 border-blue-900 rounded-md shadow-sm outline-none appearance-none focus:border-blue-900" id="categories" onChange={handleCategoryChange}>
+    // Stages formatting/transitions based on windowsize
+    <div className="bg-slate-700 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen w-screen">
+
+      {/* //left column styling */}
+      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex-col mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
+
+        <h1 className="text-center m-4">Search by Filters</h1>
+        <div className="flex justify-evenly">
+          <select className="p-2 text-black bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black" id="categories" onChange={handleCategoryChange}>
             <option>Categories:</option>
             <option>Fusion</option>
             <option>Shadow Dragon Saga</option>
@@ -354,108 +345,126 @@ function AllComponents() {
             <option>Bond of Parent and Child</option>
             <option>Warriors Raised on Earth</option>
           </select>
-          <div
-              className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-1"
-              onClick={handleRarityChange}
-            >
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="UR"
-                style={urStyle}
-              >
-                UR
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="LR"
-                style={lrStyle}
-              >
-                LR
-              </button>
-            </div>
-            <div
-              className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-2"
-              onClick={handleTypeChange}
-            >
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="AGL"
-                style={aglStyle}
-              >
-                AGL
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="TEQ"
-                style={teqStyle}
-              >
-                TEQ
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="INT"
-                style={intStyle}
-              >
-                INT
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="STR"
-                style={strStyle}
-              >
-                STR
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="PHY"
-                style={phyStyle}
-              >
-                PHY
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="ALL"
-                style={allStyle}
-              >
-                ALL
-              </button>
-            </div>
-          <div className="bg-orange-300 w-[40%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-3">
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Super</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Extreme</button>
-          </div>
+          <form>
+            <input className="p-2 rounded-md border-2 border-black text-black"
+              type="text"
+              name="characterName"
+              onChange={handleSearchChange}
+              value={search}
+            />
+          </form>
         </div>
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
-          <h2 className="p-3 mt-3">Main Character Selection</h2>
-          <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-2">
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
-              <div className="overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96">
-                {filteredCharacters && filteredCharacters.map((character) => (
-                  <div key={character.id} onClick={() => {
-                    setCardDetails(character)
-                    arraySuggestion(character)
-                    console.log(character.artwork)
-                  }} onDoubleClick = {() => {addToTeam(character)}}>
-                    <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
 
-      <div className="basis-1/3 m-2">
+        <div className="flex m-4 justify-center">
+
+          <div
+            className="bg-orange-300 relative rounded-md border-2 border-black text-center flex p-1 mr-4"
+            id="box-1"
+            onClick={handleRarityChange}
+          >
+            <button
+              className="relative hover:bg-orange-400 p-2 w-28"
+              name="UR"
+              style={urStyle}
+            >
+              UR
+            </button>
+            <button
+              className="relative hover:bg-orange-400 p-2 w-28"
+              name="LR"
+              style={lrStyle}
+            >
+              LR
+            </button>
+          </div>
+
+          <div className="bg-orange-300 rounded-md border-2 border-black text-center p-1 ml-4" id="box-3">
+            <button className="w-28 p-2">Super</button>
+            <button className="w-28 p-2">Extreme</button>
+          </div>
+        </div>
+
+        <div
+          className="bg-orange-300 rounded-md border-2 border-black flex justify-between w-96 p-1 ml-20 mb-12"
+          id="box-2"
+          onClick={handleTypeChange}
+        >
+          <button
+            className="p-2"
+            name="AGL"
+            style={aglStyle}
+          >
+            AGL
+          </button>
+          <button
+            className="p-2"
+            name="TEQ"
+            style={teqStyle}
+          >
+            TEQ
+          </button>
+          <button
+            className="p-2"
+            name="INT"
+            style={intStyle}
+          >
+            INT
+          </button>
+          <button
+            className="p-2"
+            name="STR"
+            style={strStyle}
+          >
+            STR
+          </button>
+          <button
+            className="p-2"
+            name="PHY"
+            style={phyStyle}
+          >
+            PHY
+          </button>
+          <button
+            className="p-2"
+            name="ALL"
+            style={allStyle}
+          >
+            ALL
+          </button>
+        </div>
+
+
+        <h2 className="p-3 mt-3">Main Character Selection</h2>
+        <div className=" m-2">
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="bg-gradient-radial from-orange-400 via-orange-300 to-orange-200 overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)]">
+              {filteredCharacters && filteredCharacters.map((character) => (
+                <div key={character.id} onClick={() => {
+                  setCardDetails(character)
+                  arraySuggestion(character)
+                  console.log(character.artwork)
+                }} onDoubleClick={() => { addToTeam(character) }}>
+                  <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+      </div>
+      {/* //middle column styling */}
+      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
         <CardDetails cardDetails={cardDetails} />
         {/* <Links links={links}/> */}
       </div>
-      <div className="basis-1/3 m-2">
-        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails = {newCardDetails}/>
+
+      {/* //right column styling */}
+      <div className="bg-gradient-radial from-green-400 via-green-600 to-green-900 rounded-md mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
+        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
       </div>
+
     </div>
   );
 }
