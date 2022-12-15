@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/dokkan-battle-deluxe/static/css/main.773b67f8.css",
-    "main.js": "/dokkan-battle-deluxe/static/js/main.09665dfd.js",
+    "main.css": "/dokkan-battle-deluxe/static/css/main.383fc923.css",
+    "main.js": "/dokkan-battle-deluxe/static/js/main.6b7c47f0.js",
     "index.html": "/dokkan-battle-deluxe/index.html",
-    "main.773b67f8.css.map": "/dokkan-battle-deluxe/static/css/main.773b67f8.css.map",
-    "main.09665dfd.js.map": "/dokkan-battle-deluxe/static/js/main.09665dfd.js.map"
+    "main.383fc923.css.map": "/dokkan-battle-deluxe/static/css/main.383fc923.css.map",
+    "main.6b7c47f0.js.map": "/dokkan-battle-deluxe/static/js/main.6b7c47f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.773b67f8.css",
-    "static/js/main.09665dfd.js"
+    "static/css/main.383fc923.css",
+    "static/js/main.6b7c47f0.js"
   ]
 }
