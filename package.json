@@ -1,6 +1,7 @@
 {
   "name": "dokkan-battle-deluxe",
   "version": "0.1.0",
+  "homepage": "https://mattdack.github.io/dokkan-battle-deluxe",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.2",
@@ -20,6 +21,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -46,6 +49,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.13",
     "css": "^3.0.0",
+    "gh-pages": "^4.0.0",
     "post": "^0.0.1",
     "tailwindcss": "^3.2.4"
   }

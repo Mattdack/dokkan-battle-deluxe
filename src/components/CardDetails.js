@@ -3,10 +3,10 @@ import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { ADD_CHARACTER, REMOVE_CHARACTER } from "../util/mutations";
 import Auth from "../util/auth";
 
-function CardDetails({ cardDetails, userCharacters }) {
+function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
   const [saveCharacter, { error, data }] = useMutation(ADD_CHARACTER);
-  const [removeCharacter, { error:error2, data:data2 }] = useMutation(REMOVE_CHARACTER);
-
+  const [removeCharacter, { error: error2, data: data2 }] =
+    useMutation(REMOVE_CHARACTER);
 
   let characterId = cardDetails.id;
   let prevCharacterId = useRef(characterId);
@@ -132,28 +132,30 @@ function CardDetails({ cardDetails, userCharacters }) {
     }
   }, [characterId]);
 
-  function handleSaveCharacter(){
-    const username=Auth.getProfile().data.username
+  function handleSaveCharacter() {
+    const username = Auth.getProfile().data.username;
     saveCharacter({
       variables: {
         username: username,
-        dokkanId: cardDetails.id
+        dokkanId: cardDetails.id,
       },
     }).then((result) => {
-      console.log(result)
-    })
+      console.log(result);
+    });
+    handleCardDetailsReload(cardDetails);
   }
 
-  function handleRemoveCharacter(){
-    const username=Auth.getProfile().data.username
+  function handleRemoveCharacter() {
+    const username = Auth.getProfile().data.username;
     removeCharacter({
       variables: {
         username: username,
-        dokkanId: cardDetails.id
+        dokkanId: cardDetails.id,
       },
     }).then((result) => {
-      console.log(result)
-    })
+      console.log(result);
+    });
+     handleCardDetailsReload(cardDetails);
   }
 
   return (
@@ -190,63 +192,79 @@ function CardDetails({ cardDetails, userCharacters }) {
         <p>Leader Skill: {cardDetails.ls_description}</p>
       </div>
 
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 w-[85%] h-min">
-          <p>
-            {cardDetails.sa_name}: {cardDetails.sa_description}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2">
-          <div className="m-4 h-full max-h-[60vh]">
-            <h1>Character Links:</h1>
-            <div className="border-2 border-black">
-              {characterLinks &&
-                characterLinks.map((linkText) => {
-                  return (
-                    <div>
-                      <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
-                        {linkText}
-                      </h2>
-                    </div>
-                  );
-                })}
-            </div>
+      <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 w-[85%] h-min">
+        <p>
+          {cardDetails.sa_name}: {cardDetails.sa_description}
+        </p>
+      </div>
+      <div>
+            {Auth.loggedIn() ? (
+              <div>
+                {userCharacters.includes(cardDetails.id) ? (
+                  <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+                    <button
+                      onClick={() => {
+                        handleRemoveCharacter();
+                      }}
+                      className="relative hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+                    >
+                      Remove Character
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+                  <button
+                    onClick={() => {
+                      handleSaveCharacter();
+                    }}
+                    className="relative hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+                  >
+                    Add character
+                  </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h1>Log in to add characters</h1>
+              </div>
+            )}
           </div>
-          <div className="m-4 h-full max-h-[60vh]">
-            <h1>Character Categories</h1>
 
-            <div className="border-2 border-black rounded-md h-fit min-h-fit max-h-[32.5vh] overflow-auto">
-              {cardDetails.category &&
-                cardDetails.category.map((categoryText) => {
-                  return (
+      <div className="grid grid-cols-2">
+        <div className="m-4 h-full max-h-[60vh]">
+          <h1>Character Links:</h1>
+          <div className="border-2 border-black">
+            {characterLinks &&
+              characterLinks.map((linkText) => {
+                return (
+                  <div>
                     <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
-                      {categoryText}
+                      {linkText}
                     </h2>
-                  );
-                })}
-            </div>
-  <div>
-    {Auth.loggedIn() ? (
-      <div>
-        {userCharacters.includes(cardDetails.id) ? (
-          <div>
-            <button onClick={() => {handleRemoveCharacter()}}>Remove Character</button>
+                  </div>
+                );
+              })}
           </div>
-        ) : (
-          <button onClick={() => {handleSaveCharacter()}}>Add character</button>
-        )} 
-      </div>
-    ) : (
-      <div>
-        <h1>Log in to add characters</h1>
-      </div>
-    )}
-  </div>
+          
+        </div>
+        <div className="m-4 h-full max-h-[60vh]">
+          <h1>Character Categories</h1>
+
+          <div className="border-2 border-black rounded-md h-fit min-h-fit max-h-[32.5vh] overflow-auto">
+            {cardDetails.category &&
+              cardDetails.category.map((categoryText) => {
+                return (
+                  <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
+                    {categoryText}
+                  </h2>
+                );
+              })}
           </div>
         </div>
+      </div>
     </div>
   );
 }
 
 export default CardDetails;
-

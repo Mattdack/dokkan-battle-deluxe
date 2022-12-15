@@ -119,3 +119,43 @@ query Me($username: String!) {
     savedCharacters
   }
 }`;
+
+export const GET_USERCHARACTERSBYID = gql`
+query CharactersWithIds($dokkanIds: [Int]) {
+  charactersWithIds(dokkanIds: $dokkanIds) {
+    id
+    thumb
+    art
+    name
+    title
+    rarity
+    type
+    cost
+    ls_description
+    ls_description_eza
+    sa_type
+    sa_name
+    sa_description
+    sa_description_eza
+    ultra_sa_name
+    ultra_sa_description
+    ultra_sa_description_eza
+    ps_name
+    ps_description
+    ps_description_eza
+    sa_type_active
+    active_skill_name
+    active_skill
+    active_skill_condition
+    active_skill_condition_eza
+    transform_type
+    transform_condition
+    transform_condition_eza
+    link_skill
+    category
+    jp_date
+    glb_date
+    jp_date_eza
+    glb_date_eza
+  }
+}`;
