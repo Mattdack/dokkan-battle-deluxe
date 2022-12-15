@@ -37,8 +37,8 @@ function CardDetails({ cardDetails }) {
   }, [cardDetails]);
 
   return (
-    <div className="bg-gradient-radial from-purple-300 via-purple-400 to-purple-800 rounded-md m-2 border-2 border-black">
-      <div className="rounded-md m-2 flex">
+    <div>
+      <div className="flex flex-row justify-evenly">
         <div>
           {characterThumb && (
                   <div
@@ -63,7 +63,7 @@ function CardDetails({ cardDetails }) {
           <p>{cardDetails.ls_description}</p>
         </div>
       </div>
-      <div className="rounded-md my-8 flex">
+      <div>
         <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 mx-5">
           <h4 className="">{cardDetails.sa_name}</h4>
           <p>{cardDetails.sa_description}</p>

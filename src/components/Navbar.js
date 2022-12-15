@@ -54,7 +54,7 @@ const AppNavbar = () => {
   };
 
   return (
-    <div className="h-12 w-screen">
+    <div className="h-12 w-screen bg-slate-900 border-4 border-black">
       <div>
         <form noValidate validated={validated} onSubmit={handleFormSubmit}>
           <input
