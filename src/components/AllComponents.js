@@ -4,8 +4,10 @@ import SuggestToWeb from "./SuggestToWeb";
 import { handleRarityChange } from "../util/helpers";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { QUERY_CHARACTERS, QUERY_ONECHARACTER } from "../util/queries";
+import { QUERY_CHARACTERS, QUERY_ONECHARACTER, GET_USERDATA } from "../util/queries";
 import CardDetails from "./CardDetails";
+
+import Auth from "../util/auth";
 
 function AllComponents() {
   const categorySelect = document.getElementById("categories");
@@ -43,11 +45,24 @@ function AllComponents() {
   const [phyActive, setPhyActive] = useState(false);
   const [allTypeActive, setAllTypeActive] = useState(true);
 
+  const [getUserData, { loading:loading3, data:data3 }] = useLazyQuery(GET_USERDATA);
+
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
+
+  const [userCharacters, setUserCharacters] = useState([]);
   
-  const { loading:loading3, data:data3 } = useQuery(QUERY_CHARACTERS);
-  const userCharacters = data3 || [];
+  useEffect(() => {
+    console.log('once')
+    const username = Auth.getProfile().data.username
+    getUserData({
+      variables: {
+        username: username
+      },
+    }).then((result) => {
+      setUserCharacters(result.data.me.savedCharacters)
+    });
+  },[])
 
   useEffect(() => {
     setCharacters(allCharacters);
@@ -487,7 +502,7 @@ function AllComponents() {
       </div>
       {/* //middle column styling */}
       <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
-        <CardDetails cardDetails={cardDetails} />
+        <CardDetails cardDetails={cardDetails} userCharacters={userCharacters} />
         {/* <Links links={links}/> */}
       </div>
 
