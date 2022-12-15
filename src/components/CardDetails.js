@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { ADD_CHARACTER } from "../util/mutations";
+import Auth from "../util/auth";
 
 function CardDetails({ cardDetails }) {
+  const [saveCharacter, { error, data }] = useMutation(ADD_CHARACTER);
+
   let characterId = cardDetails.id;
   let prevCharacterId = useRef(characterId);
 
@@ -125,6 +130,18 @@ function CardDetails({ cardDetails }) {
     }
   }, [characterId]);
 
+  function handleSaveCharacter(){
+    const username=Auth.getProfile().data.username
+    saveCharacter({
+      variables: {
+        username: username,
+        dokkanId: cardDetails.id
+      },
+    }).then((result) => {
+      console.log(result)
+    })
+  }
+
   return (
     <div className="grid grid-cols-1 place-items-center">
       <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-max rounded-lg">
@@ -194,6 +211,17 @@ function CardDetails({ cardDetails }) {
                   );
                 })}
             </div>
+  <div>
+    {Auth.loggedIn() ? (
+      <div>
+        <button onClick={() => {handleSaveCharacter()}}>Add character</button>
+      </div>
+    ) : (
+      <div>
+        <h1>Log in to add characters</h1>
+      </div>
+    )}
+  </div>
           </div>
         </div>
     </div>
@@ -201,3 +229,4 @@ function CardDetails({ cardDetails }) {
 }
 
 export default CardDetails;
+

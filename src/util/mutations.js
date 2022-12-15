@@ -26,3 +26,12 @@ mutation Login($email: String!, $password: String!) {
   }
 }
 `;
+
+export const ADD_CHARACTER = gql`
+mutation SaveCharacter($username: String!, $dokkanId: Int) {
+  saveCharacter(username: $username, dokkanId: $dokkanId) {
+    username
+    email
+    savedCharacters
+  }
+}`;
