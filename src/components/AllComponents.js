@@ -256,15 +256,30 @@ function AllComponents() {
   }
 
   return (
-    // Stages formatting/transitions based on windowsize
-    <div className="bg-slate-700 xl:flex xl:flex-row lg:flex lg:flex-row md:flex md:flex-row sm:flex sm:flex-col xs:flex xs:flex-col h-screen w-screen">
+    
+    // stages formatting
+    <div className="bg-slate-700 flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col h-screen w-screen">
 
       {/* //left column styling */}
-      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex-col mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
+      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex flex-col mx-2 my-4 border-4 border-black basis-1/3">
 
         <h1 className="text-center m-4">Search by Filters</h1>
-        <div className="flex justify-evenly">
-          <select className="p-2 text-black bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black" id="categories" onChange={handleCategoryChange}>
+
+        {/* //contains filters/buttons/search field/etc. */}
+        <div className="flex flex-row flex-wrap justify-around mx-5">
+
+          {/* //search field */}
+          <form className="order-1 justify-start m-2">
+            <input className="p-2.5 rounded-md border-2 border-black text-black"
+              type="text"
+              name="characterName"
+              onChange={handleSearchChange}
+              value={search}
+            />
+          </form>
+
+          {/* //categories field */}
+          <select className="order-2 m-2 p-2 text-black bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black" id="categories" onChange={handleCategoryChange}>
             <option>Categories:</option>
             <option>Fusion</option>
             <option>Shadow Dragon Saga</option>
@@ -355,119 +370,110 @@ function AllComponents() {
             <option>Bond of Parent and Child</option>
             <option>Warriors Raised on Earth</option>
           </select>
-          <form>
-            <input className="p-2 rounded-md border-2 border-black text-black"
-              type="text"
-              name="characterName"
-              onChange={handleSearchChange}
-              value={search}
-            />
-          </form>
-        </div>
 
-        <div className="flex m-4 justify-center">
-
+          {/* //type buttons */}
           <div
-              className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-1"
-              onClick={handleRarityChange}
+            className="order-3 bg-orange-300 rounded-md border-2 border-black flex my-5"
+            id="box-2"
+            onClick={handleTypeChange}
+          >
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="AGL"
+              style={aglStyle}
             >
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="UR"
-                style={urStyle}
-              >
-                UR
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="LR"
-                style={lrStyle}
-              >
-                LR
-              </button>
-            </div>
-            <div
-              className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
-              id="box-2"
-              onClick={handleTypeChange}
+              AGL
+            </button>
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="TEQ"
+              style={teqStyle}
             >
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="AGL"
-                style={aglStyle}
-              >
-                AGL
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="TEQ"
-                style={teqStyle}
-              >
-                TEQ
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="INT"
-                style={intStyle}
-              >
-                INT
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="STR"
-                style={strStyle}
-              >
-                STR
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="PHY"
-                style={phyStyle}
-              >
-                PHY
-              </button>
-              <button
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-                name="ALL"
-                style={allStyle}
-              >
-                ALL
-              </button>
-            </div>
-          <div className="bg-orange-300 w-[40%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-3">
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Super</button>
-            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Extreme</button>
+              TEQ
+            </button>
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="INT"
+              style={intStyle}
+            >
+              INT
+            </button>
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="STR"
+              style={strStyle}
+            >
+              STR
+            </button>
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="PHY"
+              style={phyStyle}
+            >
+              PHY
+            </button>
+            <button
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              name="ALL"
+              style={allStyle}
+            >
+              ALL
+            </button>
+          </div>
+
+          {/* //rarity buttons */}
+          <div
+            className="order-4 bg-orange-300 rounded-md border-2 border-black flex 2xl:h-12 2xl:mt-5"
+            id="box-1"
+            onClick={handleRarityChange}
+          >
+            <button
+              className="relative hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+              name="UR"
+              style={urStyle}
+            >
+              UR
+            </button>
+            <button
+              className="hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+              name="LR"
+              style={lrStyle}
+            >
+              LR
+            </button>
+
           </div>
         </div>
-        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
-          <h2 className="p-3 mt-3">Main Character Selection</h2>
-          <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-2">
+
+          <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
+          
+          {/* //character select box */}
+          <div className="h-fit m-10 border-4 border-black overflow-auto">
             {loading ? (
               <div>Loading...</div>
             ) : (
-              <div className="overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96">
+              <div className="bg-orange-200 grid grid-cols-5 grid-rows-5 justify-self-center">
                 {filteredCharacters && filteredCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
                     arraySuggestion(character)
-                  }} onDoubleClick = {() => {addToTeam(character)}}>
-                    <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} characterType={character.type} characterRarity={character.rarity}/>
+                  }} onDoubleClick={() => { addToTeam(character) }}>
+                    <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} characterType={character.type} characterRarity={character.rarity} />
                   </div>
                 ))}
               </div>
             )}
           </div>
-        </div>
+        
       </div>
       {/* //middle column styling */}
-      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
+      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-4 border-black relative basis-1/3">
         <CardDetails cardDetails={cardDetails} />
         {/* <Links links={links}/> */}
       </div>
 
       {/* //right column styling */}
-      <div className="bg-gradient-radial from-green-400 via-green-600 to-green-900 rounded-md mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
+      <div className="bg-gradient-radial from-green-400 via-green-600 to-green-900 rounded-md mx-2 my-4 border-2 border-black basis-1/3">
         <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
       </div>
 
