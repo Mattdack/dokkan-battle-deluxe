@@ -4,14 +4,15 @@ function CardDetails({ cardDetails }) {
   let characterId = cardDetails.id;
   let prevCharacterId = useRef(characterId);
 
-  const [characterThumb, setCharacterThumb] = useState('');
-  const [characterThumbURL, setCharacterThumbURL] = useState('');
+  const [characterThumb, setCharacterThumb] = useState("");
+  const [characterThumbURL, setCharacterThumbURL] = useState("");
 
   const [characterRarity, setCharacterRarity] = useState("");
   const [characterRarityPosition, setCharacterRarityPosition] = useState("");
 
   const [characterType, setCharacterType] = useState("");
   const [characterSuperOrExtreme, setCharacterSuperOrExtreme] = useState("");
+  const [characterLinks, setCharacterLinks] = useState([]);
 
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
@@ -27,17 +28,19 @@ function CardDetails({ cardDetails }) {
   }, [cardDetails]);
 
   useEffect(() => {
-    console.log(cardDetails)
+    console.log(cardDetails);
     if (cardDetails.thumb === null) {
       setCharacterThumb(cardDetails.art);
     } else {
       setCharacterThumb(cardDetails.thumb);
     }
 
-    if (
-      cardDetails.rarity === "UR" ||
-      cardDetails.rarity === "UR "
-    ) {
+    if (cardDetails.link_skill !== null) {
+      setCharacterLinks(cardDetails.link_skill);
+    }
+    console.log(cardDetails.link_skill);
+
+    if (cardDetails.rarity === "UR" || cardDetails.rarity === "UR ") {
       setCharacterRarityPosition(
         "h-[28px] absolute top-[80px] right-[68px] z-50"
       );
@@ -127,7 +130,7 @@ function CardDetails({ cardDetails }) {
       <div className="flex flex-row justify-evenly">
         <div>
           {characterThumb && (
-            <div className='relative'>
+            <div className="relative">
               <div
                 onClick={() => {}}
                 className="h-28 w-28 m-2 gap-4 bg-no-repeat relative z-50"
@@ -135,12 +138,8 @@ function CardDetails({ cardDetails }) {
                   backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterThumb}_thumb.png")`,
                   backgroundSize: `100%`,
                 }}
-              >
-              </div>
-              <img 
-                className={characterRarityPosition} 
-                src={characterRarity} 
-                />
+              ></div>
+              <img className={characterRarityPosition} src={characterRarity} />
               <img
                 className="w-[80px] absolute top-[20px] right-[25px] z-0"
                 src={characterType}
@@ -161,33 +160,35 @@ function CardDetails({ cardDetails }) {
         </div>
       </div>
       <div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 mx-5">
+        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 w-36 mx-5">
           <h4 className="">{cardDetails.sa_name}</h4>
           <p>{cardDetails.sa_description}</p>
         </div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 mx-5">
-          <h4 className="">HP Stat</h4>
-          <p></p>
+        <h1>CharacterLinks Should Append Under This</h1>
+        <div className="border-2 border-black">
+          {characterLinks &&
+            characterLinks.map((linkText) => {
+              return(
+              <div>
+                <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
+                  {linkText}
+                </h2>
+              </div>
+              )
+            })}
         </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-        </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-        </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-          <div>
-            <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-              This is an example Link
-            </h2>
-          </div>
+
+        <h1>Character Categories Should Append Under This</h1>
+
+        <div className="border-2 border-black">
+          {cardDetails.category &&
+            cardDetails.category.map((categoryText) => {
+              return (
+              <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
+                {categoryText}
+              </h2>
+              )
+            })}
         </div>
       </div>
     </div>

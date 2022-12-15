@@ -59,23 +59,32 @@ function Web(props) {
       ]);
     });
 
+    
+  }, [props.webOfTeam]);
+
+  useEffect(() => {
     for (let i = 0; i < props.webOfTeam.length; i++) {
       for (let j = 0; j < props.webOfTeam.length; j++) {
         if(i !== j) {
-          console.log("We should be making edges")
+          console.log("We should be making edges");
+          console.log(props.webOfTeam[i].id)
+          console.log(props.webOfTeam[j].id)
+          console.log(props.webOfTeam[i].id + props.webOfTeam[j].id)
+          console.log("===================================")
           setEdges((prev) => [
             ...prev,
             {
-              id: `e${props.webOfTeam[i].id}-${props.webOfTeam[j].id}`,
+              id: props.webOfTeam[i].id + props.webOfTeam[j].id,
               source: props.webOfTeam[i].id,
               target: props.webOfTeam[j].id,
-            }
+              type: "smoothstep",
+            },
           ])
         } 
       }
     }
 
-  }, [props.webOfTeam]);
+  }, [nodes])
 
   return (
     <div className="h-80">
@@ -88,8 +97,7 @@ function Web(props) {
           // onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-teal-50"
-          border = "parent"
+          className="bg-green-400"
         ></ReactFlow>
       </div>
     </div>
