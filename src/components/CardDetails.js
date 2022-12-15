@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { ADD_CHARACTER } from "../util/mutations";
+import Auth from "../util/auth";
 
 function CardDetails({ cardDetails }) {
+  const [saveCharacter, { error, data }] = useMutation(ADD_CHARACTER);
+
   let characterId = cardDetails.id;
   let prevCharacterId = useRef(characterId);
 
-  const [characterThumb, setCharacterThumb] = useState('');
-  const [characterThumbURL, setCharacterThumbURL] = useState('');
+  const [characterThumb, setCharacterThumb] = useState("");
+  const [characterThumbURL, setCharacterThumbURL] = useState("");
 
   const [characterRarity, setCharacterRarity] = useState("");
   const [characterRarityPosition, setCharacterRarityPosition] = useState("");
@@ -27,17 +32,14 @@ function CardDetails({ cardDetails }) {
   }, [cardDetails]);
 
   useEffect(() => {
-    console.log(cardDetails)
+    console.log(cardDetails);
     if (cardDetails.thumb === null) {
       setCharacterThumb(cardDetails.art);
     } else {
       setCharacterThumb(cardDetails.thumb);
     }
 
-    if (
-      cardDetails.rarity === "UR" ||
-      cardDetails.rarity === "UR "
-    ) {
+    if (cardDetails.rarity === "UR" || cardDetails.rarity === "UR ") {
       setCharacterRarityPosition(
         "h-[28px] absolute top-[80px] right-[68px] z-50"
       );
@@ -122,12 +124,25 @@ function CardDetails({ cardDetails }) {
     }
   }, [characterId]);
 
+  function handleSaveCharacter(){
+    const username=Auth.getProfile().data.username
+    saveCharacter({
+      variables: {
+        username: username,
+        dokkanId: cardDetails.id
+      },
+    }).then((result) => {
+      console.log(result)
+    })
+  }
+
+  
   return (
     <div>
       <div className="flex flex-row justify-evenly">
         <div>
           {characterThumb && (
-            <div className='relative'>
+            <div className="relative">
               <div
                 onClick={() => {}}
                 className="h-28 w-28 m-2 gap-4 bg-no-repeat relative z-50"
@@ -135,12 +150,8 @@ function CardDetails({ cardDetails }) {
                   backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterThumb}_thumb.png")`,
                   backgroundSize: `100%`,
                 }}
-              >
-              </div>
-              <img 
-                className={characterRarityPosition} 
-                src={characterRarity} 
-                />
+              ></div>
+              <img className={characterRarityPosition} src={characterRarity} />
               <img
                 className="w-[80px] absolute top-[20px] right-[25px] z-0"
                 src={characterType}
@@ -188,6 +199,17 @@ function CardDetails({ cardDetails }) {
               This is an example Link
             </h2>
           </div>
+        </div>
+        <div>
+          {Auth.loggedIn() ? (
+            <div>
+              <button onClick={() => {handleSaveCharacter()}}>Add character</button>
+            </div>
+          ) : (
+            <div>
+              <h1>Log in to add characters</h1>
+            </div>
+          )}
         </div>
       </div>
     </div>

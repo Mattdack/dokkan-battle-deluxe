@@ -33,6 +33,9 @@ function AllComponents() {
 
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
+  
+  const { loading:loading3, data:data3 } = useQuery(QUERY_CHARACTERS);
+  const userCharacters = data3?.characters || [];
 
   useEffect(() => {
     setCharacters(allCharacters);
@@ -222,8 +225,6 @@ function AllComponents() {
   }
 
   const [getOneCharacter, { loading: loading2, data: data2 }] = useLazyQuery(QUERY_ONECHARACTER);
-
-
 
   function newCardDetails(character) {
     const newToon = character[0];
