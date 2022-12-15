@@ -47,7 +47,7 @@ function AllComponents() {
   const allCharacters = data?.characters || [];
   
   const { loading:loading3, data:data3 } = useQuery(QUERY_CHARACTERS);
-  const userCharacters = data3?.characters || [];
+  const userCharacters = data3 || [];
 
   useEffect(() => {
     setCharacters(allCharacters);
