@@ -97,11 +97,11 @@ function AllComponents() {
 
     if (rarityType === "LR") {
       lrActive ? setLrActive(false) : setLrActive(true);
-      //console.log("Swapping LR Status");
+      console.log("Swapping LR Status");
     }
     if (rarityType === "UR") {
       urActive ? setUrActive(false) : setUrActive(true);
-      //console.log("Swapping UR Status");
+      console.log("Swapping UR Status");
     }
   };
 
@@ -236,13 +236,13 @@ function AllComponents() {
     }).then((result) => {
       setCardDetails(result.data.character)
     })
-    //console.log(cardDetails);
+    console.log(cardDetails);
   }
 
   function addToTeam(character) {
     webOfTeam.push(character)
     setWebOfTeam(webOfTeam)
-    //console.log(webOfTeam);
+    console.log(webOfTeam);
   }
 
   return (
