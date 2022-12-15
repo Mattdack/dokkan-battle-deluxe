@@ -5,8 +5,8 @@ import Auth from "../util/auth";
 
 function CardDetails({ cardDetails, userCharacters }) {
   const [saveCharacter, { error, data }] = useMutation(ADD_CHARACTER);
-  const [removeCharacter, { error:error2, data:data2 }] = useMutation(REMOVE_CHARACTER);
-
+  const [removeCharacter, { error: error2, data: data2 }] =
+    useMutation(REMOVE_CHARACTER);
 
   let characterId = cardDetails.id;
   let prevCharacterId = useRef(characterId);
@@ -144,16 +144,16 @@ function CardDetails({ cardDetails, userCharacters }) {
     });
   }
 
-  function handleRemoveCharacter(){
-    const username=Auth.getProfile().data.username
+  function handleRemoveCharacter() {
+    const username = Auth.getProfile().data.username;
     removeCharacter({
       variables: {
         username: username,
-        dokkanId: cardDetails.id
+        dokkanId: cardDetails.id,
       },
     }).then((result) => {
-      console.log(result)
-    })
+      console.log(result);
+    });
   }
 
   return (
@@ -197,11 +197,12 @@ function CardDetails({ cardDetails, userCharacters }) {
       </div>
       <div>
         {Auth.loggedIn() ? (
-          <div className = "order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+          <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
             <button
               onClick={() => {
                 handleSaveCharacter();
-              }} className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+              }}
+              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
             >
               Add character
             </button>
@@ -224,28 +225,39 @@ function CardDetails({ cardDetails, userCharacters }) {
                     <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
                       {linkText}
                     </h2>
-                    </div>
-                  );
-                })}
-            </div>
-  <div>
-    {Auth.loggedIn() ? (
-      <div>
-        {userCharacters.includes(cardDetails.id) ? (
-          <div>
-            <button onClick={() => {handleRemoveCharacter()}}>Remove Character</button>
+                  </div>
+                );
+              })}
           </div>
-        ) : (
-          <button onClick={() => {handleSaveCharacter()}}>Add character</button>
-        )} 
-      </div>
-    ) : (
-      <div>
-        <h1>Log in to add characters</h1>
-      </div>
-    )}
-  </div>
-  
+          <div>
+            {Auth.loggedIn() ? (
+              <div>
+                {userCharacters.includes(cardDetails.id) ? (
+                  <div>
+                    <button
+                      onClick={() => {
+                        handleRemoveCharacter();
+                      }}
+                    >
+                      Remove Character
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleSaveCharacter();
+                    }}
+                  >
+                    Add character
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h1>Log in to add characters</h1>
+              </div>
+            )}
+          </div>
         </div>
         <div className="m-4 h-full max-h-[60vh]">
           <h1>Character Categories</h1>
