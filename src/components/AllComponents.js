@@ -240,9 +240,7 @@ function AllComponents() {
   }
 
   function addToTeam(character) {
-    webOfTeam.push(character)
-    setWebOfTeam(webOfTeam)
-    console.log(webOfTeam);
+    setWebOfTeam(prev => [...prev, character])
   }
 
   return (
@@ -438,7 +436,6 @@ function AllComponents() {
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
                     arraySuggestion(character)
-                    console.log(character.artwork)
                   }} onDoubleClick = {() => {addToTeam(character)}}>
                     <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
                   </div>
