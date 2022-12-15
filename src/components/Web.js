@@ -14,11 +14,11 @@ import "reactflow/dist/base.css";
 
 const initialEdges = []
 const initialNodes = []
+const nodeTypes = {
+  custom: WebCard,
+};
 
 function Web(props) {
-  const nodeTypes = {
-    custom: WebCard,
-  };
   // const [nodes, setNodes, onNodesChange] = useNodesState([]);
   // const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -56,6 +56,23 @@ function Web(props) {
         },
       ]);
     });
+
+    for (let i = 0; i < props.webOfTeam.length; i++) {
+      for (let j = 0; j < props.webOfTeam.length; j++) {
+        if(i !== j) {
+          console.log("We should be making edges")
+          setEdges((prev) => [
+            ...prev,
+            {
+              id: `e${props.webOfTeam[i].id}-${props.webOfTeam[j].id}`,
+              source: props.webOfTeam[i].id,
+              target: props.webOfTeam[j].id,
+            }
+          ])
+        } 
+      }
+    }
+
   }, [props.webOfTeam]);
 
   return (
