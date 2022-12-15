@@ -35,3 +35,12 @@ mutation SaveCharacter($username: String!, $dokkanId: Int) {
     savedCharacters
   }
 }`;
+
+export const REMOVE_CHARACTER = gql`
+mutation RemoveCharacter($username: String!, $dokkanId: Int) {
+  removeCharacter(username: $username, dokkanId: $dokkanId) {
+    username
+    email
+    savedCharacters
+  }
+}`;
