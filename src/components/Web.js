@@ -50,6 +50,8 @@ function Web(props) {
             characterId: character.id,
             characterArt: character.art,
             characterThumb: character.thumb,
+            characterType: character.type,
+            characterRarity: character.rarity
           },
           position: { x: 0, y: 50 },
           style: {visibility: "visible"}
