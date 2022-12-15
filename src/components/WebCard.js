@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 
-function SingleCard(props) {
-  let characterId = props.characterId;
-  let prevCharacterId = useRef(characterId);
-  let characterLinks = props.link_skill;
+function WebCard({ data }) {
+
+  let prevCharacterId = useRef(data.characterId);
 
   const [characterThumb, setCharacterThumb] = useState([]);
   const [characterRarity, setCharacterRarity] = useState('');
@@ -12,18 +11,16 @@ function SingleCard(props) {
   const [characterType, setCharacterType] = useState('');
   const [characterSuperOrExtreme, setCharacterSuperOrExtreme] = useState('');
 
-
-
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
     // Run the query and update the "data" state.
-    if (props.characterThumb === null) {
-      setCharacterThumb(props.characterArt);
+    if (data.characterThumb === null) {
+      setCharacterThumb(data.characterArt);
     } else {
-      setCharacterThumb(props.characterThumb);
+      setCharacterThumb(data.characterThumb);
     }
 
-    if (props.characterRarity === 'UR' || props.characterRarity === 'UR '){
+    if (data.characterRarity === 'UR' || data.characterRarity === 'UR '){
       setCharacterRarityPosition('h-[28px] absolute top-[80px] right-[68px] z-50')
       setCharacterRarity('/dokkanIcons/rarities/UR.png')
     }else{
@@ -31,39 +28,39 @@ function SingleCard(props) {
       setCharacterRarity('/dokkanIcons/rarities/LR.png')
     }
 
-    if (props.characterType === 'EPHY' || props.characterType === 'EPHY ' || props.characterType === 'PHY-E'){
+    if (data.characterType === 'EPHY' || data.characterType === 'EPHY ' || data.characterType === 'PHY-E'){
       setCharacterType('/dokkanIcons/types/phy-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/ephy.png')
-    } else if (props.characterType === 'SPHY' || props.characterType === 'SPHY ' || props.characterType === 'PHY-S'){
+    } else if (data.characterType === 'SPHY' || data.characterType === 'SPHY ' || data.characterType === 'PHY-S'){
       setCharacterType('/dokkanIcons/types/phy-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/sphy.png')
-    } else if (props.characterType === 'EAGL' || props.characterType === 'SPHY ' || props.characterType === 'AGL-E'){
+    } else if (data.characterType === 'EAGL' || data.characterType === 'SPHY ' || data.characterType === 'AGL-E'){
       setCharacterType('/dokkanIcons/types/agl-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/eagl.png')
-    } else if (props.characterType === 'SAGL' || props.characterType === 'SAGL ' || props.characterType === 'AGL-S'){
+    } else if (data.characterType === 'SAGL' || data.characterType === 'SAGL ' || data.characterType === 'AGL-S'){
       setCharacterType('/dokkanIcons/types/agl-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/sagl.png')
-    } else if (props.characterType === 'ESTR' || props.characterType === 'ESTR ' || props.characterType === 'STR-E'){
+    } else if (data.characterType === 'ESTR' || data.characterType === 'ESTR ' || data.characterType === 'STR-E'){
       setCharacterType('/dokkanIcons/types/str-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/estr.png')
-    } else if (props.characterType === 'SSTR' || props.characterType === 'SSTR ' || props.characterType === 'STR-S'){
+    } else if (data.characterType === 'SSTR' || data.characterType === 'SSTR ' || data.characterType === 'STR-S'){
       setCharacterType('/dokkanIcons/types/str-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/sstr.png')
-    } else if (props.characterType === 'EINT' || props.characterType === 'EINT ' || props.characterType === 'INT-E'){
+    } else if (data.characterType === 'EINT' || data.characterType === 'EINT ' || data.characterType === 'INT-E'){
       setCharacterType('/dokkanIcons/types/int-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/eint.png')
-    } else if (props.characterType === 'SINT' || props.characterType === 'SINT ' || props.characterType === 'INT-S'){
+    } else if (data.characterType === 'SINT' || data.characterType === 'SINT ' || data.characterType === 'INT-S'){
       setCharacterType('/dokkanIcons/types/int-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/sint.png')
-    } else if (props.characterType === 'ETEQ' || props.characterType === 'ETEQ ' || props.characterType === 'PHY-E'){
+    } else if (data.characterType === 'ETEQ' || data.characterType === 'ETEQ ' || data.characterType === 'PHY-E'){
       setCharacterType('/dokkanIcons/types/teq-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/eteq.png')
-    } else if (props.characterType === 'STEQ' || props.characterType === 'STEQ ' || props.characterType === 'TEQ-S'){
+    } else if (data.characterType === 'STEQ' || data.characterType === 'STEQ ' || data.characterType === 'TEQ-S'){
       setCharacterType('/dokkanIcons/types/teq-background.png')
       setCharacterSuperOrExtreme('/dokkanIcons/types/steq.png')
     } 
-    // Update the "prevCharacter" variable with the current props
-    prevCharacterId = characterId;
+    // Update the "prevCharacter" variable with the current data
+    prevCharacterId = data.characterId;
   }, []);
 
   return (
@@ -86,4 +83,4 @@ function SingleCard(props) {
   );
 }
 
-export default SingleCard;
+export default memo(WebCard);
