@@ -240,9 +240,7 @@ function AllComponents() {
   }
 
   function addToTeam(character) {
-    webOfTeam.push(character)
-    setWebOfTeam(webOfTeam)
-    console.log(webOfTeam);
+    setWebOfTeam(prev => [...prev, character])
   }
 
   return (
@@ -358,101 +356,97 @@ function AllComponents() {
         <div className="flex m-4 justify-center">
 
           <div
-            className="bg-orange-300 relative rounded-md border-2 border-black text-center flex p-1 mr-4"
-            id="box-1"
-            onClick={handleRarityChange}
-          >
-            <button
-              className="relative hover:bg-orange-400 p-2 w-28"
-              name="UR"
-              style={urStyle}
+              className="bg-orange-300 w-[60%] mx-5 p-2 relative rounded-md border-2 border-blue-900"
+              id="box-1"
+              onClick={handleRarityChange}
             >
-              UR
-            </button>
-            <button
-              className="relative hover:bg-orange-400 p-2 w-28"
-              name="LR"
-              style={lrStyle}
-            >
-              LR
-            </button>
-          </div>
-
-          <div className="bg-orange-300 rounded-md border-2 border-black text-center p-1 ml-4" id="box-3">
-            <button className="w-28 p-2">Super</button>
-            <button className="w-28 p-2">Extreme</button>
-          </div>
-        </div>
-
-        <div
-          className="bg-orange-300 rounded-md border-2 border-black flex justify-between w-96 p-1 ml-20 mb-12"
-          id="box-2"
-          onClick={handleTypeChange}
-        >
-          <button
-            className="p-2"
-            name="AGL"
-            style={aglStyle}
-          >
-            AGL
-          </button>
-          <button
-            className="p-2"
-            name="TEQ"
-            style={teqStyle}
-          >
-            TEQ
-          </button>
-          <button
-            className="p-2"
-            name="INT"
-            style={intStyle}
-          >
-            INT
-          </button>
-          <button
-            className="p-2"
-            name="STR"
-            style={strStyle}
-          >
-            STR
-          </button>
-          <button
-            className="p-2"
-            name="PHY"
-            style={phyStyle}
-          >
-            PHY
-          </button>
-          <button
-            className="p-2"
-            name="ALL"
-            style={allStyle}
-          >
-            ALL
-          </button>
-        </div>
-
-
-        <h2 className="p-3 mt-3">Main Character Selection</h2>
-        <div className=" m-2">
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <div className="bg-gradient-radial from-orange-400 via-orange-300 to-orange-200 overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)]">
-              {filteredCharacters && filteredCharacters.map((character) => (
-                <div key={character.id} onClick={() => {
-                  setCardDetails(character)
-                  arraySuggestion(character)
-                  console.log(character.artwork)
-                }} onDoubleClick={() => { addToTeam(character) }}>
-                  <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
-                </div>
-              ))}
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="UR"
+                style={urStyle}
+              >
+                UR
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="LR"
+                style={lrStyle}
+              >
+                LR
+              </button>
             </div>
-          )}
+            <div
+              className="bg-orange-300 w-[85%] m-5 p-2 relative rounded-md border-2 border-blue-900"
+              id="box-2"
+              onClick={handleTypeChange}
+            >
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="AGL"
+                style={aglStyle}
+              >
+                AGL
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="TEQ"
+                style={teqStyle}
+              >
+                TEQ
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="INT"
+                style={intStyle}
+              >
+                INT
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="STR"
+                style={strStyle}
+              >
+                STR
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="PHY"
+                style={phyStyle}
+              >
+                PHY
+              </button>
+              <button
+                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+                name="ALL"
+                style={allStyle}
+              >
+                ALL
+              </button>
+            </div>
+          <div className="bg-orange-300 w-[40%] m-5 p-2 relative rounded-md border-2 border-blue-900" id="box-3">
+            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Super</button>
+            <button className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400">Extreme</button>
+          </div>
         </div>
-
+        <div className="bg-slate-600 rounded-md border-2 border-black text-center basis-1/2 m-2">
+          <h2 className="p-3 mt-3">Main Character Selection</h2>
+          <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-2">
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <div className="overflow-auto border-2 border-black flex flex-col flex-wrap justify-center max-h-96">
+                {filteredCharacters && filteredCharacters.map((character) => (
+                  <div key={character.id} onClick={() => {
+                    setCardDetails(character)
+                    arraySuggestion(character)
+                  }} onDoubleClick = {() => {addToTeam(character)}}>
+                    <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} characterType={character.type} characterRarity={character.rarity}/>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       {/* //middle column styling */}
       <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-2 border-black max-w-2xl basis-1/3">
