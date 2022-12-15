@@ -148,9 +148,8 @@ function newArraySuggestion(character) {
 
       <Web webOfTeam = {props.webOfTeam}/>
 
-      <div className="h-1/2 row-span-2 p-2">
-        <div className="flex flex-col h-full justify-end">
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
+      <div className="row-span-2 p-2">
+          <div className="flex flex-row self-center h-40 w-128 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 7 links
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
@@ -163,7 +162,7 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
+          <div className="flex flex-row h-40 w-128 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 6 links
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
@@ -175,7 +174,7 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
+          <div className="flex flex-row h-40 w-128 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 5 links
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
@@ -188,7 +187,7 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
+          <div className="flex flex-row h-40 w-128 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 4 links
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
@@ -200,7 +199,7 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
+          <div className="flex flex-row h-40 w-128 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 3 links
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
@@ -212,7 +211,7 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-        </div>
+        
       </div>
     </div>
   );

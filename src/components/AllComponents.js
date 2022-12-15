@@ -261,7 +261,7 @@ function AllComponents() {
     <div className="bg-slate-700 flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col h-screen w-screen">
 
       {/* //left column styling */}
-      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex flex-col mx-2 my-4 border-4 border-black basis-1/3">
+      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex flex-col mx-2 my-4 border-4 border-black">
 
         <h1 className="text-center m-4">Search by Filters</h1>
 
@@ -467,9 +467,8 @@ function AllComponents() {
         
       </div>
       {/* //middle column styling */}
-      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-4 border-black relative basis-1/3">
+      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-4 border-black">
         <CardDetails cardDetails={cardDetails} />
-        {/* <Links links={links}/> */}
       </div>
 
       {/* //right column styling */}

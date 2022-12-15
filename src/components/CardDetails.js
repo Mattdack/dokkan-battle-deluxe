@@ -127,12 +127,12 @@ function CardDetails({ cardDetails }) {
 
   return (
     <div>
-      <div className="flex flex-row justify-evenly">
-        <div>
+      <div className="flex">
+        <div className="">
           {characterThumb && (
             <div className="relative">
               <div
-                onClick={() => {}}
+                onClick={() => { }}
                 className="h-28 w-28 m-2 gap-4 bg-no-repeat relative z-50"
                 style={{
                   backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterThumb}_thumb.png")`,
@@ -158,38 +158,54 @@ function CardDetails({ cardDetails }) {
           <h2 className="ml-1 mt-2 text-center">Leader Skill</h2>
           <p>{cardDetails.ls_description}</p>
         </div>
+
       </div>
       <div>
         <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 w-36 mx-5">
           <h4 className="">{cardDetails.sa_name}</h4>
           <p>{cardDetails.sa_description}</p>
         </div>
-        <h1>CharacterLinks Should Append Under This</h1>
-        <div className="border-2 border-black">
-          {characterLinks &&
-            characterLinks.map((linkText) => {
-              return(
-              <div>
-                <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-                  {linkText}
-                </h2>
-              </div>
-              )
-            })}
+
+        <div className="grid grid-cols-2 mt-32">
+         
+          <div className="m-4">
+
+            <h1>Character Categories</h1>
+            <div className="border-2 border-black bg-purple-900 rounded-md">
+              {cardDetails.category &&
+                cardDetails.category.map((categoryText) => {
+                  return (
+                    <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-12">
+                      {categoryText}
+                    </h2>
+                  )
+                })}
+            </div>
+
+          </div>
+
+          <div className="m-4">
+
+            <h1>Character Link Skills</h1>
+            <div className="border-2 border-black bg-purple-900 rounded-md">
+              {characterLinks &&
+                characterLinks.map((linkText) => {
+                  return (
+                    <div>
+                      <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-12">
+                        {linkText}
+                      </h2>
+                    </div>
+                  )
+                })}
+            </div>
+
+          </div>
+
+
+
         </div>
 
-        <h1>Character Categories Should Append Under This</h1>
-
-        <div className="border-2 border-black">
-          {cardDetails.category &&
-            cardDetails.category.map((categoryText) => {
-              return (
-              <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-                {categoryText}
-              </h2>
-              )
-            })}
-        </div>
       </div>
     </div>
   );
