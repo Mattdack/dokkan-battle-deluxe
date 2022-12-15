@@ -204,7 +204,7 @@ function CardDetails({ cardDetails, userCharacters }) {
                 characterLinks.map((linkText) => {
                   return (
                     <div>
-                      <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
+                      <h2 key = {linkText} className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
                         {linkText}
                       </h2>
                     </div>

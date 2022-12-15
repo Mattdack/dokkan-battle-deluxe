@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, memo } from "react";
 
 function WebCard({ data }) {
 
-  let prevCharacterId = useRef(data.characterId);
+  // let prevCharacterId = useRef(data.characterId);
 
   const [characterThumb, setCharacterThumb] = useState([]);
   const [characterRarity, setCharacterRarity] = useState('');
@@ -60,7 +60,7 @@ function WebCard({ data }) {
       setCharacterSuperOrExtreme('/dokkanIcons/types/steq.png')
     } 
     // Update the "prevCharacter" variable with the current data
-    prevCharacterId = data.characterId;
+    // prevCharacterId = data.characterId;
   }, []);
 
   return (
