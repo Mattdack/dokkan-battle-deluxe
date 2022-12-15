@@ -135,13 +135,16 @@ function AllComponents() {
     }
   };
 
-  const handleDeckSelection = (e) => {
-    e.preventDefault();
-    const { target } = e;
-    if(target.name === "DECK") {
-      setFilteredCharacters(userCharacters);
-    }
-  }
+  // const handleDeckSelection = (e) => {
+  //   e.preventDefault();
+  //   const { target } = e;
+  //   if(target.name === "DECK") {
+  //     userCharacters.forEach(id => {
+  //       filteredCharacters.filter((character) => character.id === id)
+  //     });
+  //     setFilteredCharacters(filteredCharacters);
+  //   }
+  // }
 
   useEffect(() => {
     if (lrActive && urActive) {
@@ -468,7 +471,7 @@ function AllComponents() {
 
           </div>
 
-        <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5" onClick = {handleDeckSelection}>
+        <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5" >
         <button
               className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
               name="DECK"

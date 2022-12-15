@@ -196,23 +196,38 @@ function CardDetails({ cardDetails, userCharacters }) {
         </p>
       </div>
       <div>
-        {Auth.loggedIn() ? (
-          <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
-            <button
-              onClick={() => {
-                handleSaveCharacter();
-              }}
-              className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
-            >
-              Add character
-            </button>
+            {Auth.loggedIn() ? (
+              <div>
+                {userCharacters.includes(cardDetails.id) ? (
+                  <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+                    <button
+                      onClick={() => {
+                        handleRemoveCharacter();
+                      }}
+                      className="relative hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+                    >
+                      Remove Character
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+                  <button
+                    onClick={() => {
+                      handleSaveCharacter();
+                    }}
+                    className="relative hover:bg-orange-400 m-0.5 pr-10 pl-10 pt-2 pb-2"
+                  >
+                    Add character
+                  </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h1>Log in to add characters</h1>
+              </div>
+            )}
           </div>
-        ) : (
-          <div>
-            <h1>Log in to add characters</h1>
-          </div>
-        )}
-      </div>
 
       <div className="grid grid-cols-2">
         <div className="m-4 h-full max-h-[60vh]">
@@ -229,35 +244,7 @@ function CardDetails({ cardDetails, userCharacters }) {
                 );
               })}
           </div>
-          <div>
-            {Auth.loggedIn() ? (
-              <div>
-                {userCharacters.includes(cardDetails.id) ? (
-                  <div>
-                    <button
-                      onClick={() => {
-                        handleRemoveCharacter();
-                      }}
-                    >
-                      Remove Character
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => {
-                      handleSaveCharacter();
-                    }}
-                  >
-                    Add character
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div>
-                <h1>Log in to add characters</h1>
-              </div>
-            )}
-          </div>
+          
         </div>
         <div className="m-4 h-full max-h-[60vh]">
           <h1>Character Categories</h1>
