@@ -96,7 +96,6 @@ const AppNavbar = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="h-12 w-screen">
       <>{/* TODO: logout button show */}</>
       {Auth.loggedIn() ? (
@@ -178,50 +177,6 @@ const AppNavbar = () => {
           </form>
         </div>
       )}
-=======
-    <div className="h-12 w-screen bg-slate-900 border-4 border-black">
-      <div>
-        <form noValidate validated={validated} onSubmit={handleFormSubmit}>
-          <input
-            onChange={handleInputChange}
-            className="w-50 h-full border-2 border-black"
-            type='text'
-            placeholder='Your username'
-            name='username'
-            value={userFormData.username}
-          ></input>
-          <input
-            onChange={handleInputChange}
-            className="w-50 h-full border-2 border-black"
-            type='text'
-            placeholder='Your email'
-            name='email'
-            value={userFormData.email}
-          ></input>
-          <input
-            onChange={handleInputChange}
-            className="w-50 h-full border-2 border-black"
-            type='text'
-            placeholder='Your password'
-            name='password'
-            value={userFormData.password}
-          ></input>
-          <button
-            disabled={
-              !(
-                userFormData.username &&
-                userFormData.email &&
-                userFormData.password
-              )
-            }
-            type="submit"
-            variant="success">
-            Submit
-          </button>
-        </form>
-      </div>
-
->>>>>>> dev
     </div>
   );
 };
