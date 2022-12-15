@@ -148,8 +148,8 @@ function newArraySuggestion(character) {
 
       <Web webOfTeam = {props.webOfTeam}/>
 
-      <div className="bg-blue-500 h-1/2 row-span-2 rounded-md p-2 border-2 border-black m-2">
-        <div className="flex flex-col h-full">
+      <div className="h-1/2 row-span-2 p-2">
+        <div className="flex flex-col h-full justify-end">
           <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
             these characters share 7 links
             {charactersWith7Matches &&

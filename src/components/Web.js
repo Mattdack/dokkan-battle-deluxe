@@ -6,7 +6,7 @@ function Web(props) {
 
   return (
     <div className="h-80">
-      <div className="h-full bg-slate-700 row-span-6 rounded-md">
+      <div className="h-full row-span-6 rounded-md">
         {webbedCharacters &&
           webbedCharacters.map((character) => (
             <div key={character.id}>
