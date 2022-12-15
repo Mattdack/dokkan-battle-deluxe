@@ -53,7 +53,7 @@ function Web(props) {
             characterType: character.type,
             characterRarity: character.rarity
           },
-          position: { x: 0, y: 50 },
+          position: { x: 10, y: 10 },
           style: {visibility: "visible"}
         },
       ]);
@@ -87,7 +87,7 @@ function Web(props) {
   }, [nodes])
 
   return (
-    <div className="h-80">
+    <div className="h-72">
       <div className="h-full bg-slate-700 row-span-6 rounded-md">
         <ReactFlow
           nodes={nodes}
@@ -97,7 +97,7 @@ function Web(props) {
           // onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-green-400"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
         ></ReactFlow>
       </div>
     </div>

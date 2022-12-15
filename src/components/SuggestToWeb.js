@@ -148,10 +148,10 @@ function newArraySuggestion(character) {
 
       <Web webOfTeam = {props.webOfTeam}/>
 
-      <div className="h-1/2 row-span-2 p-2">
+      <div className="h-[60vh]row-span-2 p-2">
         <div className="flex flex-col h-full justify-end">
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
-            these characters share 7 links
+          {/* <h3>Characters with 7 Links:</h3>
+          <div className="grid grid-cols-5 max-w-full h-[120px] bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
             {charactersWith7Matches &&
               charactersWith7Matches.map((character) => (
                 <div key={character} onClick= {() => {
@@ -162,9 +162,9 @@ function newArraySuggestion(character) {
                   <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
-          </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
-            these characters share 6 links
+          </div> */}
+          <h3>Characters with 6 Links:</h3>
+          <div className="grid grid-cols-5 h-[120px] max-w-full bg-gradient-radial from-purple-200 via-purple-100 to-purple-50  m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
             {charactersWith6Matches &&
               charactersWith6Matches.map((character) => (
                 <div key={character} onClick= {() => {
@@ -175,8 +175,8 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
-            these characters share 5 links
+          <h3>Characters with 5 Links:</h3>
+          <div className="grid grid-cols-5 max-w-full h-[120px] bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
             {charactersWith5Matches &&
               charactersWith5Matches.map((character) => (
                 <div key={character} onClick= {() => {
@@ -188,8 +188,8 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
-            these characters share 4 links
+          <h3>Characters with 4 Links:</h3>
+          <div className="grid grid-cols-5 max-w-full h-[120px] bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
             {charactersWith4Matches &&
               charactersWith4Matches.map((character) => (
                 <div key={character} onClick= {() => {
@@ -200,8 +200,8 @@ function newArraySuggestion(character) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-row h-1/5 bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black overflow-x-scroll">
-            these characters share 3 links
+          <h3>Characters with 3 Links:</h3>
+          <div className="grid grid-cols-5 max-w-full h-[120px] bg-gradient-radial from-purple-200 via-purple-100 to-purple-50  m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
             {charactersWith3Matches &&
               charactersWith3Matches.map((character) => (
                 <div key={character} onClick= {() => {
