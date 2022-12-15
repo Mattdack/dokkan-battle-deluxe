@@ -106,5 +106,7 @@ query Characters7Link($link1: String, $link2: String, $link3: String, $link4: St
     link_skill
     thumb
     art
+    type
+    rarity
   }
 }`;

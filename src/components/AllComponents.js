@@ -97,11 +97,11 @@ function AllComponents() {
 
     if (rarityType === "LR") {
       lrActive ? setLrActive(false) : setLrActive(true);
-      console.log("Swapping LR Status");
+      //console.log("Swapping LR Status");
     }
     if (rarityType === "UR") {
       urActive ? setUrActive(false) : setUrActive(true);
-      console.log("Swapping UR Status");
+      //console.log("Swapping UR Status");
     }
   };
 
@@ -236,13 +236,13 @@ function AllComponents() {
     }).then((result) => {
       setCardDetails(result.data.character)
     })
-    console.log(cardDetails);
+    //console.log(cardDetails);
   }
 
   function addToTeam(character) {
     webOfTeam.push(character)
     setWebOfTeam(webOfTeam)
-    console.log(webOfTeam);
+    //console.log(webOfTeam);
   }
 
   return (
@@ -438,9 +438,9 @@ function AllComponents() {
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
                     arraySuggestion(character)
-                    console.log(character.artwork)
+                    //console.log(character.artwork)
                   }} onDoubleClick = {() => {addToTeam(character)}}>
-                    <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} />
+                      <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} characterType={character.type} characterRarity={character.rarity}/>
                   </div>
                 ))}
               </div>
