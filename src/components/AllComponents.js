@@ -17,7 +17,19 @@ function AllComponents() {
   const [rarityCategory, setRarityCategory] = useState("ALL");
   const [filteredCharacters, setFilteredCharacters] = useState([]);
   const [typeCharacters, setTypeCharacters] = useState("ALL");
-  const [cardDetails, setCardDetails] = useState({});
+  const [cardDetails, setCardDetails] = useState({
+    id: 1331,
+    thumb: 1003310,
+    art: null,
+    name: "Buu (Kid)",
+    category: ['Resurrected Warriors', 'Majin Buu Saga', 'Transformation Boost', 'Artificial Life Forms', 'Majin Power', 'Planetary Destruction', 'Storied Figures', 'Legendary Existence', 'Sworn Enemies', 'Accelerated Battle', 'Worldwide Chaos', 'Battle of Fate'],
+    link_skill: ['Majin', 'Brutal Beatdown', 'More Than Meets the Eye', 'Big Bad Bosses', 'Infinite Regeneration', 'Fierce Battle', 'The Wall Standing Tall'],
+    type: "EPHY",
+    rarity: "UR",
+    ls_description: `Allies’ ATK increases (MAX +50%) based on HP left`,
+    sa_name: "Planet Burst",
+    sa_description: "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
+  });
   const [suggestion, setSuggestion] = useState([]);
   const [webOfTeam, setWebOfTeam] = useState([]);
 
