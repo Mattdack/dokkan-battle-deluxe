@@ -55,33 +55,40 @@ function AllComponents() {
   const [onLoadGetUserCharacters, setOnLoadGetUserCharacters] = useState([]);
   const [userCharacters, setUserCharacters] = useState([]);
   
-  // useEffect(() => {
-  //   console.log('Not sure if logged in')
+  useEffect(() => {
+    console.log('Not sure if logged in')
 
-  //   if(Auth.loggedIn()) {
-  //     console.log("logged in")
-  //     const username = Auth.getProfile().data.username
-  //     console.log(username);
-  //     getUserData({
-  //       variables: {
-  //         username: username
-  //       },
-  //     }).then((result) => {
-  //       setOnLoadGetUserCharacters(result.data.me.savedCharacters)
-  //       console.log(result);
-  //     });
-  //   }
-  // },[])
+    const auth = async () => {
+      if (Auth.loggedIn()) {
+        const username = await Auth.getProfile().data.username
+        getUserData({
+          variables: {
+            username: username
+          },
+        }).then((result) => {
+          setOnLoadGetUserCharacters(result.data.me.savedCharacters)
+          console.log(result);
+        });
+        
+      }
+      
+    }
+    auth();
+    // if(Auth.loggedIn()) {
+    //   console.log("logged in")
+    //   console.log(username);
+    // }
+  },[])
 
-  // useEffect(() => {
-  //   getUserCharactersById({
-  //     variables: {
-  //       dokkanIds: onLoadGetUserCharacters
-  //     },
-  //   }).then((result) => {
-  //     setUserCharacters(result.data.charactersWithIds)
-  //   });
-  // },[onLoadGetUserCharacters])
+  useEffect(() => {
+    getUserCharactersById({
+      variables: {
+        dokkanIds: onLoadGetUserCharacters
+      },
+    }).then((result) => {
+      setUserCharacters(result.data.charactersWithIds)
+    });
+  },[onLoadGetUserCharacters])
 
   useEffect(() => {
     setCharacters(allCharacters);
