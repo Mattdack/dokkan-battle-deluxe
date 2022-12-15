@@ -258,10 +258,10 @@ function AllComponents() {
   return (
     
     // stages formatting
-    <div className="bg-slate-700 flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col h-screen w-screen">
+    <div className="bg-slate-700 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 h-[96.64vh] w-screen max-w-screen">
 
       {/* //left column styling */}
-      <div className="bg-gradient-radial from-orange-400 via-orange-600 to-orange-900 rounded-md flex flex-col mx-2 my-4 border-4 border-black basis-1/3">
+      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col mr-2 my-2 border-2 border-slate-900 max-h-[94vh] ml-2 w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
 
         <h1 className="text-center m-4">Search by Filters</h1>
 
@@ -373,7 +373,7 @@ function AllComponents() {
 
           {/* //type buttons */}
           <div
-            className="order-3 bg-orange-300 rounded-md border-2 border-black flex my-5"
+            className="grid grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 flex my-5"
             id="box-2"
             onClick={handleTypeChange}
           >
@@ -448,11 +448,11 @@ function AllComponents() {
           <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
           
           {/* //character select box */}
-          <div className="h-fit m-10 border-4 border-black overflow-auto">
+          <div className="h-fit m-10 border-2 border-slate-900 overflow-y-auto bg-orange-200">
             {loading ? (
               <div>Loading...</div>
             ) : (
-              <div className="bg-orange-200 grid grid-cols-5 grid-rows-5 justify-self-center">
+              <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5, xl:grid-cols-5 justify-self-center h-full max-h-[60vh]">
                 {filteredCharacters && filteredCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
@@ -467,13 +467,13 @@ function AllComponents() {
         
       </div>
       {/* //middle column styling */}
-      <div className="bg-gradient-radial from-purple-400 via-purple-600 to-purple-900 rounded-md mx-2 my-4 border-4 border-black relative basis-1/3">
+      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
         <CardDetails cardDetails={cardDetails} />
         {/* <Links links={links}/> */}
       </div>
 
       {/* //right column styling */}
-      <div className="bg-gradient-radial from-green-400 via-green-600 to-green-900 rounded-md mx-2 my-4 border-2 border-black basis-1/3">
+      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col ml-2 my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
         <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
       </div>
 

@@ -96,7 +96,7 @@ const AppNavbar = () => {
   };
 
   return (
-    <div className="h-12 w-screen">
+    <div className="h-8 w-screen">
       <>{/* TODO: logout button show */}</>
       {Auth.loggedIn() ? (
         <div>
@@ -105,7 +105,7 @@ const AppNavbar = () => {
         </div>
       ) : (
         // TODO: sign up or log in
-        <div>
+        <div className="flex flex-row">
           <form noValidate validated={validated} onSubmit={handleSignUpSubmit}>
             <input
               onChange={handleSignupChange}
