@@ -3,7 +3,7 @@ import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { ADD_CHARACTER, REMOVE_CHARACTER } from "../util/mutations";
 import Auth from "../util/auth";
 
-function CardDetails({ cardDetails, userCharacters }) {
+function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
   const [saveCharacter, { error, data }] = useMutation(ADD_CHARACTER);
   const [removeCharacter, { error: error2, data: data2 }] =
     useMutation(REMOVE_CHARACTER);
@@ -142,6 +142,7 @@ function CardDetails({ cardDetails, userCharacters }) {
     }).then((result) => {
       console.log(result);
     });
+    handleCardDetailsReload(cardDetails);
   }
 
   function handleRemoveCharacter() {
@@ -154,6 +155,7 @@ function CardDetails({ cardDetails, userCharacters }) {
     }).then((result) => {
       console.log(result);
     });
+     handleCardDetailsReload(cardDetails);
   }
 
   return (

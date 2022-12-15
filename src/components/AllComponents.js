@@ -4,7 +4,7 @@ import SuggestToWeb from "./SuggestToWeb";
 import { handleRarityChange } from "../util/helpers";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { QUERY_CHARACTERS, QUERY_ONECHARACTER, GET_USERDATA } from "../util/queries";
+import { QUERY_CHARACTERS, QUERY_ONECHARACTER, GET_USERDATA, GET_USERCHARACTERSBYID } from "../util/queries";
 import CardDetails from "./CardDetails";
 
 import Auth from "../util/auth";
@@ -45,24 +45,43 @@ function AllComponents() {
   const [phyActive, setPhyActive] = useState(false);
   const [allTypeActive, setAllTypeActive] = useState(true);
 
-  const [getUserData, { loading:loading3, data:data3 }] = useLazyQuery(GET_USERDATA);
-
+  
   const { loading, data } = useQuery(QUERY_CHARACTERS);
   const allCharacters = data?.characters || [];
+  
+  const [getUserData, { loading:loading3, data:data3 }] = useLazyQuery(GET_USERDATA);
+  const [getUserCharactersById, { loading:loading4, data:data4 }] = useLazyQuery(GET_USERCHARACTERSBYID);
 
+  const [onLoadGetUserCharacters, setOnLoadGetUserCharacters] = useState([]);
   const [userCharacters, setUserCharacters] = useState([]);
   
   useEffect(() => {
-    console.log('once')
-    const username = Auth.getProfile().data.username
-    getUserData({
+    console.log('Not sure if logged in')
+
+    if(Auth.loggedIn()) {
+      console.log("logged in")
+      const username = Auth.getProfile().data.username
+      console.log(username);
+      getUserData({
+        variables: {
+          username: username
+        },
+      }).then((result) => {
+        setOnLoadGetUserCharacters(result.data.me.savedCharacters)
+        console.log(result);
+      });
+    }
+  },[])
+
+  useEffect(() => {
+    getUserCharactersById({
       variables: {
-        username: username
+        dokkanIds: onLoadGetUserCharacters
       },
     }).then((result) => {
-      setUserCharacters(result.data.me.savedCharacters)
+      setUserCharacters(result.data.charactersWithIds)
     });
-  },[])
+  },[onLoadGetUserCharacters])
 
   useEffect(() => {
     setCharacters(allCharacters);
@@ -135,16 +154,14 @@ function AllComponents() {
     }
   };
 
-  // const handleDeckSelection = (e) => {
-  //   e.preventDefault();
-  //   const { target } = e;
-  //   if(target.name === "DECK") {
-  //     userCharacters.forEach(id => {
-  //       filteredCharacters.filter((character) => character.id === id)
-  //     });
-  //     setFilteredCharacters(filteredCharacters);
-  //   }
-  // }
+  const handleDeckSelection = (e) => {
+    e.preventDefault();
+    const { target } = e;
+    if(target.name === "DECK") {
+      console.log("Filtered by Deck")
+     setFilteredCharacters(userCharacters)
+    }
+  }
 
   useEffect(() => {
     if (lrActive && urActive) {
@@ -266,7 +283,7 @@ function AllComponents() {
 
   function newCardDetails(character) {
     const newToon = character[0];
-    console.log(newToon);
+    // console.log(newToon);
 
     getOneCharacter({
       variables: {
@@ -275,7 +292,7 @@ function AllComponents() {
     }).then((result) => {
       setCardDetails(result.data.character)
     })
-    console.log(cardDetails);
+    // console.log(cardDetails);
   }
 
   function addToTeam(character) {
@@ -475,6 +492,7 @@ function AllComponents() {
         <button
               className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
               name="DECK"
+              onClick={handleDeckSelection}
             >
               My Deck
         </button>
@@ -505,7 +523,7 @@ function AllComponents() {
       </div>
       {/* //middle column styling */}
       <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
-        <CardDetails cardDetails={cardDetails} userCharacters={userCharacters} />
+        <CardDetails cardDetails={cardDetails} userCharacters={onLoadGetUserCharacters} />
         {/* <Links links={links}/> */}
       </div>
 
