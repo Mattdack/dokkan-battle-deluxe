@@ -1,7 +1,7 @@
 {
   "name": "dokkan-battle-deluxe",
   "version": "0.1.0",
-  "homepage": "https://mattdack.github.io/dokkan-battle-deluxe",
+  "homepage": "https://mattdack.github.io/dokkan-battle-deluxe/",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.2",

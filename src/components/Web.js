@@ -10,8 +10,6 @@ import ReactFlow, {
 } from "reactflow";
 import WebCard from "./WebCard";
 
-import "reactflow/dist/base.css";
-
 const initialEdges = []
 const initialNodes = []
 const nodeTypes = {

@@ -198,7 +198,7 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
         </p>
       </div>
       <div>
-            {Auth.loggedIn() ? (
+            {/* {Auth.loggedIn() ? (
               <div>
                 {userCharacters.includes(cardDetails.id) ? (
                   <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
@@ -228,7 +228,7 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
               <div>
                 <h1>Log in to add characters</h1>
               </div>
-            )}
+            )} */}
           </div>
 
       <div className="grid grid-cols-2">

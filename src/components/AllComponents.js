@@ -55,33 +55,33 @@ function AllComponents() {
   const [onLoadGetUserCharacters, setOnLoadGetUserCharacters] = useState([]);
   const [userCharacters, setUserCharacters] = useState([]);
   
-  useEffect(() => {
-    console.log('Not sure if logged in')
+  // useEffect(() => {
+  //   console.log('Not sure if logged in')
 
-    if(Auth.loggedIn()) {
-      console.log("logged in")
-      const username = Auth.getProfile().data.username
-      console.log(username);
-      getUserData({
-        variables: {
-          username: username
-        },
-      }).then((result) => {
-        setOnLoadGetUserCharacters(result.data.me.savedCharacters)
-        console.log(result);
-      });
-    }
-  },[])
+  //   if(Auth.loggedIn()) {
+  //     console.log("logged in")
+  //     const username = Auth.getProfile().data.username
+  //     console.log(username);
+  //     getUserData({
+  //       variables: {
+  //         username: username
+  //       },
+  //     }).then((result) => {
+  //       setOnLoadGetUserCharacters(result.data.me.savedCharacters)
+  //       console.log(result);
+  //     });
+  //   }
+  // },[])
 
-  useEffect(() => {
-    getUserCharactersById({
-      variables: {
-        dokkanIds: onLoadGetUserCharacters
-      },
-    }).then((result) => {
-      setUserCharacters(result.data.charactersWithIds)
-    });
-  },[onLoadGetUserCharacters])
+  // useEffect(() => {
+  //   getUserCharactersById({
+  //     variables: {
+  //       dokkanIds: onLoadGetUserCharacters
+  //     },
+  //   }).then((result) => {
+  //     setUserCharacters(result.data.charactersWithIds)
+  //   });
+  // },[onLoadGetUserCharacters])
 
   useEffect(() => {
     setCharacters(allCharacters);
@@ -523,7 +523,9 @@ function AllComponents() {
       </div>
       {/* //middle column styling */}
       <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
-        <CardDetails cardDetails={cardDetails} userCharacters={onLoadGetUserCharacters} />
+        <CardDetails cardDetails={cardDetails} 
+        // userCharacters={onLoadGetUserCharacters} 
+        />
         {/* <Links links={links}/> */}
       </div>
 
