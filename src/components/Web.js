@@ -15,6 +15,8 @@ function Web(props) {
                 characterLinks={character.link_skill}
                 characterThumb={character.thumb}
                 characterArt={character.art}
+                characterType={character.type} 
+                characterRarity={character.rarity}
               />
             </div>
           ))}

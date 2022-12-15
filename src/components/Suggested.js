@@ -20,11 +20,11 @@ function Suggested() {
 //   //   variables : { linkskill: "Signature Pose"}
 //   // });
 //   // const charactersLink2 = characterList2.data?.charactersLink || [];
-//   // console.log(charactersLink1)
-//   // console.log(charactersLink2)
+//   // //console.log(charactersLink1)
+//   // //console.log(charactersLink2)
 //   // const charactersLink2Ids = charactersLink2.map(item => item.id)
 //   // const charactersMatched = charactersLink1.filter(item => charactersLink2Ids.includes(item.id))
-//   // console.log(charactersMatched)
+//   // //console.log(charactersMatched)
 
 //   //TODO: find how many characters match with others depending on links array
 // // Sample arrays
@@ -51,9 +51,9 @@ function Suggested() {
 // });
 
 // // Print the number of matches for the compareArray for each of the other arrays
-// console.log(`Array ${compareArray} has the following number of matching elements with the other arrays:`);
+// //console.log(`Array ${compareArray} has the following number of matching elements with the other arrays:`);
 // matches.forEach((match, index) => {
-//   console.log(`Array ${arrays[index]}: ${match}`);
+//   //console.log(`Array ${arrays[index]}: ${match}`);
 // });
 
 

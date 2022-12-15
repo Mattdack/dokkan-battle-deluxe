@@ -17,21 +17,21 @@ function SuggestToWeb(props) {
   let prevCharacterId = useRef(characterId);
 
   // const handleSuggestionClick = (e) => {
-  //   console.log("clicked");
+  //   //console.log("clicked");
   //   const { target } = e;
   //   // Updated the character link array
   //   characterId = target.characterId;
-  //   console.log(target);
+  //   //console.log(target);
   //   characterLink = [];
   //   const characterArray = target.entirecharacter;
-  //   console.log(characterArray);
+  //   //console.log(characterArray);
   //   for (let index = 3 ; index < characterArray.length; index++) {
   //     characterLink.push(characterArray[index])
   //   }
   // }
   
 function newArraySuggestion(character) {
-  console.log(character);
+  //console.log(character);
   // Updated the character link array
   characterId = character[0]
   characterLink = [];
@@ -50,7 +50,7 @@ function newArraySuggestion(character) {
       typeof characterLink !== "undefined"
     ) {
       // Run the query and update the "data" state.
-      // console.log("change detected");
+      // //console.log("change detected");
       qeuryAllCharacters();
     }
     // Update the "prevCharacter" variable with the current props
@@ -72,14 +72,14 @@ function newArraySuggestion(character) {
       },
     }).then((result) => {
       // Print the data when the query is executed
-      // console.log(characterLink);
+      // //console.log(characterLink);
       comparisonTime(result.data.characters7Link, characterLink);
     });
   };
 
   function comparisonTime(arrays, compareArray) {
-    // console.log(arrays);
-    // console.log(compareArray);
+    // //console.log(arrays);
+    // //console.log(compareArray);
 
     let combineCharacterInfo = [];
 
@@ -88,6 +88,8 @@ function newArraySuggestion(character) {
       // Create a copy of the `link_skill` array
       let linkSkills = array.link_skill.slice();
       // Use the `unshift()` method to add the `id` at the beginning of the `link_skill` array
+      linkSkills.unshift(array.rarity)
+      linkSkills.unshift(array.type)
       linkSkills.unshift(array.art);
       linkSkills.unshift(array.thumb);
       linkSkills.unshift(array.id);
@@ -96,7 +98,7 @@ function newArraySuggestion(character) {
       combineCharacterInfo.push(linkSkills);
     }
     // Print `combineCharacterInfo`
-    // console.log(combineCharacterInfo);
+    // //console.log(combineCharacterInfo);
 
     // makes a variable matchers that maps over the new array of JUST linkskills, then iterates over the comparison array to see if there are any matching elemets
     let matches = combineCharacterInfo.map((otherArray) => {
@@ -117,22 +119,22 @@ function newArraySuggestion(character) {
     let arrayOfAll3Matches = [];
     matches.forEach((match, index) => {
       if (match === 7) {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
         arrayOfAll7Matches.push(combineCharacterInfo[index]);
       } else if (match === 6) {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
         arrayOfAll6Matches.push(combineCharacterInfo[index]);
       } else if (match === 5) {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
         arrayOfAll5Matches.push(combineCharacterInfo[index]);
       } else if (match === 4) {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
         arrayOfAll4Matches.push(combineCharacterInfo[index]);
       } else if (match === 3) {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match}`);
         arrayOfAll3Matches.push(combineCharacterInfo[index]);
       } else {
-        // console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match} :(`)
+        // //console.log(`This array: ${combineCharacterInfo[index]} matches this many times: ${match} :(`)
       }
     });
     setCharactersWith7Matches(arrayOfAll7Matches);
@@ -154,9 +156,10 @@ function newArraySuggestion(character) {
               charactersWith7Matches.map((character) => (
                 <div key={character} onClick= {() => {
                   newArraySuggestion(character);
-                  props.handleNewDetails(character);
+                  props.handleNewDetails(character)
+                  console.log(character);
                 }}>
-                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
           </div>
@@ -168,7 +171,7 @@ function newArraySuggestion(character) {
                   newArraySuggestion(character)
                   props.handleNewDetails(character);
                 }}>
-                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
           </div>
@@ -179,8 +182,9 @@ function newArraySuggestion(character) {
                 <div key={character} onClick= {() => {
                   newArraySuggestion(character)
                   props.handleNewDetails(character);
+                  //console.log(character)
                 }}>
-                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
           </div>
@@ -192,7 +196,7 @@ function newArraySuggestion(character) {
                   newArraySuggestion(character)
                   props.handleNewDetails(character);
                 }}>
-                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]}/>
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
           </div>
@@ -204,7 +208,7 @@ function newArraySuggestion(character) {
                   newArraySuggestion(character)
                   props.handleNewDetails(character);
                 }}>
-                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} />
+                  <SingleCard characterId={character[0]} characterThumb = {character[1]} characterArt = {character[2]} characterType={character[3]} characterRarity={character[4]}/>
                 </div>
               ))}
           </div>
