@@ -53,32 +53,41 @@ function Web(props) {
             characterType: character.type,
             characterRarity: character.rarity
           },
-          position: { x: 0, y: 50 },
+          position: { x: 10, y: 10 },
           style: {visibility: "visible"}
         },
       ]);
     });
 
+    
+  }, [props.webOfTeam]);
+
+  useEffect(() => {
     for (let i = 0; i < props.webOfTeam.length; i++) {
       for (let j = 0; j < props.webOfTeam.length; j++) {
         if(i !== j) {
-          console.log("We should be making edges")
+          console.log("We should be making edges");
+          console.log(props.webOfTeam[i].id)
+          console.log(props.webOfTeam[j].id)
+          console.log(props.webOfTeam[i].id + props.webOfTeam[j].id)
+          console.log("===================================")
           setEdges((prev) => [
             ...prev,
             {
-              id: `e${props.webOfTeam[i].id}-${props.webOfTeam[j].id}`,
+              id: props.webOfTeam[i].id + props.webOfTeam[j].id,
               source: props.webOfTeam[i].id,
               target: props.webOfTeam[j].id,
-            }
+              type: "smoothstep",
+            },
           ])
         } 
       }
     }
 
-  }, [props.webOfTeam]);
+  }, [nodes])
 
   return (
-    <div className="h-80">
+    <div className="h-72">
       <div className="h-full bg-slate-700 row-span-6 rounded-md">
         <ReactFlow
           nodes={nodes}
@@ -88,8 +97,7 @@ function Web(props) {
           // onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-teal-50"
-          border = "parent"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
         ></ReactFlow>
       </div>
     </div>

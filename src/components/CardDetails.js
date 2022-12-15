@@ -17,6 +17,7 @@ function CardDetails({ cardDetails }) {
 
   const [characterType, setCharacterType] = useState("");
   const [characterSuperOrExtreme, setCharacterSuperOrExtreme] = useState("");
+  const [characterLinks, setCharacterLinks] = useState([]);
 
   useEffect(() => {
     // Only run the query if the "characterId" value changes.
@@ -39,14 +40,19 @@ function CardDetails({ cardDetails }) {
       setCharacterThumb(cardDetails.thumb);
     }
 
+    if (cardDetails.link_skill !== null) {
+      setCharacterLinks(cardDetails.link_skill);
+    }
+    console.log(cardDetails.link_skill);
+
     if (cardDetails.rarity === "UR" || cardDetails.rarity === "UR ") {
       setCharacterRarityPosition(
-        "h-[28px] absolute top-[80px] right-[68px] z-50"
+        "h-[48px] absolute top-[136px] right-[116px] z-50"
       );
       setCharacterRarity("/dokkanIcons/rarities/UR.png");
     } else {
       setCharacterRarityPosition(
-        "h-[35px] absolute top-[72px] right-[70px] z-50"
+        "h-[56px] absolute top-[130px] right-[130px] z-50"
       );
       setCharacterRarity("/dokkanIcons/rarities/LR.png");
     }
@@ -138,14 +144,17 @@ function CardDetails({ cardDetails }) {
 
   
   return (
-    <div>
-      <div className="flex flex-row justify-evenly">
+    <div className="grid grid-cols-1 place-items-center">
+      <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-max rounded-lg">
+        <h2 className="ml-1 mt-2 text-center text-4xl">{cardDetails.name}</h2>
+      </div>
+      <div>
         <div>
           {characterThumb && (
             <div className="relative">
               <div
                 onClick={() => {}}
-                className="h-28 w-28 m-2 gap-4 bg-no-repeat relative z-50"
+                className="h-48 w-48 m-2 gap-4 bg-no-repeat relative z-50"
                 style={{
                   backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterThumb}_thumb.png")`,
                   backgroundSize: `100%`,
@@ -153,51 +162,56 @@ function CardDetails({ cardDetails }) {
               ></div>
               <img className={characterRarityPosition} src={characterRarity} />
               <img
-                className="w-[80px] absolute top-[20px] right-[25px] z-0"
+                className="w-40 absolute top-[15px] right-[25px] z-0"
                 src={characterType}
               />
               <img
-                className="w-[40px] h-[40px] absolute top-[6px] right-[11px] z-50"
+                className="w-20 absolute top-[-12px] right-[4px] z-50"
                 src={characterSuperOrExtreme}
               />
             </div>
           )}
         </div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-40 mt-4 ml-14">
-          <h2 className="ml-1 mt-2 text-center">{cardDetails.name}</h2>
-        </div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-40 mt-4 ml-20">
-          <h2 className="ml-1 mt-2 text-center">Leader Skill</h2>
-          <p>{cardDetails.ls_description}</p>
-        </div>
       </div>
-      <div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 mx-5">
-          <h4 className="">{cardDetails.sa_name}</h4>
-          <p>{cardDetails.sa_description}</p>
+      <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 w-[85%] h-min">
+        <p>Leader Skill: {cardDetails.ls_description}</p>
+      </div>
+
+        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 w-[85%] h-min">
+          <p>
+            {cardDetails.sa_name}: {cardDetails.sa_description}
+          </p>
         </div>
-        <div className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-black w-1/5 h-20 p-5 mx-5">
-          <h4 className="">HP Stat</h4>
-          <p></p>
-        </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-        </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-        </div>
-        <div>
-          <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-            This is an example Link
-          </h2>
-          <div>
-            <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-16">
-              This is an example Link
-            </h2>
+
+        <div className="grid grid-cols-2">
+          <div className="m-4 h-full max-h-[60vh]">
+            <h1>Character Links:</h1>
+            <div className="border-2 border-black">
+              {characterLinks &&
+                characterLinks.map((linkText) => {
+                  return (
+                    <div>
+                      <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
+                        {linkText}
+                      </h2>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          <div className="m-4 h-full max-h-[60vh]">
+            <h1>Character Categories</h1>
+
+            <div className="border-2 border-black rounded-md h-fit min-h-fit max-h-[32.5vh] overflow-auto">
+              {cardDetails.category &&
+                cardDetails.category.map((categoryText) => {
+                  return (
+                    <h2 className="bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] h-10">
+                      {categoryText}
+                    </h2>
+                  );
+                })}
+            </div>
           </div>
         </div>
         <div>
@@ -212,7 +226,6 @@ function CardDetails({ cardDetails }) {
           )}
         </div>
       </div>
-    </div>
   );
 }
 
