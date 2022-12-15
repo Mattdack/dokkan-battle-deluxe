@@ -22,42 +22,42 @@ function WebCard({ data }) {
 
     if (data.characterRarity === 'UR' || data.characterRarity === 'UR '){
       setCharacterRarityPosition('h-[28px] absolute top-[80px] right-[68px] z-50')
-      setCharacterRarity('/dokkanIcons/rarities/UR.png')
+      setCharacterRarity(process.env.PUBLIC_URL + '/dokkanIcons/rarities/UR.png')
     }else{
       setCharacterRarityPosition('h-[35px] absolute top-[72px] right-[70px] z-50')
-      setCharacterRarity('/dokkanIcons/rarities/LR.png')
+      setCharacterRarity(process.env.PUBLIC_URL + '/dokkanIcons/rarities/LR.png')
     }
 
     if (data.characterType === 'EPHY' || data.characterType === 'EPHY ' || data.characterType === 'PHY-E'){
-      setCharacterType('/dokkanIcons/types/phy-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/ephy.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/phy-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/ephy.png')
     } else if (data.characterType === 'SPHY' || data.characterType === 'SPHY ' || data.characterType === 'PHY-S'){
-      setCharacterType('/dokkanIcons/types/phy-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sphy.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/phy-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sphy.png')
     } else if (data.characterType === 'EAGL' || data.characterType === 'SPHY ' || data.characterType === 'AGL-E'){
-      setCharacterType('/dokkanIcons/types/agl-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eagl.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/agl-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eagl.png')
     } else if (data.characterType === 'SAGL' || data.characterType === 'SAGL ' || data.characterType === 'AGL-S'){
-      setCharacterType('/dokkanIcons/types/agl-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sagl.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/agl-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sagl.png')
     } else if (data.characterType === 'ESTR' || data.characterType === 'ESTR ' || data.characterType === 'STR-E'){
-      setCharacterType('/dokkanIcons/types/str-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/estr.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/str-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/estr.png')
     } else if (data.characterType === 'SSTR' || data.characterType === 'SSTR ' || data.characterType === 'STR-S'){
-      setCharacterType('/dokkanIcons/types/str-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sstr.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/str-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sstr.png')
     } else if (data.characterType === 'EINT' || data.characterType === 'EINT ' || data.characterType === 'INT-E'){
-      setCharacterType('/dokkanIcons/types/int-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eint.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/int-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eint.png')
     } else if (data.characterType === 'SINT' || data.characterType === 'SINT ' || data.characterType === 'INT-S'){
-      setCharacterType('/dokkanIcons/types/int-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sint.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/int-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sint.png')
     } else if (data.characterType === 'ETEQ' || data.characterType === 'ETEQ ' || data.characterType === 'PHY-E'){
-      setCharacterType('/dokkanIcons/types/teq-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eteq.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/teq-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eteq.png')
     } else if (data.characterType === 'STEQ' || data.characterType === 'STEQ ' || data.characterType === 'TEQ-S'){
-      setCharacterType('/dokkanIcons/types/teq-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/steq.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/teq-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/steq.png')
     } 
     // Update the "prevCharacter" variable with the current data
     prevCharacterId = data.characterId;

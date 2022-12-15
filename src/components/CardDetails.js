@@ -51,12 +51,12 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
       setCharacterRarityPosition(
         "h-[48px] absolute top-[136px] right-[116px] z-50"
       );
-      setCharacterRarity("/dokkanIcons/rarities/UR.png");
+      setCharacterRarity(process.env.PUBLIC_URL + "/dokkanIcons/rarities/UR.png");
     } else {
       setCharacterRarityPosition(
         "h-[56px] absolute top-[130px] right-[130px] z-50"
       );
-      setCharacterRarity("/dokkanIcons/rarities/LR.png");
+      setCharacterRarity(process.env.PUBLIC_URL + "/dokkanIcons/rarities/LR.png");
     }
 
     if (
@@ -64,71 +64,71 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
       cardDetails.type === "EPHY " ||
       cardDetails.type === "PHY-E"
     ) {
-      setCharacterType("/dokkanIcons/types/phy-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/ephy.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/phy-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/ephy.png");
     } else if (
       cardDetails.type === "SPHY" ||
       cardDetails.type === "SPHY " ||
       cardDetails.type === "PHY-S"
     ) {
-      setCharacterType("/dokkanIcons/types/phy-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/sphy.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/phy-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/sphy.png");
     } else if (
       cardDetails.type === "EAGL" ||
       cardDetails.type === "SPHY " ||
       cardDetails.type === "AGL-E"
     ) {
-      setCharacterType("/dokkanIcons/types/agl-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/eagl.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/agl-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/eagl.png");
     } else if (
       cardDetails.type === "SAGL" ||
       cardDetails.type === "SAGL " ||
       cardDetails.type === "AGL-S"
     ) {
-      setCharacterType("/dokkanIcons/types/agl-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/sagl.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/agl-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/sagl.png");
     } else if (
       cardDetails.type === "ESTR" ||
       cardDetails.type === "ESTR " ||
       cardDetails.type === "STR-E"
     ) {
-      setCharacterType("/dokkanIcons/types/str-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/estr.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/str-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/estr.png");
     } else if (
       cardDetails.type === "SSTR" ||
       cardDetails.type === "SSTR " ||
       cardDetails.type === "STR-S"
     ) {
-      setCharacterType("/dokkanIcons/types/str-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/sstr.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/str-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/sstr.png");
     } else if (
       cardDetails.type === "EINT" ||
       cardDetails.type === "EINT " ||
       cardDetails.type === "INT-E"
     ) {
-      setCharacterType("/dokkanIcons/types/int-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/eint.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/int-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/eint.png");
     } else if (
       cardDetails.type === "SINT" ||
       cardDetails.type === "SINT " ||
       cardDetails.type === "INT-S"
     ) {
-      setCharacterType("/dokkanIcons/types/int-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/sint.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/int-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/sint.png");
     } else if (
       cardDetails.type === "ETEQ" ||
       cardDetails.type === "ETEQ " ||
       cardDetails.type === "PHY-E"
     ) {
-      setCharacterType("/dokkanIcons/types/teq-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/eteq.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/teq-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/eteq.png");
     } else if (
       cardDetails.type === "STEQ" ||
       cardDetails.type === "STEQ " ||
       cardDetails.type === "TEQ-S"
     ) {
-      setCharacterType("/dokkanIcons/types/teq-background.png");
-      setCharacterSuperOrExtreme("/dokkanIcons/types/steq.png");
+      setCharacterType(process.env.PUBLIC_URL + "/dokkanIcons/types/teq-background.png");
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + "/dokkanIcons/types/steq.png");
     }
   }, [characterId]);
 
@@ -198,7 +198,7 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
         </p>
       </div>
       <div>
-            {/* {Auth.loggedIn() ? (
+            {Auth.loggedIn() ? (
               <div>
                 {userCharacters.includes(cardDetails.id) ? (
                   <div className="bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
@@ -228,7 +228,7 @@ function CardDetails({ cardDetails, userCharacters, handleCardDetailsReload }) {
               <div>
                 <h1>Log in to add characters</h1>
               </div>
-            )} */}
+            )}
           </div>
 
       <div className="grid grid-cols-2">
