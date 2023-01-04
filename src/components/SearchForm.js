@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 const SearchForm = ({onFormChange}) => {
-  const [searchTerm, setSearchTerm] = useState("");
-
   return (
     <div className="flex flex-row flex-wrap justify-around mx-5">
       {/* //search field */}
@@ -25,8 +23,6 @@ const SearchForm = ({onFormChange}) => {
           className="p-2.5 rounded-md border-2 border-black text-black"
           type="text"
           name="searchTerm"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          value={searchTerm}
         />
 
         {/* //categories field */}
