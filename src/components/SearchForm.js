@@ -5,7 +5,7 @@ const SearchForm = ({onFormChange}) => {
     <div className="flex flex-row flex-wrap justify-around mx-5">
       {/* //search field */}
       <form
-
+        onSubmit={(e) => e.preventDefault()}
         // calls onFormChange with formData. Schema:
         // {
         //   searchTerm: string (empty string if not present),
