@@ -102,7 +102,7 @@ function AllComponents() {
 
         {/* //contains filters/buttons/search field/etc. */}
         
-          <SearchForm onFormChange={filterAndSetCharacters}/>
+          <SearchForm onFormChange={filterAndSetCharacters} isDisabled={allCharactersLoading}/>
 
           <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
           
