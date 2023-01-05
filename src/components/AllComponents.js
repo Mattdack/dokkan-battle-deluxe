@@ -141,15 +141,18 @@ function AllComponents() {
   );
 }
 
+// returns a new array of characters derived from either allCharacters or userCharacters
+// based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
-  const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
-  return baseChars.filter(character => {
-    return (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
-    (!filterData.characterCategory || filterData.characterCategory === character.category) &&
-    (!filterData.characterRarity || filterData.characterRarity === character.rarity) &&
-    (!filterData.characterType || character.type.includes(filterData.characterType));
-  }
-  );
+  const baseChars = filterData.isUserDeck ? userCharacters: allCharacters;
+
+  return baseChars.filter((character) => {
+    return (
+      (!filterData.searchTerm|| character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
+      (!filterData.characterCategory|| character.category.includes(filterData.characterCategory)) &&
+      (!filterData.characterType|| character.type.includes(filterData.characterType)) &&
+      (!filterData.characterRarity|| filterData.characterRarity === character.rarity)
+  )});
 }
 
 export default AllComponents;
