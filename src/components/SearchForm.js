@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const SearchForm = ({onFormChange}) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [characterCategory, setCharacterCategory] = useState("");
-  const [characterRarity, setCharacterRarity] = useState("");
-  const [characterType, setCharacterType] = useState("");
-  const [isUserDeck, setIsUserDeck] = useState(false);
-
   return (
     <div className="flex flex-row flex-wrap justify-around mx-5">
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
-        onChange={(e) => onFormChange(new FormData(e.currentTarget))}
+        // calls onFormChange with formData. Schema:
+        // {
+        //   searchTerm: string (empty string if not present),
+        //   characterCategory: string (empty string if ALL)
+        //   characterType: string (empty string if ALL)
+        //   characterRarity: string (empty string if ALL)
+        //   isUserDeck: true or else this key is not present
+        // }
+        onChange={(e) => {
+          const formData = Object.fromEntries(new FormData(e.currentTarget));
+          onFormChange(formData);
+        }}
       >
         <input
           className="p-2.5 rounded-md border-2 border-black text-black"
           type="text"
           name="searchTerm"
-          onChange={setSearchTerm}
-          value={searchTerm}
         />
 
         {/* //categories field */}
         <select
           className="order-2 m-2 p-2 text-black bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
           id="categories"
-          onChange={(e) => setCharacterCategory(e.target.value)}
-          value={characterCategory}
+          name="characterCategory"
         >
-          <option>Categories:</option>
+          <option value="">Categories:</option>
           <option>Fusion</option>
           <option>Shadow Dragon Saga</option>
           <option>World Tournament</option>
@@ -128,38 +130,28 @@ const SearchForm = ({onFormChange}) => {
           <CharacterSelectButton
             name="characterType"
             label="AGL"
-            onChange={setCharacterType}
-            currentSelect={characterType}
           />
           <CharacterSelectButton
             name="characterType"
             label="TEQ"
-            onChange={setCharacterType}
-            currentSelect={characterType}
           />
           <CharacterSelectButton
             name="characterType"
             label="INT"
-            onChange={setCharacterType}
-            currentSelect={characterType}
           />
           <CharacterSelectButton
             name="characterType"
             label="STR"
-            onChange={setCharacterType}
-            currentSelect={characterType}
           />
           <CharacterSelectButton
             name="characterType"
             label="PHY"
-            onChange={setCharacterType}
-            currentSelect={characterType}
           />
           <CharacterSelectButton
             name="characterType"
+            value=""
             label="ALL"
-            onChange={() => setCharacterType("")}
-            currentSelect={characterType}
+            defaultChecked
           />
         </div>
 
@@ -171,56 +163,62 @@ const SearchForm = ({onFormChange}) => {
           <CharacterSelectButton
             name="characterRarity"
             label="UR"
-            onChange={setCharacterRarity}
-            currentSelect={characterRarity}
           />
           <CharacterSelectButton
             name="characterRarity"
             label="LR"
-            onChange={setCharacterRarity}
-            currentSelect={characterRarity}
           />
           <CharacterSelectButton
             name="characterRarity"
+            value=""
             label="ALL"
-            onChange={() => setCharacterRarity("")}
-            currentSelect={characterRarity}
+            defaultChecked
           />
         </div>
 
         <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
-          <button
-            className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+        <label
+          for="isUserDeck"
+        >
+          <input
+            type="checkbox"
             name="isUserDeck"
-            style={{
-              backgroundColor: isUserDeck ? "DarkOrange" : "Orange",
-            }}
-            onClick={() => setIsUserDeck((prev) => !prev)}
+            id="isUserDeck"
+            className="hidden peer"
+            value={true}
+          />
+          <div 
+            style={{cursor: "pointer"}}
+            className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
           >
-            My Deck
-          </button>
+              My Deck
+            </div>
+        </label>
         </div>
       </form>
     </div>
   );
 };
 
-const CharacterSelectButton = ({ name, label, onChange, currentSelect }) => {
+const CharacterSelectButton = ({ name, label, ...inputProps}) => {
   return (
     <label
-      for={label}
-      style={{ appearance: "button" }}
-      className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5"
+      for={`${name}-${label}`}
     >
       <input
+        type="radio"
         name={name}
-        id={label}
-        style={{
-          backgroundColor: currentSelect === label ? "DarkOrange" : "Orange",
-        }}
-        onClick={() => onChange(label)}
+        id={`${name}-${label}`}
+        className="hidden peer"
+        value={label}
+        {...inputProps}
       />
-      {label}
+      <div 
+        style={{cursor: "pointer"}}
+        className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+      >
+          {label}
+        </div>
     </label>
   );
 };
