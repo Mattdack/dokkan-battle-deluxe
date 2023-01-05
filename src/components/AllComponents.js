@@ -28,7 +28,6 @@ function AllComponents() {
     sa_name: "Planet Burst",
     sa_description: "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
   });
-  const [suggestion, setSuggestion] = useState([]);
   const [webOfTeam, setWebOfTeam] = useState([]);
   
   const [getUserData, { loading:loading3, data:data3 }] = useLazyQuery(GET_USERDATA);
@@ -69,10 +68,6 @@ function AllComponents() {
       setUserCharacters(result.data.charactersWithIds)
     });
   },[onLoadGetUserCharacters])
-
-  const addSuggestion = (character) => {
-    setSuggestion(currSuggestions => [...currSuggestions, character.id, character.link_skill]);
-  }
 
   const [getOneCharacter, { loading: loading2, data: data2 }] = useLazyQuery(QUERY_ONECHARACTER);
 
@@ -120,7 +115,6 @@ function AllComponents() {
                 {filteredCharacters && filteredCharacters.map((character) => (
                   <div key={character.id} onClick={() => {
                     setCardDetails(character)
-                    addSuggestion(character)
                   }} onDoubleClick={() => { addToTeam(character) }}>
                     <SingleCard characterId={character.id} characterLinks={character.link_skill} characterThumb={character.thumb} characterArt={character.art} characterType={character.type} characterRarity={character.rarity} />
                   </div>
@@ -140,7 +134,7 @@ function AllComponents() {
 
       {/* //right column styling */}
       <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col ml-2 my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
-        <SuggestToWeb suggestion={suggestion} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
+        <SuggestToWeb suggestion={[cardDetails.id, cardDetails.link_skill]} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
       </div>
 
     </div>
