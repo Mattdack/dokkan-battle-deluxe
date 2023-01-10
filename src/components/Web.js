@@ -46,13 +46,7 @@ function Web(props) {
         {
           id: character.id,
           type: "custom",
-          data: {
-            characterId: character.id,
-            characterArt: character.art,
-            characterThumb: character.thumb,
-            characterType: character.type,
-            characterRarity: character.rarity
-          },
+          data:character, 
           position: { x: 10, y: 10 },
           style: {visibility: "visible"}
         },
@@ -78,6 +72,7 @@ function Web(props) {
               source: props.webOfTeam[i].id,
               target: props.webOfTeam[j].id,
               type: "smoothstep",
+              style: {visibility: "visible"}
             },
           ])
         } 

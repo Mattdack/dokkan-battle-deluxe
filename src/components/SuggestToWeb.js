@@ -55,7 +55,7 @@ const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails}) => (
         <div
           key={character.id}
           onClick={() => {
-            handleNewDetails(character);
+            handleNewDetails(character.id);
           }}
         >
           <SingleCard

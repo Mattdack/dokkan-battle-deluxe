@@ -157,7 +157,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           </div>
 
           <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
-            <label for="isUserDeck">
+            <label htmlFor="isUserDeck">
               <input
                 type="checkbox"
                 name="isUserDeck"
@@ -181,7 +181,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
 
 const CharacterSelectButton = ({ name, label, ...inputProps }) => {
   return (
-    <label for={`${name}-${label}`}>
+    <label htmlFor={`${name}-${label}`}>
       <input
         type="radio"
         name={name}
