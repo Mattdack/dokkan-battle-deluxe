@@ -30,8 +30,8 @@ function AllComponents() {
   });
   const [webOfTeam, setWebOfTeam] = useState([]);
   
-  const [getUserData, { loading:loading3, data:data3 }] = useLazyQuery(GET_USERDATA);
-  const [getUserCharactersById, { loading:loading4, data:data4 }] = useLazyQuery(GET_USERCHARACTERSBYID);
+  const [getUserData, { loading:isUserDataLoading, data:userData }] = useLazyQuery(GET_USERDATA);
+  const [getUserCharactersById, { loading:isUserCharactersLoading, data:userCharactersData}] = useLazyQuery(GET_USERCHARACTERSBYID);
 
   const [onLoadGetUserCharacters, setOnLoadGetUserCharacters] = useState([]);
   const [userCharacters, setUserCharacters] = useState([]);
@@ -69,11 +69,10 @@ function AllComponents() {
     });
   },[onLoadGetUserCharacters])
 
-  const [getOneCharacter, { loading: loading2, data: data2 }] = useLazyQuery(QUERY_ONECHARACTER);
+  const [getOneCharacter, { loading: isOneCharacterLoading, data: oneCharacterData }] = useLazyQuery(QUERY_ONECHARACTER);
 
   function newCardDetails(character) {
-    const newToon = character[0];
-    // console.log(newToon);
+    const newToon = character.id;
 
     getOneCharacter({
       variables: {
@@ -134,7 +133,7 @@ function AllComponents() {
 
       {/* //right column styling */}
       <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col ml-2 my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
-        <SuggestToWeb suggestion={[cardDetails.id, cardDetails.link_skill]} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
+        <SuggestToWeb selectedCharacter={cardDetails} webOfTeam={webOfTeam} handleNewDetails={newCardDetails} />
       </div>
 
     </div>

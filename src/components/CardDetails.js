@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { ADD_CHARACTER, REMOVE_CHARACTER } from "../util/mutations";
 import Auth from "../util/auth";
 
@@ -56,14 +56,17 @@ function CardDetails({ cardDetails, userCharacters }) {
                     : "h-[56px] absolute top-[130px] right-[130px] z-50"
                 }
                 src={getCharacterRarityBackground(cardDetails)}
+                alt=""
               />
               <img
                 className="w-40 absolute top-[15px] right-[25px] z-0"
                 src={getCharacterTypeBackground(cardDetails)}
+                alt=""
               />
               <img
                 className="w-20 absolute top-[-12px] right-[4px] z-50"
                 src={getCharacterTypeText(cardDetails)}
+                alt=""
               />
             </div>
         </div>
