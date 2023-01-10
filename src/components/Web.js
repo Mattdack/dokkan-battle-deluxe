@@ -9,7 +9,7 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import WebCard from "./WebCard";
-
+import { countBy } from "lodash";
 import "reactflow/dist/base.css";
 
 const nodeTypes = {
@@ -77,6 +77,7 @@ const toEdge = (source, target, existingEdge = {}) => ({
     id: toEdgeId(source, target),
     source: source.id,
     target: target.id,
+    label: countSharedLinks(source, target),
     ...existingEdge
 });
 
@@ -93,5 +94,9 @@ const buildAllEdges = (nodes, edges =[]) => {
 
 const toEdgeId = (source, target) => `${source.id}-${target.id}`;
 
+const countSharedLinks = (source, target) => {
+  const result = countBy(source.data.link_skill, (link_skill) => target.data.link_skill.includes(link_skill))
+  return result.true;
+}
 
 export default Web;
