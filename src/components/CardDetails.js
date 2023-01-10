@@ -54,7 +54,7 @@ function CardDetails({ cardDetails, userCharacters }) {
               ></div>
               <img
                 className={
-                  cardDetails.rarity.trim() === "UR"
+                  cardDetails && cardDetails.rarity.trim() === "UR"
                     ? "h-[48px] absolute top-[136px] right-[116px] z-50"
                     : "h-[56px] absolute top-[130px] right-[130px] z-50"
                 }
@@ -151,5 +151,6 @@ function CardDetails({ cardDetails, userCharacters }) {
     </div>
   );
 }
+
 
 export default CardDetails;

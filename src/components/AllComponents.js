@@ -23,7 +23,7 @@ function AllComponents() {
     allCharacters.map((characterObj) => [characterObj.id, characterObj])
   );
 
-  const [filteredCharacters, setFilteredCharacters] = useState(allCharacters);
+  const [filteredCharacters, setFilteredCharacters] = useState(null);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -95,6 +95,8 @@ function AllComponents() {
       getFilteredCharacters(allCharacters, userCharacters, filterData)
     );
 
+  const charactersToDisplay = filteredCharacters === null ? allCharacters : filteredCharacters;
+
   return (
     // stages formatting
     <div className="bg-slate-700 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 h-[96.64vh] w-screen max-w-screen">
@@ -117,12 +119,12 @@ function AllComponents() {
             <div>Loading...</div>
           ) : (
             <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5, xl:grid-cols-5 justify-self-center h-full max-h-[60vh]">
-              {filteredCharacters &&
-                filteredCharacters.map((character) => (
+              {charactersToDisplay &&
+                charactersToDisplay.map((character) => (
                   <div
                     key={character.id}
                     onClick={() => {
-                      setCardDetails(character.id);
+                      newCardDetails(character.id);
                     }}
                     onDoubleClick={() => {
                       addToTeam(character);

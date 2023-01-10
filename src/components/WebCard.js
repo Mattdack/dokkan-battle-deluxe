@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef, memo } from "react";
+import { Handle } from "reactflow";
 import * as characterStyling from "../util/characterCardStyling";
 
 function WebCard({ data: character }) {
   return (
     <>
+      <Handle type="source"/>
+      <Handle type="target"/>
       <img
         className="h-[100px] w-[100px] m-2 gap-4 bg-no-repeat absolute right-[8px] top-[-1px] z-10"
-        src={`url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getChracterThumbNail(character)}_thumb.png")`}
+        src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getChracterThumbNail(
+          character
+        )}_thumb.png`}
         alt={character.name}
       ></img>
       <img
