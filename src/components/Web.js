@@ -9,89 +9,40 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import WebCard from "./WebCard";
-
+import { countBy } from "lodash";
 import "reactflow/dist/base.css";
 
-const initialEdges = []
-const initialNodes = []
 const nodeTypes = {
   custom: WebCard,
 };
 
-function Web(props) {
-  // const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  // const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
-  // const onConnect = useCallback(
-  //   (params) => setEdges((eds) => addEdge(params, eds)),
-  //   []
-  // );
+function Web({ webOfTeam }) {
   
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+
+  const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
+  const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
+    (changes) => {
+      setExistingNodes((prevNodes) => applyNodeChanges(changes,buildAllNodes(webOfTeam, prevNodes)))  
+    },
+    [setExistingNodes, webOfTeam]
   );
   const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
+    (changes) => {
+      setExistingEdges((prevEdges) => applyEdgeChanges(changes,buildAllEdges(webOfTeam, prevEdges)))
+    },
+    [setExistingEdges, webOfTeam]
   );
 
-
-  useEffect(() => {
-    props.webOfTeam.forEach((character) => {
-      setNodes((prev) => [
-        ...prev,
-        {
-          id: character.id,
-          type: "custom",
-          data: {
-            characterId: character.id,
-            characterArt: character.art,
-            characterThumb: character.thumb,
-            characterType: character.type,
-            characterRarity: character.rarity
-          },
-          position: { x: 10, y: 10 },
-          style: {visibility: "visible"}
-        },
-      ]);
-    });
-
-    
-  }, [props.webOfTeam]);
-
-  useEffect(() => {
-    for (let i = 0; i < props.webOfTeam.length; i++) {
-      for (let j = 0; j < props.webOfTeam.length; j++) {
-        if(i !== j) {
-          console.log("We should be making edges");
-          console.log(props.webOfTeam[i].id)
-          console.log(props.webOfTeam[j].id)
-          console.log(props.webOfTeam[i].id + props.webOfTeam[j].id)
-          console.log("===================================")
-          setEdges((prev) => [
-            ...prev,
-            {
-              id: props.webOfTeam[i].id + props.webOfTeam[j].id,
-              source: props.webOfTeam[i].id,
-              target: props.webOfTeam[j].id,
-              type: "smoothstep",
-            },
-          ])
-        } 
-      }
-    }
-
-  }, [nodes])
+  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes);
+  const combinedEdgeData = buildAllEdges(combinedNodeData, existingEdges);
 
   return (
     <div className="h-72">
       <div className="h-full bg-slate-700 row-span-6 rounded-md">
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
+          nodes={combinedNodeData}
+          edges={combinedEdgeData}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           // onConnect={onConnect}
@@ -103,6 +54,49 @@ function Web(props) {
     </div>
   );
 }
-// }
+
+const toNode = (character, existingNode = {}) => ({
+  id: character.id.toString(),
+  type: "custom",
+  data: character,
+  position: { x: 10, y: 10 },
+  style: { 
+    visibility: "visible",
+    height: "100px",
+    width: "100px" 
+  },
+  ...existingNode,
+});
+
+const buildAllNodes = (team, nodes = []) => {
+  const nodeDictionary = Object.fromEntries(nodes.map(node=>[node.id, node]));
+  return team.map(character => toNode(character, nodeDictionary[character.id]))
+}
+
+const toEdge = (source, target, existingEdge = {}) => ({
+    id: toEdgeId(source, target),
+    source: source.id,
+    target: target.id,
+    label: countSharedLinks(source, target),
+    ...existingEdge
+});
+
+const buildAllEdges = (nodes, edges =[]) => {
+  const edgeDictionary = Object.fromEntries(edges.map(edge=>[edge.id, edge]));
+  const newEdges= [];
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      newEdges.push(toEdge(nodes[i], nodes[j], edgeDictionary[toEdgeId(nodes[i], nodes[j])]));
+    }
+  }
+  return newEdges;
+}
+
+const toEdgeId = (source, target) => `${source.id}-${target.id}`;
+
+const countSharedLinks = (source, target) => {
+  const result = countBy(source.data.link_skill, (link_skill) => target.data.link_skill.includes(link_skill))
+  return result.true;
+}
 
 export default Web;
