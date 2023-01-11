@@ -15,10 +15,10 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <Navbar />
         <Routes>
-          <Route path='/' element={<AllComponents/>}/>
+          <Route exact path='/' element={<AllComponents/>}/>
         </Routes>
       </Router>
     </ApolloProvider>

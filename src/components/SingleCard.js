@@ -25,42 +25,42 @@ function SingleCard(props) {
 
     if (props.characterRarity === 'UR' || props.characterRarity === 'UR '){
       setCharacterRarityPosition('h-[28px] absolute top-[80px] right-[68px] z-50')
-      setCharacterRarity('/dokkanIcons/rarities/UR.png')
+      setCharacterRarity(process.env.PUBLIC_URL + '/dokkanIcons/rarities/UR.png')
     }else{
       setCharacterRarityPosition('h-[35px] absolute top-[72px] right-[70px] z-50')
-      setCharacterRarity('/dokkanIcons/rarities/LR.png')
+      setCharacterRarity(process.env.PUBLIC_URL + '/dokkanIcons/rarities/LR.png')
     }
 
     if (props.characterType === 'EPHY' || props.characterType === 'EPHY ' || props.characterType === 'PHY-E'){
-      setCharacterType('/dokkanIcons/types/phy-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/ephy.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/phy-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/ephy.png')
     } else if (props.characterType === 'SPHY' || props.characterType === 'SPHY ' || props.characterType === 'PHY-S'){
-      setCharacterType('/dokkanIcons/types/phy-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sphy.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/phy-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sphy.png')
     } else if (props.characterType === 'EAGL' || props.characterType === 'SPHY ' || props.characterType === 'AGL-E'){
-      setCharacterType('/dokkanIcons/types/agl-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eagl.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/agl-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eagl.png')
     } else if (props.characterType === 'SAGL' || props.characterType === 'SAGL ' || props.characterType === 'AGL-S'){
-      setCharacterType('/dokkanIcons/types/agl-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sagl.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/agl-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sagl.png')
     } else if (props.characterType === 'ESTR' || props.characterType === 'ESTR ' || props.characterType === 'STR-E'){
-      setCharacterType('/dokkanIcons/types/str-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/estr.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/str-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/estr.png')
     } else if (props.characterType === 'SSTR' || props.characterType === 'SSTR ' || props.characterType === 'STR-S'){
-      setCharacterType('/dokkanIcons/types/str-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sstr.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/str-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sstr.png')
     } else if (props.characterType === 'EINT' || props.characterType === 'EINT ' || props.characterType === 'INT-E'){
-      setCharacterType('/dokkanIcons/types/int-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eint.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/int-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eint.png')
     } else if (props.characterType === 'SINT' || props.characterType === 'SINT ' || props.characterType === 'INT-S'){
-      setCharacterType('/dokkanIcons/types/int-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/sint.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/int-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/sint.png')
     } else if (props.characterType === 'ETEQ' || props.characterType === 'ETEQ ' || props.characterType === 'PHY-E'){
-      setCharacterType('/dokkanIcons/types/teq-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/eteq.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/teq-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/eteq.png')
     } else if (props.characterType === 'STEQ' || props.characterType === 'STEQ ' || props.characterType === 'TEQ-S'){
-      setCharacterType('/dokkanIcons/types/teq-background.png')
-      setCharacterSuperOrExtreme('/dokkanIcons/types/steq.png')
+      setCharacterType(process.env.PUBLIC_URL + '/dokkanIcons/types/teq-background.png')
+      setCharacterSuperOrExtreme(process.env.PUBLIC_URL + '/dokkanIcons/types/steq.png')
     } 
     // Update the "prevCharacter" variable with the current props
     prevCharacterId = characterId;
