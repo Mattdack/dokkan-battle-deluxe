@@ -7,6 +7,9 @@ export const getChracterThumbNail = (cardDetails) => {
 };
 
 export const getCharacterRarityBackground = (cardDetails) => {
+  if(cardDetails.rarity === null) {
+    return undefined;
+  }
   if (cardDetails.rarity.trim() === "UR") {
     return process.env.PUBLIC_URL + "/dokkanIcons/rarities/UR.png";
   } else {
@@ -15,6 +18,9 @@ export const getCharacterRarityBackground = (cardDetails) => {
 };
 
 export const getCharacterTypeBackground = (cardDetails) => {
+  if(cardDetails.type === null) {
+    return undefined;
+  }
   if (cardDetails.type.includes("PHY")) {
     return process.env.PUBLIC_URL + "/dokkanIcons/types/agl-background.png";
   } else if (cardDetails.type.includes("AGL")) {
@@ -29,6 +35,9 @@ export const getCharacterTypeBackground = (cardDetails) => {
 };
 
 export const getCharacterTypeText = (cardDetails) => {
+  if(cardDetails.type === null) {
+    return undefined;
+  }
   if (cardDetails.type.trim() === "EPHY" || cardDetails.type === "PHY-E") {
     return process.env.PUBLIC_URL + "/dokkanIcons/types/ephy.png";
   } else if (
