@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SingleCard from "./SingleCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
-import { handleRarityChange } from "../util/helpers";
 
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   QUERY_CHARACTERS,
-  QUERY_ONECHARACTER,
   GET_USERDATA,
   GET_USERCHARACTERSBYID,
 } from "../util/queries";
@@ -131,12 +129,7 @@ function AllComponents() {
                     }}
                   >
                     <SingleCard
-                      characterId={character.id}
-                      characterLinks={character.link_skill}
-                      characterThumb={character.thumb}
-                      characterArt={character.art}
-                      characterType={character.type}
-                      characterRarity={character.rarity}
+                      character={character}
                     />
                   </div>
                 ))}

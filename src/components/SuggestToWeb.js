@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_7LINKS } from "../util/queries";
 import SingleCard from "./SingleCard";
@@ -59,11 +59,7 @@ const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails}) => (
           }}
         >
           <SingleCard
-            characterId={character.id}
-            characterThumb={character.thumb}
-            characterArt={character.art}
-            characterType={character.type}
-            characterRarity={character.rarity}
+            character={character}
           />
         </div>
       ))}
