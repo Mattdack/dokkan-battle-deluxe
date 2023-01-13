@@ -1,4 +1,4 @@
-export const getChracterThumbNail = (cardDetails) => {
+export const getCharacterThumbNail = (cardDetails) => {
   if (!cardDetails.thumb) {
     return cardDetails.art;
   } else {
