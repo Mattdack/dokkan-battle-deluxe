@@ -53,7 +53,7 @@ function CardDetails({ cardDetails, userCharacters }) {
             onClick={() => {}}
             className="h-48 w-48 m-2 gap-4 bg-no-repeat relative z-50"
             style={{
-              backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getChracterThumbNail(
+              backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
                 cardDetails
               )}_thumb.png")`,
               backgroundSize: `100%`,
