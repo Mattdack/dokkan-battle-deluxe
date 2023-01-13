@@ -99,9 +99,9 @@ function AllComponents() {
 
   return (
     // stages formatting
-    <div className="bg-slate-700 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 h-[96.64vh] w-screen max-w-screen">
+    <div className="grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
       {/* //left column styling */}
-      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col mr-2 my-2 border-2 border-slate-900 max-h-[94vh] ml-2 w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
+      <div className="h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
         <h1 className="text-center m-4">Search by Filters</h1>
 
         {/* //contains filters/buttons/search field/etc. */}
@@ -111,14 +111,14 @@ function AllComponents() {
           isDisabled={allCharactersLoading}
         />
 
-        <h2 className="p-3 text-center mt-10">Main Character Selection</h2>
+        <h2 className="p-3 text-center">Main Character Selection</h2>
 
         {/* //character select box */}
-        <div className="h-fit m-10 border-2 border-slate-900 overflow-y-auto bg-orange-200">
+        <div className="h-fit m-1 border-2 border-slate-900 overflow-y-auto bg-orange-200 lg:m-2">
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5, xl:grid-cols-5 justify-self-center h-full max-h-[60vh]">
+            <div className="flex flex-wrap justify-evenly h-full max-h-[60vh]">
               {charactersToDisplay &&
                 charactersToDisplay.map((character) => (
                   <div
@@ -145,7 +145,7 @@ function AllComponents() {
         </div>
       </div>
       {/* //middle column styling */}
-      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
+      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
         <CardDetails
           cardDetails={cardDetails}
           userCharacters={userCharacterIds}
@@ -154,7 +154,7 @@ function AllComponents() {
       </div>
 
       {/* //right column styling */}
-      <div className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col ml-2 my-2 border-2 border-slate-900 max-h-[94vh] w-screen md:w-screen lg:w-[32vw] xl:w-[32vw]">
+      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
         <SuggestToWeb
           selectedCharacter={cardDetails}
           webOfTeam={webOfTeam}

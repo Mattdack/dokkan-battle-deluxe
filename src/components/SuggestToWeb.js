@@ -30,10 +30,10 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
 
   return (
     <div className="h-full my-2">
-      <Web webOfTeam={webOfTeam} />
+      <Web webOfTeam={webOfTeam} className='h-[40vh]' />
 
-      <div className="h-[60vh]row-span-2 p-2">
-        <div className="flex flex-col h-full justify-end">
+      <div className="h-[60vh] lg:h-[54vh] row-span-2 p-2 overflow-auto">
+        <div className="h-full">
           {/* <CharacterLinkDisplay matchCount={7} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/> */}
           <CharacterLinkDisplay matchCount={6} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
           <CharacterLinkDisplay matchCount={5} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
@@ -49,7 +49,7 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
 const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails}) => (
   <>
   <h3>Characters with {matchCount} Links:</h3>
-  <div className="grid grid-cols-5 h-[120px] max-w-full bg-gradient-radial from-purple-200 via-purple-100 to-purple-50  m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
+  <div className="flex flex-wrap h-fit h-[120px] justify-evenly bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
     {countedLinks[matchCount] &&
       countedLinks[matchCount].map((character) => (
         <div
