@@ -1,0 +1,28 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      # Config the git user to be used to commit deploy files to the last commit (from the push event)
+      - name: Configure Deploy User
+        run: |
+          gitUser="$(git log -n 1 --pretty=format:%an)"
+          gitEmail="$(git log -n 1 --pretty=format:%ae)"
+          echo "Deploying with user $gitUser and email $gitEmail"
+          git config user.name $gitUser
+          git config user.email $gitEmail
+      - name: Deploy
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npm install
+          npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

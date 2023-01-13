@@ -5,99 +5,107 @@ import { ADD_USER, LOGIN_USER } from "../util/mutations";
 
 import Auth from "../util/auth";
 
+import LoginSignUpModal from "./LoginSignUpModal";
+
 const AppNavbar = () => {
-  // set modal display state
-  // const [showModal, setShowModal] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  // // set modal display state
+  // // const [showModal, setShowModal] = useState(false);
+  // const [searchInput, setSearchInput] = useState("");
 
-  const [loginFormData, setLoginFormData] = useState({
-    email: "",
-    password: "",
-  });
+  // const [loginFormData, setLoginFormData] = useState({
+  //   email: "",
+  //   password: "",
+  // });
 
-  const [signUpFormData, setSignUpFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  // const [signUpFormData, setSignUpFormData] = useState({
+  //   username: "",
+  //   email: "",
+  //   password: "",
+  // });
 
-  const [validated] = useState(false);
+  // const [validated] = useState(false);
 
-  const [addUser, { error, data }] = useMutation(ADD_USER);
-  const [login, { error:error2, data:data2 }] = useMutation(LOGIN_USER);
+  // const [addUser, { error, data }] = useMutation(ADD_USER);
+  // const [login, { error:error2, data:data2 }] = useMutation(LOGIN_USER);
 
-  const handleSignupChange = (event) => {
-    const { name, value } = event.target;
-    setSignUpFormData({ ...signUpFormData, [name]: value });
-  };
+  // const handleSignupChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setSignUpFormData({ ...signUpFormData, [name]: value });
+  // };
 
-  const handleLoginChange = (event) => {
-    const { name, value } = event.target;
-    setLoginFormData({ ...loginFormData, [name]: value });
-  };
+  // const handleLoginChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setLoginFormData({ ...loginFormData, [name]: value });
+  // };
 
-  const handleLoginSubmit = async (event) => {
-    event.preventDefault();
+  // const handleLoginSubmit = async (event) => {
+  //   event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    //TODO: INSERT THE MUTATION HERE
-    try {
-      console.log(loginFormData)
-      const { data } = await login({
-        variables: {
-          email: loginFormData.emailLogin,
-          password: loginFormData.passwordLogin,
-        },
-      });
-      Auth.login(data.login.token);
-    } catch (e) {
-      console.error(e);
-    }
+  //   // check if form has everything (as per react-bootstrap docs)
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+  //   //TODO: INSERT THE MUTATION HERE
+  //   try {
+  //     console.log(loginFormData)
+  //     const { data } = await login({
+  //       variables: {
+  //         email: loginFormData.emailLogin,
+  //         password: loginFormData.passwordLogin,
+  //       },
+  //     });
+  //     Auth.login(data.login.token);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
 
-    setSignUpFormData({
-      email: "",
-      password: "",
-    });
-  };
+  //   setSignUpFormData({
+  //     email: "",
+  //     password: "",
+  //   });
+  // };
 
-  const handleSignUpSubmit = async (event) => {
-    event.preventDefault();
+  // const handleSignUpSubmit = async (event) => {
+  //   event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    //TODO: INSERT THE MUTATION HERE
-    try {
-      const { data } = await addUser({
-        variables: {
-          username: signUpFormData.username,
-          email: signUpFormData.email,
-          password: signUpFormData.password,
-        },
-      });
-      Auth.login(data.addUser.token);
-    } catch (e) {
-      console.error(e);
-    }
+  //   // check if form has everything (as per react-bootstrap docs)
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+  //   //TODO: INSERT THE MUTATION HERE
+  //   try {
+  //     const { data } = await addUser({
+  //       variables: {
+  //         username: signUpFormData.username,
+  //         email: signUpFormData.email,
+  //         password: signUpFormData.password,
+  //       },
+  //     });
+  //     Auth.login(data.addUser.token);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
 
-    setSignUpFormData({
-      username: "",
-      email: "",
-      password: "",
-    });
-  };
+  //   setSignUpFormData({
+  //     username: "",
+  //     email: "",
+  //     password: "",
+  //   });
+  // };
+
+
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="h-8 w-screen">
-      <>{/* TODO: logout button show */}</>
+    <div className="h-[8vh]">
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      <LoginSignUpModal open={isOpen} onClose={() => setIsOpen(false)}>
+      </LoginSignUpModal>
+      {/* <>TODO: logout button show</>
       {Auth.loggedIn() ? (
         <div>
           <h1>Hey you're logged in</h1>
@@ -176,7 +184,7 @@ const AppNavbar = () => {
             </button>
           </form>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
