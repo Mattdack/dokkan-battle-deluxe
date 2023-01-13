@@ -12,19 +12,23 @@ const nodeTypes = {
 };
 
 function Web({ webOfTeam }) {
-  
-
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
-  const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
+  const [existingEdges, setExistingEdges] = useState(
+    buildAllEdges(existingNodes)
+  );
   const onNodesChange = useCallback(
     (changes) => {
-      setExistingNodes((prevNodes) => applyNodeChanges(changes,buildAllNodes(webOfTeam, prevNodes)))  
+      setExistingNodes((prevNodes) =>
+        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes))
+      );
     },
     [setExistingNodes, webOfTeam]
   );
   const onEdgesChange = useCallback(
     (changes) => {
-      setExistingEdges((prevEdges) => applyEdgeChanges(changes,buildAllEdges(webOfTeam, prevEdges)))
+      setExistingEdges((prevEdges) =>
+        applyEdgeChanges(changes, buildAllEdges(webOfTeam, prevEdges))
+      );
     },
     [setExistingEdges, webOfTeam]
   );
@@ -50,48 +54,79 @@ function Web({ webOfTeam }) {
   );
 }
 
-const toNode = (character, existingNode = {}) => ({
+const startingPosition = {x: 10, y: 10};
+
+const toNode = (character, midpoint, existingNode = {}) => ({
   id: character.id.toString(),
   type: "custom",
-  data: character,
-  position: { x: 10, y: 10 },
-  style: { 
+  data: {midpoint, ...character},
+  position: startingPosition,
+  style: {
     visibility: "visible",
     height: "100px",
-    width: "100px" 
+    width: "100px",
+    border: "solid 2px black"
   },
   ...existingNode,
 });
 
 const buildAllNodes = (team, nodes = []) => {
-  const nodeDictionary = Object.fromEntries(nodes.map(node=>[node.id, node]));
-  return team.map(character => toNode(character, nodeDictionary[character.id]))
-}
+  const nodeDictionary = Object.fromEntries(
+    nodes.map((node) => [node.id, node])
+  );
+  const midpoint = computeMidpoint(team, nodeDictionary);
+  return team.map((character) =>
+    toNode(character, midpoint, nodeDictionary[character.id])
+  );
+};
 
 const toEdge = (source, target, existingEdge = {}) => ({
-    id: toEdgeId(source, target),
-    source: source.id,
-    target: target.id,
-    label: countSharedLinks(source, target),
-    ...existingEdge
+  id: toEdgeId(source, target),
+  source: source.id,
+  target: target.id,
+  label: countSharedLinks(source, target),
+  ...existingEdge,
 });
 
-const buildAllEdges = (nodes, edges =[]) => {
-  const edgeDictionary = Object.fromEntries(edges.map(edge=>[edge.id, edge]));
-  const newEdges= [];
+const buildAllEdges = (nodes, edges = []) => {
+  const edgeDictionary = Object.fromEntries(
+    edges.map((edge) => [edge.id, edge])
+  );
+  const newEdges = [];
+
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
-      newEdges.push(toEdge(nodes[i], nodes[j], edgeDictionary[toEdgeId(nodes[i], nodes[j])]));
+      newEdges.push(
+        toEdge(nodes[i], nodes[j], edgeDictionary[toEdgeId(nodes[i], nodes[j])])
+      );
     }
   }
+
   return newEdges;
-}
+};
 
 const toEdgeId = (source, target) => `${source.id}-${target.id}`;
 
 const countSharedLinks = (source, target) => {
-  const result = countBy(source.data.link_skill, (link_skill) => target.data.link_skill.includes(link_skill))
+  // result = { true: count of matching, false: count of missing }
+  const result = countBy(source.data.link_skill, (link_skill) =>
+    target.data.link_skill.includes(link_skill)
+  );
   return result.true;
+};
+
+const computeMidpoint = (team, nodeDictionary ) => {
+  if(!team.length) {
+    return startingPosition;
+  }
+  const {x:xSum,y:ySum} = team.reduce((aggregate, currentCharacter) => {
+    const { x, y } = nodeDictionary[currentCharacter.id]?.position || startingPosition
+    return {
+      x: aggregate.x + x,
+      y: aggregate.y + y,
+    }
+  }, { x: 0, y: 0 })
+    return { x: (xSum / team.length), y: (ySum / team.length) }
 }
 
 export default Web;
