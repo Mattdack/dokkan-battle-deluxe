@@ -99,7 +99,7 @@ function AllComponents() {
     // stages formatting
     <div className="grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
       {/* //left column styling */}
-      <div className="h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
+      <div className="h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
         <h1 className="text-center m-4">Search by Filters</h1>
 
         {/* //contains filters/buttons/search field/etc. */}
@@ -138,7 +138,7 @@ function AllComponents() {
         </div>
       </div>
       {/* //middle column styling */}
-      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
+      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
         <CardDetails
           cardDetails={cardDetails}
           userCharacters={userCharacterIds}
@@ -147,7 +147,7 @@ function AllComponents() {
       </div>
 
       {/* //right column styling */}
-      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 rounded-md flex flex-col border-2 border-slate-900">
+      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
         <SuggestToWeb
           selectedCharacter={cardDetails}
           webOfTeam={webOfTeam}

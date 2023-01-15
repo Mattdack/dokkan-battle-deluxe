@@ -8,7 +8,7 @@ function SingleCard( { character }) {
     
     <div className="w-[120px] h-[120px] relative">
       <img
-        className="h-[100px] w-[100px] m-2 gap-4 bg-no-repeat absolute right-[8px] top-[-1px] z-10"
+        className="h-[100px] w-[100px] m-2 gap-4 bg-no-repeat absolute right-[7px] top-[-1px] z-10"
         src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
           character
         )}_thumb.png`}
@@ -19,8 +19,8 @@ function SingleCard( { character }) {
           src={characterStyling.getCharacterRarityBackground(character)}
           className={
             character.rarity.trim() === "UR"
-              ? "h-[48px] absolute top-[56px] right-[56px] z-50"
-              : "h-[56px] absolute top-[56px] right-[56px] z-50"
+              ? "h-[28px] absolute bottom-[17px] left-[-2px] z-50"
+              : "h-[34px] absolute bottom-[19px] left-[2px] z-50"
           }
         />
       }
