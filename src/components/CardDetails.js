@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_CHARACTER, REMOVE_CHARACTER } from "../util/mutations";
 import Auth from "../util/auth";
 import * as characterStyling from "../util/characterCardStyling";
-
+import * as linkSkillInfo from '../util/linkSkillInfo'
 
 function CardDetails({ cardDetails, userCharacters }) {
   const [
@@ -40,6 +40,27 @@ function CardDetails({ cardDetails, userCharacters }) {
       console.log(result);
     });
   }
+
+  const CharacterLinkDisplay = ({ linkText }) => {
+    const [showPopUp, setShowPopUp] = useState(false);
+    return (
+      <>
+        <div className="relative">
+          <div>
+            {showPopUp && (
+              <div className="absolute top-[-100%] p-2 bg-gray-200 text-gray-700 z-50">
+                {linkSkillInfo.getLinkSkillInfo(linkText)[2]}
+              </div>
+            )}
+          </div>
+          <button className="h-min-10 w-full flex flex-wrap bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm"
+            onMouseEnter={() => setShowPopUp(true)}
+            onMouseLeave={() => setShowPopUp(false)}> {linkText}
+          </button>
+        </div>
+      </>
+    );
+  };
 
   console.log(cardDetails);
 
@@ -145,13 +166,7 @@ function CardDetails({ cardDetails, userCharacters }) {
           <div className="">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
-                return (
-                  <div>
-                    <h2 className="h-min-10 flex flex-wrap bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm">
-                      {linkText}
-                    </h2>
-                  </div>
-                );
+                return <CharacterLinkDisplay linkText={linkText} />;
               })}
           </div>
         </div>

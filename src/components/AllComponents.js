@@ -51,6 +51,7 @@ function AllComponents() {
       "Fierce Battle",
       "The Wall Standing Tall",
     ],
+    ps_description: "stuff",
     type: "EPHY",
     rarity: "UR",
     ls_description: `Allies’ ATK increases (MAX +50%) based on HP left`,
