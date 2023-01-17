@@ -62,10 +62,9 @@ const toNode = (character, midpoint, existingNode = {}) => ({
   data: {midpoint, ...character},
   position: startingPosition,
   style: {
+
     visibility: "visible",
-    height: "100px",
-    width: "100px",
-    border: "solid 2px black"
+
   },
   ...existingNode,
 });

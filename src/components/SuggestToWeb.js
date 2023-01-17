@@ -49,7 +49,7 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
 const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails}) => (
   <>
   <h3>Characters with {matchCount} Links:</h3>
-  <div className="flex flex-wrap h-fit h-[120px] justify-evenly bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
+  <div className="flex flex-wrap h-fit h-[140px] justify-evenly bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
     {countedLinks[matchCount] &&
       countedLinks[matchCount].map((character) => (
         <div
