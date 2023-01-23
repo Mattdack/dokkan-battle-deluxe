@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SingleCard from "./SingleCard";
+import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
 
@@ -62,6 +62,7 @@ function AllComponents() {
 
   const [webOfTeam, setWebOfTeam] = useState([]);
 
+  //TODO: using token for login
   const { loading: isUserDataLoading, data: userData } = useQuery(
     GET_USERDATA,
     {
@@ -94,13 +95,36 @@ function AllComponents() {
       getFilteredCharacters(allCharacters, userCharacters, filterData)
     );
 
-  const charactersToDisplay = filteredCharacters === null ? allCharacters : filteredCharacters;
+  //added the slice to orient characters by id
+  const charactersToDisplay = filteredCharacters === null ? allCharacters.slice().sort((a, b) => b.id - a.id) : filteredCharacters.slice().sort((a, b) => b.id - a.id);
+
+  const scrollToCardDetails = () => {
+    const middleColumn = document.getElementById("CardDetails");
+    middleColumn.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToCharacterSelection = () => {
+    const middleColumn = document.getElementById("CharacterSelection");
+    middleColumn.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToTeam = () => {
+    const middleColumn = document.getElementById("Team");
+    middleColumn.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     // stages formatting
-    <div className="grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
+    <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
       {/* //left column styling */}
-      <div className="h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
+      <div
+        id="CharacterSelection"
+        className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900"
+      >
+        <button onClick={() => scrollToCardDetails()}>Character Details</button>
+        <button onClick={() => scrollToTeam()}>Team</button>
+      </div>
+      <div className="h-[86vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
         <h1 className="text-center m-4">Search by Filters</h1>
 
         {/* //contains filters/buttons/search field/etc. */}
@@ -113,11 +137,11 @@ function AllComponents() {
         <h2 className="p-3 text-center">Main Character Selection</h2>
 
         {/* //character select box */}
-        <div className="h-fit m-1 border-2 border-slate-900 overflow-y-auto bg-orange-200 lg:m-2">
+        <div className="h-fit p-1 m-1 border-2 border-slate-900 overflow-y-auto bg-orange-200 lg:m-2">
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="flex flex-wrap justify-evenly h-full max-h-[60vh]">
+            <div className="flex flex-wrap justify-center items-center h-full max-h-[60vh]">
               {charactersToDisplay &&
                 charactersToDisplay.map((character) => (
                   <div
@@ -129,9 +153,7 @@ function AllComponents() {
                       addToTeam(character);
                     }}
                   >
-                    <SingleCard
-                      character={character}
-                    />
+                    <AllComponentsCard character={character} />
                   </div>
                 ))}
             </div>
@@ -139,7 +161,14 @@ function AllComponents() {
         </div>
       </div>
       {/* //middle column styling */}
-      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
+      <div
+        id="CardDetails"
+        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900"
+      >
+        <div className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900">
+          <button onClick={() => scrollToCharacterSelection()}>Character Selection</button>
+          <button onClick={() => scrollToTeam()}>Team</button>
+        </div>
         <CardDetails
           cardDetails={cardDetails}
           userCharacters={userCharacterIds}
@@ -148,11 +177,19 @@ function AllComponents() {
       </div>
 
       {/* //right column styling */}
-      <div className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
+      <div
+        id="Team"
+        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-2 border-slate-900"
+      >
+        <div className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900">
+          <button onClick={() => scrollToCharacterSelection()}>Character Selection</button>
+          <button onClick={() => scrollToCardDetails()}>Character Details</button>
+        </div>
         <SuggestToWeb
           selectedCharacter={cardDetails}
-          webOfTeam={webOfTeam}
           handleNewDetails={newCardDetails}
+          addToTeam={addToTeam}
+          webOfTeam={webOfTeam}
         />
       </div>
     </div>

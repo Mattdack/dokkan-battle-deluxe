@@ -33,7 +33,7 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
           className={
             character.rarity.trim() === "UR"
               ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
-              : "h-[34px] absolute bottom-[19px] left-[2px] z-50"
+              : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
           }
         />
       )}
