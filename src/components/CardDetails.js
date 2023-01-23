@@ -53,7 +53,7 @@ function CardDetails({ cardDetails, userCharacters }) {
               </div>
             )}
           </div>
-          <button className="h-min-10 w-full flex flex-wrap bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black m-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm"
+          <button className="h-min-10 w-full flex flex-wrap bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm"
             onMouseEnter={() => setShowPopUp(true)}
             onMouseLeave={() => setShowPopUp(false)}> {linkText}
           </button>
@@ -61,8 +61,6 @@ function CardDetails({ cardDetails, userCharacters }) {
       </>
     );
   };
-
-  console.log(cardDetails);
 
   return (
     <div className="h-full flex flex-col">

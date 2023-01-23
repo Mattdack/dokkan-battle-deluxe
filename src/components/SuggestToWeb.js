@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_7LINKS } from "../util/queries";
-import SingleCard from "./SingleCard";
+import SuggestCard from "./SuggestCard";
 import Web from "./Web";
-import { countBy, groupBy } from "lodash";
+import { add, countBy, groupBy } from "lodash";
 
-function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
+function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam, addToTeam }) {
+
   const {
     loading: isLinkedCharactersLoading,
     data:linkedCharactersData,
@@ -30,15 +31,15 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
 
   return (
     <div className="h-full my-2">
-      <Web webOfTeam={webOfTeam} className='h-[40vh]' />
+      <Web webOfTeam={webOfTeam} />
 
-      <div className="h-[60vh] lg:h-[54vh] row-span-2 p-2 overflow-auto">
+      <div className="h-[48vh] row-span-2 p-2 overflow-auto">
         <div className="h-full">
-          {/* <CharacterLinkDisplay matchCount={7} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/> */}
-          <CharacterLinkDisplay matchCount={6} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
-          <CharacterLinkDisplay matchCount={5} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
-          <CharacterLinkDisplay matchCount={4} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
-          <CharacterLinkDisplay matchCount={3} countedLinks={countedLinks} handleNewDetails={handleNewDetails}/>
+          <CharacterLinkDisplay matchCount={7} countedLinks={countedLinks} handleNewDetails={handleNewDetails} addToTeam={addToTeam} />
+          <CharacterLinkDisplay matchCount={6} countedLinks={countedLinks} handleNewDetails={handleNewDetails} addToTeam={addToTeam}/>
+          <CharacterLinkDisplay matchCount={5} countedLinks={countedLinks} handleNewDetails={handleNewDetails} addToTeam={addToTeam}/>
+          <CharacterLinkDisplay matchCount={4} countedLinks={countedLinks} handleNewDetails={handleNewDetails} addToTeam={addToTeam}/>
+          <CharacterLinkDisplay matchCount={3} countedLinks={countedLinks} handleNewDetails={handleNewDetails} addToTeam={addToTeam}/>
           
         </div>
       </div>
@@ -46,20 +47,19 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam }) {
   );
 }
 
-const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails}) => (
+const CharacterLinkDisplay = ({matchCount, countedLinks, handleNewDetails, addToTeam}) => (
   <>
   <h3>Characters with {matchCount} Links:</h3>
-  <div className="flex flex-wrap h-fit h-[140px] justify-evenly bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto">
+  <div className="flex flex-wrap h-fit h-[120px] justify-evenly bg-gradient-radial from-purple-200 via-purple-100 to-purple-50 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
     {countedLinks[matchCount] &&
       countedLinks[matchCount].map((character) => (
         <div
           key={character.id}
-          onClick={() => {
-            handleNewDetails(character.id);
-          }}
         >
-          <SingleCard
+          <SuggestCard
             character={character}
+            handleNewDetails={handleNewDetails}
+            addToTeam={addToTeam}
           />
         </div>
       ))}
