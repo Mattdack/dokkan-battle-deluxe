@@ -1,7 +1,7 @@
 import { data } from "autoprefixer";
 import { all } from "axios";
 import React, { useEffect, useState } from "react";
-import { EdgeProps, getBezierPath, EdgeLabelRenderer } from "reactflow";
+import { EdgeProps, getBezierPath, EdgeLabelRenderer, useEdgesState } from "reactflow";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
 const CustomEdge = (props) => {
@@ -19,65 +19,50 @@ const CustomEdge = (props) => {
     return null;
   }
   
-  const sourceNode = data.sourceNode.data.link_skill;
-  const targetNode = data.targetNode.data.link_skill;
-  const matchedLinks = linkSkillInfo.findMatchingLinks(sourceNode, targetNode);
+  const sourceNodeLinks = data.sourceNode.data.link_skill;
+  const targetNodeLinks = data.targetNode.data.link_skill;
+  const matchedLinks = linkSkillInfo.findMatchingLinks(sourceNodeLinks, targetNodeLinks);
   let matchedLinkInfo = [];
   for (let i = 0; i < matchedLinks.length; i++) {
     matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
   }
-  
+
+  function handleShowLinkInfo (event) {
+    setShowLinkInfo(!showLinkInfo)
+  }
+
   return (
-    <>
-      <path
-        id={id}
-        className="react-flow__edge-path"
-        d={edgePath}
-        style={{
-          stroke: edgeSelected ? "orange" : "white",
-          strokeWidth: edgeSelected ? "3px" : "1px",
-          zIndex: edgeSelected ? "800" : "1",
-        }}
-      />
+    <> 
+      <path key={id} id={id} className="react-flow__edge-path" d={edgePath} style={{ stroke: edgeSelected?"orange":"white", strokeWidth: edgeSelected?"5px":"1px" }}/>
 
       <EdgeLabelRenderer>
       <div
           style={{
             position: "absolute",
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            background: "#ffcc00",
-            padding: 10,
-            borderWidth: 2,
-            borderWidth: edgeSelected ? "4px" : "0px",
-            borderColor: "#000000",
-            borderStyle: "solid",
+            background: edgeSelected?"#ffcc00": "white",
+            padding: 5,
+            borderWidth: edgeSelected ? "4px" : "",
+            borderColor: edgeSelected ? "#000000" : "",
+            borderStyle: edgeSelected ? "solid" : "",
             borderRadius: 5,
             fontSize: 12,
             fontWeight: 700,
-            zIndex: edgeSelected ? 1000 : 1, 
+            zIndex: edgeSelected ? (showLinkInfo ? 1000 : 100) : 1,
             pointerEvents: "all",
           }}
-          className="nodrag nopan test1"
-          onClick={() => setShowLinkInfo(!showLinkInfo)}
+          className="nodrag nopan"
+          onClick={() => handleShowLinkInfo()}
         >
-          {!showLinkInfo ? (
-            <div
-            style={{zIndex:900}}
-            >{data.sharedLinks}</div>
-          ) : (
-            matchedLinkInfo.map((linkSkillInfo) => {
+          {!showLinkInfo ? (<div className="font-bold text-lg"> {data.sharedLinks} </div>) 
+          : 
+          (matchedLinkInfo.map((linkSkillInfo) => {
               return (
-                <div
-                style={{zIndex:1000}}
-                  className="nodrag nopan w-20 border-b border-black p-1"
-                >
-                  {linkSkillInfo}
-                </div>
+                <div className="nodrag nopan p-1 w-20 border-b border-black"> {linkSkillInfo} </div>
               );
             })
           )}
         </div>
-
       </EdgeLabelRenderer>
     </>
   );

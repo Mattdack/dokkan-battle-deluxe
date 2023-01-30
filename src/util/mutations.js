@@ -1,46 +1,38 @@
 import { gql } from "@apollo/client";
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-        email
-      }
-    }
-  }
-`;
-
-export const LOGIN_USER = gql`
-mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
+mutation AddUser($username: String!, $email: String!, $password: String!) {
+  addUser(username: $username, email: $email, password: $password) {
     token
-    user {
-      _id
-      username
-      email
-      savedCharacters
-    }
   }
 }
 `;
 
+export const LOGIN_USER = gql`
+mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    token
+  }
+}
+`;
+
+export const UPDATE_SAVED_CHARACTERS = gql`
+mutation UpdateSavedCharacters($token: String!, $newSavedCharacters: [Int]) {
+  updateSavedCharacters(token: $token, newSavedCharacters: $newSavedCharacters) {
+    savedCharacters
+  }
+}`;
+
 export const ADD_CHARACTER = gql`
-mutation SaveCharacter($username: String!, $dokkanId: Int) {
-  saveCharacter(username: $username, dokkanId: $dokkanId) {
-    username
-    email
+mutation SaveCharacter($token: String!, $dokkanId: Int) {
+  saveCharacter(token: $token, dokkanId: $dokkanId) {
     savedCharacters
   }
 }`;
 
 export const REMOVE_CHARACTER = gql`
-mutation RemoveCharacter($username: String!, $dokkanId: Int) {
-  removeCharacter(username: $username, dokkanId: $dokkanId) {
-    username
-    email
+mutation RemoveCharacter($token: String!, $dokkanId: Int) {
+  removeCharacter(token: $token, dokkanId: $dokkanId) {
     savedCharacters
   }
 }`;
