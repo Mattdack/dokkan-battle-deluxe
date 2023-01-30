@@ -28,11 +28,46 @@ function AllComponents() {
   const [filteredCharacters, setFilteredCharacters] = useState(null);
 
   const [cardDetails, setCardDetails] = useState({
-    id: 1331,
-    thumb: 1003310,
-    art: null,
-    name: "Buu (Kid)",
-    category: [
+    "id": 1331,
+    "char_link": "https://dbz-dokkanbattle.fandom.com/wiki/Heartless_Destruction_Buu_(Kid)",
+    "thumb": 1003310,
+    "art": null,
+    "title": "Heartless Destruction",
+    "name": "Buu (Kid)",
+    "rarity": "UR",
+    "type": "EPHY",
+    "cost": "42",
+    "ls_description": "Allies’ ATK increases (MAX +50%) based on HP left",
+    "ls_description_eza": "All Types Ki +3 and HP & DEF +50%, raises ATK by up to 80% (the more HP remaining, the greater the ATK boost)",
+    "sa_type": "Ki ",
+    "sa_name": "Planet Burst",
+    "sa_description": "Causes supreme damage and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
+    "sa_description_eza": "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
+    "ultra_sa_type": null,
+    "ultra_sa_name": null,
+    "ultra_sa_description": null,
+    "ultra_sa_description_eza": null,
+    "ps_name": "Planetary Destruction",
+    "ps_description": "ATK & DEF +50% for all allies when HP is 80% or above",
+    "ps_description_eza": "All allies' Ki +2 and ATK & DEF +50% when HP is 80% or above; all allies' ATK & DEF +30% when HP is 79% or below",
+    "sa_type_active": null,
+    "active_skill_name": null,
+    "active_skill": null,
+    "active_skill_condition": null,
+    "active_skill_condition_eza": null,
+    "transform_type": null,
+    "transform_condition": null,
+    "transform_condition_eza": null,
+    "link_skill": [
+      "Majin",
+      "Brutal Beatdown",
+      "More Than Meets the Eye",
+      "Big Bad Bosses",
+      "Infinite Regeneration",
+      "Fierce Battle",
+      "The Wall Standing Tall"
+    ],
+    "category": [
       "Resurrected Warriors",
       "Majin Buu Saga",
       "Transformation Boost",
@@ -44,24 +79,12 @@ function AllComponents() {
       "Sworn Enemies",
       "Accelerated Battle",
       "Worldwide Chaos",
-      "Battle of Fate",
+      "Battle of Fate"
     ],
-    link_skill: [
-      "Majin",
-      "Brutal Beatdown",
-      "More Than Meets the Eye",
-      "Big Bad Bosses",
-      "Infinite Regeneration",
-      "Fierce Battle",
-      "The Wall Standing Tall",
-    ],
-    ps_description: "stuff",
-    type: "EPHY",
-    rarity: "UR",
-    ls_description: `Allies’ ATK increases (MAX +50%) based on HP left`,
-    sa_name: "Planet Burst",
-    sa_description:
-      "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
+    "jp_date": "1 Dec 2015",
+    "glb_date": "6 Apr 2016",
+    "jp_date_eza": "11 Oct 2018",
+    "glb_date_eza": "22 Jan 2019"
   });
 
   //setting a state of webOfTeam for characeters in graph
