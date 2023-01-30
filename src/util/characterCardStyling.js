@@ -1,4 +1,4 @@
-export const getChracterThumbNail = (cardDetails) => {
+export const getCharacterThumbNail = (cardDetails) => {
   if (!cardDetails.thumb) {
     return cardDetails.art;
   } else {
@@ -7,7 +7,7 @@ export const getChracterThumbNail = (cardDetails) => {
 };
 
 export const getCharacterRarityBackground = (cardDetails) => {
-  if(cardDetails.rarity === null) {
+  if (cardDetails.rarity === null) {
     return undefined;
   }
   if (cardDetails.rarity.trim() === "UR") {
@@ -18,11 +18,11 @@ export const getCharacterRarityBackground = (cardDetails) => {
 };
 
 export const getCharacterTypeBackground = (cardDetails) => {
-  if(cardDetails.type === null) {
+  if (cardDetails.type === null) {
     return undefined;
   }
   if (cardDetails.type.includes("PHY")) {
-    return process.env.PUBLIC_URL + "/dokkanIcons/types/agl-background.png";
+    return process.env.PUBLIC_URL + "/dokkanIcons/types/phy-background.png";
   } else if (cardDetails.type.includes("AGL")) {
     return process.env.PUBLIC_URL + "/dokkanIcons/types/agl-background.png";
   } else if (cardDetails.type.includes("STR")) {
@@ -35,7 +35,7 @@ export const getCharacterTypeBackground = (cardDetails) => {
 };
 
 export const getCharacterTypeText = (cardDetails) => {
-  if(cardDetails.type === null) {
+  if (cardDetails.type === null) {
     return undefined;
   }
   if (cardDetails.type.trim() === "EPHY" || cardDetails.type === "PHY-E") {

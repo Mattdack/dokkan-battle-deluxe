@@ -1,182 +1,90 @@
 import React, { useState } from "react";
-
-import { useMutation } from "@apollo/client";
-import { ADD_USER, LOGIN_USER } from "../util/mutations";
-
 import Auth from "../util/auth";
 
+import HamburgerModal from "../modals/HamburgerModal"
+import LoginSignUpModal from "../modals/LoginSignUpModal";
+import HelpModal from "../modals/HelpModal";
+import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
+
 const AppNavbar = () => {
-  // set modal display state
-  // const [showModal, setShowModal] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-
-  const [loginFormData, setLoginFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [signUpFormData, setSignUpFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-
-  const [validated] = useState(false);
-
-  const [addUser, { error, data }] = useMutation(ADD_USER);
-  const [login, { error:error2, data:data2 }] = useMutation(LOGIN_USER);
-
-  const handleSignupChange = (event) => {
-    const { name, value } = event.target;
-    setSignUpFormData({ ...signUpFormData, [name]: value });
-  };
-
-  const handleLoginChange = (event) => {
-    const { name, value } = event.target;
-    setLoginFormData({ ...loginFormData, [name]: value });
-  };
-
-  const handleLoginSubmit = async (event) => {
-    event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    //TODO: INSERT THE MUTATION HERE
-    try {
-      console.log(loginFormData)
-      const { data } = await login({
-        variables: {
-          email: loginFormData.emailLogin,
-          password: loginFormData.passwordLogin,
-        },
-      });
-      Auth.login(data.login.token);
-    } catch (e) {
-      console.error(e);
-    }
-
-    setSignUpFormData({
-      email: "",
-      password: "",
-    });
-  };
-
-  const handleSignUpSubmit = async (event) => {
-    event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    //TODO: INSERT THE MUTATION HERE
-    try {
-      const { data } = await addUser({
-        variables: {
-          username: signUpFormData.username,
-          email: signUpFormData.email,
-          password: signUpFormData.password,
-        },
-      });
-      Auth.login(data.addUser.token);
-    } catch (e) {
-      console.error(e);
-    }
-
-    setSignUpFormData({
-      username: "",
-      email: "",
-      password: "",
-    });
-  };
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false)
+  const [updatesOpen, setUpdatesOpen] = useState(false)
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50`;
+  const logo = process.env.PUBLIC_URL + "/dokkanIcons/logo.png";
 
   return (
-    <div className="h-8 w-screen">
-      <>{/* TODO: logout button show */}</>
-      {Auth.loggedIn() ? (
-        <div>
-          <h1>Hey you're logged in</h1>
-          <button onClick={Auth.logout}>Logout</button>
-        </div>
-      ) : (
-        // TODO: sign up or log in
-        <div className="flex flex-row">
-          <form noValidate validated={validated} onSubmit={handleSignUpSubmit}>
-            <input
-              onChange={handleSignupChange}
-              className="w-50 h-full border-2 border-black"
-              type="text"
-              placeholder="Your username"
-              name="username"
-              value={signUpFormData.username}
-            ></input>
-            <input
-              onChange={handleSignupChange}
-              className="w-50 h-full border-2 border-black"
-              type="text"
-              placeholder="Your email"
-              name="email"
-              value={signUpFormData.email}
-            ></input>
-            <input
-              onChange={handleSignupChange}
-              className="w-50 h-full border-2 border-black"
-              type="text"
-              placeholder="Your password"
-              name="password"
-              value={signUpFormData.password}
-            ></input>
-            <button
-              disabled={
-                !(
-                  signUpFormData.username &&
-                  signUpFormData.email &&
-                  signUpFormData.password
-                )
-              }
-              type="submit"
-              variant="success"
-            >
-              Sign up
-            </button>
-          </form>
-          <form noValidate validated={validated} onSubmit={handleLoginSubmit}>
-            <input
-              onChange={handleLoginChange}
-              className="w-50 h-full border-2 border-black"
-              type="text"
-              placeholder="Your email"
-              name="emailLogin"
-              value={loginFormData.emailLogin}
-            ></input>
-            <input
-              onChange={handleLoginChange}
-              className="w-50 h-full border-2 border-black"
-              type="text"
-              placeholder="Your password"
-              name="passwordLogin"
-              value={loginFormData.passwordLogin}
-            ></input>
-            <button
-              disabled={
-                !(
-                  loginFormData.emailLogin &&
-                  loginFormData.passwordLogin
-                )
-              }
-              type="submit"
-              variant="success"
-            >
-              Login
-            </button>
-          </form>
-        </div>
-      )}
+    <div className="h-[10vh] flex justify-between items-center bg-slate-700 border-2 border-slate-900">
+      <img src={logo} className="ml-2 sm:ml-4 h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh]" />
+      <div className="flex pr-8">
+        {/* hamburger button */}
+        <button
+          className="lg:hidden flex flex-col h-10 w-10 border-2 border-black rounded justify-center items-center group relative"
+        >
+          <div
+            onClick={() => setHamburgerOpen(!hamburgerOpen)}
+            className={`${genericHamburgerLine} ${
+              hamburgerOpen
+              ? "rotate-45 translate-y-3 opacity-50 group-hover:opacity-100"
+              : "opacity-50 group-hover:opacity-100"
+            }`}
+            />
+          <div
+            onClick={() => setHamburgerOpen(!hamburgerOpen)}
+            className={`${genericHamburgerLine} ${
+              hamburgerOpen ? "opacity-0" : "opacity-50 group-hover:opacity-100"
+            }`}
+            />
+          <div
+            onClick={() => setHamburgerOpen(!hamburgerOpen)}
+            className={`${genericHamburgerLine} ${
+              hamburgerOpen
+              ? "-rotate-45 -translate-y-3 opacity-50 group-hover:opacity-100"
+              : "opacity-50 group-hover:opacity-100"
+            }`}
+            />
+            <div
+            onClick={() => setHamburgerOpen(!hamburgerOpen)}
+            className="absolute w-full h-full top-0 right-0"
+            />
+          {hamburgerOpen ?
+          <HamburgerModal hamburgerOpen={hamburgerOpen} setHamburgerOpen={setHamburgerOpen}/>
+          : null}
+
+        </button>
+        
+        <button
+            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
+            // onClick={() => setHelpOpen(true)}
+        >
+            Help
+        </button>
+        <button
+            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
+            // onClick={() => setUpdatesOpen(true)}
+        >
+            News & Updates
+        </button>
+        {Auth.loggedIn() ? (
+          <button
+            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
+            onClick={Auth.logout}
+          >
+            Log Out
+          </button>
+        ) : (
+          <button
+            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
+            onClick={() => setLoginOpen(true)}
+          >
+            Login/Sign Up
+          </button>
+        )}
+      </div>
+      <LoginSignUpModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+      <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)}/>
+      <NewsAndUpdatesModal open={updatesOpen} onClose={() => setUpdatesOpen(false)}/>
     </div>
   );
 };
