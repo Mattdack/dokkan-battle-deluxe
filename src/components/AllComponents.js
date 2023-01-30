@@ -215,7 +215,7 @@ function AllComponents() {
             </div>
             <div class="flex space-x-2 justify-center">
               <button
-                disabled={!multiCardSelection}
+                disabled={!multiCardSelection || allCharactersLoading}
                 type="button"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
