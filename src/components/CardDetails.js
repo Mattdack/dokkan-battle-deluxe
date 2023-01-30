@@ -5,8 +5,12 @@ import { set } from "lodash";
 
 function CardDetails({ cardDetails }) {
   const divRef1 = useRef(null);
-
   const [ezaEnabled, setEzaEnabled] = useState(false)
+
+  //clears EZA button selection. Withoutit, if EZA is selected, all characters become EZA'd and descriptions become empty if characters are not EZAs
+  useEffect(() => {
+    setEzaEnabled(false);
+  }, [cardDetails])
 
   return (
     <div className="h-full flex flex-col">
