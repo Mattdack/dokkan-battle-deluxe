@@ -130,11 +130,11 @@ function CardDetails({ cardDetails }) {
 
           <div className="flex flex-wrap justify-center h-full w-[48%]">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
-            <div className="flex h-[31.5%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
+            <div className="flex h-[31.5%] mt-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
               {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
             </div>
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
-            <div className="flex h-[31.5%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
+            <div className="flex h-[31.5%] mb-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
               {cardDetails.active_skill_condition}
             </div>
           </div>
