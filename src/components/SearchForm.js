@@ -19,113 +19,120 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           onFormChange(formData);
         }}
       >
-        <fieldset disabled={isDisabled}>
-          <input
-            className="p-2.5 rounded-md border-2 border-black text-black"
-            type="text"
-            name="searchTerm"
-          />
+        <fieldset 
+        disabled={isDisabled} 
+        className="flex flex-col w-full p-1 items-center">
+          
+          {/* input and category selection */}
+          <div className="flex w-full justify-between items-center">
 
-          {/* //categories field */}
-          <select
-            className="order-2 m-2 p-2 text-black bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
-            id="categories"
-            name="characterCategory"
-          >
-            <option value="">Categories:</option>
-            <option>Fusion</option>
-            <option>Shadow Dragon Saga</option>
-            <option>World Tournament</option>
-            <option>Peppy Gals</option>
-            <option>Hybrid Saiyans</option>
-            <option>Universe Survival Saga</option>
-            <option>Resurrected Warriors</option>
-            <option>Realm of Gods</option>
-            <option>Majin Buu Saga</option>
-            <option>Potara</option>
-            <option>Low-Class Warrior</option>
-            <option>Super Saiyan 3</option>
-            <option>Giant Form</option>
-            <option>Planet Namek Saga</option>
-            <option>Ginyu Force</option>
-            <option>Movie Bosses</option>
-            <option>Pure Saiyans</option>
-            <option>Namekians</option>
-            <option>Future Saga</option>
-            <option>Full Power</option>
-            <option>Androids</option>
-            <option>Representatives of Universe 7</option>
-            <option>Transformation Boost</option>
-            <option>Wicked Bloodline</option>
-            <option>Dragon Ball Seekers</option>
-            <option>Time Travelers</option>
-            <option>Universe 6</option>
-            <option>Joined Forces</option>
-            <option>Movie Heroes</option>
-            <option>Goku's Family</option>
-            <option>Vegeta's Family</option>
-            <option>Artificial Life Forms</option>
-            <option>Youth</option>
-            <option>DB Saga</option>
-            <option>Siblings' Bond</option>
-            <option>Super Saiyans</option>
-            <option>Worthy Rivals</option>
-            <option>Androids/Cell Saga</option>
-            <option>Kamehameha</option>
-            <option>Bond of Master and Disciple</option>
-            <option>Terrifying Conquerors</option>
-            <option>Dragon Ball Heroes</option>
-            <option>Target: Goku</option>
-            <option>Otherworld Warriors</option>
-            <option>Super Saiyan 2</option>
-            <option>Final Trump Card</option>
-            <option>Exploding Rage</option>
-            <option>Revenge</option>
-            <option>Team Bardock</option>
-            <option>Inhuman Deeds</option>
-            <option>Earthlings</option>
-            <option>Special Pose</option>
-            <option>Majin Power</option>
-            <option>Rapid Growth</option>
-            <option>All-Out Struggle</option>
-            <option>Universe 11</option>
-            <option>Saviors</option>
-            <option>Battle of Wits</option>
-            <option>Power Absorption</option>
-            <option>Giant Ape Power</option>
-            <option>Crossover</option>
-            <option>Space-Traveling Warriors</option>
-            <option>Connected Hope</option>
-            <option>Corroded Body and Mind</option>
-            <option>Turtle School</option>
-            <option>Miraculous Awakening</option>
-            <option>Powerful Comeback</option>
-            <option>Gifted Warriors</option>
-            <option>Planetary Destruction</option>
-            <option>Defenders of Justice</option>
-            <option>Storied Figures</option>
-            <option>GT Heroes</option>
-            <option>GT Bosses</option>
-            <option>Heavenly Events</option>
-            <option>Time Limit</option>
-            <option>Mastered Evolution</option>
-            <option>Legendary Existence</option>
-            <option>Sowrn Enemies</option>
-            <option>Bond of Friendship</option>
-            <option>Accelerated Battle</option>
-            <option>Entrusted Will</option>
-            <option>Worldwide Chaos</option>
-            <option>Battle of Fate</option>
-            <option>Power Beyond Super Saiyan</option>
-            <option>Fused Fighters</option>
-            <option>Saiyan Saga</option>
-            <option>Bond of Parent and Child</option>
-            <option>Warriors Raised on Earth</option>
-          </select>
+            <input
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-black font-bold"
+              type="text"
+              placeholder="Character Name"
+              name="searchTerm"
+              />
+
+            <select
+              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              id="categories"
+              name="characterCategory"
+              >
+              <option value="">All Categories</option>
+              <option>Accelerated Battle</option>
+              <option>All-Out Struggle</option>
+              <option>Androids</option>
+              <option>Androids/Cell Saga</option>
+              <option>Artificial Life Forms</option>
+              <option>Battle of Fate</option>
+              <option>Battle of Wits</option>
+              <option>Bond of Friendship</option>
+              <option>Bond of Master and Disciple</option>
+              <option>Bond of Parent and Child</option>
+              <option>Connected Hope</option>
+              <option>Corroded Body and Mind</option>
+              <option>Crossover</option>
+              <option>DB Saga</option>
+              <option>Defenders of Justice</option>
+              <option>Dragon Ball Heroes</option>
+              <option>Dragon Ball Seekers</option>
+              <option>Earthlings</option>
+              <option>Entrusted Will</option>
+              <option>Exploding Rage</option>
+              <option>Final Trump Card</option>
+              <option>Full Power</option>
+              <option>Fused Fighters</option>
+              <option>Fusion</option>
+              <option>Future Saga</option>
+              <option>Giant Ape Power</option>
+              <option>Giant Form</option>
+              <option>Gifted Warriors</option>
+              <option>Ginyu Force</option>
+              <option>Goku's Family</option>
+              <option>GT Bosses</option>
+              <option>GT Heroes</option>
+              <option>Heavenly Events</option>
+              <option>Hybrid Saiyans</option>
+              <option>Inhuman Deeds</option>
+              <option>Joined Forces</option>
+              <option>Kamehameha</option>
+              <option>Low-Class Warrior</option>
+              <option>Legendary Existence</option>
+              <option>Majin Buu Saga</option>
+              <option>Majin Power</option>
+              <option>Mastered Evolution</option>
+              <option>Movie Bosses</option>
+              <option>Movie Heroes</option>
+              <option>Miraculous Awakening</option>
+              <option>Namekians</option>
+              <option>Otherworld Warriors</option>
+              <option>Peppy Gals</option>
+              <option>Planet Namek Saga</option>
+              <option>Planetary Destruction</option>
+              <option>Potara</option>
+              <option>Power Absorption</option>
+              <option>Power Beyond Super Saiyan</option>
+              <option>Powerful Comeback</option>
+              <option>Pure Saiyans</option>
+              <option>Rapid Growth</option>
+              <option>Realm of Gods</option>
+              <option>Representatives of Universe 7</option>
+              <option>Resurrected Warriors</option>
+              <option>Revenge</option>
+              <option>Saiyan Saga</option>
+              <option>Saviors</option>
+              <option>Shadow Dragon Saga</option>
+              <option>Siblings' Bond</option>
+              <option>Space-Traveling Warriors</option>
+              <option>Special Pose</option>
+              <option>Storied Figures</option>
+              <option>Super Saiyans</option>
+              <option>Super Saiyan 2</option>
+              <option>Super Saiyan 3</option>
+              <option>Sworn Enemies</option>
+              <option>Target: Goku</option>
+              <option>Team Bardock</option>
+              <option>Terrifying Conquerors</option>
+              <option>Time Limit</option>
+              <option>Time Travelers</option>
+              <option>Transformation Boost</option>
+              <option>Turtle School</option>
+              <option>Universe Survival Saga</option>
+              <option>Universe 6</option>
+              <option>Universe 11</option>
+              <option>Vegeta's Family</option>
+              <option>Wicked Bloodline</option>
+              <option>World Tournament</option>
+              <option>Worldwide Chaos</option>
+              <option>Warriors Raised on Earth</option>
+              <option>Worthy Rivals</option>
+              <option>Youth</option>
+            </select>
+          </div>
 
           {/* //type buttons */}
           <div
-            className="grid grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 flex my-5"
+            className="flex w-full my-1 grid grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-2"
           >
             <CharacterSelectButton name="characterType" label="AGL" />
@@ -141,9 +148,9 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             />
           </div>
 
-          {/* //rarity buttons */}
+          {/* rarity buttons */}
           <div
-            className="order-4 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5"
+            className="flex w-full justify-between mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 2xl:h-12 font-bold"
             id="box-1"
           >
             <CharacterSelectButton name="characterRarity" label="UR" />
@@ -156,7 +163,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             />
           </div>
 
-          <div className="order-5 bg-orange-300 rounded-md border-2 border-slate-900 flex 2xl:h-12 2xl:mt-5">
+          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900 2xl:h-12">
             <label htmlFor="isUserDeck">
               <input
                 type="checkbox"
@@ -167,7 +174,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+                className="pr-10 pl-10 pt-2 pb-2 m-0.5 font-bold relative hover:bg-orange-400 peer-checked:bg-orange-400"
               >
                 My Deck
               </div>
@@ -192,7 +199,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>

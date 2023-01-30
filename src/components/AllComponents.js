@@ -1,22 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
 
-import { useQuery } from "@apollo/client";
-import {
-  QUERY_CHARACTERS,
-  GET_USERDATA,
-  GET_USERCHARACTERSBYID,
-} from "../util/queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { QUERY_CHARACTERS, GET_USERDATA, GET_USERCHARACTERSBYID } from "../util/queries";
+
+import { useMutation } from "@apollo/client";
+import { UPDATE_SAVED_CHARACTERS } from "../util/mutations"
 import CardDetails from "./CardDetails";
 
 import Auth from "../util/auth";
 
 function AllComponents() {
-  const { loading: allCharactersLoading, data: allCharactersData } =
-    useQuery(QUERY_CHARACTERS);
+  // Queries for all characters to get an array of objects
+  const { loading: allCharactersLoading, data: allCharactersData } = useQuery(QUERY_CHARACTERS, {
+    onCompleted: (data) => {
+      console.log(data)
+    }
+  });
   const allCharacters = allCharactersData?.characters || [];
+
   const characterDictionary = Object.fromEntries(
     allCharacters.map((characterObj) => [characterObj.id, characterObj])
   );
@@ -60,101 +64,198 @@ function AllComponents() {
       "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
   });
 
+  //setting a state of webOfTeam for characeters in graph
   const [webOfTeam, setWebOfTeam] = useState([]);
 
-  //TODO: using token for login
-  const { loading: isUserDataLoading, data: userData } = useQuery(
-    GET_USERDATA,
+  // These are both needed to edit the teams, this logic is what is also passed to SuggestToWeb for editing the Web there too
+  function  addToWebOfTeam(character) {
+    setWebOfTeam((prev) => {
+      if(prev.includes(character)) {
+        return prev;
+      } else {
+        return [...prev, character];
+      }
+    });
+  }
+  function removeFromWebOfTeam(character) {
+    setWebOfTeam(prev => prev.filter(c => c.id !== character.id));
+  }
+
+  // TODO: is it safe to call the token outside the query?
+  // can initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
+  const token = Auth.getToken()
+  const { loading: isUserDataLoading, data: userData } = useQuery(GET_USERDATA,
     {
-      variables: {
-        username: Auth.getProfile()?.data?.username,
+      variables: {token: token},
+      onCompleted: (data) => {
+        setSavedToDeck(data.findOneUser.savedCharacters)
       },
     }
   );
-  const userCharacterIds = userData?.me?.savedCharacters || [];
+  const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
+  
+  // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the characters saved to the user) this is used for finding characters in My Deck
+  const [getUserCharactersById, { loading: isUserCharactersLoading, data: userCharacterData }] = useLazyQuery(GET_USERCHARACTERSBYID, {
+    variables: {
+      dokkanIds: userCharacterIds,
+    },
+    skip: userCharacterIds.length === 0
+  });
+  const userCharacters = userCharacterData?.charactersWithIds || [];
 
-  const { loading: isUserCharactersLoading, data: userCharacterData } =
-    useQuery(GET_USERCHARACTERSBYID, {
+  // this allows the lazyQuery to load on page load, putting characters into the My Deck filter
+  useEffect(() => {
+    getUserCharactersById();
+  }, []);
+  
+
+  // this useEffect renders selected card based on which cards are in the persons deck already
+  useEffect(() => {
+    if (userCharacters) {
+      setSavedToDeck(userCharacters.map((c) => c.id));
+    }
+  }, []);
+
+  //adding state for saved to deck...initially composed of userCharacterIds
+  const [savedToDeck, setSavedToDeck] = useState(userCharacterIds)
+  //adds or remove characters from the state deck 
+  function changeDeck(characterId) {
+    setSavedToDeck((prev) => {
+      if(prev.includes(characterId)) {
+        return prev.filter(id => id !== characterId);
+      } else {
+        return [...prev, characterId];
+      }
+    });
+  }
+  
+  const [multiCardSelection, setMultiCardSelection] = useState(false);
+  
+  const [updateSavedCharacters,{ error: updateSavedCharactersError, data: newSavedCharacters }] = useMutation(UPDATE_SAVED_CHARACTERS);
+  //this runs on the save button click
+  async function handleUpdateSavedCharacters() {
+    const token = Auth.getToken();
+    await updateSavedCharacters({
       variables: {
-        dokkanIds: userCharacterIds,
+        token: token,
+        newSavedCharacters: savedToDeck,
       },
     });
-
-  const userCharacters = userCharacterData?.charactersWithIds || [];
+    // closes out card selection for deck building
+    setMultiCardSelection(false)
+    //TODO: pretty sure this is unecessary // the savedToDeck is updated to the most recent array of ids
+    // setSavedToDeck(savedToDeck);
+    // After mutation is completed, re-run the lazy query to get the updated userCharacters
+    await getUserCharactersById({ variables: { dokkanIds: savedToDeck } });
+  }
+  
 
   function newCardDetails(characterId) {
     setCardDetails(characterDictionary[characterId]);
   }
 
-  function addToTeam(character) {
-    setWebOfTeam((prev) => [...prev, character]);
-  }
-
-  const filterAndSetCharacters = (filterData) =>
-    setFilteredCharacters(
-      getFilteredCharacters(allCharacters, userCharacters, filterData)
-    );
+  const filterAndSetCharacters = (filterData) => setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData));
 
   //added the slice to orient characters by id
   const charactersToDisplay = filteredCharacters === null ? allCharacters.slice().sort((a, b) => b.id - a.id) : filteredCharacters.slice().sort((a, b) => b.id - a.id);
 
-  const scrollToCardDetails = () => {
-    const middleColumn = document.getElementById("CardDetails");
-    middleColumn.scrollIntoView({ behavior: "smooth" });
+  //scroll ability through buttons on mobile
+  const scrollToSingleCardStats = () => {
+    const middleColumn = document.getElementById("SingleCardDetails");
+    middleColumn.scrollIntoView({top: 0, left: 0});
   };
-
   const scrollToCharacterSelection = () => {
-    const middleColumn = document.getElementById("CharacterSelection");
-    middleColumn.scrollIntoView({ behavior: "smooth" });
+    window.scrollTo({top: 0, left: 0});
   };
-
   const scrollToTeam = () => {
     const middleColumn = document.getElementById("Team");
-    middleColumn.scrollIntoView({ behavior: "smooth" });
+    middleColumn.scrollIntoView({top: 0, left: 0});
   };
 
   return (
     // stages formatting
     <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
       {/* //left column styling */}
-      <div
-        id="CharacterSelection"
-        className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900"
-      >
-        <button onClick={() => scrollToCardDetails()}>Character Details</button>
-        <button onClick={() => scrollToTeam()}>Team</button>
+      <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <button 
+        className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+        onClick={() => scrollToSingleCardStats()}>Character Details</button>
+        <button 
+        className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+        onClick={() => scrollToTeam()}>Team</button>
       </div>
-      <div className="h-[86vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900">
-        <h1 className="text-center m-4">Search by Filters</h1>
+      <div className="h-[86vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+        <h1 className="font-header text-2xl text-center m-2 lg:m-4">Search by Filters</h1>
 
         {/* //contains filters/buttons/search field/etc. */}
 
-        <SearchForm
-          onFormChange={filterAndSetCharacters}
-          isDisabled={allCharactersLoading}
-        />
+        <SearchForm onFormChange={filterAndSetCharacters} isDisabled={allCharactersLoading}/>
 
-        <h2 className="p-3 text-center">Main Character Selection</h2>
+        <div className="flex w-full items-center justify-center">
+          {Auth.loggedIn() ? 
+          (
+          <>
+          <h2 className="p-3 text-center font-bold">Character Selection</h2>
+            <div className="flex">
+              <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={multiCardSelection}
+                  readOnly
+                />
+                <div
+                  onClick={() => {setMultiCardSelection(!multiCardSelection)}}
+                  className="w-11 h-6 bg-orange-100 rounded-full peer  peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"
+                ></div>
+                <span className="ml-2 text-sm font-bold text-gray-900">
+                  ON
+                </span>
+              </label>
+            </div>
+            <div class="flex space-x-2 justify-center">
+              <button
+                disabled={!multiCardSelection}
+                type="button"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                className='disabled:bg-gray-500 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+                onClick={() => handleUpdateSavedCharacters()}
+              >Save</button>
+            </div>
+          </>
+          ) : (
+            <h2 className="p-2 font-bold">Please log in to add players</h2>
+          )
+          }
+        </div>
 
         {/* //character select box */}
-        <div className="h-fit p-1 m-1 border-2 border-slate-900 overflow-y-auto bg-orange-200 lg:m-2">
+        <div className="h-fit p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
             <div className="flex flex-wrap justify-center items-center h-full max-h-[60vh]">
               {charactersToDisplay &&
                 charactersToDisplay.map((character) => (
-                  <div
-                    key={character.id}
-                    onClick={() => {
-                      newCardDetails(character.id);
-                    }}
-                    onDoubleClick={() => {
-                      addToTeam(character);
-                    }}
-                  >
-                    <AllComponentsCard character={character} />
-                  </div>
+                <div 
+                  key={character.id}
+                  onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
+                  onDoubleClick={() => {
+                        if (!multiCardSelection) {
+                            if (webOfTeam.map(char => char.id).includes(character.id)) {
+                                setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
+                            } else {
+                                setWebOfTeam([...webOfTeam, character]);
+                            }
+                          }
+                        }}>
+                  <AllComponentsCard 
+                    character={character} 
+                    savedToDeck={multiCardSelection ? savedToDeck : undefined} 
+                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                  />
+                </div>
                 ))}
             </div>
           )}
@@ -162,16 +263,24 @@ function AllComponents() {
       </div>
       {/* //middle column styling */}
       <div
-        id="CardDetails"
-        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex flex-col border-2 border-slate-900"
+        id="SingleCardDetails"
+        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900">
-          <button onClick={() => scrollToCharacterSelection()}>Character Selection</button>
-          <button onClick={() => scrollToTeam()}>Team</button>
+        <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+          <button 
+            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            onClick={() => scrollToCharacterSelection()}>
+              Selection
+          </button>
+          <button 
+            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+            onClick={() => scrollToTeam()}>
+              Team
+          </button>
         </div>
         <CardDetails
           cardDetails={cardDetails}
-          userCharacters={userCharacterIds}
+          userCharacterIds={userCharacterIds}
         />
         {/* <Links links={links}/> */}
       </div>
@@ -179,17 +288,26 @@ function AllComponents() {
       {/* //right column styling */}
       <div
         id="Team"
-        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-2 border-slate-900"
+        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[4vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900  flex justify-around border-2 border-slate-900">
-          <button onClick={() => scrollToCharacterSelection()}>Character Selection</button>
-          <button onClick={() => scrollToCardDetails()}>Character Details</button>
+        <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+          <button 
+            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            onClick={() => scrollToCharacterSelection()}>
+              Selection
+          </button>
+          <button 
+            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+            onClick={() => scrollToSingleCardStats()}>
+              Details
+          </button>
         </div>
         <SuggestToWeb
           selectedCharacter={cardDetails}
           handleNewDetails={newCardDetails}
-          addToTeam={addToTeam}
+          addToWebOfTeam={ addToWebOfTeam}
           webOfTeam={webOfTeam}
+          removeFromWebOfTeam={removeFromWebOfTeam}
         />
       </div>
     </div>
@@ -203,18 +321,14 @@ const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
 
   return baseChars.filter((character) => {
     return (
-      (!filterData.searchTerm ||
-        character.name
-          .toLowerCase()
-          .includes(filterData.searchTerm.toLowerCase())) &&
-      (!filterData.characterCategory ||
-        character.category.includes(filterData.characterCategory)) &&
-      (!filterData.characterType ||
-        character.type.includes(filterData.characterType)) &&
-      (!filterData.characterRarity ||
-        filterData.characterRarity === character.rarity)
+      (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
+      (!filterData.characterCategory || character.category.includes(filterData.characterCategory)) &&
+      (!filterData.characterType || character.type.includes(filterData.characterType)) &&
+      (!filterData.characterRarity || filterData.characterRarity === character.rarity)
     );
   });
 };
 
 export default AllComponents;
+
+

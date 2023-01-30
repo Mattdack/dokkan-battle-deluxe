@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 
-function SuggestCard({ character, handleNewDetails, addToTeam }) {
+function SuggestCard({ character, handleNewDetails,  addToWebOfTeam }) {
 
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
@@ -31,16 +31,16 @@ function SuggestCard({ character, handleNewDetails, addToTeam }) {
         {isCardClicked ? (
         <div>
           <div 
-          className="w-[100px] h-[50px] border-2 border-black relative"
-          onClick={() => addToTeam(character)}
+          className="flex w-[100px] h-[50px] border-4 rounded-t-lg border-black bg-sky-500 hover:bg-sky-700 font-header text-md items-center text-center"
+          onClick={() =>  addToWebOfTeam(character)}
           >
-            Add To Team
+          Add To Team
           </div>
           <div 
-          className="w-[100px] h-[50px] border-2 border-black relative"
+          className="flex w-[100px] h-[50px] border-4 rounded-b-lg border-black bg-orange-400 hover:bg-amber-600 font-header text-md items-center text-center"
           onClick={() => handleNewDetails(character.id)}
           >
-            New Sugegstions
+            New Suggestion
           </div>
         </div>
         ) : (

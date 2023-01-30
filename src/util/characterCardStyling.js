@@ -1,20 +1,3 @@
-import Style from "../components/Style";
-import StyleActive from "../components/StyleActive";
-import StyleUltraSA from "../components/StyleUltraSA";
-import StyleActiveUltraSA from "../components/StyleActiveUltraSA";
-
-export const getCardDetailStyling = (cardDetails) => {
-  console.log(cardDetails);
-  if (cardDetails.active_skill_name && cardDetails.ultra_sa_description) {
-    return <StyleActiveUltraSA cardDetails={cardDetails} />;
-  } else if (cardDetails.ultra_sa_description) {
-    return <StyleUltraSA cardDetails={cardDetails} />;
-  } else if (cardDetails.active_skill_name) {
-    return <StyleActive cardDetails={cardDetails} />;
-  }
-  return <Style cardDetails={cardDetails} />;
-};
-
 export const getCharacterThumbNail = (cardDetails) => {
   if (!cardDetails.thumb) {
     return cardDetails.art;
