@@ -156,7 +156,7 @@ export default function LoginSignUpModal({ open, children, onClose }) {
               <div className="flex items-center">
                 <input
                   onChange={handleLoginChange}
-                  className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
+                  className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg hover:"
                   type={showPassword}
                   placeholder="password"
                   name="passwordLogin"
@@ -164,7 +164,7 @@ export default function LoginSignUpModal({ open, children, onClose }) {
                 ></input>
                 <img 
                 onClick={() => handleShowPassword()}
-                className="w-8 lg:w-10 ml-2 lg:ml-4"
+                className="w-8 lg:w-10 ml-2 lg:ml-4 cursor-pointer"
                 src= {process.env.PUBLIC_URL + '/dokkanIcons/show-password.png'}
                 />
               </div>
@@ -205,19 +205,19 @@ export default function LoginSignUpModal({ open, children, onClose }) {
                 value={signUpFormData.email}
               ></input>
               <div className="flex items-center">
-              <input
-                onChange={handleSignupChange}
-                className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
-                type={showPassword}
-                placeholder="password"
-                name="password"
-                value={signUpFormData.password}
-              ></input>
-              <img 
-                onClick={() => handleShowPassword()}
-                className="w-8 lg:w-10 ml-2 lg:ml-4"
-                src= {process.env.PUBLIC_URL + '/dokkanIcons/show-password.png'}
-              />
+                <input
+                  onChange={handleSignupChange}
+                  className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
+                  type={showPassword}
+                  placeholder="password"
+                  name="password"
+                  value={signUpFormData.password}
+                ></input>
+                <img 
+                  onClick={() => handleShowPassword()}
+                  className="w-8 lg:w-10 ml-2 lg:ml-4 cursor-pointer"
+                  src= {process.env.PUBLIC_URL + '/dokkanIcons/show-password.png'}
+                />
               </div>
               <input
                 onChange={handleSignupChange}
