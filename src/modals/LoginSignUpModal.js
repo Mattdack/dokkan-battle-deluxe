@@ -11,6 +11,7 @@ export default function LoginSignUpModal({ open, children, onClose }) {
   const [loginError, setLoginError] = useState(null);
   const [signUpError, setSignUpError] = useState(null);
   const [validated] = useState(false);
+  const [showPassword, setShowPassword] = useState('password')
   const [loginFormData, setLoginFormData] = useState({
     username: "",
     password: "",
@@ -24,7 +25,14 @@ export default function LoginSignUpModal({ open, children, onClose }) {
 
   const [addUser, { error, data }] = useMutation(ADD_USER);
   const [login, { error: error2, data: data2 }] = useMutation(LOGIN_USER);
-  
+
+  const handleShowPassword =() => {
+    if (showPassword==='password'){
+      setShowPassword('text')
+    } else {
+      setShowPassword('password')
+    }
+  }
   
   const handleSignupChange = (event) => {
     const { name, value } = event.target;
@@ -115,15 +123,15 @@ export default function LoginSignUpModal({ open, children, onClose }) {
     <>
       <div 
       onClick={onClose}
-      className="fixed top-0 left-0 right-0 bottom-0 bg-black/[.7] z-[1000]" />
-      <div className="w-3/4 lg:w-1/3 p-2 lg:p-10 rounded-lg shadow-lg fixed top-[30%] right-[13%] lg:top-[25%] lg:right-[33.5%] bg-white z-[1000]">
+      className="fixed top-0 left-0 right-0 bottom-0 bg-black/[.8] z-[1000]" />
+      <div className="w-3/4 lg:w-1/3 p-2 lg:p-10 rounded-lg shadow-lg fixed top-[20%] right-[13%] lg:top-[15%] lg:right-[33.5%] bg-white z-[1000]">
         <div className="flex flex-col items-center">
           <img src={logo} className="h-[5.5vh] logo-md:h-[6vh] md:h-[7.2vh] p-2 mb-2 border-b-4 border-black" />
           <div className="flex justify-around w-full">
-            <button className={`text-xl lg:text-4xl font-bold pb-2 ${atLoginForm ?'text-blue-500 border-b-2 border-blue-500':'text-gray-300'}`} onClick={() => setAtLoginForm(true)}>
+            <button className={`text-xl lg:text-4xl font-bold pb-2 ${atLoginForm ?'text-blue-500 border-b-2 border-blue-500':'text-gray-300'}`} onClick={() => [setAtLoginForm(true), setShowPassword('password')]}>
               Login
             </button>
-            <button className={`text-xl lg:text-4xl font-bold pb-2 ${!atLoginForm ?'text-blue-500 border-b-2 border-blue-500':'text-gray-300'}`} onClick={() => setAtLoginForm(false)}>
+            <button className={`text-xl lg:text-4xl font-bold pb-2 ${!atLoginForm ?'text-blue-500 border-b-2 border-blue-500':'text-gray-300'}`} onClick={() => [setAtLoginForm(false), setShowPassword('password')]}>
               Sign-Up
             </button>
           </div>
@@ -145,22 +153,29 @@ export default function LoginSignUpModal({ open, children, onClose }) {
                 name="userLogin"
                 value={loginFormData.userLogin}
               ></input>
-              <input
-                onChange={handleLoginChange}
-                className="flex w-full h-12 p-2 mb-4 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
-                type="password"
-                placeholder="password"
-                name="passwordLogin"
-                value={loginFormData.passwordLogin}
-              ></input>
-                  {loginError && <p className="w-full pb-4 text-center text-lg text-red-500 font-bold">{loginError}</p>}
+              <div className="flex items-center">
+                <input
+                  onChange={handleLoginChange}
+                  className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
+                  type={showPassword}
+                  placeholder="password"
+                  name="passwordLogin"
+                  value={loginFormData.passwordLogin}
+                ></input>
+                <img 
+                onClick={() => handleShowPassword()}
+                className="w-8 lg:w-10 ml-2 lg:ml-4"
+                src= {process.env.PUBLIC_URL + '/dokkanIcons/show-password.png'}
+                />
+              </div>
+                  {loginError && <p className="w-full pt-4 text-center text-lg text-red-500 font-bold">{loginError}</p>}
               <button
                 disabled={
                   !(loginFormData.userLogin && loginFormData.passwordLogin)
                 }
                 type="submit"
                 variant="success"
-                className="inline-block px-7 py-3 bg-orange-400 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-orange-700 hover:shadow-lg focus:bg-orange-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+                className="inline-block px-7 py-3 mt-4 bg-orange-400 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-orange-700 hover:shadow-lg focus:bg-orange-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
               >
                 Login
               </button>
@@ -189,24 +204,31 @@ export default function LoginSignUpModal({ open, children, onClose }) {
                 name="email"
                 value={signUpFormData.email}
               ></input>
+              <div className="flex items-center">
               <input
                 onChange={handleSignupChange}
                 className="flex w-full h-12 p-2 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
-                type="password"
+                type={showPassword}
                 placeholder="password"
                 name="password"
                 value={signUpFormData.password}
               ></input>
-              <p className="ml-1 mb-4 text-sm text-gray-400">*password must have eight characters, one uppercase letter, one lowercase letter and one number</p>
+              <img 
+                onClick={() => handleShowPassword()}
+                className="w-8 lg:w-10 ml-2 lg:ml-4"
+                src= {process.env.PUBLIC_URL + '/dokkanIcons/show-password.png'}
+              />
+              </div>
               <input
                 onChange={handleSignupChange}
-                className="flex w-full h-12 p-2 mb-4 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
-                type="password"
+                className="flex w-full h-12 p-2 my-4 bg-gray-200 text-2xl border border-gray-400 rounded-lg border-black text-start items-center shadow-md text-lg"
+                type={showPassword}
                 placeholder="write the same password"
                 name="password2"
                 value={signUpFormData.password2}
               ></input>
-                  {signUpError && <p className="w-full pb-4 text-center text-lg text-red-500 font-bold">{signUpError}</p>}
+              <p className="ml-1 mb-4 text-sm text-gray-400">*password must have eight characters, one uppercase letter, one lowercase letter and one number</p>
+              {signUpError && <p className="w-full pb-4 text-center text-lg text-red-500 font-bold">{signUpError}</p>}
               <button
                 disabled={
                   !(
