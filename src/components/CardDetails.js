@@ -54,11 +54,13 @@ function CardDetails({ cardDetails }) {
           <button
           disabled={!cardDetails.glb_date_eza}
           onClick={() => setEzaEnabled(!ezaEnabled)}
-          className={`disabled:text-gray-900 font-header EZA-header text-2xl`}>
+          className={`disabled:text-gray-900 font-header EZA-header text-2xl relative z-50`}>
             EZA
-          <img 
-          src=""
-          />  
+            {ezaEnabled ? 
+            <img 
+            className="absolute max-w-[200%] h-[120%] -bottom-[10%] -right-[30%] z-0 object-contain"
+            src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
+            /> : ''}
           </button>
         </div>
 
