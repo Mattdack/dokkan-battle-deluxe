@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 
 const client = new ApolloClient({
   // uri: 'http://localhost:3001/graphql',
-  uri: process.env.API_URI,
+  uri: 'https://dokkan-api.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 
