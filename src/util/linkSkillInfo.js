@@ -543,38 +543,61 @@ const linkSkillDictionary = {
 };
 
 export const getLinkSkillInfo = (linkskill) => {
-  const searchKey = linkskill.trim().replace(/ /g, "").replace(/-/g, "").replace(/'/g, "");
-  const result = Object.entries(linkSkillDictionary).find( link => link[0] === searchKey)
+  const searchKey = linkskill
+    .trim()
+    .replace(/ /g, "")
+    .replace(/-/g, "")
+    .replace(/'/g, "");
+  const result = Object.entries(linkSkillDictionary).find(
+    (link) => link[0] === searchKey
+  );
   if (!result) return;
-  const [linkName, {lvl1_stats: lvl1, lvl10_stats: lvl10}] = result
-  return ([linkName, lvl1, lvl10])
+  const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
+  return [linkName, lvl1, lvl10];
 };
 
 export const getLvl1LinkSkillInfo = (linkskill) => {
-  const searchKey = linkskill.trim().replace(/ /g, "").replace(/-/g, "").replace(/'/g, "");
-  const result = Object.entries(linkSkillDictionary).find( link => link[0] === searchKey)
+  const searchKey = linkskill
+    .trim()
+    .replace(/ /g, "")
+    .replace(/-/g, "")
+    .replace(/'/g, "");
+  const result = Object.entries(linkSkillDictionary).find(
+    (link) => link[0] === searchKey
+  );
   if (!result) return;
-  const [linkName, {lvl1_stats: lvl1, lvl10_stats: lvl10}] = result
-  return (lvl1)
+  const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
+  return lvl1;
 };
 
 export const getLvl10LinkSkillInfo = (linkskill) => {
-  const searchKey = linkskill.trim().replace(/ /g, "").replace(/-/g, "").replace(/'/g, "");
-  const result = Object.entries(linkSkillDictionary).find( link => link[0] === searchKey)
+  const searchKey = linkskill
+    .trim()
+    .replace(/ /g, "")
+    .replace(/-/g, "")
+    .replace(/'/g, "");
+  const result = Object.entries(linkSkillDictionary).find(
+    (link) => link[0] === searchKey
+  );
   if (!result) return;
-  const [linkName, {lvl1_stats: lvl1, lvl10_stats: lvl10}] = result
-  return (lvl10)
+  const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
+  return lvl10;
 };
 
 export const getLinkSkillInfoObject = (linkskill) => {
-  const searchKey = linkskill.trim().replace(/ /g, "").replace(/-/g, "").replace(/'/g, "");
-  const result = Object.entries(linkSkillDictionary).find( link => link[0] === searchKey)
+  const searchKey = linkskill
+    .trim()
+    .replace(/ /g, "")
+    .replace(/-/g, "")
+    .replace(/'/g, "");
+  const result = Object.entries(linkSkillDictionary).find(
+    (link) => link[0] === searchKey
+  );
   if (!result) return;
-  const [linkName, {lvl1_stats: lvl1, lvl10_stats: lvl10}] = result
-  return { [linkName]: { lvl1, lvl10 } }
+  const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
+  return { [linkName]: { lvl1, lvl10 } };
 };
 
-
 export function findMatchingLinks(source, target) {
-  return source.filter(elem => target.includes(elem))
+  return source.filter((elem) => target.includes(elem));
 }

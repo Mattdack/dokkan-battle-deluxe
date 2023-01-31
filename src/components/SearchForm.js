@@ -19,30 +19,29 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           onFormChange(formData);
         }}
       >
-        <fieldset 
-        disabled={isDisabled} 
-        className="flex flex-col w-full p-1 items-center">
-          
+        <fieldset
+          disabled={isDisabled}
+          className="flex flex-col w-full p-1 items-center"
+        >
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
-
             <input
               className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
-              />
+            />
 
             <select
               className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
-              >
+            >
               <option value="">All Categories</option>
               <option>Accelerated Battle</option>
               <option>All-Out Struggle</option>
               <option>Androids</option>
-              <option>Androids/Cell Saga</option>
+              <option>Androids-Cell Saga</option>
               <option>Artificial Life Forms</option>
               <option>Battle of Fate</option>
               <option>Battle of Wits</option>
@@ -64,27 +63,29 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               <option>Fused Fighters</option>
               <option>Fusion</option>
               <option>Future Saga</option>
+              <option>GT Bosses</option>
+              <option>GT Heroes</option>
               <option>Giant Ape Power</option>
               <option>Giant Form</option>
               <option>Gifted Warriors</option>
               <option>Ginyu Force</option>
               <option>Goku's Family</option>
-              <option>GT Bosses</option>
-              <option>GT Heroes</option>
               <option>Heavenly Events</option>
               <option>Hybrid Saiyans</option>
               <option>Inhuman Deeds</option>
               <option>Joined Forces</option>
               <option>Kamehameha</option>
-              <option>Low-Class Warrior</option>
               <option>Legendary Existence</option>
+              <option>Low-Class Warrior</option>
               <option>Majin Buu Saga</option>
               <option>Majin Power</option>
               <option>Mastered Evolution</option>
+              <option>Miraculous Awakening</option>
               <option>Movie Bosses</option>
               <option>Movie Heroes</option>
-              <option>Miraculous Awakening</option>
               <option>Namekians</option>
+              <option>NoPower of Wishes</option>
+              <option>NoWarriors Raised on Earth</option>
               <option>Otherworld Warriors</option>
               <option>Peppy Gals</option>
               <option>Planet Namek Saga</option>
@@ -106,25 +107,25 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               <option>Space-Traveling Warriors</option>
               <option>Special Pose</option>
               <option>Storied Figures</option>
-              <option>Super Saiyans</option>
+              <option>Super Heroes</option>
               <option>Super Saiyan 2</option>
               <option>Super Saiyan 3</option>
+              <option>Super Saiyans</option>
               <option>Sworn Enemies</option>
-              <option>Target: Goku</option>
+              <option>Target Goku</option>
               <option>Team Bardock</option>
               <option>Terrifying Conquerors</option>
               <option>Time Limit</option>
               <option>Time Travelers</option>
               <option>Transformation Boost</option>
               <option>Turtle School</option>
-              <option>Universe Survival Saga</option>
-              <option>Universe 6</option>
               <option>Universe 11</option>
+              <option>Universe 6</option>
+              <option>Universe Survival Saga</option>
               <option>Vegeta's Family</option>
               <option>Wicked Bloodline</option>
               <option>World Tournament</option>
               <option>Worldwide Chaos</option>
-              <option>Warriors Raised on Earth</option>
               <option>Worthy Rivals</option>
               <option>Youth</option>
             </select>

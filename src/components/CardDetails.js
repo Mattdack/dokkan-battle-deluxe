@@ -202,8 +202,8 @@ const CharacterLinkDisplay = ({ linkText }) => {
         )}
         <button
           className="h-min-10 w-full flex flex-wrap font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm"
-          onMouseEnter={() => setShowPopUp(true)}
-          onMouseLeave={() => setShowPopUp(false)}
+          // onMouseEnter={() => setShowPopUp(true)}
+          // onMouseLeave={() => setShowPopUp(false)}
         >
           {linkText}
         </button>
