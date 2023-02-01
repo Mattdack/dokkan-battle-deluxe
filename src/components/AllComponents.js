@@ -217,7 +217,7 @@ function AllComponents() {
           (
           <>
           <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-lg text-center font-bold">Character Selection</h2>
-            <div className="flex">
+            <div className="flex items-center ">
               <label className="inline-flex relative items-center mr-5 cursor-pointer">
                 <input
                   type="checkbox"
@@ -227,7 +227,7 @@ function AllComponents() {
                 />
                 <div
                   onClick={() => {setMultiCardSelection(!multiCardSelection)}}
-                  className="w-11 h-6 bg-orange-100 rounded-full peer  peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"
+                  className="w-11 h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 card-sm:after:absolute after:top-1 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"
                 ></div>
                 <span className="ml-2 text-sm card-sm:text-lg font-bold text-gray-900">
                   ON
