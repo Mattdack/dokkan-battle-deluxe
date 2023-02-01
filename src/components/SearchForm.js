@@ -136,7 +136,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
 
           {/* rarity buttons */}
           <div
-            className="flex w-full justify-between mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
+            className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-1"
           >
             <CharacterSelectButton name="characterRarity" label="UR" />
