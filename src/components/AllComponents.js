@@ -14,11 +14,7 @@ import Auth from "../util/auth";
 
 function AllComponents() {
   // Queries for all characters to get an array of objects
-  const { loading: allCharactersLoading, data: allCharactersData } = useQuery(QUERY_CHARACTERS, {
-    onCompleted: (data) => {
-      console.log(data)
-    }
-  });
+  const { loading: allCharactersLoading, data: allCharactersData } = useQuery(QUERY_CHARACTERS);
   const allCharacters = allCharactersData?.characters || [];
 
   const characterDictionary = Object.fromEntries(
@@ -104,12 +100,14 @@ function AllComponents() {
     setWebOfTeam(prev => prev.filter(c => c.id !== character.id));
   }
 
-  // TODO: is it safe to call the token outside the query?
+  // TODO: is it safe to call the profile outside the query?
   // can initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
-  const token = Auth.getToken()
+  const profileData = Auth.getProfile() || []
   const { loading: isUserDataLoading, data: userData } = useQuery(GET_USERDATA,
     {
-      variables: {token: token},
+      variables: {
+        profileId: profileData?.data?._id || '',
+      },
       onCompleted: (data) => {
         setSavedToDeck(data.findOneUser.savedCharacters)
       },
@@ -118,7 +116,7 @@ function AllComponents() {
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
   
   // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the characters saved to the user) this is used for finding characters in My Deck
-  const [getUserCharactersById, { loading: isUserCharactersLoading, data: userCharacterData }] = useLazyQuery(GET_USERCHARACTERSBYID, {
+  const [getUserCharacterObjects, { loading: isUserCharactersLoading, data: userCharacterData }] = useLazyQuery(GET_USERCHARACTERSBYID, {
     variables: {
       dokkanIds: userCharacterIds,
     },
@@ -128,7 +126,7 @@ function AllComponents() {
 
   // this allows the lazyQuery to load on page load, putting characters into the My Deck filter
   useEffect(() => {
-    getUserCharactersById();
+    getUserCharacterObjects();
   }, []);
   
 
@@ -154,13 +152,13 @@ function AllComponents() {
   
   const [multiCardSelection, setMultiCardSelection] = useState(false);
   
-  const [updateSavedCharacters,{ error: updateSavedCharactersError, data: newSavedCharacters }] = useMutation(UPDATE_SAVED_CHARACTERS);
+  const [updateSavedCharacters,{ error: updateSavedCharactersError, data: updatedSavedCharacters }] = useMutation(UPDATE_SAVED_CHARACTERS);
   //this runs on the save button click
   async function handleUpdateSavedCharacters() {
-    const token = Auth.getToken();
+    const profileData = Auth.getProfile()
     await updateSavedCharacters({
       variables: {
-        token: token,
+        profileId: profileData.data._id,
         newSavedCharacters: savedToDeck,
       },
     });
@@ -169,7 +167,7 @@ function AllComponents() {
     //TODO: pretty sure this is unecessary // the savedToDeck is updated to the most recent array of ids
     // setSavedToDeck(savedToDeck);
     // After mutation is completed, re-run the lazy query to get the updated userCharacters
-    await getUserCharactersById({ variables: { dokkanIds: savedToDeck } });
+    await getUserCharacterObjects({ variables: { dokkanIds: savedToDeck } });
   }
   
 
@@ -199,16 +197,16 @@ function AllComponents() {
     // stages formatting
     <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
       {/* //left column styling */}
-      <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+      <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
         <button 
-        className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
-        onClick={() => scrollToSingleCardStats()}>Character Details</button>
+        className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+        onClick={() => scrollToSingleCardStats()}>Character</button>
         <button 
-        className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+        className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
         onClick={() => scrollToTeam()}>Team</button>
       </div>
-      <div className="h-[86vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
-        <h1 className="font-header text-2xl text-center m-2 lg:m-4">Search by Filters</h1>
+      <div className="h-[85vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+        <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1>
 
         {/* //contains filters/buttons/search field/etc. */}
 
@@ -218,7 +216,7 @@ function AllComponents() {
           {Auth.loggedIn() ? 
           (
           <>
-          <h2 className="p-3 text-center font-bold">Character Selection</h2>
+          <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-lg text-center font-bold">Character Selection</h2>
             <div className="flex">
               <label className="inline-flex relative items-center mr-5 cursor-pointer">
                 <input
@@ -289,14 +287,14 @@ function AllComponents() {
         id="SingleCardDetails"
         className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
-            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
               Selection
           </button>
           <button 
-            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
             onClick={() => scrollToTeam()}>
               Team
           </button>
@@ -313,14 +311,14 @@ function AllComponents() {
         id="Team"
         className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[4vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
-            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
               Selection
           </button>
           <button 
-            className="font-header text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
             onClick={() => scrollToSingleCardStats()}>
               Details
           </button>

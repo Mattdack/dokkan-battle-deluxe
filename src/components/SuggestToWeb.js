@@ -27,7 +27,7 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam,  addToWe
     <div className="h-full my-2">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} />
 
-      <div className="h-[48vh] lg:h-[43vh] row-span-2 p-2 overflow-auto">
+      <div className="h-[46vh] lg:h-[43vh] row-span-2 p-2 overflow-auto">
         <div className="h-full">
           <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} countedLinks={countedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} />
           <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} countedLinks={countedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
@@ -43,8 +43,8 @@ function SuggestToWeb({ selectedCharacter, handleNewDetails, webOfTeam,  addToWe
 const CharacterLinkDisplay = ({matchCount, selectedCharacter, countedLinks, handleNewDetails,  addToWebOfTeam}) => {
   return (
     <>
-    <h3 className="h-fit font-header text-start text-xl">Characters with {matchCount} Links:</h3>
-    <div className="flex flex-wrap h-[120px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
+    <h3 className="h-fit font-header text-start text-lg card-sm:text-xl">Characters with {matchCount} Links:</h3>
+    <div className="flex flex-wrap h-[100px] card-sm:h-[120px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
       {/* with the characters found with matchedLinks (countedLinks) we are filtering them to ensure that the character with the same id or name is not included in the array, then we take that character to pass to SuggestCard */}
       {countedLinks[matchCount] && countedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
             <div key={character.id}>
