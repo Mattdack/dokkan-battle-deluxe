@@ -12,11 +12,11 @@ function AllComponentsCard({ character, webOfTeam, savedToDeck }) {
 function WebCard ({character, webOfTeam}){
   // this valid image state is changed to false if the onError occurs on the img (basically a 404 handler)
   const [isImageValid, setIsImageValid] = useState(true);
-  const [isInWeb, setIsInWeb] = useState(webOfTeam.includes(character));
   function handleImageError() {
     setIsImageValid(false);
   }
   
+  const [isInWeb, setIsInWeb] = useState(webOfTeam.includes(character));
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
     setIsInWeb(webOfTeam.map(char => char.id).includes(character.id));
@@ -28,7 +28,7 @@ function WebCard ({character, webOfTeam}){
         <div className={`w-fit relative hover:bg-slate-900/[.4] 
         ${isInWeb ? 'bg-slate-900/[.75]' : ''}`}>
           <img
-            className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
+            className="h-[64px] card-sm:h-[100px] w-[64px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
             onError={handleImageError}
             alt={character.name}
@@ -37,17 +37,17 @@ function WebCard ({character, webOfTeam}){
             <img
               src={characterStyling.getCharacterRarityBackground(character)}
               className={character.rarity.trim() === "UR"
-                  ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-                  : "h-[24px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+                  ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+                  : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
               }
             />
           )}
           <img
-            className="w-[60px] card-sm:w-[81px] absolute top-[18%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
+            className="w-[48px] card-sm:w-[81px] absolute top-[18%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
             src={characterStyling.getCharacterTypeBackground(character)}
           />
           <img
-            className="w-[30px] card-sm:w-[40px] h-[30px] card-sm:h-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
+            className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
             src={characterStyling.getCharacterTypeText(character)}
           />
         </div>

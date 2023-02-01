@@ -95,8 +95,8 @@ query Characters7Link($link1: String, $link2: String, $link3: String, $link4: St
 }`;
 
 export const GET_USERDATA = gql`
-query FindOneUser($token: String!) {
-  findOneUser(token: $token) {
+query FindOneUser($profileId: String!) {
+  findOneUser(profileId: $profileId) {
     savedCharacters
   }
 }`;

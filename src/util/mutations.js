@@ -17,8 +17,8 @@ mutation Login($username: String!, $password: String!) {
 `;
 
 export const UPDATE_SAVED_CHARACTERS = gql`
-mutation UpdateSavedCharacters($token: String!, $newSavedCharacters: [Int]) {
-  updateSavedCharacters(token: $token, newSavedCharacters: $newSavedCharacters) {
+mutation Mutation($profileId: String!, $newSavedCharacters: [Int]) {
+  updateSavedCharacters(profileId: $profileId, newSavedCharacters: $newSavedCharacters) {
     savedCharacters
   }
 }`;
