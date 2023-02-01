@@ -199,10 +199,10 @@ function AllComponents() {
       {/* //left column styling */}
       <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
         <button 
-        className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+        className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
         onClick={() => scrollToSingleCardStats()}>Character</button>
         <button 
-        className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+        className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
         onClick={() => scrollToTeam()}>Team</button>
       </div>
       <div className="h-[85vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
@@ -229,7 +229,7 @@ function AllComponents() {
                   onClick={() => {setMultiCardSelection(!multiCardSelection)}}
                   className="w-11 h-6 bg-orange-100 rounded-full peer  peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"
                 ></div>
-                <span className="ml-2 text-sm font-bold text-gray-900">
+                <span className="ml-2 text-sm card-sm:text-lg font-bold text-gray-900">
                   ON
                 </span>
               </label>
@@ -240,7 +240,7 @@ function AllComponents() {
                 type="button"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
-                className='disabled:bg-gray-500 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+                className='disabled:bg-gray-500 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-lg leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
                 onClick={() => handleUpdateSavedCharacters()}
               >Save</button>
             </div>
@@ -289,12 +289,12 @@ function AllComponents() {
       >
         <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
-            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
               Selection
           </button>
           <button 
-            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-r-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
             onClick={() => scrollToTeam()}>
               Team
           </button>
@@ -313,12 +313,12 @@ function AllComponents() {
       >
         <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
-            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
               Selection
           </button>
           <button 
-            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 rounded-l-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
             onClick={() => scrollToSingleCardStats()}>
               Details
           </button>
