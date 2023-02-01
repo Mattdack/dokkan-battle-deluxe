@@ -17,10 +17,8 @@ function CardDetails({ cardDetails }) {
       <div className="w-full h-[40%] flex flex-wrap">
         {/* character name, thumb, EZA button*/}
         <div className="w-1/2 h-full flex flex-col justify-center items-center">
-          <div className="flex h-[35%] w-full justify-center items-center">
-            <p className="flex h-fit lg:h-fit lg:max-h-full p-2 overflow-y-auto font-header text-center text-2xl">
+          <div className="flex h-[50%] w-full py-1 font-header overflow-y-auto text-xl card-sm:text-2xl justify-center text-center">
               {cardDetails.name}
-            </p>
           </div>
 
           <div className="w-fit relative">
@@ -37,7 +35,7 @@ function CardDetails({ cardDetails }) {
             <img
               className={
                 cardDetails && cardDetails.rarity.trim() === "UR"
-                  ? "h-[35px] absolute top-[112px] right-[98px] z-50"
+                  ? "h-[35px] absolute top-[115px] right-[98px] z-50"
                   : "h-[56px] absolute top-[92px] right-[92px] z-50"
               }
               src={characterStyling.getCharacterRarityBackground(cardDetails)}
@@ -62,26 +60,26 @@ function CardDetails({ cardDetails }) {
             EZA
             {ezaEnabled ? 
             <img 
-            className="absolute max-w-[200%] h-[120%] -bottom-[10%] -right-[30%] z-0 object-contain"
+            className="absolute max-w-[200%] h-[120%] -bottom-[10%] -right-[40%] z-0 object-contain"
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
             /> : ''}
           </button>
         </div>
 
-        {/* leader and super */}
+        {/* leader and super APPLY TO ALL CHARACTERS */}
         <div className="h-full w-1/2 pt-2 pr-2">
           <div className="h-[50%]">
-            <p className="h-fit font-header text-center text-2xl overflow-y-auto">
+            <p className="h-fit font-header text-center text-lg card-sm:text-2xl overflow-y-auto">
               Leader Skill:
             </p>
-            <div className="w-full h-[82%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
+            <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-2xsm">
               {!ezaEnabled ? cardDetails.ls_description : cardDetails.ls_description_eza}
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center h-[50%] w-full">
             <ScrollingDiv divRef={divRef1} text={cardDetails.sa_name} />
-            <div className="w-full h-[80%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
+            <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
               {!ezaEnabled ? cardDetails.sa_description : cardDetails.sa_description_eza}
             </div>
           </div>
@@ -136,7 +134,7 @@ function CardDetails({ cardDetails }) {
 
           <div className="flex flex-wrap justify-center h-full w-[48%]">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
-            <div className="flex h-[31.5%] mt-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
+            <div className="flex h-[32%] mt-2 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm">
               {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
             </div>
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
@@ -147,6 +145,7 @@ function CardDetails({ cardDetails }) {
         </div>
       )}
 
+      {/* no ultra or active */}
       {!cardDetails.active_skill_name && !cardDetails.ultra_sa_description && (
       <div className="flex flex-wrap justify-center h-[30%]">
         <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
@@ -159,10 +158,10 @@ function CardDetails({ cardDetails }) {
       {/* links + categories */}
       <div className="h-[28%] w-full flex flex-row">
         <div className="h-full w-1/2">
-          <p className="h-fit font-header text-center text-2xl overflow-y-auto">
+          <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Links:
           </p>
-          <div className="h-[80%] lg:h-[90%] pr-2 pl-2 overflow-auto text-sm">
+          <div className="h-[70%] lg:h-[90%] pr-2 pl-2 overflow-auto text-sm">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
                 return <CharacterLinkDisplay linkText={linkText} />;
@@ -171,10 +170,10 @@ function CardDetails({ cardDetails }) {
         </div>
 
         <div className="h-full w-1/2 pr-2">
-          <p className="h-fit font-header text-center text-2xl overflow-y-auto">
+          <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Categories:
           </p>
-          <div className="h-[80%] lg:h-[90%] pr-2 pl-2 overflow-auto text-sm">
+          <div className="h-[70%] lg:h-[90%] pr-2 pl-2 overflow-auto text-sm">
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (
@@ -222,7 +221,7 @@ const ScrollingDiv = ({ text }) => {
   
   const divRef = useRef(null);
   const [divClass, setDivClass] = useState(
-    "flex px-4 w-full font-header text-2xl whitespace-nowrap justify-center"
+    "flex px-4 w-full font-header text-lg card-sm:text-2xl whitespace-nowrap justify-center"
     );
     
     useEffect(() => {
@@ -230,11 +229,11 @@ const ScrollingDiv = ({ text }) => {
         if (divRef.current) {
           if (divRef.current.scrollWidth <= divRef.current.clientWidth) {
             setDivClass(
-              "flex px-4 w-full font-header text-2xl whitespace-nowrap justify-center"
+              "flex px-4 w-full font-header text-lg card-sm:text-2xl whitespace-nowrap justify-center"
               );
             } else {
               setDivClass(
-              "flex w-[94%] px-6 w-full overflow-x-auto font-header text-2xl whitespace-nowrap"
+              "flex w-[94%] px-6 w-full overflow-x-auto font-header text-lg card-sm:text-2xl whitespace-nowrap"
           );
         }
       }

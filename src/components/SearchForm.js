@@ -6,14 +6,6 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
-        // calls onFormChange with formData. Schema:
-        // {
-        //   searchTerm: string (empty string if not present),
-        //   characterCategory: string (empty string if ALL)
-        //   characterType: string (empty string if ALL)
-        //   characterRarity: string (empty string if ALL)
-        //   isUserDeck: true or else this key is not present
-        // }
         onChange={(e) => {
           const formData = Object.fromEntries(new FormData(e.currentTarget));
           onFormChange(formData);
@@ -84,8 +76,6 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               <option>Movie Bosses</option>
               <option>Movie Heroes</option>
               <option>Namekians</option>
-              <option>NoPower of Wishes</option>
-              <option>NoWarriors Raised on Earth</option>
               <option>Otherworld Warriors</option>
               <option>Peppy Gals</option>
               <option>Planet Namek Saga</option>
@@ -133,7 +123,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
 
           {/* //type buttons */}
           <div
-            className="flex w-full my-1 grid grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
+            className="flex w-full my-1 card-sm:my-2 grid grid-cols-6 card-sm:grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-2"
           >
             <CharacterSelectButton name="characterType" label="AGL" />
@@ -141,30 +131,20 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             <CharacterSelectButton name="characterType" label="INT" />
             <CharacterSelectButton name="characterType" label="STR" />
             <CharacterSelectButton name="characterType" label="PHY" />
-            <CharacterSelectButton
-              name="characterType"
-              value=""
-              label="ALL"
-              defaultChecked
-            />
+            <CharacterSelectButton name="characterType" value="" label="ALL" defaultChecked/>
           </div>
 
           {/* rarity buttons */}
           <div
-            className="flex w-full justify-between mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 2xl:h-12 font-bold"
+            className="flex w-full justify-between mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-1"
           >
             <CharacterSelectButton name="characterRarity" label="UR" />
             <CharacterSelectButton name="characterRarity" label="LR" />
-            <CharacterSelectButton
-              name="characterRarity"
-              value=""
-              label="ALL"
-              defaultChecked
-            />
+            <CharacterSelectButton name="characterRarity" value="" label="ALL" defaultChecked />
           </div>
 
-          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900 2xl:h-12">
+          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
             <label htmlFor="isUserDeck">
               <input
                 type="checkbox"
@@ -175,7 +155,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="pr-10 pl-10 pt-2 pb-2 m-0.5 font-bold relative hover:bg-orange-400 peer-checked:bg-orange-400"
+                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-lg m-0.5 font-bold relative hover:bg-orange-400 peer-checked:bg-orange-400"
               >
                 My Deck
               </div>
@@ -200,7 +180,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center pr-10 pl-10 pt-2 pb-2 relative hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-10 relative text-sm card-sm:text-xl hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>
