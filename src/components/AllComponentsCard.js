@@ -26,7 +26,7 @@ function WebCard ({character, webOfTeam}){
     <>
       {isImageValid ? (
         <div className={`w-fit relative hover:bg-slate-900/[.4] 
-        ${isInWeb ? 'bg-slate-900/[.75]' : ''}`}>
+        ${isInWeb ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
           <img
             className="h-[64px] card-sm:h-[100px] w-[64px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
