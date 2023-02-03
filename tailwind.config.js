@@ -6,7 +6,7 @@ module.exports = {
       header: ["Luckiest Guy", "cursive"],
     },
     fontSize: {
-      xsm: '0.75rem',
+      xsm: '0.65rem',
       sm: '0.8rem',
       base: '1rem',
       lg: '1.125rem',
@@ -41,6 +41,7 @@ module.exports = {
       },
       height: {
         '10vh': '10vh',
+        '[45%]': '45%',
       },
       spacing: {
         128: "32rem",

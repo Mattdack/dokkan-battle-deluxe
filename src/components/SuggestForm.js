@@ -1,8 +1,8 @@
 import React from "react";
 
-const SearchForm = ({ onFormChange, isDisabled }) => {
+const SuggestForm = ({ onFormChange, isDisabled }) => {
   return (
-    <div className="flex flex-row flex-wrap justify-around lg:mx-5">
+    <div className="h-[12vh] flex flex-row flex-wrap justify-center items-center ">
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
@@ -18,16 +18,16 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-lg rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-xsm card-sm:text-base text-black font-bold"
               type="text"
               placeholder="Character Name"
-              name="searchTerm"
+              name="searchTermSuggest"
             />
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-lg text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
-              name="characterCategory"
+              name="characterCategorySuggest"
             >
               <option value="">All Categories</option>
               <option>Accelerated Battle</option>
@@ -121,46 +121,39 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             </select>
           </div>
 
-          {/* //type buttons */}
-          <div
-            className="flex w-full my-1 card-sm:my-2 grid grid-cols-6 card-sm:grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
-            id="box-2"
-          >
-            <CharacterSelectButton name="characterType" label="AGL" />
-            <CharacterSelectButton name="characterType" label="TEQ" />
-            <CharacterSelectButton name="characterType" label="INT" />
-            <CharacterSelectButton name="characterType" label="STR" />
-            <CharacterSelectButton name="characterType" label="PHY" />
-            <CharacterSelectButton name="characterType" value="" label="ALL" defaultChecked/>
+          
+          {/* type and My Deck buttons*/}
+          <div className="flex h-fit w-full justify-between items-center">
+            <div
+              className="flex w-full my-1 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
+              id="box-2"
+            >
+              <CharacterSelectButton name="characterTypeSuggest" label="AGL" />
+              <CharacterSelectButton name="characterTypeSuggest" label="TEQ" />
+              <CharacterSelectButton name="characterTypeSuggest" label="INT" />
+              <CharacterSelectButton name="characterTypeSuggest" label="STR" />
+              <CharacterSelectButton name="characterTypeSuggest" label="PHY" />
+              <CharacterSelectButton name="characterTypeSuggest" value="" label="ALL" defaultChecked/>
+            </div>
+            <div className="flex w-2/5 justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
+              <label htmlFor="isUserDeckSuggest">
+                <input
+                  type="checkbox"
+                  name="isUserDeckSuggest"
+                  id="isUserDeckSuggest"
+                  className="hidden peer"
+                  value={true}
+                />
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base font-bold hover:bg-orange-400 peer-checked:bg-orange-400"
+                >
+                  My Deck
+                </div>
+              </label>
+            </div>
           </div>
 
-          {/* rarity buttons */}
-          <div
-            className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
-            id="box-1"
-          >
-            <CharacterSelectButton name="characterRarity" label="UR" />
-            <CharacterSelectButton name="characterRarity" label="LR" />
-            <CharacterSelectButton name="characterRarity" value="" label="ALL" defaultChecked />
-          </div>
-
-          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
-            <label htmlFor="isUserDeck">
-              <input
-                type="checkbox"
-                name="isUserDeck"
-                id="isUserDeck"
-                className="hidden peer"
-                value={true}
-              />
-              <div
-                style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-lg m-0.5 font-bold relative hover:bg-orange-400 peer-checked:bg-orange-400"
-              >
-                My Deck
-              </div>
-            </label>
-          </div>
         </fieldset>
       </form>
     </div>
@@ -180,7 +173,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-10 relative text-sm card-sm:text-xl hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base hover:bg-orange-400 peer-checked:bg-orange-400"
       >
         {label}
       </div>
@@ -188,4 +181,4 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
   );
 };
 
-export default SearchForm;
+export default SuggestForm;

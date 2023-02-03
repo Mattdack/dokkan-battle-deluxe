@@ -9,6 +9,10 @@
   }
   }
 
+body {
+  touch-action: manipulation;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:

@@ -100,7 +100,6 @@ function AllComponents() {
     setWebOfTeam(prev => prev.filter(c => c.id !== character.id));
   }
 
-  // TODO: is it safe to call the profile outside the query?
   // can initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || []
   const { loading: isUserDataLoading, data: userData } = useQuery(GET_USERDATA,
@@ -115,7 +114,7 @@ function AllComponents() {
   );
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
   
-  // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the characters saved to the user) this is used for finding characters in My Deck
+  // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the character objects saved to the user) this is used for finding characters in My Deck
   const [getUserCharacterObjects, { loading: isUserCharactersLoading, data: userCharacterData }] = useLazyQuery(GET_USERCHARACTERSBYID, {
     variables: {
       dokkanIds: userCharacterIds,
@@ -177,7 +176,7 @@ function AllComponents() {
 
   const filterAndSetCharacters = (filterData) => setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData));
 
-  //added the slice to orient characters by id
+  //added the slice to orient characters by id (newest added first)
   const charactersToDisplay = filteredCharacters === null ? allCharacters.slice().sort((a, b) => b.id - a.id) : filteredCharacters.slice().sort((a, b) => b.id - a.id);
 
   //scroll ability through buttons on mobile
@@ -200,7 +199,7 @@ function AllComponents() {
       <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
         <button 
         className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
-        onClick={() => scrollToSingleCardStats()}>Character</button>
+        onClick={() => scrollToSingleCardStats()}>Details</button>
         <button 
         className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
         onClick={() => scrollToTeam()}>Team</button>
@@ -252,11 +251,11 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="h-fit p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
+        <div className="p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="flex flex-wrap justify-center items-center h-full max-h-[60vh]">
+            <div className="flex flex-wrap justify-center items-center">
               {charactersToDisplay &&
                 charactersToDisplay.map((character) => (
                 <div 
@@ -303,7 +302,6 @@ function AllComponents() {
           cardDetails={cardDetails}
           userCharacterIds={userCharacterIds}
         />
-        {/* <Links links={links}/> */}
       </div>
 
       {/* //right column styling */}
@@ -325,8 +323,9 @@ function AllComponents() {
         </div>
         <SuggestToWeb
           selectedCharacter={cardDetails}
+          userCharacters={userCharacters}
           handleNewDetails={newCardDetails}
-          addToWebOfTeam={ addToWebOfTeam}
+          addToWebOfTeam={addToWebOfTeam}
           webOfTeam={webOfTeam}
           removeFromWebOfTeam={removeFromWebOfTeam}
         />
@@ -339,7 +338,7 @@ function AllComponents() {
 // based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
-
+  console.log(baseChars)
   return baseChars.filter((character) => {
     return (
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&

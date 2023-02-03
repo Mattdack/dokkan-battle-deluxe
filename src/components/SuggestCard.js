@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 
-function SuggestCard({ character, handleNewDetails,  addToWebOfTeam }) {
+function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
   const [isImageValid, setIsImageValid] = useState(true);
   function handleImageError() {
     setIsImageValid(false);

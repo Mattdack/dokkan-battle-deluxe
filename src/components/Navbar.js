@@ -56,13 +56,13 @@ const AppNavbar = () => {
         
         <button
             className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            // onClick={() => setHelpOpen(true)}
+            onClick={() => setHelpOpen(true)}
         >
             Help
         </button>
         <button
             className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            // onClick={() => setUpdatesOpen(true)}
+            onClick={() => setUpdatesOpen(true)}
         >
             News & Updates
         </button>

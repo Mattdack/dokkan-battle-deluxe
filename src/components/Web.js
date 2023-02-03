@@ -23,7 +23,7 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .75,
+  zoom: .5,
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam }) {
@@ -98,7 +98,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
   }, [selectedNode, webOfTeam, onEdgesChange, onEdgeClick]);
 
   return (
-    <div className="h-[45vh]">
+    <div className="h-[45vh] lg:h-[40vh]">
       <div className="h-full bg-slate-700 row-span-6 rounded-md">
         <ReactFlow
           nodes={combinedNodeData}
