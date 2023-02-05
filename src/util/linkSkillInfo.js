@@ -542,6 +542,35 @@ const linkSkillDictionary = {
   },
 };
 
+export const linkSkillStatBoosts = (linkSkills) => {
+  const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
+  
+  linkSkills.forEach(lvl1_stats => {
+    const match = lvl1_stats.match(/\d+/g);
+    if (!match) return;
+    const stat = parseInt(match[0]);
+    
+    if (lvl1_stats.includes("ATK")) {
+      if (lvl1_stats.includes("%")) {
+        linkSkillBuffs.ATK.push(stat);
+      }
+    }
+    if (lvl1_stats.includes("DEF")) {
+      if (lvl1_stats.includes("%")) {
+        linkSkillBuffs.DEF.push(stat);
+      }
+    }
+    if (lvl1_stats.includes("Ki")) {
+      linkSkillBuffs.Ki.push(stat);
+    }
+  });
+  return(linkSkillBuffs);
+}
+
+
+
+
+
 export const getLinkSkillInfo = (linkskill) => {
   const searchKey = linkskill
     .trim()

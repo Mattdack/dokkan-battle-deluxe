@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
+import * as linkSkillInfo from "../util/linkSkillInfo"
 
-function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
+function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam }) {
   const [isImageValid, setIsImageValid] = useState(true);
   function handleImageError() {
     setIsImageValid(false);
@@ -23,6 +24,14 @@ function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
+
+  const matchedLinks = linkSkillInfo.findMatchingLinks(selectedCharacter.link_skill, character.link_skill) || []
+  let matchedLinkInfo = [];
+  for (let i = 0; i < matchedLinks.length; i++) {
+    matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+  }
+  const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
+  console.log(linkSkillStatsBoosted)
 
   return (
     <>
@@ -75,6 +84,10 @@ function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
             className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
             src={characterStyling.getCharacterTypeText(character)}
           />
+          <div
+            className='w-[30px] h-[30px] bg-black text-white absolute bottom-0 right-0 z-50'>
+            {linkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
+          </div>
           </>
         )
         }

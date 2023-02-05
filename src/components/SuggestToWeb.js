@@ -6,6 +6,7 @@ import SuggestForm from "./SuggestForm";
 import Web from "./Web";
 import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
+import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
 function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam }) {
@@ -27,7 +28,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   
   //TODO: finding all characters by the links of the selected character
   const linkedCharacters = linkedCharactersData?.characters7Link || [];
-  console.log(linkedCharacters)
+  // console.log(linkedCharacters)
 
   // this useEffect allows the inital load of Suggested Characters to be placed in. Without it, they are blank until the form changes
   useEffect(() => {
@@ -37,11 +38,12 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
   const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
-  console.log(filteredSuggestedCharacters)
+  // console.log(filteredSuggestedCharacters)
 
   //TODO: this is then the array of arrays (characters paired by how many links match) 
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
-  console.log(charactersWithMatchedLinks)
+  // console.log(charactersWithMatchedLinks)
+
 
 
   return (
@@ -112,6 +114,7 @@ const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatc
           <div key={character.id}>
             <SuggestCard
               character={character}
+              selectedCharacter={selectedCharacter}
               handleNewDetails={handleNewDetails}
               addToWebOfTeam={addToWebOfTeam}
             />
