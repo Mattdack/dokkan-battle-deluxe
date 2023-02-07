@@ -567,10 +567,6 @@ export const linkSkillStatBoosts = (linkSkills) => {
   return(linkSkillBuffs);
 }
 
-
-
-
-
 export const getLinkSkillInfo = (linkskill) => {
   const searchKey = linkskill
     .trim()

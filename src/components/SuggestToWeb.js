@@ -10,7 +10,14 @@ import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
 function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam }) {
-  // this console.log brings up a lot of repatative values, is thatokay?
+  // these allow the selected options in the SuggestForm to be passed into the SuggestCards
+  const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
+  const handleStatsSelectedOptions = (event) => {
+    setStatsSelectedOptions(event.target.value);
+  };
+  // console.log(statsSelectedOptions)
+  
+  // this console.log brings up a lot of repatative values, is that okay?
   // console.log(userCharacters)
   const [filteredSuggestedCharacters, setFilteredSuggestedCharacters] = useState([])
   
@@ -34,7 +41,6 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   useEffect(() => {
     setFilteredSuggestedCharacters(linkedCharacters)
   }, [linkedCharacters]);
-
   
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
   const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
@@ -44,15 +50,12 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
   // console.log(charactersWithMatchedLinks)
 
-
-
   return (
     <div className="my-2">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} />
 
-      <div className="row-span-2 h-[12vh] px-2 pb-2">
-
-        {/* image */}
+      <div className="row-span-2 px-2 pb-2">
+        {/* image on mobile */}
         <div className="flex justify-around items-center">
           <div className="lg:hidden w-[100px] card-sm:w-[120px]">
             <div className="w-fit relative">
@@ -87,23 +90,26 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           <SuggestForm 
           onFormChange={filterAndSetSuggestedCharacters} 
           isDisabled={isLinkedCharactersLoading}
+          statsSelectedOptions={statsSelectedOptions}
+          setStatsSelectedOptions={setStatsSelectedOptions}
+          handleStatsSelectedOptions={handleStatsSelectedOptions}
           />
         </div>
-
-        <div className="h-[33vh] card-sm:h-[35vh] overflow-auto">
-          <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} />
-          <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
+        
+        <div className="h-[28vh] card-sm:h-[30vh] overflow-auto">
+          <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}statsSelectedOptions={statsSelectedOptions} />
+          <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
         </div>
       </div>
     </div>
   );
 }
-// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
 
-const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatchedLinks, handleNewDetails,  addToWebOfTeam}) => {
+// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
+const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, statsSelectedOptions}) => {
   return (
     <>
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
@@ -117,6 +123,7 @@ const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatc
               selectedCharacter={selectedCharacter}
               handleNewDetails={handleNewDetails}
               addToWebOfTeam={addToWebOfTeam}
+              statsSelectedOptions={statsSelectedOptions}
             />
           </div>
         ))}

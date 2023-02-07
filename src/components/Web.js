@@ -80,7 +80,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
     setSelectedNode(null)
   }
 
-  // this 
+  // this is where the web can get a little glitchy. This can definitely be optimized but works great
   useEffect(() => {
     if (!selectedNode) {
       return;
@@ -97,9 +97,19 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
     });
   }, [selectedNode, webOfTeam, onEdgesChange, onEdgeClick]);
 
+  const handleResetTeam = (webOfTeam) => {
+    for (let i = 0; i < webOfTeam.length; i++) {
+      removeFromWebOfTeam(webOfTeam[i])      
+    }
+  }
+
   return (
     <div className="h-[45vh] lg:h-[40vh]">
-      <div className="h-full bg-slate-700 row-span-6 rounded-md">
+      <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
+        <div
+        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
+        onClick={() => handleResetTeam(webOfTeam)}
+        >Reset Team</div>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}

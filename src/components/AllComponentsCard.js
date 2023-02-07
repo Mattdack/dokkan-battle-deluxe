@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 
 function AllComponentsCard({ character, webOfTeam, savedToDeck }) {
@@ -27,12 +27,19 @@ function WebCard ({character, webOfTeam}){
       {isImageValid ? (
         <div className={`w-fit relative hover:bg-slate-900/[.4] 
         ${isInWeb ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
-          <img
+          {/* <img
             className="h-[64px] card-sm:h-[100px] w-[64px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
             onError={handleImageError}
             alt={character.name}
-          ></img>
+          ></img> */}
+          <img
+            className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
+            src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
+            onError={handleImageError}
+            alt={character.name}
+          >
+          </img>
           {character.rarity && (
             <img
               src={characterStyling.getCharacterRarityBackground(character)}
@@ -74,12 +81,19 @@ function DeckCard ({character, savedToDeck}) {
       {isImageValid ? (
         <div className={`w-fit relative
         ${isSavedCharacter ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-slate-900/[.4]'}`}>
-          <img
+          {/* <img
             className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
             onError={handleImageError}
             alt={character.name}
-          ></img>
+          ></img> */}
+          <img
+            className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
+            src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
+            onError={handleImageError}
+            alt={character.name}
+          >
+          </img>
           {character.rarity && (
             <img
               src={characterStyling.getCharacterRarityBackground(character)}

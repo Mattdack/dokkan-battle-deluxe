@@ -72,14 +72,17 @@ function CardDetails({ cardDetails }) {
               Leader Skill:
             </p>
             <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ls_description : cardDetails.ls_description_eza}
+              {!ezaEnabled ? cardDetails.ls_description: cardDetails.ls_description_eza}
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center h-[50%] w-full">
             <ScrollingDiv divRef={divRef1} text={cardDetails.sa_name} />
             <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.sa_description : cardDetails.sa_description_eza}
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.sa_description} />
+              : 
+              <CardDescription text={cardDetails.sa_description_eza} />}
             </div>
           </div>
         </div>
@@ -187,6 +190,59 @@ function CardDetails({ cardDetails }) {
     </div>
   );
 }
+
+//ChatGPT helped with basically all of this. The text and hover iteration is pretty wild
+const CardDescription = ({ text }) => {
+  const [hover, setHover] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState(-1);
+
+  const handleHover = (index) => {
+    setHover(!hover);
+    setHoverIndex(index);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (hover && !event.target.closest('.hover-box')) {
+        setHover(false);
+        setHoverIndex(-1);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [hover]);
+
+  const formattedText = text.replace(/<(.*?)>/g, '*');
+  const descriptionArray = formattedText.split('*');
+
+  const textBetweenBrackets = text.match(/<(.*?)>/g);
+  let hoverTextArray = [];
+
+  if (textBetweenBrackets) {
+    hoverTextArray = textBetweenBrackets.map(t => t.slice(1, -1));
+  }
+
+  return (
+    <div>
+      {descriptionArray.map((t, i) => (
+        <React.Fragment key={i}>
+          {t}
+          {i < descriptionArray.length - 1 && (
+            <b className="text-base text-orange-500" 
+            onClick={() => handleHover(i + 1)}>
+              *
+            </b>
+          )}
+          {hover && hoverIndex === i + 1 ? (
+            <div className="w-fit p-2 bg-orange-400 border border-black absolute hover-box z-50">
+              {hoverTextArray[i]}
+            </div>
+          ) : null}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
 
 const CharacterLinkDisplay = ({ linkText }) => {
   const [showPopUp, setShowPopUp] = useState(false);
