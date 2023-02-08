@@ -9,13 +9,12 @@ import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
-function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam }) {
+function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
   const handleStatsSelectedOptions = (event) => {
     setStatsSelectedOptions(event.target.value);
   };
-  // console.log(statsSelectedOptions)
   
   // this console.log brings up a lot of repatative values, is that okay?
   // console.log(userCharacters)
@@ -36,11 +35,6 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   //TODO: finding all characters by the links of the selected character
   const linkedCharacters = linkedCharactersData?.characters7Link || [];
   // console.log(linkedCharacters)
-
-  // this useEffect allows the inital load of Suggested Characters to be placed in. Without it, they are blank until the form changes
-  useEffect(() => {
-    setFilteredSuggestedCharacters(linkedCharacters)
-  }, [linkedCharacters]);
   
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
   const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
@@ -88,11 +82,11 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           </div>
 
           <SuggestForm 
-          onFormChange={filterAndSetSuggestedCharacters} 
-          isDisabled={isLinkedCharactersLoading}
+          onFormChange={filterAndSetSuggestedCharacters}
           statsSelectedOptions={statsSelectedOptions}
           setStatsSelectedOptions={setStatsSelectedOptions}
           handleStatsSelectedOptions={handleStatsSelectedOptions}
+          allCharactersLoading={allCharactersLoading}
           />
         </div>
         
@@ -146,7 +140,6 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
 const getFilteredCharacters = (linkedCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
   return baseChars.filter((character) => {
-    console.log(character)
     return (
       (!filterData.searchTermSuggest || character.name.toLowerCase().includes(filterData.searchTermSuggest.toLowerCase())) &&
       (!filterData.characterCategorySuggest || character.category.includes(filterData.characterCategorySuggest)) &&

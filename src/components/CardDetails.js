@@ -79,10 +79,10 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center h-[50%] w-full">
             <ScrollingDiv divRef={divRef1} text={cardDetails.sa_name} />
             <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-            {!ezaEnabled ? 
-              <CardDescription text={cardDetails.sa_description} />
-              : 
-              <CardDescription text={cardDetails.sa_description_eza} />}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.sa_description} />
+                : 
+                <CardDescription text={cardDetails.sa_description_eza} />}
             </div>
           </div>
         </div>
@@ -94,13 +94,19 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.ps_description} />
+              : 
+              <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.ultra_sa_description} />
+              : 
+              <CardDescription text={cardDetails.ultra_sa_description_eza} />}
             </div>
           </div>
         </div>
@@ -112,13 +118,16 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-                {cardDetails.active_skill_condition}
+              <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
         </div>
@@ -130,18 +139,24 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name}/>
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center w-[48%]">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex h-[10vh] mt-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ultra_sa_description} />
+                : 
+                <CardDescription text={cardDetails.ultra_sa_description_eza} />}
             </div>
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
             <div className="flex h-[10vh] mb-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {cardDetails.active_skill_condition}
+                <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
         </div>
@@ -152,7 +167,10 @@ function CardDetails({ cardDetails }) {
       <div className="flex flex-wrap justify-center pt-1">
         <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
         <div className="flex h-[25vh] w-full overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-          {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+          {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
         </div>
       </div>
       )}
@@ -191,16 +209,21 @@ function CardDetails({ cardDetails }) {
   );
 }
 
-//ChatGPT helped with basically all of this. The text and hover iteration is pretty wild
+//ChatGPT helped with basically all of this. Allows for * to be clickable / off click, hovers text on click
 const CardDescription = ({ text }) => {
+  
   const [hover, setHover] = useState(false);
   const [hoverIndex, setHoverIndex] = useState(-1);
-
-  const handleHover = (index) => {
+  const [hoverX, setHoverX] = useState(0);
+  const [hoverY, setHoverY] = useState(0);
+  
+  const handleHover = (index, event) => {
     setHover(!hover);
     setHoverIndex(index);
+    setHoverX(event.clientX);
+    setHoverY(event.clientY);
   };
-
+  
   useEffect(() => {
     const handleClickOutside = event => {
       if (hover && !event.target.closest('.hover-box')) {
@@ -212,6 +235,10 @@ const CardDescription = ({ text }) => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [hover]);
 
+  if (!text) {
+  return null;
+  }
+  
   const formattedText = text.replace(/<(.*?)>/g, '*');
   const descriptionArray = formattedText.split('*');
 
@@ -222,19 +249,36 @@ const CardDescription = ({ text }) => {
     hoverTextArray = textBetweenBrackets.map(t => t.slice(1, -1));
   }
 
+  const hoverXModified = (() => {
+    if (hoverX < window.innerWidth / 3) {
+    return hoverX + 100;
+    } else if (hoverX >= window.innerWidth / 3 && hoverX < 2 * (window.innerWidth / 3)) {
+    return hoverX;
+    } else {
+    return hoverX - 100;
+    }
+    })();
+
   return (
     <div>
       {descriptionArray.map((t, i) => (
         <React.Fragment key={i}>
           {t}
           {i < descriptionArray.length - 1 && (
-            <b className="text-base text-orange-500" 
-            onClick={() => handleHover(i + 1)}>
+            <b className="text-md text-orange-400 cursor-pointer" 
+            onClick={(event) => handleHover(i + 1, event)}>
               *
             </b>
           )}
           {hover && hoverIndex === i + 1 ? (
-            <div className="w-fit p-2 bg-orange-400 border border-black absolute hover-box z-50">
+            <div 
+            className="w-fit p-2 bg-orange-400 border border-black absolute hover-box z-50"
+            style={{
+              // some styling logic I implimented with the screen height/width
+              left: window.innerWidth < 1250 ? hoverXModified : hoverX,
+              top: window.innerWidth < 1250 ? (hoverY + window.innerHeight) : hoverY,
+            }}
+            >
               {hoverTextArray[i]}
             </div>
           ) : null}

@@ -177,10 +177,10 @@ function AllComponents() {
 
   const filterAndSetCharacters = (filterData) => setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData));
 
-
-  //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter, if the first is GameFilter, then filter characters like this 
+  //TODO: can be optimized/look cleaner if this sort/filter was a util function
+  //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay = filteredCharacters === null ? 
+  const charactersToDisplay = filteredCharacters === null ? (
     (filterByGame ? 
       allCharacters.slice().sort((a, b) => {
         if (a.rarity === b.rarity) {
@@ -194,22 +194,18 @@ function AllComponents() {
         }
         return b.rarity === 'LR' ? 1 : -1;
       }) 
-      :
-      //we are still under the filteredCharacters is null, but the filterByGame has changed. Now we filter characters by date
+      :        
       allCharacters.slice().sort((a, b) => {
-        const dateA = new Date(a.glb_date).getTime();
-        const dateB = new Date(b.glb_date).getTime();
-        if (dateA === dateB) {
-          if (a.id === b.id) {
-            return b.rarity === 'LR' ? 1 : -1;
-          }
+        if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
           return b.id - a.id;
         }
-        return dateB - dateA;
-      })
+        return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+      })       
     ) 
+  ) 
+    // This is now starting the FILTERED characters (if filter form is filled out)
     :
-    // now filteredCharacters has a value. So now we filter the characters by the filterByGame again.
+  (
     (filterByGame ? 
       filteredCharacters.slice().sort((a, b) => {
         if (a.rarity === b.rarity) {
@@ -224,17 +220,13 @@ function AllComponents() {
         return b.rarity === 'LR' ? 1 : -1;
       }) :
       filteredCharacters.slice().sort((a, b) => {
-        const dateA = new Date(a.glb_date).getTime();
-        const dateB = new Date(b.glb_date).getTime();
-        if (dateA === dateB) {
-          if (a.id === b.id) {
-            return b.rarity === 'LR' ? 1 : -1;
-          }
+        if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
           return b.id - a.id;
         }
-        return dateB - dateA;
-      })
-    );
+        return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+      })       
+    )
+  )
   
 
 
@@ -409,6 +401,7 @@ function AllComponents() {
           addToWebOfTeam={addToWebOfTeam}
           webOfTeam={webOfTeam}
           removeFromWebOfTeam={removeFromWebOfTeam}
+          allCharactersLoading={allCharactersLoading}
         />
       </div>
     </div>

@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const SuggestForm = ({ onFormChange, isDisabled, statsSelectedOptions, handleStatsSelectedOptions }) => {
+const SuggestForm = ({ onFormChange, statsSelectedOptions, handleStatsSelectedOptions, allCharactersLoading }) => {
+  function handleFormChange (e) {
+    const formData = Object.fromEntries(new FormData(e.currentTarget));
+    onFormChange(formData);
+  }
+  
+  // this useEffect allows for characters to be loaded in on render (waits for everycharacter to be loaded in) 
+  useEffect(() => {
+    handleFormChange({ currentTarget: document.querySelector("#form") });
+  }, [allCharactersLoading]);
+
   return (
     <div className="h-[17vh] flex flex-col justify-center items-center ">
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
-        onChange={(e) => {
-          const formData = Object.fromEntries(new FormData(e.currentTarget));
-          onFormChange(formData);
-        }}
+        onChange={(e) => handleFormChange(e)}
+        id='form'
       >
         <fieldset
-          disabled={isDisabled}
+          disabled={allCharactersLoading}
           className="flex flex-col w-full p-1 items-center"
         >
           {/* input and category selection */}
@@ -132,11 +140,8 @@ const SuggestForm = ({ onFormChange, isDisabled, statsSelectedOptions, handleSta
               <CharacterSelectButton name="characterTypeSuggest" label="INT" />
               <CharacterSelectButton name="characterTypeSuggest" label="STR" />
               <CharacterSelectButton name="characterTypeSuggest" label="PHY" />
-              <CharacterSelectButton
-                name="characterTypeSuggest"
-                value=""
-                label="ALL"
-                defaultChecked
+              <CharacterSelectButton name="characterTypeSuggest" label="ALL" value="" 
+              defaultChecked
               />
             </div>
             <div className="flex w-2/5 justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
