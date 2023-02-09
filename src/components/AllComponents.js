@@ -337,36 +337,33 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
+        <div className="flex flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="flex flex-wrap justify-center items-center">
-              {charactersToDisplay &&
-                charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
-                  <LazyLoad continuous>
-                <div 
-                  id='CharacterCard'
-                  key={character.id}
-                  onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                  onDoubleClick={() => {
-                        if (!multiCardSelection) {
-                            if (webOfTeam.map(char => char.id).includes(character.id)) {
-                                setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
-                            } else {
-                                setWebOfTeam([...webOfTeam, character]);
-                            }
-                          }
-                        }}>
-                    <AllComponentsCard 
-                      character={character} 
-                      savedToDeck={multiCardSelection ? savedToDeck : undefined} 
-                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                    />
-                </div>
-                  </LazyLoad>
-                ))}
+          charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
+          <LazyLoad continuous>
+            <div 
+              id='CharacterCard'
+              key={character.id}
+              onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
+              onDoubleClick={() => {
+                    if (!multiCardSelection) {
+                        if (webOfTeam.map(char => char.id).includes(character.id)) {
+                            setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
+                        } else {
+                            setWebOfTeam([...webOfTeam, character]);
+                        }
+                      }
+                    }}>
+                <AllComponentsCard 
+                  character={character} 
+                  savedToDeck={multiCardSelection ? savedToDeck : undefined} 
+                  webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                />
             </div>
+          </LazyLoad>
+          ))
           )}
         </div>
       </div>
