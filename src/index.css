@@ -14,11 +14,7 @@ body {
   touch-action: manipulation;
 }
 
-#AllCharacterContainer {
-  touch-action: auto;
-}
-
-#Web{
+#CharacterCard {
   touch-action: auto;
 }
 

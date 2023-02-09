@@ -341,13 +341,11 @@ function AllComponents() {
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div
-            id='AllCharacterContainer'
-            className="flex flex-wrap justify-center items-center"
-            >
+            <div className="flex flex-wrap justify-center items-center">
               {charactersToDisplay &&
                 charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
                 <div 
+                  id='CharacterCard'
                   key={character.id}
                   onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
                   onDoubleClick={() => {
