@@ -10,13 +10,13 @@
 }
 
 /* this might turn off zoom on double tap for mobiles */
-body {
+/* body {
   touch-action: manipulation;
 }
 
 #CharacterCard {
   touch-action: auto;
-}
+} */
 
 .font-header {
   color: #ffac37;
