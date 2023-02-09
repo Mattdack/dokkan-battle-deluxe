@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazyload';
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
@@ -357,11 +357,13 @@ function AllComponents() {
                             }
                           }
                         }}>
-                  <AllComponentsCard 
-                    character={character} 
-                    savedToDeck={multiCardSelection ? savedToDeck : undefined} 
-                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                  />
+                  <LazyLoad once>
+                    <AllComponentsCard 
+                      character={character} 
+                      savedToDeck={multiCardSelection ? savedToDeck : undefined} 
+                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                    />
+                  </LazyLoad>
                 </div>
                 ))}
             </div>
