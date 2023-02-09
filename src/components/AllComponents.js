@@ -357,7 +357,7 @@ function AllComponents() {
                             }
                           }
                         }}>
-                  <LazyLoad once>
+                  <LazyLoad continuous>
                     <AllComponentsCard 
                       character={character} 
                       savedToDeck={multiCardSelection ? savedToDeck : undefined} 
