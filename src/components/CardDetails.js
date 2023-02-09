@@ -272,7 +272,7 @@ const CardDescription = ({ text }) => {
           )}
           {hover && hoverIndex === i + 1 ? (
             <div 
-            className="w-fit p-2 bg-orange-400 border border-black absolute hover-box z-50"
+            className="w-[40px] p-2 bg-orange-400 border border-black absolute hover-box z-50"
             style={{
               // some styling logic I implimented with the screen height/width
               left: window.innerWidth < 1250 ? hoverXModified : hoverX,

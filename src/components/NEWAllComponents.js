@@ -341,28 +341,18 @@ function AllComponents() {
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div
-            id='AllCharacterContainer'
-            className="flex flex-wrap justify-center items-center"
-            >
+            <div className="flex flex-wrap justify-center items-center">
               {charactersToDisplay &&
                 charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
-                <div 
-                  key={character.id}
-                  onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                  onDoubleClick={() => {
-                        if (!multiCardSelection) {
-                            if (webOfTeam.map(char => char.id).includes(character.id)) {
-                                setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
-                            } else {
-                                setWebOfTeam([...webOfTeam, character]);
-                            }
-                          }
-                        }}>
+                <div key={character.id}>
                   <AllComponentsCard 
-                    character={character} 
-                    savedToDeck={multiCardSelection ? savedToDeck : undefined} 
-                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                    character={character}
+                    multiCardSelection={multiCardSelection}
+                    savedToDeck={savedToDeck} 
+                    webOfTeam={webOfTeam}
+                    handleNewDetails={newCardDetails}
+                    addToWebOfTeam={addToWebOfTeam}
+                    changeDeck={changeDeck}
                   />
                 </div>
                 ))}

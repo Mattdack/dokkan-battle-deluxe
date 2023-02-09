@@ -14,6 +14,10 @@ body {
   touch-action: manipulation;
 }
 
+#AllCharacterContainer {
+  touch-action: auto;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
