@@ -339,38 +339,40 @@ function AllComponents() {
 
         {/* //character select box */}
         <div className="flex flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
-          {allCharactersLoading ? (
+        {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-          charactersToDisplay
-          .slice(0, viewableCharacters)
-          .filter(character => character.glb_date !== null).map((character) => (
-          <LazyLoad>
-            <div 
-              id='CharacterCard'
-              key={character.id}
-              onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-              onDoubleClick={() => {
-                    if (!multiCardSelection) {
-                        if (webOfTeam.map(char => char.id).includes(character.id)) {
-                            setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
-                        } else {
-                            setWebOfTeam([...webOfTeam, character]);
+            window.innerWidth < 550 ?
+              charactersToDisplay.slice(0, viewableCharacters) :
+              charactersToDisplay
+            )
+            .filter(character => character.glb_date !== null).map((character) => (
+            <LazyLoad>
+              <div 
+                id='CharacterCard'
+                key={character.id}
+                onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
+                onDoubleClick={() => {
+                      if (!multiCardSelection) {
+                          if (webOfTeam.map(char => char.id).includes(character.id)) {
+                              setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
+                          } else {
+                              setWebOfTeam([...webOfTeam, character]);
+                          }
                         }
-                      }
-                    }}>
-                <AllComponentsCard 
-                  character={character} 
-                  savedToDeck={multiCardSelection ? savedToDeck : undefined} 
-                  webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                />
-            </div>
-          </LazyLoad>
-          ))
-          )}
+                      }}>
+                  <AllComponentsCard 
+                    character={character} 
+                    savedToDeck={multiCardSelection ? savedToDeck : undefined} 
+                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                  />
+              </div>
+            </LazyLoad>
+            ))
+                    }
           {charactersToDisplay.length > viewableCharacters && (
             
-              <button className="w-full text-center" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
+              <button className="w-[90%] p-2 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
                 Load More Characters
               </button>
             
