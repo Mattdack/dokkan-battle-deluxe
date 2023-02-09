@@ -250,15 +250,13 @@ const CardDescription = ({ text }) => {
   }
 
   const hoverXModified = (() => {
-    if (hoverX < window.innerWidth / 3) {
-    return hoverX + 100;
-    } else if (hoverX >= window.innerWidth / 3 && hoverX < 2 * (window.innerWidth / 3)) {
-    return hoverX;
+    if (hoverX + 160 > window.innerWidth) {
+      return hoverX - 160;
     } else {
-    return hoverX - 100;
+      return hoverX;
     }
-    })();
-
+  })();
+  
   return (
     <div>
       {descriptionArray.map((t, i) => (
@@ -272,11 +270,10 @@ const CardDescription = ({ text }) => {
           )}
           {hover && hoverIndex === i + 1 ? (
             <div 
-            className="w-[40px] p-2 bg-orange-400 border border-black absolute hover-box z-50"
+            className="w-40 h-fit p-2 bg-orange-400 border border-black absolute hover-box z-50"
             style={{
-              // some styling logic I implimented with the screen height/width
-              left: window.innerWidth < 1250 ? hoverXModified : hoverX,
-              top: window.innerWidth < 1250 ? (hoverY + window.innerHeight) : hoverY,
+              left: hoverXModified,
+              top: hoverY+window.innerHeight,
             }}
             >
               {hoverTextArray[i]}

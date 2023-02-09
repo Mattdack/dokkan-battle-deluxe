@@ -242,6 +242,7 @@ function AllComponents() {
   )
   
 
+  const [viewableCharacters, setViewableCharacters] = useState(50);
 
   //scroll ability through buttons on mobile
   const scrollToSingleCardStats = () => {
@@ -341,8 +342,10 @@ function AllComponents() {
           {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-          charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
-          <LazyLoad continuous>
+          charactersToDisplay
+          .slice(0, viewableCharacters)
+          .filter(character => character.glb_date !== null).map((character) => (
+          <LazyLoad>
             <div 
               id='CharacterCard'
               key={character.id}
@@ -364,6 +367,13 @@ function AllComponents() {
             </div>
           </LazyLoad>
           ))
+          )}
+          {charactersToDisplay.length > viewableCharacters && (
+            
+              <button className="w-full text-center" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
+                Load More Characters
+              </button>
+            
           )}
         </div>
       </div>

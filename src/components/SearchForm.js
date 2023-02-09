@@ -33,7 +33,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               <option>Accelerated Battle</option>
               <option>All-Out Struggle</option>
               <option>Androids</option>
-              <option>Androids-Cell Saga</option>
+              <option>Androids/Cell Saga</option>
               <option>Artificial Life Forms</option>
               <option>Battle of Fate</option>
               <option>Battle of Wits</option>
@@ -131,7 +131,12 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             <CharacterSelectButton name="characterType" label="INT" />
             <CharacterSelectButton name="characterType" label="STR" />
             <CharacterSelectButton name="characterType" label="PHY" />
-            <CharacterSelectButton name="characterType" value="" label="ALL" defaultChecked/>
+            <CharacterSelectButton
+              name="characterType"
+              value=""
+              label="ALL"
+              defaultChecked
+            />
           </div>
 
           {/* rarity buttons */}
@@ -141,7 +146,12 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           >
             <CharacterSelectButton name="characterRarity" label="UR" />
             <CharacterSelectButton name="characterRarity" label="LR" />
-            <CharacterSelectButton name="characterRarity" value="" label="ALL" defaultChecked />
+            <CharacterSelectButton
+              name="characterRarity"
+              value=""
+              label="ALL"
+              defaultChecked
+            />
           </div>
 
           <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
