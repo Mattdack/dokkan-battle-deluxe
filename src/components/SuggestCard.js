@@ -66,7 +66,7 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
               character
             )}_thumb.png`}
-            onError={handleImageError}
+            // onError={handleImageError}
             alt={character.name}
           ></img>
           {character.rarity && (

@@ -70,7 +70,7 @@ function WebCard ({character, webOfTeam, addToWebOfTeam, handleNewDetails }){
             <img
               className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
               src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
-              onError={handleImageError}
+              // onError={handleImageError}
               alt={character.name}
             >
             </img>
@@ -122,7 +122,7 @@ function DeckCard ({character, savedToDeck, changeDeck}) {
           <img
             className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
             src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
-            onError={handleImageError}
+            // onError={handleImageError}
             alt={character.name}
           >
           </img>
