@@ -344,6 +344,7 @@ function AllComponents() {
             <div className="flex flex-wrap justify-center items-center">
               {charactersToDisplay &&
                 charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
+                  <LazyLoad continuous>
                 <div 
                   id='CharacterCard'
                   key={character.id}
@@ -357,14 +358,13 @@ function AllComponents() {
                             }
                           }
                         }}>
-                  <LazyLoad continuous>
                     <AllComponentsCard 
                       character={character} 
                       savedToDeck={multiCardSelection ? savedToDeck : undefined} 
                       webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                     />
-                  </LazyLoad>
                 </div>
+                  </LazyLoad>
                 ))}
             </div>
           )}
