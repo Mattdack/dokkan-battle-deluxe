@@ -18,6 +18,10 @@ body {
   touch-action: auto;
 }
 
+#Web{
+  touch-action: auto;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
