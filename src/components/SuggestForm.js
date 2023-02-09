@@ -177,12 +177,12 @@ const SuggestForm = ({ onFormChange, statsSelectedOptions, handleStatsSelectedOp
             onChange={handleStatsSelectedOptions}
             defaultChecked
           />
-          <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
-            for="inlineRadio10"
-          >
-            None
-          </label>
+            <label
+              className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+              htmlFor="inlineRadio10"
+            >
+              None
+            </label>
         </div>
         <div className="">
           <input
@@ -194,12 +194,12 @@ const SuggestForm = ({ onFormChange, statsSelectedOptions, handleStatsSelectedOp
             checked={statsSelectedOptions === "ATK"}
             onChange={handleStatsSelectedOptions}
           />
-          <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
-            for="inlineRadio10"
-          >
-            ATK
-          </label>
+            <label
+              className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+              htmlFor="inlineRadio10"
+            >
+              ATK
+            </label>
         </div>
         <div className="">
           <input
@@ -211,12 +211,12 @@ const SuggestForm = ({ onFormChange, statsSelectedOptions, handleStatsSelectedOp
             checked={statsSelectedOptions === "DEF"}
             onChange={handleStatsSelectedOptions}
           />
-          <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
-            for="inlineRadio20"
-          >
-            DEF
-          </label>
+            <label
+              className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+              htmlFor="inlineRadio20"
+            >
+              DEF
+            </label>
         </div>
         <div className="">
           <input
@@ -228,12 +228,12 @@ const SuggestForm = ({ onFormChange, statsSelectedOptions, handleStatsSelectedOp
             checked={statsSelectedOptions === "Ki"}
             onChange={handleStatsSelectedOptions}
           />
-          <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
-            for="inlineRadio30"
-          >
-            Ki
-          </label>
+            <label
+              className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+              htmlFor="inlineRadio30"
+            >
+              Ki
+            </label>
         </div>
       </div>
 

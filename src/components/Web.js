@@ -63,7 +63,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
     setSelectedNode(null);
   };
 
-  const onNodeDragEnd = (event, node) => {
+  const onNodeDragStop = (event, node) => {
     setSelectedNode(null)
   }
   
@@ -118,7 +118,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           onNodeDragStart={onNodeDragStart}
-          onNodeDragEnd={onNodeDragEnd}
+          onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
           onNodeDoubleClick={onNodeDoubleClick}
           onEdgeClick={onEdgeClick}

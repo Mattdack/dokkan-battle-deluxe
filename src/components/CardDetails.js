@@ -18,7 +18,7 @@ function CardDetails({ cardDetails }) {
         {/* character name, thumb, EZA button*/}
         <div className="w-1/2 h-[33vh] flex flex-col justify-center items-center">
           
-          <ScrollingDiv divRef={divRef1} text={cardDetails.name} />
+          <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
           <div className="w-fit relative">
             <div
@@ -35,7 +35,7 @@ function CardDetails({ cardDetails }) {
               className={
                 cardDetails && cardDetails.rarity.trim() === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
-                  : "h-[35px] card-sm:h-[56px] absolute bottom-[0%] -left-[10%] z-50"
+                  : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }
               src={characterStyling.getCharacterRarityBackground(cardDetails)}
               alt=""
@@ -59,7 +59,7 @@ function CardDetails({ cardDetails }) {
             EZA
             {ezaEnabled ? 
             <img 
-            className="absolute max-w-[200%] h-[120%] -bottom-[5%] -right-[40%] z-0 object-contain"
+            className="absolute max-w-[200%] h-[120%] -bottom-[20%] -right-[40%] z-0 object-contain"
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
             /> : ''}
           </button>
@@ -375,7 +375,7 @@ const ScrollingDiv = ({ text }) => {
   }
   
   return (
-    <div className={divClass} ref={divRef}>
+    <div className={divClass} ref={divRef} key={text}>
       {text}
     </div>
   );

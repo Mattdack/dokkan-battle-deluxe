@@ -183,17 +183,23 @@ function AllComponents() {
   const charactersToDisplay = filteredCharacters === null ? (
     (filterByGame ? 
       allCharacters.slice().sort((a, b) => {
-        if (a.rarity === b.rarity) {
-          const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const rarityOrder = ['UR', 'LR'];
+      
+        const rarityA = rarityOrder.indexOf(a.rarity);
+        const rarityB = rarityOrder.indexOf(b.rarity);
+        if (rarityA === rarityB) {
           const typeA = typeOrder.indexOf(a.type);
           const typeB = typeOrder.indexOf(b.type);
           if (typeA === typeB) {
-            return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+            const dateA = new Date(a.glb_date).getTime();
+            const dateB = new Date(b.glb_date).getTime();
+            return dateB - dateA;
           }
           return typeB - typeA;
         }
-        return b.rarity === 'LR' ? 1 : -1;
-      }) 
+        return rarityB - rarityA;
+      })           
       :        
       allCharacters.slice().sort((a, b) => {
         if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
@@ -208,23 +214,30 @@ function AllComponents() {
   (
     (filterByGame ? 
       filteredCharacters.slice().sort((a, b) => {
-        if (a.rarity === b.rarity) {
-          const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const rarityOrder = ['UR', 'LR'];
+      
+        const rarityA = rarityOrder.indexOf(a.rarity);
+        const rarityB = rarityOrder.indexOf(b.rarity);
+        if (rarityA === rarityB) {
           const typeA = typeOrder.indexOf(a.type);
           const typeB = typeOrder.indexOf(b.type);
           if (typeA === typeB) {
-            return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+            const dateA = new Date(a.glb_date).getTime();
+            const dateB = new Date(b.glb_date).getTime();
+            return dateB - dateA;
           }
           return typeB - typeA;
         }
-        return b.rarity === 'LR' ? 1 : -1;
-      }) :
+        return rarityB - rarityA;
+      }) 
+      :
       filteredCharacters.slice().sort((a, b) => {
         if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
           return b.id - a.id;
         }
         return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
-      })       
+      })
     )
   )
   
@@ -330,7 +343,7 @@ function AllComponents() {
           ) : (
             <div className="flex flex-wrap justify-center items-center">
               {charactersToDisplay &&
-                charactersToDisplay.map((character) => (
+                charactersToDisplay.filter(character => character.glb_date !== null).map((character) => (
                 <div 
                   key={character.id}
                   onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
@@ -412,7 +425,6 @@ function AllComponents() {
 // based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
-  console.log(baseChars)
   return baseChars.filter((character) => {
     return (
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
