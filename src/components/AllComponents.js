@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import LazyLoad from 'react-lazyload';
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
@@ -37,8 +38,8 @@ function AllComponents() {
     "ls_description_eza": "All Types Ki +3 and HP & DEF +50%, raises ATK by up to 80% (the more HP remaining, the greater the ATK boost)",
     "sa_type": "Ki ",
     "sa_name": "Planet Burst",
-    "sa_description": "Causes supreme damage and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
-    "sa_description_eza": "Causes immense damage to enemy and lowers DEF  <Lowers enemy's DEF by 40% for 3 turns>  ",
+    "sa_description": "Causes supreme damage and lowers DEF <Lowers enemy's DEF by 40% for 3 turns>  ",
+    "sa_description_eza": "Causes immense damage to enemy and lowers DEF<Lowers enemy's DEF by 40% for 3 turns>  ",
     "ultra_sa_type": null,
     "ultra_sa_name": null,
     "ultra_sa_description": null,
@@ -176,8 +177,72 @@ function AllComponents() {
 
   const filterAndSetCharacters = (filterData) => setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData));
 
-  //added the slice to orient characters by id (newest added first)
-  const charactersToDisplay = filteredCharacters === null ? allCharacters.slice().sort((a, b) => b.id - a.id) : filteredCharacters.slice().sort((a, b) => b.id - a.id);
+  //TODO: can be optimized/look cleaner if this sort/filter was a util function
+  //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
+  const [filterByGame, setFilterByGame] = useState(true);
+  const charactersToDisplay = filteredCharacters === null ? (
+    (filterByGame ? 
+      allCharacters.slice().sort((a, b) => {
+        const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const rarityOrder = ['UR', 'LR'];
+      
+        const rarityA = rarityOrder.indexOf(a.rarity);
+        const rarityB = rarityOrder.indexOf(b.rarity);
+        if (rarityA === rarityB) {
+          const typeA = typeOrder.indexOf(a.type);
+          const typeB = typeOrder.indexOf(b.type);
+          if (typeA === typeB) {
+            const dateA = new Date(a.glb_date).getTime();
+            const dateB = new Date(b.glb_date).getTime();
+            return dateB - dateA;
+          }
+          return typeB - typeA;
+        }
+        return rarityB - rarityA;
+      })           
+      :        
+      allCharacters.slice().sort((a, b) => {
+        if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
+          return b.id - a.id;
+        }
+        return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+      })       
+    ) 
+  ) 
+    // This is now starting the FILTERED characters (if filter form is filled out)
+    :
+  (
+    (filterByGame ? 
+      filteredCharacters.slice().sort((a, b) => {
+        const typeOrder = ['EAGL', 'SAGL', 'ETEQ', 'STEQ', 'EINT', 'SINT', 'ESTR', 'SSTR', 'EPHY', 'SPHY'];
+        const rarityOrder = ['UR', 'LR'];
+      
+        const rarityA = rarityOrder.indexOf(a.rarity);
+        const rarityB = rarityOrder.indexOf(b.rarity);
+        if (rarityA === rarityB) {
+          const typeA = typeOrder.indexOf(a.type);
+          const typeB = typeOrder.indexOf(b.type);
+          if (typeA === typeB) {
+            const dateA = new Date(a.glb_date).getTime();
+            const dateB = new Date(b.glb_date).getTime();
+            return dateB - dateA;
+          }
+          return typeB - typeA;
+        }
+        return rarityB - rarityA;
+      }) 
+      :
+      filteredCharacters.slice().sort((a, b) => {
+        if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
+          return b.id - a.id;
+        }
+        return new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime();
+      })
+    )
+  )
+  
+
+  const [viewableCharacters, setViewableCharacters] = useState(50);
 
   //scroll ability through buttons on mobile
   const scrollToSingleCardStats = () => {
@@ -205,7 +270,29 @@ function AllComponents() {
         onClick={() => scrollToTeam()}>Team</button>
       </div>
       <div className="h-[85vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+
         <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1>
+
+        <div className="flex pb-2 items-center justify-center">
+            <span className="mr-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
+              Game Filter
+            </span>
+          <label className="inline-flex relative items-center mr-5 cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={!filterByGame}
+              readOnly
+            />
+            <div
+              onClick={() => {setFilterByGame(!filterByGame)}}
+              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[23%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+            ></div>
+            <div className="ml-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
+              Release Date
+            </div>
+          </label>
+        </div>
 
         {/* //contains filters/buttons/search field/etc. */}
 
@@ -226,7 +313,7 @@ function AllComponents() {
                 />
                 <div
                   onClick={() => {setMultiCardSelection(!multiCardSelection)}}
-                  className="w-11 h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] card-sm:after:absolute after:top-[10%] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"
+                  className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                 ></div>
                 <span className="ml-2 text-sm card-sm:text-lg font-bold text-gray-900">
                   ON
@@ -239,7 +326,7 @@ function AllComponents() {
                 type="button"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
-                className='disabled:bg-gray-500 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-lg leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+                className='disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-lg leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
                 onClick={() => handleUpdateSavedCharacters()}
               >Save</button>
             </div>
@@ -251,33 +338,44 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
-          {allCharactersLoading ? (
+        <div className="flex flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
+        {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="flex flex-wrap justify-center items-center">
-              {charactersToDisplay &&
-                charactersToDisplay.map((character) => (
-                <div 
-                  key={character.id}
-                  onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                  onDoubleClick={() => {
-                        if (!multiCardSelection) {
-                            if (webOfTeam.map(char => char.id).includes(character.id)) {
-                                setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
-                            } else {
-                                setWebOfTeam([...webOfTeam, character]);
-                            }
+            window.innerWidth < 550 ?
+              charactersToDisplay.slice(0, viewableCharacters) :
+              charactersToDisplay
+            )
+            .filter(character => character.glb_date !== null).map((character) => (
+            <LazyLoad>
+              <div 
+                id='CharacterCard'
+                key={character.id}
+                onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
+                onDoubleClick={() => {
+                      if (!multiCardSelection) {
+                          if (webOfTeam.map(char => char.id).includes(character.id)) {
+                              setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
+                          } else {
+                              setWebOfTeam([...webOfTeam, character]);
                           }
-                        }}>
+                        }
+                      }}>
                   <AllComponentsCard 
                     character={character} 
                     savedToDeck={multiCardSelection ? savedToDeck : undefined} 
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                   />
-                </div>
-                ))}
-            </div>
+              </div>
+            </LazyLoad>
+            ))
+                    }
+          {charactersToDisplay.length > viewableCharacters && (
+            
+              <button className="w-[90%] p-2 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
+                Load More Characters
+              </button>
+            
           )}
         </div>
       </div>
@@ -328,6 +426,7 @@ function AllComponents() {
           addToWebOfTeam={addToWebOfTeam}
           webOfTeam={webOfTeam}
           removeFromWebOfTeam={removeFromWebOfTeam}
+          allCharactersLoading={allCharactersLoading}
         />
       </div>
     </div>
@@ -338,7 +437,6 @@ function AllComponents() {
 // based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
-  console.log(baseChars)
   return baseChars.filter((character) => {
     return (
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&

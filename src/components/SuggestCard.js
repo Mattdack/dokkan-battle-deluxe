@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
+import * as linkSkillInfo from "../util/linkSkillInfo"
 
-function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
+function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions }) {
   const [isImageValid, setIsImageValid] = useState(true);
   function handleImageError() {
     setIsImageValid(false);
@@ -17,12 +18,23 @@ function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
       setIsCardClicked(false);
     }
   }
+  // this allows for an out of click from the suggestion card to bring it back to the regular card
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
+
+  // gets matched links between the selected character and character card
+  const matchedLinks = linkSkillInfo.findMatchingLinks(selectedCharacter.link_skill, character.link_skill) || []
+  let matchedLinkInfo = [];
+  // gets lvl1 linkskill info of the match links
+  for (let i = 0; i < matchedLinks.length; i++) {
+    matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+  }
+  // uses the linkSkillInfo function which only grabs the stats that were changed
+  const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
 
   return (
     <>
@@ -54,7 +66,7 @@ function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
               character
             )}_thumb.png`}
-            onError={handleImageError}
+            // onError={handleImageError}
             alt={character.name}
           ></img>
           {character.rarity && (
@@ -75,6 +87,25 @@ function SuggestCard({ character, handleNewDetails, addToWebOfTeam }) {
             className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
             src={characterStyling.getCharacterTypeText(character)}
           />
+
+          {statsSelectedOptions === "ATK" &&
+          <div
+            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
+            {linkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
+          </div>
+          }
+          {statsSelectedOptions === "DEF" &&
+          <div
+            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
+            {linkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
+          </div>
+          }
+          {statsSelectedOptions === "Ki" &&
+          <div
+            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
+            {linkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
+          </div>
+          }
           </>
         )
         }

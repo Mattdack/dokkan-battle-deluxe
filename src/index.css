@@ -7,11 +7,16 @@
   body {
   overflow: hidden;
   }
-  }
+}
 
-body {
+/* this might turn off zoom on double tap for mobiles */
+/* body {
   touch-action: manipulation;
 }
+
+#CharacterCard {
+  touch-action: auto;
+} */
 
 .font-header {
   color: #ffac37;

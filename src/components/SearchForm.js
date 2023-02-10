@@ -33,7 +33,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               <option>Accelerated Battle</option>
               <option>All-Out Struggle</option>
               <option>Androids</option>
-              <option>Androids-Cell Saga</option>
+              <option>Androids/Cell Saga</option>
               <option>Artificial Life Forms</option>
               <option>Battle of Fate</option>
               <option>Battle of Wits</option>
@@ -123,7 +123,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
 
           {/* //type buttons */}
           <div
-            className="flex w-full my-1 card-sm:my-2 grid grid-cols-6 card-sm:grid-cols-3 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
+            className="flex w-full my-1 card-sm:my-2 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-2"
           >
             <CharacterSelectButton name="characterType" label="AGL" />
@@ -131,7 +131,12 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
             <CharacterSelectButton name="characterType" label="INT" />
             <CharacterSelectButton name="characterType" label="STR" />
             <CharacterSelectButton name="characterType" label="PHY" />
-            <CharacterSelectButton name="characterType" value="" label="ALL" defaultChecked/>
+            <CharacterSelectButton
+              name="characterType"
+              value=""
+              label="ALL"
+              defaultChecked
+            />
           </div>
 
           {/* rarity buttons */}
@@ -141,7 +146,12 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           >
             <CharacterSelectButton name="characterRarity" label="UR" />
             <CharacterSelectButton name="characterRarity" label="LR" />
-            <CharacterSelectButton name="characterRarity" value="" label="ALL" defaultChecked />
+            <CharacterSelectButton
+              name="characterRarity"
+              value=""
+              label="ALL"
+              defaultChecked
+            />
           </div>
 
           <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
@@ -180,7 +190,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-10 relative text-sm card-sm:text-xl hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-xl hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>

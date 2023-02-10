@@ -6,10 +6,17 @@ import SuggestForm from "./SuggestForm";
 import Web from "./Web";
 import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
+import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
-function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam }) {
-  // this console.log brings up a lot of repatative values, is thatokay?
+function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
+  // these allow the selected options in the SuggestForm to be passed into the SuggestCards
+  const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
+  const handleStatsSelectedOptions = (event) => {
+    setStatsSelectedOptions(event.target.value);
+  };
+  
+  // this console.log brings up a lot of repatative values, is that okay?
   // console.log(userCharacters)
   const [filteredSuggestedCharacters, setFilteredSuggestedCharacters] = useState([])
   
@@ -27,30 +34,22 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   
   //TODO: finding all characters by the links of the selected character
   const linkedCharacters = linkedCharactersData?.characters7Link || [];
-  console.log(linkedCharacters)
-
-  // this useEffect allows the inital load of Suggested Characters to be placed in. Without it, they are blank until the form changes
-  useEffect(() => {
-    setFilteredSuggestedCharacters(linkedCharacters)
-  }, [linkedCharacters]);
-
+  // console.log(linkedCharacters)
   
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
   const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
-  console.log(filteredSuggestedCharacters)
+  // console.log(filteredSuggestedCharacters)
 
   //TODO: this is then the array of arrays (characters paired by how many links match) 
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
-  console.log(charactersWithMatchedLinks)
-
+  // console.log(charactersWithMatchedLinks)
 
   return (
     <div className="my-2">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} />
 
-      <div className="row-span-2 h-[12vh] px-2 pb-2">
-
-        {/* image */}
+      <div className="row-span-2 px-2 pb-2">
+        {/* image on mobile */}
         <div className="flex justify-around items-center">
           <div className="lg:hidden w-[100px] card-sm:w-[120px]">
             <div className="w-fit relative">
@@ -83,25 +82,28 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           </div>
 
           <SuggestForm 
-          onFormChange={filterAndSetSuggestedCharacters} 
-          isDisabled={isLinkedCharactersLoading}
+          onFormChange={filterAndSetSuggestedCharacters}
+          statsSelectedOptions={statsSelectedOptions}
+          setStatsSelectedOptions={setStatsSelectedOptions}
+          handleStatsSelectedOptions={handleStatsSelectedOptions}
+          allCharactersLoading={allCharactersLoading}
           />
         </div>
-
-        <div className="h-[33vh] card-sm:h-[35vh] overflow-auto">
-          <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} />
-          <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
-          <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}/>
+        
+        <div className="h-[28vh] card-sm:h-[30vh] overflow-auto">
+          <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}statsSelectedOptions={statsSelectedOptions} />
+          <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
         </div>
       </div>
     </div>
   );
 }
-// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
 
-const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatchedLinks, handleNewDetails,  addToWebOfTeam}) => {
+// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
+const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, statsSelectedOptions}) => {
   return (
     <>
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
@@ -109,11 +111,15 @@ const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatc
       <h3 className="h-fit font-header text-start text-md card-sm:text-xl">Characters with {matchCount} Links:</h3>
       <div className="flex flex-wrap h-[100px] card-sm:h-[120px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
         {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
-          <div key={character.id}>
+          <div 
+          id='CharacterCard'
+          key={character.id}>
             <SuggestCard
               character={character}
+              selectedCharacter={selectedCharacter}
               handleNewDetails={handleNewDetails}
               addToWebOfTeam={addToWebOfTeam}
+              statsSelectedOptions={statsSelectedOptions}
             />
           </div>
         ))}
@@ -136,7 +142,6 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
 const getFilteredCharacters = (linkedCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
   return baseChars.filter((character) => {
-    console.log(character)
     return (
       (!filterData.searchTermSuggest || character.name.toLowerCase().includes(filterData.searchTermSuggest.toLowerCase())) &&
       (!filterData.characterCategorySuggest || character.category.includes(filterData.characterCategorySuggest)) &&

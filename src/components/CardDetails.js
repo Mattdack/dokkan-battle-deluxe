@@ -18,7 +18,7 @@ function CardDetails({ cardDetails }) {
         {/* character name, thumb, EZA button*/}
         <div className="w-1/2 h-[33vh] flex flex-col justify-center items-center">
           
-          <ScrollingDiv divRef={divRef1} text={cardDetails.name} />
+          <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
           <div className="w-fit relative">
             <div
@@ -35,7 +35,7 @@ function CardDetails({ cardDetails }) {
               className={
                 cardDetails && cardDetails.rarity.trim() === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
-                  : "h-[35px] card-sm:h-[56px] absolute bottom-[0%] -left-[10%] z-50"
+                  : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }
               src={characterStyling.getCharacterRarityBackground(cardDetails)}
               alt=""
@@ -59,7 +59,7 @@ function CardDetails({ cardDetails }) {
             EZA
             {ezaEnabled ? 
             <img 
-            className="absolute max-w-[200%] h-[120%] -bottom-[5%] -right-[40%] z-0 object-contain"
+            className="absolute max-w-[200%] h-[120%] -bottom-[20%] -right-[40%] z-0 object-contain"
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
             /> : ''}
           </button>
@@ -72,14 +72,17 @@ function CardDetails({ cardDetails }) {
               Leader Skill:
             </p>
             <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ls_description : cardDetails.ls_description_eza}
+              {!ezaEnabled ? cardDetails.ls_description: cardDetails.ls_description_eza}
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center h-[50%] w-full">
             <ScrollingDiv divRef={divRef1} text={cardDetails.sa_name} />
             <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.sa_description : cardDetails.sa_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.sa_description} />
+                : 
+                <CardDescription text={cardDetails.sa_description_eza} />}
             </div>
           </div>
         </div>
@@ -91,13 +94,19 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.ps_description} />
+              : 
+              <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.ultra_sa_description} />
+              : 
+              <CardDescription text={cardDetails.ultra_sa_description_eza} />}
             </div>
           </div>
         </div>
@@ -109,13 +118,16 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-                {cardDetails.active_skill_condition}
+              <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
         </div>
@@ -127,18 +139,24 @@ function CardDetails({ cardDetails }) {
           <div className="flex flex-wrap justify-center w-1/2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name}/>
             <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center w-[48%]">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex h-[10vh] mt-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {!ezaEnabled ? cardDetails.ultra_sa_description : cardDetails.ultra_sa_description_eza}
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ultra_sa_description} />
+                : 
+                <CardDescription text={cardDetails.ultra_sa_description_eza} />}
             </div>
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
             <div className="flex h-[10vh] mb-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-              {cardDetails.active_skill_condition}
+                <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
         </div>
@@ -149,7 +167,10 @@ function CardDetails({ cardDetails }) {
       <div className="flex flex-wrap justify-center pt-1">
         <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
         <div className="flex h-[25vh] w-full overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
-          {!ezaEnabled ? cardDetails.ps_description : cardDetails.ps_description_eza}
+          {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
         </div>
       </div>
       )}
@@ -187,6 +208,82 @@ function CardDetails({ cardDetails }) {
     </div>
   );
 }
+
+//ChatGPT helped with basically all of this. Allows for * to be clickable / off click, hovers text on click
+const CardDescription = ({ text }) => {
+  
+  const [hover, setHover] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState(-1);
+  const [hoverX, setHoverX] = useState(0);
+  const [hoverY, setHoverY] = useState(0);
+  
+  const handleHover = (index, event) => {
+    setHover(!hover);
+    setHoverIndex(index);
+    setHoverX(event.clientX);
+    setHoverY(event.clientY);
+  };
+  
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (hover && !event.target.closest('.hover-box')) {
+        setHover(false);
+        setHoverIndex(-1);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [hover]);
+
+  if (!text) {
+  return null;
+  }
+  
+  const formattedText = text.replace(/<(.*?)>/g, '*');
+  const descriptionArray = formattedText.split('*');
+
+  const textBetweenBrackets = text.match(/<(.*?)>/g);
+  let hoverTextArray = [];
+
+  if (textBetweenBrackets) {
+    hoverTextArray = textBetweenBrackets.map(t => t.slice(1, -1));
+  }
+
+  const hoverXModified = (() => {
+    if (hoverX + 160 > window.innerWidth) {
+      return hoverX - 160;
+    } else {
+      return hoverX;
+    }
+  })();
+  
+  return (
+    <div>
+      {descriptionArray.map((t, i) => (
+        <React.Fragment key={i}>
+          {t}
+          {i < descriptionArray.length - 1 && (
+            <b className="text-md text-orange-400 cursor-pointer" 
+            onClick={(event) => handleHover(i + 1, event)}>
+              *
+            </b>
+          )}
+          {hover && hoverIndex === i + 1 ? (
+            <div 
+            className="w-40 h-fit p-2 bg-orange-400 border border-black absolute hover-box z-50"
+            style={{
+              left: hoverXModified,
+              top: hoverY+window.innerHeight,
+            }}
+            >
+              {hoverTextArray[i]}
+            </div>
+          ) : null}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
 
 const CharacterLinkDisplay = ({ linkText }) => {
   const [showPopUp, setShowPopUp] = useState(false);
@@ -275,7 +372,7 @@ const ScrollingDiv = ({ text }) => {
   }
   
   return (
-    <div className={divClass} ref={divRef}>
+    <div className={divClass} ref={divRef} key={text}>
       {text}
     </div>
   );

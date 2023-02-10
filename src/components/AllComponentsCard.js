@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 
 function AllComponentsCard({ character, webOfTeam, savedToDeck }) {
@@ -28,22 +28,21 @@ function WebCard ({character, webOfTeam}){
         <div className={`w-fit relative hover:bg-slate-900/[.4] 
         ${isInWeb ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
           <img
-            className="h-[64px] card-sm:h-[100px] w-[64px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
-            src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
-            onError={handleImageError}
+            className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
+            src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
+            // onError={handleImageError}
             alt={character.name}
-          ></img>
-          {character.rarity && (
-            <img
-              src={characterStyling.getCharacterRarityBackground(character)}
-              className={character.rarity.trim() === "UR"
-                  ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-                  : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
-              }
-            />
-          )}
+          >
+          </img>
           <img
-            className="w-[48px] card-sm:w-[81px] absolute top-[18%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
+            src={characterStyling.getCharacterRarityBackground(character)}
+            className={character.rarity.trim() === "UR"
+                ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+                : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+            }
+          />
+          <img
+            className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
             src={characterStyling.getCharacterTypeBackground(character)}
           />
           <img
@@ -75,26 +74,25 @@ function DeckCard ({character, savedToDeck}) {
         <div className={`w-fit relative
         ${isSavedCharacter ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-slate-900/[.4]'}`}>
           <img
-            className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 right-[2%] card-sm:right-0"
-            src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(character)}_thumb.png`}
-            onError={handleImageError}
+            className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
+            src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
+            // onError={handleImageError}
             alt={character.name}
-          ></img>
-          {character.rarity && (
-            <img
-              src={characterStyling.getCharacterRarityBackground(character)}
-              className={character.rarity.trim() === "UR"
-              ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-              : "h-[24px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
-              }
-            />
-          )}
+          >
+          </img>
           <img
-            className="w-[60px] card-sm:w-[81px] absolute top-[18%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
+            src={characterStyling.getCharacterRarityBackground(character)}
+            className={character.rarity.trim() === "UR"
+                ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+                : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+            }
+          />
+          <img
+            className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
             src={characterStyling.getCharacterTypeBackground(character)}
           />
           <img
-            className="w-[30px] card-sm:w-[40px] h-[30px] card-sm:h-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
+            className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
             src={characterStyling.getCharacterTypeText(character)}
           />
         </div>

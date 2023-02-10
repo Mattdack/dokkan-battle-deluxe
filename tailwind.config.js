@@ -41,6 +41,7 @@ module.exports = {
       },
       height: {
         '10vh': '10vh',
+        '[9%]': '9%',
         '[45%]': '45%',
       },
       spacing: {

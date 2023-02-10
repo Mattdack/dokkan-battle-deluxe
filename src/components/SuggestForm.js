@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const SuggestForm = ({ onFormChange, isDisabled }) => {
+const SuggestForm = ({
+  onFormChange,
+  statsSelectedOptions,
+  handleStatsSelectedOptions,
+  allCharactersLoading,
+}) => {
+  function handleFormChange(e) {
+    const formData = Object.fromEntries(new FormData(e.currentTarget));
+    onFormChange(formData);
+  }
+
+  // this useEffect allows for characters to be loaded in on render (waits for everycharacter to be loaded in)
+  useEffect(() => {
+    handleFormChange({ currentTarget: document.querySelector("#form") });
+  }, [allCharactersLoading]);
+
   return (
-    <div className="h-[12vh] flex flex-row flex-wrap justify-center items-center ">
+    <div className="h-[17vh] flex flex-col justify-center items-center ">
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
-        onChange={(e) => {
-          const formData = Object.fromEntries(new FormData(e.currentTarget));
-          onFormChange(formData);
-        }}
+        onChange={(e) => handleFormChange(e)}
+        id="form"
       >
         <fieldset
-          disabled={isDisabled}
+          disabled={allCharactersLoading}
           className="flex flex-col w-full p-1 items-center"
         >
           {/* input and category selection */}
@@ -33,7 +46,7 @@ const SuggestForm = ({ onFormChange, isDisabled }) => {
               <option>Accelerated Battle</option>
               <option>All-Out Struggle</option>
               <option>Androids</option>
-              <option>Androids-Cell Saga</option>
+              <option>Androids/Cell Saga</option>
               <option>Artificial Life Forms</option>
               <option>Battle of Fate</option>
               <option>Battle of Wits</option>
@@ -121,7 +134,6 @@ const SuggestForm = ({ onFormChange, isDisabled }) => {
             </select>
           </div>
 
-          
           {/* type and My Deck buttons*/}
           <div className="flex h-fit w-full justify-between items-center">
             <div
@@ -133,7 +145,12 @@ const SuggestForm = ({ onFormChange, isDisabled }) => {
               <CharacterSelectButton name="characterTypeSuggest" label="INT" />
               <CharacterSelectButton name="characterTypeSuggest" label="STR" />
               <CharacterSelectButton name="characterTypeSuggest" label="PHY" />
-              <CharacterSelectButton name="characterTypeSuggest" value="" label="ALL" defaultChecked/>
+              <CharacterSelectButton
+                name="characterTypeSuggest"
+                label="ALL"
+                value=""
+                defaultChecked
+              />
             </div>
             <div className="flex w-2/5 justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
               <label htmlFor="isUserDeckSuggest">
@@ -153,9 +170,80 @@ const SuggestForm = ({ onFormChange, isDisabled }) => {
               </label>
             </div>
           </div>
-
         </fieldset>
       </form>
+
+      <div className="flex justify-center">
+        <div className="">
+          <input
+            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            type="radio"
+            name="None"
+            id="inlineRadio1"
+            value="None"
+            checked={statsSelectedOptions === "None"}
+            onChange={handleStatsSelectedOptions}
+            defaultChecked
+          />
+          <label
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            htmlFor="inlineRadio10"
+          >
+            None
+          </label>
+        </div>
+        <div className="">
+          <input
+            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            type="radio"
+            name="ATK"
+            id="inlineRadio1"
+            value="ATK"
+            checked={statsSelectedOptions === "ATK"}
+            onChange={handleStatsSelectedOptions}
+          />
+          <label
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            htmlFor="inlineRadio10"
+          >
+            ATK
+          </label>
+        </div>
+        <div className="">
+          <input
+            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            type="radio"
+            name="DEF"
+            id="inlineRadio2"
+            value="DEF"
+            checked={statsSelectedOptions === "DEF"}
+            onChange={handleStatsSelectedOptions}
+          />
+          <label
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            htmlFor="inlineRadio20"
+          >
+            DEF
+          </label>
+        </div>
+        <div className="">
+          <input
+            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            type="radio"
+            name="Ki"
+            id="inlineRadio3"
+            value="Ki"
+            checked={statsSelectedOptions === "Ki"}
+            onChange={handleStatsSelectedOptions}
+          />
+          <label
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            htmlFor="inlineRadio30"
+          >
+            Ki
+          </label>
+        </div>
+      </div>
     </div>
   );
 };
