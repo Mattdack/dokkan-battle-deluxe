@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 /* turns scroll off on mobile */
-@media only screen and (max-width: 1250px) {
+/* @media only screen and (max-width: 1250px) {
   body {
   overflow: hidden;
   }
-}
+} */
 
 /* this might turn off zoom on double tap for mobiles */
 /* body {
