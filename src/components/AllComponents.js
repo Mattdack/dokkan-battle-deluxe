@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import LazyLoad from 'react-lazyload';
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
@@ -347,7 +346,6 @@ function AllComponents() {
               charactersToDisplay
             )
             .filter(character => character.glb_date !== null).map((character) => (
-            <LazyLoad>
               <div 
                 id='CharacterCard'
                 key={character.id}
@@ -367,7 +365,6 @@ function AllComponents() {
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                   />
               </div>
-            </LazyLoad>
             ))
                     }
           {charactersToDisplay.length > viewableCharacters && (
