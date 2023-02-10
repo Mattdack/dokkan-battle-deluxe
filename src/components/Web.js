@@ -106,10 +106,10 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
   return (
     <div className="h-[45vh] lg:h-[40vh]">
       <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
-        <div
+        <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
         onClick={() => handleResetTeam(webOfTeam)}
-        >Reset Team</div>
+        >Reset Team</button>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}

@@ -272,8 +272,8 @@ const CardDescription = ({ text }) => {
             <div 
             className="w-40 h-fit p-2 bg-orange-400 border border-black absolute hover-box z-50"
             style={{
-              left: hoverXModified,
-              top: hoverY+window.innerHeight,
+              left: window.innerWidth<1250 ? hoverXModified : hoverX,
+              top: window.innerWidth<1250 ? hoverY+window.innerHeight : hoverY,
             }}
             >
               {hoverTextArray[i]}

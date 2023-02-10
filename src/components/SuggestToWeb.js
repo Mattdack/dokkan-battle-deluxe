@@ -110,7 +110,7 @@ const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatc
     <>
       <h3 className="h-fit font-header text-start text-md card-sm:text-xl">Characters with {matchCount} Links:</h3>
       <div className="flex flex-wrap h-[100px] card-sm:h-[120px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
-        {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
+        {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id && character.glb_date !== null).map((character) => (
           <div 
           id='CharacterCard'
           key={character.id}>
