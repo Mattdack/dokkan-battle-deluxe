@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
+import LazyLoad from "react-lazyload";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_USERDATA, GET_USERCHARACTERSBYID } from "../util/queries";
@@ -349,6 +350,7 @@ function AllComponents() {
               charactersToDisplay
             )
             .filter(character => character.glb_date !== null).map((character) => (
+            <LazyLoad>
               <div 
                 id='CharacterCard'
                 key={character.id}
@@ -368,6 +370,7 @@ function AllComponents() {
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                   />
               </div>
+            </LazyLoad>
             ))
                     }
           {charactersToDisplay.length >= viewableCharacters && (
