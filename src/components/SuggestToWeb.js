@@ -96,6 +96,8 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
           <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
           <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={2} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
+          <CharacterLinkDisplay matchCount={1} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions}/>
         </div>
       </div>
     </div>

@@ -261,7 +261,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base hover:bg-orange-400 peer-checked:bg-orange-400"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base lg:hover:bg-orange-400 peer-checked:bg-orange-400"
       >
         {label}
       </div>

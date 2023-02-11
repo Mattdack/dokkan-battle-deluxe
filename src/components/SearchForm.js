@@ -165,7 +165,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-lg m-0.5 font-bold relative hover:bg-orange-400 peer-checked:bg-orange-400"
+                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-lg m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400"
               >
                 My Deck
               </div>

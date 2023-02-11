@@ -249,7 +249,8 @@ function AllComponents() {
     middleColumn.scrollIntoView({top: 0, left: 0});
   };
   const scrollToCharacterSelection = () => {
-    window.scrollTo({top: 0, left: 0});
+    const middleColumn = document.getElementById("CardSelection");
+    middleColumn.scrollIntoView({top: 0, left: 0});
   };
   const scrollToTeam = () => {
     const middleColumn = document.getElementById("Team");
@@ -258,17 +259,19 @@ function AllComponents() {
 
   return (
     // stages formatting
-    <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-3 bg-slate-700">
+    <div className="overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       {/* //left column styling */}
-      <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
-        <button 
-        className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
-        onClick={() => scrollToSingleCardStats()}>Details</button>
-        <button 
-        className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
-        onClick={() => scrollToTeam()}>Team</button>
-      </div>
-      <div className="h-[85vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+      <div 
+      id='CardSelection'
+      className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+          <button 
+          className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
+          onClick={() => scrollToSingleCardStats()}>Details</button>
+          <button 
+          className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
+          onClick={() => scrollToTeam()}>Team</button>
+        </div>
 
         <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1>
 
@@ -331,13 +334,13 @@ function AllComponents() {
             </div>
           </>
           ) : (
-            <h2 className="p-2 font-bold">Please log in to add players</h2>
+            <h2 className="p-2 text-md lg:text-base font-bold">Please log in to add players</h2>
           )
           }
         </div>
 
         {/* //character select box */}
-        <div className="flex flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
+        <div className="flex h-1/2 lg:h-full flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
         {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
@@ -367,9 +370,9 @@ function AllComponents() {
               </div>
             ))
                     }
-          {charactersToDisplay.length > viewableCharacters && (
+          {charactersToDisplay.length >= viewableCharacters && (
             
-              <button className="w-[90%] p-2 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
+              <button className="w-full py-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
                 Load More Characters
               </button>
             
@@ -379,9 +382,9 @@ function AllComponents() {
       {/* //middle column styling */}
       <div
         id="SingleCardDetails"
-        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
+        className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
             className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
@@ -402,9 +405,9 @@ function AllComponents() {
       {/* //right column styling */}
       <div
         id="Team"
-        className="h-[100vh] lg:h-[90vh] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
+        className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
       >
-        <div className="lg:hidden h-[5vh] px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
           <button 
             className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToCharacterSelection()}>
