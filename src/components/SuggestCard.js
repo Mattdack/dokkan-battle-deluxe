@@ -62,7 +62,7 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
         ) : (
           <>
           <img
-            className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative z-50"
+            className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative right-[.5%] z-50"
             src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
               character
             )}_thumb.png`}

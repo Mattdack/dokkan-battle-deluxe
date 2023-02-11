@@ -140,18 +140,34 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           </div>
 
           {/* rarity buttons */}
-          <div
-            className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
-            id="box-1"
-          >
-            <CharacterSelectButton name="characterRarity" label="UR" />
-            <CharacterSelectButton name="characterRarity" label="LR" />
-            <CharacterSelectButton
-              name="characterRarity"
-              value=""
-              label="ALL"
-              defaultChecked
-            />
+          <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
+            <div
+              className="flex w-1/2 justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
+              id="box-1"
+            >
+              <CharacterSelectButton name="characterRarity" label="UR" />
+              <CharacterSelectButton name="characterRarity" label="LR" />
+              <CharacterSelectButton
+                name="characterRarity"
+                value=""
+                label="ALL"
+                defaultChecked
+              />
+            </div>
+
+            <div
+              className="flex w-1/2 justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold ml-1"
+              id="box-1"
+            >
+              <CharacterSelectButton name="characterSuperOrExtreme" label="S"/>
+              <CharacterSelectButton name="characterSuperOrExtreme" label="E"/>
+              <CharacterSelectButton
+                name="characterSuperOrExtreme"
+                value=""
+                label="ALL"
+                defaultChecked
+              />
+            </div>
           </div>
 
           <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
@@ -190,7 +206,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-xl hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-xl lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>

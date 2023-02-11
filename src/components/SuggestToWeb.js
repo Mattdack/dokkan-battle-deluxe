@@ -46,7 +46,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
 
   return (
     <div className="my-2">
-      <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} />
+      <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
 
       <div className="row-span-2 px-2 pb-2">
         {/* image on mobile */}

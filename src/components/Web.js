@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
@@ -26,15 +26,29 @@ const viewPort = {
   zoom: .5,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
 
+  const myDivRef = useRef(null);
+  // let webWidth = null
+  // let webHeight = null
+  const [webWidth, setWebWidth] = useState(null)
+  const [webHeight, setWebHeight] = useState(null)
+
+  useEffect(() => {
+    // webWidth = myDivRef.current.offsetWidth
+    // webHeight = myDivRef.current.offsetHeight
+    setWebWidth(myDivRef.current.offsetWidth)
+    setWebHeight(myDivRef.current.offsetHeight)
+  }, [allCharactersLoading]);
+  
+
   const onNodesChange = useCallback(
     (changes) => {
       setExistingNodes((prevNodes) =>
-        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes))
+        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight))
       );
     },
     [setExistingNodes, setExistingEdges, webOfTeam]
@@ -49,7 +63,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
     [setExistingEdges, webOfTeam]
   );
 
-  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes);
+  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight);
   const combinedEdgeData = buildAllEdges(combinedNodeData, existingEdges);
 
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
@@ -80,7 +94,7 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
     setSelectedNode(null)
   }
 
-  // this is where the web can get a little glitchy. This can definitely be optimized but works great
+  // this is where the web can get a little touchy. This can definitely be optimized on the dependency side, currently it reaches maximum update depth, but still works great. Allows for the edges to be selected on node click and certain drag capabilities. 
   useEffect(() => {
     if (!selectedNode) {
       return;
@@ -102,10 +116,15 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
       removeFromWebOfTeam(webOfTeam[i])      
     }
   }
+  
+  // console.log("The width of the div is: " + webWidth + "px");
+  // console.log("The height of the div is: " + webHeight + "px");
 
   return (
     <div className="h-[45vh] lg:h-[40vh]">
-      <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
+      <div 
+      ref={myDivRef}
+      className="h-full bg-slate-700 row-span-6 rounded-md relative">
         <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
         onClick={() => handleResetTeam(webOfTeam)}
@@ -131,23 +150,29 @@ function Web({ webOfTeam, removeFromWebOfTeam }) {
   );
 }
 
-const buildAllNodes = (team, nodes = []) => {
+const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
   const nodeDictionary = Object.fromEntries(
     nodes.map((node) => [node.id, node])
   );
-  const midpoint = computeMidpoint(team, nodeDictionary);
+  const midpoint = computeMidpoint(team, nodeDictionary, webWidth, webHeight);
   return team.map((character) =>
-    toNode(character, midpoint, nodeDictionary[character.id])
+    toNode(character, midpoint, nodeDictionary[character.id], webWidth, webHeight)
   );
 };
 
-const startingPosition = { x: 200, y: 200 };
+const startingPosition = (webWidth, webHeight) => {
+  if (webHeight === null || typeof webWidth === 'undefined'){
+    // console.log('no width rendered')
+    return {x: 0, y:0}
+  }
+  return {x: webWidth, y: webHeight}
+};
 
-const toNode = (character, midpoint, existingNode = {}) => ({
+const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({
   id: character.id.toString(),
   type: "custom",
   data: { midpoint, ...character },
-  position: startingPosition,
+  position: startingPosition(webWidth, webHeight),
   style: {
     visibility: "visible",
   },
@@ -221,14 +246,14 @@ const buildAllEdges = (nodes, edges = []) => {
 
 const toEdgeId = (source, target) => `${source.id}-${target.id}`;
 
-const computeMidpoint = (team, nodeDictionary) => {
+const computeMidpoint = (team, nodeDictionary, webWidth, webHeight) => {
   if (!team.length) {
-    return startingPosition;
+    return startingPosition(webWidth, webHeight);
   }
   const { x: xSum, y: ySum } = team.reduce(
     (aggregate, currentCharacter) => {
       const { x, y } =
-        nodeDictionary[currentCharacter.id]?.position || startingPosition;
+        nodeDictionary[currentCharacter.id]?.position || startingPosition(webWidth, webHeight);
       return {
         x: aggregate.x + x,
         y: aggregate.y + y,

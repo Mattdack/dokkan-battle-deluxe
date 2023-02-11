@@ -163,7 +163,7 @@ const SuggestForm = ({
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base font-bold hover:bg-orange-400 peer-checked:bg-orange-400"
+                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
                 >
                   My Deck
                 </div>

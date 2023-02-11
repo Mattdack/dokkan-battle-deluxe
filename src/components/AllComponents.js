@@ -10,8 +10,9 @@ import { QUERY_CHARACTERS, GET_USERDATA, GET_USERCHARACTERSBYID } from "../util/
 import { useMutation } from "@apollo/client";
 import { UPDATE_SAVED_CHARACTERS } from "../util/mutations"
 import CardDetails from "./CardDetails";
-
 import Auth from "../util/auth";
+
+import * as sort from "../util/sorting"
 
 function AllComponents() {
   // Queries for all characters to get an array of objects
@@ -341,7 +342,7 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="flex h-1/2 lg:h-full flex-wrap justify-center items-center p-1 m-1 mb-4 card-sm:m-1 border-2 border-slate-900 overflow-y-auto bg-orange-100 lg:m-2">
+        <div className="flex flex-wrap justify-center items-center p-1 mx-1 mb-16 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
         {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
@@ -355,7 +356,8 @@ function AllComponents() {
                 id='CharacterCard'
                 key={character.id}
                 onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                onDoubleClick={() => {
+                onDoubleClick={(event) => {
+                     event.preventDefault()
                       if (!multiCardSelection) {
                           if (webOfTeam.map(char => char.id).includes(character.id)) {
                               setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
@@ -445,6 +447,7 @@ const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
       (!filterData.characterCategory || character.category.includes(filterData.characterCategory)) &&
       (!filterData.characterType || character.type.includes(filterData.characterType)) &&
+      (!filterData.characterSuperOrExtreme || character.type.slice(0,1).includes(filterData.characterSuperOrExtreme)) &&
       (!filterData.characterRarity || filterData.characterRarity === character.rarity)
     );
   });
