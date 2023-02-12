@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
-import LazyLoad from "react-lazyload";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_USERDATA, GET_USERCHARACTERSBYID } from "../util/queries";
@@ -350,12 +349,12 @@ function AllComponents() {
               charactersToDisplay
             )
             .filter(character => character.glb_date !== null).map((character) => (
-            <LazyLoad>
+
               <div 
                 id='CharacterCard'
                 key={character.id}
                 onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                onDoubleClick={(event) => {
+                onDoubleClick={() => {
                       if (!multiCardSelection) {
                           if (webOfTeam.map(char => char.id).includes(character.id)) {
                               setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
@@ -370,16 +369,15 @@ function AllComponents() {
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                   />
               </div>
-            </LazyLoad>
             ))
-                    }
-          {charactersToDisplay.length > viewableCharacters && (
-            
-              <button className="w-full py-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
-                Load More Characters
-              </button>
-            
-          )}
+        }
+        {charactersToDisplay.length > viewableCharacters && (
+          
+            <button className="w-full py-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
+              Load More Characters
+            </button>
+          
+        )}
         </div>
       </div>
       {/* //middle column styling */}
