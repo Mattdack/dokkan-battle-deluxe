@@ -43,7 +43,7 @@ function WebCard ({character, webOfTeam}){
             cldImg={myImage}
             // onError={handleImageError}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.1})]}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           >
           </AdvancedImage>
           <img
@@ -96,7 +96,7 @@ function DeckCard ({character, savedToDeck}) {
             // onError={handleImageError}
             cldImg={myImage}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.1})]}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           >
           </AdvancedImage>
           <img

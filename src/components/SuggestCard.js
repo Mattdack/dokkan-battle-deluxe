@@ -78,7 +78,7 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
             cldImg={myImage}
             // onError={handleImageError}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.1})]}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           >
           </AdvancedImage>
           {character.rarity && (
