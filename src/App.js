@@ -1,14 +1,14 @@
 import React from "react";
 import AllComponents from "./components/AllComponents"
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Navbar from "./components/Navbar";
+
 
 const client = new ApolloClient({
   // uri: 'http://localhost:3001/graphql',
-  uri: 'https://dokkan-api.herokuapp.com/graphql',
+  // uri: 'https://dokkan-api.herokuapp.com/graphql',
+  uri: process.env.REACT_APP_API_KEY,
   cache: new InMemoryCache(),
 });
 

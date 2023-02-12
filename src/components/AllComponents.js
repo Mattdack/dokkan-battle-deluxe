@@ -356,6 +356,7 @@ function AllComponents() {
                 id='CharacterCard'
                 key={character.id}
                 onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
+                onPointerDownCapture
                 onDoubleClick={(event) => {
                       if (!multiCardSelection) {
                           if (webOfTeam.map(char => char.id).includes(character.id)) {
