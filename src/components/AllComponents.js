@@ -274,9 +274,9 @@ function AllComponents() {
           onClick={() => scrollToTeam()}>Team</button>
         </div>
 
-        <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1>
+        {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 
-        <div className="flex pb-2 items-center justify-center">
+        <div className="flex pt-4 pb-2 items-center justify-center">
             <span className="mr-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
               Game Filter
             </span>
@@ -289,7 +289,7 @@ function AllComponents() {
             />
             <div
               onClick={() => {setFilterByGame(!filterByGame)}}
-              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[23%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
             ></div>
             <div className="ml-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
               Release Date
@@ -305,7 +305,7 @@ function AllComponents() {
           {Auth.loggedIn() ? 
           (
           <>
-          <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-lg text-center font-bold">Character Selection</h2>
+          <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">Character Selection</h2>
             <div className="flex items-center ">
               <label className="inline-flex relative items-center mr-5 cursor-pointer">
                 <input
@@ -316,9 +316,9 @@ function AllComponents() {
                 />
                 <div
                   onClick={() => {setMultiCardSelection(!multiCardSelection)}}
-                  className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                  className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                 ></div>
-                <span className="ml-2 text-sm card-sm:text-lg font-bold text-gray-900">
+                <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
                   ON
                 </span>
               </label>
@@ -329,7 +329,7 @@ function AllComponents() {
                 type="button"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
-                className='disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-lg leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+                className='disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
                 onClick={() => handleUpdateSavedCharacters()}
               >Save</button>
             </div>
@@ -355,7 +355,6 @@ function AllComponents() {
                 id='CharacterCard'
                 key={character.id}
                 onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
-                onPointerDownCapture
                 onDoubleClick={(event) => {
                       if (!multiCardSelection) {
                           if (webOfTeam.map(char => char.id).includes(character.id)) {

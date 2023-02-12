@@ -21,7 +21,10 @@ function CardDetails({ cardDetails }) {
   let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
-  let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
+  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
+  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.rarity}`, cloudConfig, urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.type.toLowerCase()}`, cloudConfig, urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${cardDetails.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
   return (
     <div className="flex flex-col">
@@ -33,28 +36,24 @@ function CardDetails({ cardDetails }) {
 
           <div className="w-fit relative">
             <AdvancedImage
-              onClick={() => {}}
               className="h-[100px] card-sm:h-[161px] w-[100px] card-sm:w-[161px] bg-no-repeat relative z-50"
-              cldImg={myImage}
+              cldImg={characterThumb}
             ></AdvancedImage>
-            <img
+            <AdvancedImage
               className={
                 cardDetails && cardDetails.rarity.trim() === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
                   : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }
-              src={characterStyling.getCharacterRarityBackground(cardDetails)}
-              alt=""
+              cldImg={characterRarity}
             />
-            <img
+            <AdvancedImage
               className="w-[81px] card-sm:w-[131px] absolute top-[13%] right-[9%] z-0"
-              src={characterStyling.getCharacterTypeBackground(cardDetails)}
-              alt=""
+              cldImg={characterTypeBackground}
             />
-            <img
+            <AdvancedImage
               className="w-[40px] card-sm:w-[65px] absolute top-[0%] -right-[5%] z-50"
-              src={characterStyling.getCharacterTypeText(cardDetails)}
-              alt=""
+              cldImg={characterTypeBadge}
             />
           </div>
 

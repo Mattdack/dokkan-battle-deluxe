@@ -21,11 +21,14 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
     });
   }, [xPos, yPos, midpoint]);
 
-    // Set the Cloud configuration and URL configuration
-    let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
-    let urlConfig = new URLConfig({secure: true});
-    // Instantiate and configure a CloudinaryImage object.
-    let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
+  // Set the Cloud configuration and URL configuration
+  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
+  let urlConfig = new URLConfig({secure: true});
+  // Instantiate and configure a CloudinaryImage object.
+  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
+  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${character.rarity}`, cloudConfig, urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${character.type.toLowerCase()}`, cloudConfig, urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${character.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
   return (
     <div className="w-[100px] h-[100px] relative">
@@ -33,26 +36,24 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
       <Handle type="target" position={handlePosition} />
       <AdvancedImage
         className="max-w-[123.5%] left-[-11.5%] top-[-16%] gap-4 z-10 absolute"
-        cldImg={myImage}
+        cldImg={characterThumb}
         alt={character.name}
       ></AdvancedImage>
-      {character.rarity && (
-        <img
-          src={characterStyling.getCharacterRarityBackground(character)}
-          className={
-            character.rarity.trim() === "UR"
-              ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
-              : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
-          }
-        />
-      )}
-      <img
-        className="w-full z-0"
-        src={characterStyling.getCharacterTypeBackground(character)}
+      <AdvancedImage
+        cldImg={characterRarity}
+        className={
+          character.rarity.trim() === "UR"
+            ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
+            : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
+        }
       />
-      <img
+      <AdvancedImage
+        className="w-full z-0"
+        cldImg={characterTypeBackground}
+      />
+      <AdvancedImage
         className="w-[40px] h-[40px] absolute top-[-11%] right-[-13%] z-50"
-        src={characterStyling.getCharacterTypeText(character)}
+        cldImg={characterTypeBadge}
       />
     </div>
   );
