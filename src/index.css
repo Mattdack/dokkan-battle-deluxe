@@ -10,17 +10,17 @@
 } */
 
 /* this might turn off zoom on double tap for mobiles */
-/* body {
+body {
   touch-action: manipulation;
 }
 
-#CharacterCard {
+/* #CharacterCard {
   touch-action: auto;
 } */
 
-body {
+/* body {
   touch-action: pan-x pan-y;
-}
+} */
 
 .font-header {
   color: #ffac37;
