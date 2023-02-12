@@ -2,26 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* turns scroll off on mobile */
-/* @media only screen and (max-width: 1250px) {
-  body {
-  overflow: hidden;
-  }
-} */
-
-/* this might turn off zoom on double tap for mobiles */
-body {
-  touch-action: manipulation;
-}
-
-/* #CharacterCard {
-  touch-action: auto;
-} */
-
-/* body {
-  touch-action: pan-x pan-y;
-} */
-
 .font-header {
   color: #ffac37;
   text-shadow:
@@ -49,7 +29,6 @@ body {
   transform: translateX(100%);
   transition: transform 1s ease-out;
 }
-
 
 /* width */
 ::-webkit-scrollbar {
