@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.2",
+    "@cloudinary/react": "^1.9.1",
+    "@cloudinary/url-gen": "^1.9.0",
     "@react-ui-org/react-ui": "^0.50.1",
     "apollo-server-express": "^3.11.1",
     "axios": "^1.2.0",
+    "cloudinary": "^1.33.0",
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "jwt-decode": "^3.1.2",

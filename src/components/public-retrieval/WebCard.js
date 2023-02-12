@@ -2,11 +2,6 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import { Handle, useUpdateNodeInternals } from "reactflow";
 import * as characterStyling from "../util/characterCardStyling";
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
-
 function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
   const newHandlePosition = getHandlePosition(midpoint, xPos, yPos);
   const [handlePosition, setHandlePosition] = useState(newHandlePosition);
@@ -21,21 +16,17 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
     });
   }, [xPos, yPos, midpoint]);
 
-    // Set the Cloud configuration and URL configuration
-    let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
-    let urlConfig = new URLConfig({secure: true});
-    // Instantiate and configure a CloudinaryImage object.
-    let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
-
   return (
     <div className="w-[100px] h-[100px] relative">
       <Handle type="source" position={handlePosition} />
       <Handle type="target" position={handlePosition} />
-      <AdvancedImage
+      <img
         className="max-w-[123.5%] left-[-11.5%] top-[-16%] gap-4 z-10 absolute"
-        cldImg={myImage}
+        src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
+          character
+        )}_thumb.png`}
         alt={character.name}
-      ></AdvancedImage>
+      ></img>
       {character.rarity && (
         <img
           src={characterStyling.getCharacterRarityBackground(character)}

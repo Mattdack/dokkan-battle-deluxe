@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
+import {AdvancedImage, lazyload, accessibility, responsive, placeholder} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
@@ -79,26 +79,19 @@ function DeckCard ({character, savedToDeck}) {
   useEffect(() => {
     setIsSavedCharacter(savedToDeck.includes(character.id));
   }, [savedToDeck, character.id])
-
-    // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
   
   return (
     <>
       {isImageValid ? (
         <div className={`w-fit relative
         ${isSavedCharacter ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-slate-900/[.4]'}`}>
-          <AdvancedImage
+          <img
             className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
+            src={process.env.PUBLIC_URL + `/characterArt/${character.id}.png`}
             // onError={handleImageError}
-            cldImg={myImage}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.1})]}
           >
-          </AdvancedImage>
+          </img>
           <img
             src={characterStyling.getCharacterRarityBackground(character)}
             className={character.rarity.trim() === "UR"

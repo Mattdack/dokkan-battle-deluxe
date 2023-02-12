@@ -1,12 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import * as characterStyling from "../util/characterCardStyling";
-import * as linkSkillInfo from "../util/linkSkillInfo";
+import * as characterStyling from "../../util/characterCardStyling";
+import * as linkSkillInfo from "../../util/linkSkillInfo";
 import { set } from "lodash";
-
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
 
 function CardDetails({ cardDetails }) {
   const divRef1 = useRef(null);
@@ -17,12 +12,6 @@ function CardDetails({ cardDetails }) {
     setEzaEnabled(false);
   }, [cardDetails])
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
-
   return (
     <div className="flex flex-col">
       <div className="w-full flex flex-wrap">
@@ -32,11 +21,16 @@ function CardDetails({ cardDetails }) {
           <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
           <div className="w-fit relative">
-            <AdvancedImage
+            <div
               onClick={() => {}}
               className="h-[100px] card-sm:h-[161px] w-[100px] card-sm:w-[161px] bg-no-repeat relative z-50"
-              cldImg={myImage}
-            ></AdvancedImage>
+              style={{
+                backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
+                  cardDetails
+                )}_thumb.png")`,
+                backgroundSize: `100%`,
+              }}
+            ></div>
             <img
               className={
                 cardDetails && cardDetails.rarity.trim() === "UR"

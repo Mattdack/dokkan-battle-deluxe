@@ -2,11 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
-
 function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions }) {
   const [isImageValid, setIsImageValid] = useState(true);
   function handleImageError() {
@@ -41,13 +36,6 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
   // uses the linkSkillInfo function which only grabs the stats that were changed
   const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let myImage = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
-
-
   return (
     <>
     {isImageValid ? 
@@ -73,14 +61,14 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
         </div>
         ) : (
           <>
-          <AdvancedImage
+          <img
             className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative right-[.5%] z-50"
-            cldImg={myImage}
+            src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
+              character
+            )}_thumb.png`}
             // onError={handleImageError}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.1})]}
-          >
-          </AdvancedImage>
+          ></img>
           {character.rarity && (
             <img
               src={characterStyling.getCharacterRarityBackground(character)}

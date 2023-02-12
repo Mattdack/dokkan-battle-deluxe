@@ -18,14 +18,14 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-lg rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-base rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
             />
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-lg text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
             >
@@ -181,7 +181,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-lg m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400"
               >
                 My Deck
               </div>
@@ -206,7 +206,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-xl lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-base lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>

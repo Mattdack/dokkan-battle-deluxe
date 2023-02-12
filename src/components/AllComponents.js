@@ -27,7 +27,6 @@ function AllComponents() {
 
   const [cardDetails, setCardDetails] = useState({
     "id": 1331,
-    "char_link": "https://dbz-dokkanbattle.fandom.com/wiki/Heartless_Destruction_Buu_(Kid)",
     "thumb": 1003310,
     "art": null,
     "title": "Heartless Destruction",
