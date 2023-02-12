@@ -375,7 +375,7 @@ function AllComponents() {
             </LazyLoad>
             ))
                     }
-          {charactersToDisplay.length >= viewableCharacters && (
+          {charactersToDisplay.length < viewableCharacters && (
             
               <button className="w-full py-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400" onClick={() => setViewableCharacters(viewableCharacters + 75)}>
                 Load More Characters
