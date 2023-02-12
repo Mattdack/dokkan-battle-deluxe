@@ -18,6 +18,10 @@
   touch-action: auto;
 } */
 
+body {
+  touch-action: pan-x pan-y;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
