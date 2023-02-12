@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.disable-zoom {
+  touch-action: pan-x pan-y;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
@@ -29,6 +33,7 @@
   transform: translateX(100%);
   transition: transform 1s ease-out;
 }
+
 
 /* width */
 ::-webkit-scrollbar {

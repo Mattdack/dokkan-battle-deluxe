@@ -261,7 +261,7 @@ function AllComponents() {
 
   return (
     // stages formatting
-    <div className="overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
+    <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       {/* //left column styling */}
       <div 
       id='CardSelection'
@@ -342,7 +342,7 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="flex flex-wrap justify-center items-center p-1 mx-1 mb-16 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        <div className="disable-zoom flex flex-wrap justify-center items-center p-1 mx-1 mb-16 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
         {allCharactersLoading ? (
             <div>Loading...</div>
           ) : (
@@ -357,7 +357,6 @@ function AllComponents() {
                 key={character.id}
                 onClick={() => {multiCardSelection ? changeDeck(character.id) : newCardDetails(character.id)}}
                 onDoubleClick={(event) => {
-                     event.preventDefault()
                       if (!multiCardSelection) {
                           if (webOfTeam.map(char => char.id).includes(character.id)) {
                               setWebOfTeam(webOfTeam.filter(char => char.id !== character.id));
