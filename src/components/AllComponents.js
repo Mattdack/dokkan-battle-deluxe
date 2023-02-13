@@ -12,6 +12,7 @@ import CardDetails from "./CardDetails";
 import Auth from "../util/auth";
 
 import * as sort from "../util/sorting"
+import Announcement from "../modals/Announcement";
 
 function AllComponents() {
   // Queries for all characters to get an array of objects
@@ -257,9 +258,12 @@ function AllComponents() {
     middleColumn.scrollIntoView({top: 0, left: 0});
   };
 
+  const [announcementOpen , setAnnouncementOpen] = useState(true)
+
   return (
     // stages formatting
     <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
+      <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
       {/* //left column styling */}
       <div 
       id='CardSelection'

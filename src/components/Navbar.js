@@ -16,7 +16,7 @@ const AppNavbar = () => {
 
   return (
     <div className="h-[10vh] flex justify-between items-center bg-slate-700 border-2 border-slate-900">
-      <img src={logo} className="ml-2 sm:ml-4 h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh]" />
+      <img src={logo} alt='Dokkan Battle Helper' className="ml-2 sm:ml-4 h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh]" />
       <div className="flex pr-8">
         {/* hamburger button */}
         <button

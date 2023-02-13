@@ -65,6 +65,7 @@ function CardDetails({ cardDetails }) {
             {ezaEnabled ? 
             <img 
             className="absolute max-w-[200%] h-[120%] -bottom-[20%] -right-[40%] z-0 object-contain"
+            alt='extreme awakening'
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
             /> : ''}
           </button>

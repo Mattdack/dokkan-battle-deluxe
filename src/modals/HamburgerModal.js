@@ -5,7 +5,6 @@ import LoginSignUpModal from "./LoginSignUpModal";
 
 
 export default function HamburgerModal({hamburgerOpen, setHamburgerOpen}) {
-  console.log(hamburgerOpen)
   const [isOpen, setIsOpen] = useState(false);
 
   return ReactDom.createPortal(
@@ -18,13 +17,13 @@ export default function HamburgerModal({hamburgerOpen, setHamburgerOpen}) {
       </button>
       <button
         className="font-header text-lg card-sm:text-2xl flex justify-center items-center h-1/3 w-full col-span-1 p-4 bg-orange-200 border-2 border-black"
-        onClick={() => setIsOpen(true)}
+        // onClick={() => setIsOpen(true)}
       >
         News & Updates
       </button>
       <button
         className="font-header text-lg card-sm:text-2xl flex justify-center items-center h-1/3 w-full col-span-1 p-4 bg-orange-200 border-2 border-black"
-        onClick={() => setIsOpen(true)}
+        // onClick={() => setIsOpen(true)}
       >
         Help
       </button>
