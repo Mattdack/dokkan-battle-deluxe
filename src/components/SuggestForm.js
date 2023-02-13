@@ -15,7 +15,7 @@ const SuggestForm = ({
   useEffect(() => {
     handleFormChange({ currentTarget: document.querySelector("#form") });
   }, [allCharactersLoading]);
-
+  
   return (
     <div className="h-[17vh] flex flex-col justify-center items-center ">
       {/* //search field */}

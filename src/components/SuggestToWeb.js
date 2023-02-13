@@ -9,6 +9,12 @@ import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
+import {AdvancedImage, lazyload} from '@cloudinary/react';
+import {CloudinaryImage} from "@cloudinary/url-gen";
+import {URLConfig} from "@cloudinary/url-gen";
+import {CloudConfig} from "@cloudinary/url-gen";
+
+
 function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
@@ -44,6 +50,15 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
   // console.log(charactersWithMatchedLinks)
 
+  // Set the Cloud configuration and URL configuration
+  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
+  let urlConfig = new URLConfig({secure: true});
+  // Instantiate and configure a CloudinaryImage object.
+  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${selectedCharacter.id}`, cloudConfig, urlConfig);
+  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${selectedCharacter.rarity}`, cloudConfig, urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${selectedCharacter.type.toLowerCase()}`, cloudConfig, urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${selectedCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
+
   return (
     <div className="my-2">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
@@ -54,14 +69,16 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           <div className="lg:hidden w-[100px] card-sm:w-[120px]">
             <div className="w-fit relative">
               <>
-              <img
+              <AdvancedImage
                 className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative z-50"
-                src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(selectedCharacter)}_thumb.png`}
+                // src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(selectedCharacter)}_thumb.png`}
+                cldImg={characterThumb}
                 alt={selectedCharacter.name}
-              ></img>
+              ></AdvancedImage>
               {selectedCharacter.rarity && (
-                <img
-                  src={characterStyling.getCharacterRarityBackground(selectedCharacter)}
+                <AdvancedImage
+                  // src={characterStyling.getCharacterRarityBackground(selectedCharacter)}
+                  cldImg={characterRarity}
                   className={
                     selectedCharacter.rarity.trim() === "UR"
                       ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
@@ -69,13 +86,15 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
                   }
                 />
               )}
-              <img
+              <AdvancedImage
                 className="w-[65px] card-sm:w-[81px] absolute top-[13%] right-[9.5%] z-0"
-                src={characterStyling.getCharacterTypeBackground(selectedCharacter)}
+                // src={characterStyling.getCharacterTypeBackground(selectedCharacter)}
+                cldImg={characterTypeBackground}
               />
-              <img
+              <AdvancedImage
                 className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
-                src={characterStyling.getCharacterTypeText(selectedCharacter)}
+                // src={characterStyling.getCharacterTypeText(selectedCharacter)}
+                cldImg={characterTypeBadge}
               />
               </>
             </div>   

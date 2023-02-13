@@ -12,6 +12,8 @@ import CustomEdge from "./CustomEdge";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
+import { none } from "@cloudinary/transformation-builder-sdk/qualifiers/progressive";
+import { color } from "d3-color";
 
 const nodeTypes = {
   custom: WebCard,
@@ -32,14 +34,10 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   const [selectedNode, setSelectedNode] = useState(null);
 
   const myDivRef = useRef(null);
-  // let webWidth = null
-  // let webHeight = null
   const [webWidth, setWebWidth] = useState(null)
   const [webHeight, setWebHeight] = useState(null)
 
   useEffect(() => {
-    // webWidth = myDivRef.current.offsetWidth
-    // webHeight = myDivRef.current.offsetHeight
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
   }, [allCharactersLoading]);
@@ -69,9 +67,12 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
   
   const onNodeClick = (event, node) => {
-    setSelectedNode(null)
     setSelectedNode(node);
   };
+
+  const onNodeDrag = (event, node) => {
+    setSelectedNode(null)
+  }
   
   const onNodeDragStart = (event, node) => {
     setSelectedNode(null);
@@ -109,33 +110,46 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
       });
       return updatedEdges;
     });
-  }, [selectedNode, webOfTeam, onEdgesChange, onEdgeClick]);
+  }, [webOfTeam, onEdgesChange, onEdgeClick]);
 
   const handleResetTeam = (webOfTeam) => {
     for (let i = 0; i < webOfTeam.length; i++) {
       removeFromWebOfTeam(webOfTeam[i])      
     }
   }
-  
-  // console.log("The width of the div is: " + webWidth + "px");
-  // console.log("The height of the div is: " + webHeight + "px");
+
+  const defaultNodes = [
+    {
+      id: '3',
+      type: 'output',
+      data: { label: 'Output Node' },
+      position: { x: 0, y: 0 },
+      style: {
+        backgroundColor: 'black',
+      },
+      height: 5,
+      width:5
+    }
+  ]
 
   return (
-    <div className="h-[45vh] lg:h-[40vh]">
+    <div ref={myDivRef} className="h-[45vh] lg:h-[40vh]">
       <div 
-      ref={myDivRef}
       className="h-full bg-slate-700 row-span-6 rounded-md relative">
+        <div className="absolute top-0 right-0 bg-red-500 w-20 h-20"></div>
         <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
         <ReactFlow
+          defaultNodes={defaultNodes}
           nodes={combinedNodeData}
           edges={combinedEdgeData}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
+          onNodeDrag={onNodeDrag}
           onNodeDragStart={onNodeDragStart}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
@@ -144,7 +158,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
           className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
-        ></ReactFlow>
+        >
+        </ReactFlow>
       </div>
     </div>
   );
@@ -165,7 +180,7 @@ const startingPosition = (webWidth, webHeight) => {
     // console.log('no width rendered')
     return {x: 0, y:0}
   }
-  return {x: webWidth, y: webHeight}
+  return {x: webWidth-100, y: webHeight-100}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

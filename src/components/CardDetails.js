@@ -268,7 +268,7 @@ const CardDescription = ({ text }) => {
         <React.Fragment key={i}>
           {t}
           {i < descriptionArray.length - 1 && (
-            <b className="text-md text-orange-400 cursor-pointer" 
+            <b className="text-md text-orange-600 cursor-pointer" 
             onClick={(event) => handleHover(i + 1, event)}>
               *
             </b>

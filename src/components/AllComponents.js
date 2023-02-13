@@ -322,7 +322,7 @@ function AllComponents() {
                 </span>
               </label>
             </div>
-            <div class="flex space-x-2 justify-center">
+            <div className="flex space-x-2 justify-center">
               <button
                 disabled={!multiCardSelection || allCharactersLoading}
                 type="button"

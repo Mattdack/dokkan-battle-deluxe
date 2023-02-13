@@ -54,11 +54,11 @@ const CustomEdge = (props) => {
           className="nodrag nopan"
           onClick={() => handleShowLinkInfo()}
         >
-          {!showLinkInfo ? (<div className="font-bold text-lg"> {data.sharedLinks} </div>) 
+          {!showLinkInfo ? (<div className="font-bold text-2xl"> {data.sharedLinks} </div>) 
           : 
           (matchedLinkInfo.map((linkSkillInfo) => {
               return (
-                <div className="nodrag nopan p-1 w-20 border-b border-black"> {linkSkillInfo} </div>
+                <div className="nodrag nopan p-1 w-20 text-md border-b border-black"> {linkSkillInfo} </div>
               );
             })
           )}
