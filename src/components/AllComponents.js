@@ -263,7 +263,10 @@ function AllComponents() {
   return (
     // stages formatting
     <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
-      <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
+
+      {/* TODO: for important information to announce on page load */}
+      {/* <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/> */}
+      
       {/* //left column styling */}
       <div 
       id='CardSelection'
