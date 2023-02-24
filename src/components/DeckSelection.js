@@ -208,7 +208,7 @@ const CharacterCard = ({individualCharacter, team}) => {
           : 
             null}
           <AdvancedImage
-            className="h-[70px] card-sm:h-[100px] w-[70px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[0%] right-[2%] card-sm:right-[0%] z-40"
+            className="h-[70px] card-sm:h-[100px] w-[70px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
             cldImg={characterThumb}
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
