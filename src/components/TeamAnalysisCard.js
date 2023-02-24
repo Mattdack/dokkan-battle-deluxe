@@ -72,18 +72,18 @@ function TeamAnalysisCard({ id, data }) {
       ></AdvancedImage>
       <AdvancedImage
         cldImg={characterRarity}
-        className={"h-[24px] absolute bottom-[3%] left-[-13%] z-50"}
-          // character.rarity === "UR"
-          //   ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
-          //   : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
-        // }
+        className={
+          data.character.rarity === "UR"
+          ? "h-[26.67%] absolute bottom-[0%] left-[-12%] z-50"
+          : "h-[31.67%] absolute bottom-[0%] left-[-10%] z-50"
+        }
       />
       <AdvancedImage
         className="w-full z-0"
         cldImg={characterTypeBackground}
       />
       <AdvancedImage
-        className="w-[40px] h-[40px] absolute top-[-11%] right-[-13%] z-50"
+        className="w-[40%] absolute top-[-12%] right-[-13%] z-50"
         cldImg={characterTypeBadge}
       />
     </div>
