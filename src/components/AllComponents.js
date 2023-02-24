@@ -381,7 +381,7 @@ function AllComponents() {
                   <input
                     type="checkbox"
                     className="sr-only peer"
-                    checked={multiCardSelection}
+                    checked={multiCardSelection} 
                     readOnly
                   />
                   <div
