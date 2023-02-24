@@ -31,7 +31,7 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
         <img
           src={characterStyling.getCharacterRarityBackground(character)}
           className={
-            character.rarity.trim() === "UR"
+            character.rarity === "UR"
               ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
               : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
           }

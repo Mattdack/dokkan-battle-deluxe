@@ -99,6 +99,59 @@ query Characters7Link($link1: String, $link2: String, $link3: String, $link4: St
 export const GET_USERDATA = gql`
 query FindOneUser($profileId: String!) {
   findOneUser(profileId: $profileId) {
+    _id
+    decks {
+      _id
+      name
+      teams {
+        _id
+        name
+        characters {
+          id
+          thumb
+          art
+          name
+          title
+          rarity
+          type
+          cost
+          ls_description
+          ls_description_eza
+          sa_type
+          sa_name
+          sa_description
+          sa_description_eza
+          ultra_sa_type
+          ultra_sa_name
+          ultra_sa_description
+          ultra_sa_description_eza
+          ps_name
+          ps_description
+          ps_description_eza
+          sa_type_active
+          active_skill_name
+          active_skill
+          active_skill_condition
+          active_skill_condition_eza
+          transform_type
+          transform_condition
+          transform_condition_eza
+          link_skill
+          category
+          jp_date
+          glb_date
+          jp_date_eza
+          glb_date_eza
+        }
+        info {
+          leader
+          subLeader
+          rotation1
+          rotation2
+          notes
+        }
+      }
+    }
     savedCharacters
   }
 }`;

@@ -33,7 +33,7 @@ function CardDetails({ cardDetails }) {
             ></div>
             <img
               className={
-                cardDetails && cardDetails.rarity.trim() === "UR"
+                cardDetails && cardDetails.rarity === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
                   : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }

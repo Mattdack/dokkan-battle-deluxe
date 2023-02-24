@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AllComponents from "./components/AllComponents"
+import Navbar from "./components/Navbar";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Auth from './util/auth';
 
 
 const client = new ApolloClient({
-  // uri: 'http://localhost:3001/graphql',
-  uri: process.env.REACT_APP_API_KEY,
+  uri: 'http://localhost:3001/graphql',
+  // uri: process.env.REACT_APP_API_KEY,
   cache: new InMemoryCache(),
 });
 
-function App() {
+function App() {  
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
-        <Navbar />
+        <Navbar/>
         <Routes>
           <Route exact path='/' element={<AllComponents/>}/>
         </Routes>

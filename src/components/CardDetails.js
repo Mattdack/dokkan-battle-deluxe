@@ -18,7 +18,8 @@ function CardDetails({ cardDetails }) {
   }, [cardDetails])
 
   // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
   let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
@@ -41,7 +42,7 @@ function CardDetails({ cardDetails }) {
             ></AdvancedImage>
             <AdvancedImage
               className={
-                cardDetails && cardDetails.rarity.trim() === "UR"
+                cardDetails && cardDetails.rarity === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
                   : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }
@@ -187,7 +188,7 @@ function CardDetails({ cardDetails }) {
           <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Links:
           </p>
-          <div className="h-[20vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
                 return <CharacterLinkDisplay linkText={linkText} />;
@@ -199,7 +200,7 @@ function CardDetails({ cardDetails }) {
           <p className="flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Categories:
           </p>
-          <div className="h-[20vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (

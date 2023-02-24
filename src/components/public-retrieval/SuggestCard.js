@@ -73,7 +73,7 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
             <img
               src={characterStyling.getCharacterRarityBackground(character)}
               className={
-                character.rarity.trim() === "UR"
+                character.rarity === "UR"
                   ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
                   : "h-[25px] card-sm:h-[34px] absolute bottom-[5.5%] left-[0%] z-50"
               }

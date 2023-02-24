@@ -6,12 +6,17 @@ import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
+import { grayscale } from "@cloudinary/url-gen/actions/effect";
 
-function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions }) {
-  const [isImageValid, setIsImageValid] = useState(true);
-  function handleImageError() {
-    setIsImageValid(false);
-  }
+function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
+  const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
+
+  const selectedDeckObj = userDeckData.find(deck => deck._id === selectedDeck) || []
+  const selectedDeckTeams = selectedDeckObj.teams || []
+  useEffect(() => {
+    setIsInSelectedDeck(selectedDeckTeams.flatMap(team => team.characters.map(char => char.id)).includes(character.id));
+  }, [selectedDeck]);
+
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
   const ref = useRef(null);
@@ -42,7 +47,8 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
   const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
 
   // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
   let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
@@ -52,12 +58,10 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
 
 
   return (
-    <>
-    {isImageValid ? 
       <div
         ref={ref}
         onClick={handleCardClick}
-        className="w-fit relative hover:bg-slate-900/[.4]"
+        className={`${showCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
       >
         {isCardClicked ? (
         <div>
@@ -87,18 +91,21 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
           <AdvancedImage
             cldImg={characterRarity}
             className={
-              character.rarity.trim() === "UR"
+              character.rarity === "UR"
                 ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
                 : "h-[25px] card-sm:h-[34px] absolute bottom-[5.5%] left-[0%] z-50"
             }
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
           <AdvancedImage
             className="w-[65px] card-sm:w-[81px] absolute top-[13%] right-[9.5%] z-0"
             cldImg={characterTypeBackground}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
           <AdvancedImage
             className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
             cldImg={characterTypeBadge}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
 
           {statsSelectedOptions === "ATK" &&
@@ -122,10 +129,7 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
           </>
         )
         }
-      </div>   
-    : 
-    null}
-    </>
+      </div>
   );
 }
 

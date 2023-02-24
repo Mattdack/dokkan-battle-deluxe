@@ -22,7 +22,8 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
   }, [xPos, yPos, midpoint]);
 
   // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: 'ddmgbof1l'});
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
   let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
@@ -42,7 +43,7 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
       <AdvancedImage
         cldImg={characterRarity}
         className={
-          character.rarity.trim() === "UR"
+          character.rarity === "UR"
             ? "h-[24px] absolute bottom-[3%] left-[-13%] z-50"
             : "h-[34px] absolute bottom-[2%] left-[-11%] z-50"
         }
