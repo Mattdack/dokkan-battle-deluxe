@@ -10,7 +10,7 @@ export const getCharacterRarityBackground = (cardDetails) => {
   if (cardDetails.rarity === null) {
     return undefined;
   }
-  if (cardDetails.rarity.trim() === "UR") {
+  if (cardDetails.rarity === "UR") {
     return process.env.PUBLIC_URL + "/dokkanIcons/rarities/UR.png";
   } else {
     return process.env.PUBLIC_URL + "/dokkanIcons/rarities/LR.png";

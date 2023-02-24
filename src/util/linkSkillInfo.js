@@ -542,31 +542,6 @@ const linkSkillDictionary = {
   },
 };
 
-export const linkSkillStatBoosts = (linkSkills) => {
-  const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
-  
-  linkSkills.forEach(lvl1_stats => {
-    const match = lvl1_stats.match(/\d+/g);
-    if (!match) return;
-    const stat = parseInt(match[0]);
-    
-    if (lvl1_stats.includes("ATK")) {
-      if (lvl1_stats.includes("%")) {
-        linkSkillBuffs.ATK.push(stat);
-      }
-    }
-    if (lvl1_stats.includes("DEF")) {
-      if (lvl1_stats.includes("%")) {
-        linkSkillBuffs.DEF.push(stat);
-      }
-    }
-    if (lvl1_stats.includes("Ki")) {
-      linkSkillBuffs.Ki.push(stat);
-    }
-  });
-  return(linkSkillBuffs);
-}
-
 export const getLinkSkillInfo = (linkskill) => {
   const searchKey = linkskill
     .trim()
@@ -625,4 +600,86 @@ export const getLinkSkillInfoObject = (linkskill) => {
 
 export function findMatchingLinks(source, target) {
   return source.filter((elem) => target.includes(elem));
+}
+
+export const linkSkillStatBoosts = (linkSkills) => {
+  const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
+  
+  linkSkills.forEach(lvl1_stats => {
+    //this finds all digits in the link description
+    const match = lvl1_stats.match(/\d+/g);
+    if (!match) return;
+    const stat = parseInt(match[0]);
+    
+    if (lvl1_stats.includes("ATK")) {
+      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
+        linkSkillBuffs.ATK.push(stat);
+      }
+    }
+    if (lvl1_stats.includes("DEF")) {
+      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
+        linkSkillBuffs.DEF.push(stat);
+      }
+    }
+    if (lvl1_stats.includes("Ki")) {
+      linkSkillBuffs.Ki.push(stat);
+    }
+  });
+  
+  return linkSkillBuffs;
+}
+
+export const linkSkillStatsBoostedFor2Characters_lvl_1 = (character1, character2) => {
+  // gets matched links between the selected character and character card
+    const matchedLinks = findMatchingLinks(character1.link_skill, character2.link_skill) || []
+    let matchedLinkInfo = [];
+    // gets lvl1 linkskill info of the match links
+    for (let i = 0; i < matchedLinks.length; i++) {
+      matchedLinkInfo.push(getLvl1LinkSkillInfo(matchedLinks[i]));
+    }
+    // uses the linkSkillInfo function which only grabs the stats that were changed
+    const linkSkillStatsBoosted = linkSkillStatBoosts(matchedLinkInfo)
+    return {
+      linkNames: matchedLinks,
+      linkStats: matchedLinkInfo,
+      linkAccumulation: linkSkillStatsBoosted
+    }
+}
+
+
+export const linkSkillStatsBoostedForFloatCharacter = (character1, character2, floatCharacter) => {
+    // gets matched links between first rotation characters
+    const sharedRotationLinks = findMatchingLinks(character1.link_skill, character2.link_skill) || []
+    // console.log('links between char1 and char2: '+sharedRotationLinks)
+    // gets matching links between the first character and the floater
+    const sharedFloatLinks = findMatchingLinks(character1.link_skill, floatCharacter.link_skill) || []
+    // console.log('links between char1 and float1: '+sharedFloatLinks)
+    // finds the links that are present in both arrays
+    const usedLinks = sharedRotationLinks.filter(link => sharedFloatLinks.includes(link))
+    // finds the links that are not present in both arrays
+    const uNusedLinks = sharedFloatLinks.filter(link => !usedLinks.includes(link))
+
+    // console.log('used links: '+usedLinks)
+    // console.log('unused links for float: '+uNusedLinks)
+
+    let usedLinkStats = [] 
+    let uNusedLinkStats = []
+    for (let i = 0; i < usedLinks.length; i++) {
+      usedLinkStats.push(getLvl1LinkSkillInfo(usedLinks[i]));
+    }
+    for (let i = 0; i < uNusedLinks.length; i++) {
+      uNusedLinkStats.push(getLvl1LinkSkillInfo(uNusedLinks[i]));
+    }
+
+    const usedLinksStatsBoost = linkSkillStatBoosts(usedLinkStats)
+    const uNusedLinksStatsBoost = linkSkillStatBoosts(uNusedLinkStats)
+
+    // console.log(usedLinksStatsBoost)
+    // console.log(uNusedLinksStatsBoost)
+
+    return {
+      linkNames: {usedLinks, uNusedLinks},
+      linkStats: {usedLinkStats, uNusedLinkStats},
+      linkAccumulation: {usedLinksStatsBoost, uNusedLinksStatsBoost}
+    }
 }

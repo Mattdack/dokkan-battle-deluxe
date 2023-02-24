@@ -1,12 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import * as characterStyling from "../util/characterCardStyling";
-import * as linkSkillInfo from "../util/linkSkillInfo";
+import * as characterStyling from "../../util/characterCardStyling";
+import * as linkSkillInfo from "../../util/linkSkillInfo";
 import { set } from "lodash";
-
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
 
 function CardDetails({ cardDetails }) {
   const divRef1 = useRef(null);
@@ -17,16 +12,6 @@ function CardDetails({ cardDetails }) {
     setEzaEnabled(false);
   }, [cardDetails])
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
-  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.rarity}`, cloudConfig, urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.type.toLowerCase()}`, cloudConfig, urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${cardDetails.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
-
   return (
     <div className="flex flex-col">
       <div className="w-full flex flex-wrap">
@@ -36,25 +21,34 @@ function CardDetails({ cardDetails }) {
           <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
           <div className="w-fit relative">
-            <AdvancedImage
+            <div
+              onClick={() => {}}
               className="h-[100px] card-sm:h-[161px] w-[100px] card-sm:w-[161px] bg-no-repeat relative z-50"
-              cldImg={characterThumb}
-            ></AdvancedImage>
-            <AdvancedImage
+              style={{
+                backgroundImage: `url("https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
+                  cardDetails
+                )}_thumb.png")`,
+                backgroundSize: `100%`,
+              }}
+            ></div>
+            <img
               className={
                 cardDetails && cardDetails.rarity === "UR"
                   ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
                   : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
               }
-              cldImg={characterRarity}
+              src={characterStyling.getCharacterRarityBackground(cardDetails)}
+              alt=""
             />
-            <AdvancedImage
+            <img
               className="w-[81px] card-sm:w-[131px] absolute top-[13%] right-[9%] z-0"
-              cldImg={characterTypeBackground}
+              src={characterStyling.getCharacterTypeBackground(cardDetails)}
+              alt=""
             />
-            <AdvancedImage
+            <img
               className="w-[40px] card-sm:w-[65px] absolute top-[0%] -right-[5%] z-50"
-              cldImg={characterTypeBadge}
+              src={characterStyling.getCharacterTypeText(cardDetails)}
+              alt=""
             />
           </div>
 
@@ -66,7 +60,6 @@ function CardDetails({ cardDetails }) {
             {ezaEnabled ? 
             <img 
             className="absolute max-w-[200%] h-[120%] -bottom-[20%] -right-[40%] z-0 object-contain"
-            alt='extreme awakening'
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
             /> : ''}
           </button>
@@ -188,7 +181,7 @@ function CardDetails({ cardDetails }) {
           <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Links:
           </p>
-          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[20vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
                 return <CharacterLinkDisplay linkText={linkText} />;
@@ -200,7 +193,7 @@ function CardDetails({ cardDetails }) {
           <p className="flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Categories:
           </p>
-          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[20vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (
@@ -270,7 +263,7 @@ const CardDescription = ({ text }) => {
         <React.Fragment key={i}>
           {t}
           {i < descriptionArray.length - 1 && (
-            <b className="text-md text-orange-600 cursor-pointer" 
+            <b className="text-md text-orange-400 cursor-pointer" 
             onClick={(event) => handleHover(i + 1, event)}>
               *
             </b>

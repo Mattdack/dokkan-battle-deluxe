@@ -2,21 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
-import { grayscale } from "@cloudinary/url-gen/actions/effect";
-
-function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
-  const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
-
-  const selectedDeckObj = userDeckData.find(deck => deck._id === selectedDeck) || []
-  const selectedDeckTeams = selectedDeckObj.teams || []
-  useEffect(() => {
-    setIsInSelectedDeck(selectedDeckTeams.flatMap(team => team.characters.map(char => char.id)).includes(character.id));
-  }, [selectedDeck]);
-
+function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions }) {
+  const [isImageValid, setIsImageValid] = useState(true);
+  function handleImageError() {
+    setIsImageValid(false);
+  }
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
   const ref = useRef(null);
@@ -46,22 +36,13 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
   // uses the linkSkillInfo function which only grabs the stats that were changed
   const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
-  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${character.rarity}`, cloudConfig, urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${character.type.toLowerCase()}`, cloudConfig, urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${character.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
-
-
   return (
+    <>
+    {isImageValid ? 
       <div
         ref={ref}
         onClick={handleCardClick}
-        className={`${showCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
+        className="w-fit relative hover:bg-slate-900/[.4]"
       >
         {isCardClicked ? (
         <div>
@@ -80,32 +61,31 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
         </div>
         ) : (
           <>
-          <AdvancedImage
+          <img
             className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative right-[.5%] z-50"
-            cldImg={characterThumb}
+            src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(
+              character
+            )}_thumb.png`}
             // onError={handleImageError}
             alt={character.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          >
-          </AdvancedImage>
-          <AdvancedImage
-            cldImg={characterRarity}
-            className={
-              character.rarity === "UR"
-                ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
-                : "h-[25px] card-sm:h-[34px] absolute bottom-[5.5%] left-[0%] z-50"
-            }
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          <AdvancedImage
+          ></img>
+          {character.rarity && (
+            <img
+              src={characterStyling.getCharacterRarityBackground(character)}
+              className={
+                character.rarity === "UR"
+                  ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
+                  : "h-[25px] card-sm:h-[34px] absolute bottom-[5.5%] left-[0%] z-50"
+              }
+            />
+          )}
+          <img
             className="w-[65px] card-sm:w-[81px] absolute top-[13%] right-[9.5%] z-0"
-            cldImg={characterTypeBackground}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+            src={characterStyling.getCharacterTypeBackground(character)}
           />
-          <AdvancedImage
+          <img
             className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
-            cldImg={characterTypeBadge}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+            src={characterStyling.getCharacterTypeText(character)}
           />
 
           {statsSelectedOptions === "ATK" &&
@@ -129,7 +109,10 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
           </>
         )
         }
-      </div>
+      </div>   
+    : 
+    null}
+    </>
   );
 }
 

@@ -2,20 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* turns scroll off on mobile */
-@media only screen and (max-width: 1250px) {
-  body {
-  overflow: hidden;
-  }
-}
-
-/* this might turn off zoom on double tap for mobiles */
-/* body {
-  touch-action: manipulation;
-}
-
-#CharacterCard {
-  touch-action: auto;
+/* .disable-zoom {
+  touch-action: pan-x pan-y;
 } */
 
 .font-header {

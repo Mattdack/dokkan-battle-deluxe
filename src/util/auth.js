@@ -20,11 +20,13 @@ class AuthService {
     return !!token && !this.isTokenExpired(token); // handwaiving here
   }
 
-  // check if token is expired
+  // check if token is expired, if  it is, then remove the token from the localstorage
   isTokenExpired(token) {
     try {
       const decoded = decode(token);
       if (decoded.exp < Date.now() / 1000) {
+        localStorage.removeItem('id_token');
+        this.logout()
         return true;
       } else return false;
     } catch (err) {

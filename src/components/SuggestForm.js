@@ -15,7 +15,7 @@ const SuggestForm = ({
   useEffect(() => {
     handleFormChange({ currentTarget: document.querySelector("#form") });
   }, [allCharactersLoading]);
-
+  
   return (
     <div className="h-[17vh] flex flex-col justify-center items-center ">
       {/* //search field */}
@@ -163,9 +163,9 @@ const SuggestForm = ({
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base font-bold hover:bg-orange-400 peer-checked:bg-orange-400"
+                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
                 >
-                  My Deck
+                  Characters Saved
                 </div>
               </label>
             </div>
@@ -183,7 +183,6 @@ const SuggestForm = ({
             value="None"
             checked={statsSelectedOptions === "None"}
             onChange={handleStatsSelectedOptions}
-            defaultChecked
           />
           <label
             className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
@@ -261,7 +260,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base hover:bg-orange-400 peer-checked:bg-orange-400"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base lg:hover:bg-orange-400 peer-checked:bg-orange-400"
       >
         {label}
       </div>
