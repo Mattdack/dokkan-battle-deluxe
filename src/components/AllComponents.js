@@ -123,7 +123,7 @@ function AllComponents() {
       },
     }
   );
-  const userDeckData = userData?.findOneUser?.decks || []
+  const userDeckData = userData?.findOneUser?.decks || [];
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
 
   // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the character objects saved to the user) this is used for finding characters in My Deck
@@ -151,7 +151,8 @@ function AllComponents() {
   }, []);
 
   //adding state for saved to deck...initially composed of userCharacterIds
-  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] = useState(userCharacterIds);
+  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] =
+    useState(userCharacterIds);
   //adds or remove characters from the state deck
   function changeDeck(characterId) {
     setSavedToMyCharacterDeck((prev) => {
@@ -165,7 +166,10 @@ function AllComponents() {
 
   const [multiCardSelection, setMultiCardSelection] = useState(false);
 
-  const [updateSavedCharacters,{ error: updateSavedCharactersError, data: updatedSavedCharacters },] = useMutation(UPDATE_SAVED_CHARACTERS);
+  const [
+    updateSavedCharacters,
+    { error: updateSavedCharactersError, data: updatedSavedCharacters },
+  ] = useMutation(UPDATE_SAVED_CHARACTERS);
   //this runs on the save button click
   async function handleUpdateSavedCharacters() {
     const profileData = Auth.getProfile();
@@ -180,7 +184,9 @@ function AllComponents() {
     //TODO: pretty sure this is unecessary // the savedToMyCharacterDeck is updated to the most recent array of ids
     // setSavedToMyCharacterDeck(savedToMyCharacterDeck);
     // After mutation is completed, re-run the lazy query to get the updated userCharacters
-    await getUserCharacterObjects({ variables: { dokkanIds: savedToMyCharacterDeck } });
+    await getUserCharacterObjects({
+      variables: { dokkanIds: savedToMyCharacterDeck },
+    });
   }
 
   function newCardDetails(characterId) {
@@ -195,7 +201,8 @@ function AllComponents() {
   //TODO: can be optimized/look cleaner if this sort/filter was a util function
   //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay = filteredCharacters === null
+  const charactersToDisplay =
+    filteredCharacters === null
       ? filterByGame
         ? allCharacters.slice().sort((a, b) => {
             const typeOrder = [
@@ -299,15 +306,16 @@ function AllComponents() {
 
   const [showCardDetails, setShowCardDetails] = useState(true);
   const [selectedDeck, setSelectedDeck] = useState("");
-  
+
   const handleSelectedDeck = (deckId) => {
-    setShowCardDetails(false)
+    setShowCardDetails(false);
     setSelectedDeck(deckId);
   };
 
-  const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] = useState(false)
-  function handleShowCharactersInSelectedDeck (){
-    setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck)
+  const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] =
+    useState(false);
+  function handleShowCharactersInSelectedDeck() {
+    setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
   const [announcementOpen, setAnnouncementOpen] = useState(true);
@@ -381,7 +389,7 @@ function AllComponents() {
                   <input
                     type="checkbox"
                     className="sr-only peer"
-                    checked={multiCardSelection} 
+                    checked={multiCardSelection}
                     readOnly
                   />
                   <div
@@ -430,31 +438,35 @@ function AllComponents() {
                   id="CharacterCard"
                   key={character.id}
                   onClick={() => {
-                    multiCardSelection
-                      ? changeDeck(character.id)
-                      : newCardDetails(character.id);
-                  }}
-                  onDoubleClick={() => {
-                    if (!multiCardSelection) {
-                      if (
-                        webOfTeam.map((char) => char.id).includes(character.id)
-                      ) {
-                        setWebOfTeam(
-                          webOfTeam.filter((char) => char.id !== character.id)
-                        );
-                      } else {
-                        setWebOfTeam([...webOfTeam, character]);
-                      }
+                    if (multiCardSelection) {
+                      changeDeck(character.id);
                     }
                   }}
+                  // onDoubleClick={() => {
+                  //   if (!multiCardSelection) {
+                  //     if (
+                  //       webOfTeam.map((char) => char.id).includes(character.id)
+                  //     ) {
+                  //       setWebOfTeam(
+                  //         webOfTeam.filter((char) => char.id !== character.id)
+                  //       );
+                  //     } else {
+                  //       setWebOfTeam([...webOfTeam, character]);
+                  //     }
+                  //   }
+                  // }}
                 >
                   <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
                     showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-                    savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
+                    savedToMyCharacterDeck={
+                      multiCardSelection ? savedToMyCharacterDeck : undefined
+                    }
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                    addToWebOfTeam={addToWebOfTeam}
+                    newCardDetails={newCardDetails}
                   />
                 </div>
               ))
@@ -493,33 +505,42 @@ function AllComponents() {
           <div className="w-1/2">
             <div
               onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
-              className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? 'border-4 bg-orange-400' : 'border-2 bg-orange-200'}`}
+              className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
+                showCardDetails
+                  ? "border-4 bg-orange-400"
+                  : "border-2 bg-orange-200"
+              }`}
             >
               Card Details
             </div>
           </div>
           <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
-            {Auth.loggedIn() ?
-            (  
-              <select className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? 'border-2 bg-orange-200' : 'border-4 bg-orange-400' }`} id="deckSelect" 
-              value={selectedDeck} 
-              onChange={(e) => handleSelectedDeck(e.target.value)}
-              disabled={allCharactersLoading}
+            {Auth.loggedIn() ? (
+              <select
+                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${
+                  showCardDetails
+                    ? "border-2 bg-orange-200"
+                    : "border-4 bg-orange-400"
+                }`}
+                id="deckSelect"
+                value={selectedDeck}
+                onChange={(e) => handleSelectedDeck(e.target.value)}
+                disabled={allCharactersLoading}
               >
-              <option value="font-bold">Decks:</option>
+                <option value="font-bold">Decks:</option>
                 {userDeckData.map((deck) => (
-                  <option className='font-bold' key={deck._id} value={deck._id}>{deck.name}</option>
+                  <option className="font-bold" key={deck._id} value={deck._id}>
+                    {deck.name}
+                  </option>
                 ))}
               </select>
-            )
-            :
-            (
-              <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">Log In To See Decks</div>
+            ) : (
+              <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                Log In To See Decks
+              </div>
             )}
           </div>
         </div>
-
-
 
         {showCardDetails ? (
           <CardDetails
@@ -532,7 +553,9 @@ function AllComponents() {
             userDeckData={userDeckData}
             selectedDeck={selectedDeck}
             showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-            handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            handleShowCharactersInSelectedDeck={
+              handleShowCharactersInSelectedDeck
+            }
           />
         )}
       </div>
@@ -579,11 +602,20 @@ const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
   return baseChars.filter((character) => {
     return (
-      (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
-      (!filterData.characterCategory || character.category.includes(filterData.characterCategory)) &&
-      (!filterData.characterType || character.type.includes(filterData.characterType)) &&
-      (!filterData.characterSuperOrExtreme || character.type.slice(0, 1).includes(filterData.characterSuperOrExtreme)) &&
-      (!filterData.characterRarity || filterData.characterRarity === character.rarity)
+      (!filterData.searchTerm ||
+        character.name
+          .toLowerCase()
+          .includes(filterData.searchTerm.toLowerCase())) &&
+      (!filterData.characterCategory ||
+        character.category.includes(filterData.characterCategory)) &&
+      (!filterData.characterType ||
+        character.type.includes(filterData.characterType)) &&
+      (!filterData.characterSuperOrExtreme ||
+        character.type
+          .slice(0, 1)
+          .includes(filterData.characterSuperOrExtreme)) &&
+      (!filterData.characterRarity ||
+        filterData.characterRarity === character.rarity)
     );
   });
 };
