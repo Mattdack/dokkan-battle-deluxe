@@ -128,10 +128,10 @@ function WebCard({
             Add To Team
           </div>
           <div
-            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-xsm card-sm:text-md justify-center items-center text-center bg-orange-400 hover:bg-amber-600 rounded-b-lg"
+            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-orange-400 hover:bg-amber-600 rounded-b-lg"
             onClick={() => newCardDetails(character.id)}
           >
-            New Suggestion
+            Details
           </div>
         </div>
       ) : (
