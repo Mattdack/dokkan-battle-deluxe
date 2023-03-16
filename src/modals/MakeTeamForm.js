@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactDom from "react-dom";
 import Auth from "../util/auth";
 
 import ErrorModal from "./ErrorModal";
 
-import { useMutation } from "@apollo/client";
-import { EDIT_TEAM_INFO, REMOVE_TEAM_FROM_DECK } from "../util/mutations"
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { ADD_TEAM_TO_DECK } from "../util/mutations"
+import { GET_ONE_TEAM_POST } from "../util/queries"
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
@@ -19,86 +20,45 @@ const firstIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/1-icon.png";
 const secondIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/2-icon.png";
 
 
-export default function EditTeamForm( {team, selectedDeck, open, onClose} ) {
-  const [editTeamInfo, { error: editTeamInfoError, data: updatedTeamInfo }] = useMutation(EDIT_TEAM_INFO)
-  const findRotation1Characters = team?.info?.rotation1 || []
-  const findRotation2Characters = team?.info?.rotation2 || []
-
+export default function MakeTeamForm( {team, selectedDeck, open, onClose} ) {
+  const [addTeamToDeck, { error: addTeamToDeckError, data: updatedUserDeck }] = useMutation(ADD_TEAM_TO_DECK);
+  
+  const findRotation1Characters = [0,0]
+  const findRotation2Characters = [0,0]
+  
   const [rotation1Characters, setRotation1Characters] = useState([]);
   const [rotation2Characters, setRotation2Characters] = useState([]);
   const [errorDiv, setErrorDiv] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-
+  
+  const makeTeamFormRef = useRef(null);
+  
   // this useEffect is ABSOLUTELY needed for updating the rotation1Characters to show the characters previously in the rotation of the team.info
   useEffect(() => {
     setRotation1Characters(findRotation1Characters);
     setRotation2Characters(findRotation2Characters);
   }, [open]);
   
-  if (!open) return null;
-  if (!team) return null
-  
-  const handleFormSubmit = (event) => {
+  async function handleFormSubmit (event) {
     event.preventDefault()
-    if(rotation1Characters[0] === 0 || rotation1Characters[1] === 0 || rotation2Characters[0] === 0 || rotation2Characters[1] === 0){
-      setErrorMessage('Error: must select two characters for each rotation')
-      setErrorDiv(true)
-      throw new Error
-    }
-    if(rotation1Characters.legnth === 0 || rotation1Characters.length === 1){
-      setErrorMessage('Error: must select two characters for the first rotation')
-      setErrorDiv(true)
-      throw new Error
-    }
-    if(rotation2Characters.legnth === 0 || rotation2Characters.length === 1){
-      setErrorMessage('Error: must select two characters for the second rotation')
-      setErrorDiv(true)
-      throw new Error
-    }
-
-    const form = document.forms[0]
-    const formData = new FormData(form)
-    const formObject = Object.fromEntries(formData)
+    const formData = new FormData(makeTeamFormRef.current);
+    const formObject = Object.fromEntries(formData);
     const profileId = Auth.getProfile()?.data?._id;
-    const teamId = team._id
 
-    if(team.characters.length === 6){
-      if(formObject.leaderSelect !== formObject.subLeaderSelect){
-        setErrorMessage('Error: because you have only six characters on your team, the same character must be the leader and sub/friend leader')
-        setErrorDiv(true)
-        throw new Error
-      }
-    }
-    if(team.characters.length === 7){
-      if(formObject.leaderSelect === formObject.subLeaderSelect){
-        setErrorMessage('Error: because you have seven characters on your team, the same character cannot be the leader and sub/friend leader')
-        setErrorDiv(true)
-        throw new Error
-      }
-    }
-    if(typeof formObject.leaderSelect === 'undefined' || formObject.leaderSelect === null){
-      setErrorMessage('Error: must select a leader')
-      setErrorDiv(true)
-      throw new Error
-    }
-    if(typeof formObject.subLeaderSelect === 'undefined' || formObject.subLeaderSelect === null){
-      setErrorMessage('Error: must select a sub-leader')
-      setErrorDiv(true)
-      throw new Error
-    }
-
-    editTeamInfo ({
-      variables:{
+    await addTeamToDeck({
+      variables: {
         profileId: profileId,
         deckId: selectedDeck,
-        teamId: teamId,
-        newTeamName: formObject.newTeamName,
-        info: {
-          leader: parseInt(formObject.leaderSelect),
-          subLeader: parseInt(formObject.subLeaderSelect),
-          rotation1: rotation1Characters,
-          rotation2: rotation2Characters,
-          notes: formObject.strategy
+        team: {
+          name: formObject.teamName,
+          info: {
+            leader: parseInt(formObject.leaderSelect),
+            notes: formObject.strategy,
+            rotation1: rotation1Characters,
+            rotation2: rotation2Characters,
+            subLeader: parseInt(formObject.subLeaderSelect)
+          },
+          characters: team
         }
       }
     })
@@ -109,11 +69,15 @@ export default function EditTeamForm( {team, selectedDeck, open, onClose} ) {
       setErrorMessage('')
     })
     .catch((error) => {
+      //errors are caught on the API
       setErrorMessage(error.message);
       setErrorDiv(true);
-    });
-  };
+    })
+  }
   
+  if (!open) return null;
+  if (!team) return null
+
   function handleRotation1Characters(characterId) {
     setRotation1Characters((prev) => {
       if (prev.includes(characterId)) {
@@ -158,34 +122,34 @@ export default function EditTeamForm( {team, selectedDeck, open, onClose} ) {
      <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/[.2] z-[900]">
         <div className="w-3/4 lg:max-w-[60%] max-h-[80%] px-4 pt-14 pb-4 card-sm:p-10 border-4 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[900] top-[5%] right-[13%] lg:top-[10%] lg:left-[5%] overflow-y-auto">
           <img onClick={handleOnClose} src={closeIcon} className="absolute top-2 right-2 rounded-lg transition ease-in-out hover:bg-gray-400/[.6] cursor-pointer"/>
-          <form>
+          <form ref={makeTeamFormRef}>
             <h1 className="font-header card-sm:text-2xl">Team Name</h1>
             <input
-            name='newTeamName'
-            className="rounded-lg px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
-            defaultValue={team.name}
+              name='teamName'
+              className="rounded-lg px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
+              required
             />
             <h1 className="font-header card-sm:text-2xl">Select A Leader</h1>
             <div className="flex flex-wrap w-full p-2 justify-around bg-orange-100 border-4 border-black rounded-lg">
-            {team.characters.map((individualCharacter => (
+            {team.map((individualCharacter => (
               <CharacterLeaderSelect team={team} individualCharacter={individualCharacter} name="leaderSelect" label={individualCharacter.id}/>   
             )))}
             </div>
             <h1 className="font-header card-sm:text-2xl">Select A Sub-Leader</h1>
             <div className="flex flex-wrap w-full p-2 justify-around bg-orange-100 border-4 border-black rounded-lg">
-            {team.characters.map((individualCharacter => (
+            {team.map((individualCharacter => (
               <CharacterSubLeaderSelect team={team} individualCharacter={individualCharacter} name="subLeaderSelect" label={individualCharacter.id}/>   
             )))}
             </div>
             <h1 className="font-header card-sm:text-2xl">Select Your First Rotation</h1>
             <div className="flex flex-wrap w-full p-2 justify-around bg-orange-100 border-4 border-black rounded-lg">
-            {team.characters.map((individualCharacter => (
+            {team.map((individualCharacter => (
               <Rotation1CharacterSelection individualCharacter={individualCharacter} label={individualCharacter.id} rotation1Characters={rotation1Characters} handleRotation1Characters={handleRotation1Characters}/>   
             )))}
             </div>
             <h1 className="font-header card-sm:text-2xl">Select Your Second Rotation</h1>
             <div className="flex flex-wrap w-full p-2 justify-around bg-orange-100 border-4 border-black rounded-lg">
-            {team.characters.map((individualCharacter => (
+            {team.map((individualCharacter => (
               <Rotation2CharacterSelection individualCharacter={individualCharacter} label={individualCharacter.id} rotation2Characters={rotation2Characters} handleRotation2Characters={handleRotation2Characters}/>   
             )))}
             </div>
@@ -196,7 +160,6 @@ export default function EditTeamForm( {team, selectedDeck, open, onClose} ) {
                   name='strategy'
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
                   rows="4"
-                  defaultValue={team.info.notes}
                 ></textarea>
               </div>
             </div>
@@ -210,12 +173,11 @@ export default function EditTeamForm( {team, selectedDeck, open, onClose} ) {
         </div>
       </div>
     </>,
-    document.getElementById("EditTeamForm")
+    document.getElementById("MakeTeamForm")
   );
 }
 
-const CharacterLeaderSelect = ({ team, individualCharacter, name, label, ...inputProps }) => {
-  const previousLeader = team.info.leader
+const CharacterLeaderSelect = ({ individualCharacter, name, label, ...inputProps }) => {
   return (
     <label htmlFor={`${name}-${label}`}>
       <input
@@ -225,7 +187,6 @@ const CharacterLeaderSelect = ({ team, individualCharacter, name, label, ...inpu
         className="hidden peer"
         value={label}
         {...inputProps}
-        defaultChecked={label === previousLeader}
       />
       <div
         style={{ cursor: "pointer" }}
@@ -237,8 +198,7 @@ const CharacterLeaderSelect = ({ team, individualCharacter, name, label, ...inpu
   );
 };
 
-const CharacterSubLeaderSelect = ({ team, individualCharacter, name, label, ...inputProps }) => {
-  const previousSubLeader = team.info.subLeader
+const CharacterSubLeaderSelect = ({ individualCharacter, name, label, ...inputProps }) => {
   return (
     <label htmlFor={`${name}-${label}`}>
       <input
@@ -248,7 +208,6 @@ const CharacterSubLeaderSelect = ({ team, individualCharacter, name, label, ...i
         className="hidden peer"
         value={label}
         {...inputProps}
-        defaultChecked={label === previousSubLeader}
       />
       <div
         style={{ cursor: "pointer" }}

@@ -4,6 +4,7 @@ import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
+
 import {
   QUERY_CHARACTERS,
   GET_USERDATA,
@@ -19,15 +20,7 @@ import Auth from "../util/auth";
 import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
-function AllComponents() {
-  const { loading: allCharactersLoading, data: allCharactersData } =
-    useQuery(QUERY_CHARACTERS);
-  const allCharacters = allCharactersData?.characters || [];
-
-  const characterDictionary = Object.fromEntries(
-    allCharacters.map((characterObj) => [characterObj.id, characterObj])
-  );
-
+function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
   const [filteredCharacters, setFilteredCharacters] = useState(null);
 
   const [cardDetails, setCardDetails] = useState({
@@ -528,6 +521,7 @@ function AllComponents() {
           />
         ) : (
           <DeckSelection
+            characterDictionary={characterDictionary}
             webOfTeam={webOfTeam}
             userDeckData={userDeckData}
             selectedDeck={selectedDeck}

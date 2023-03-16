@@ -155,3 +155,258 @@ query FindOneUser($profileId: String!) {
     savedCharacters
   }
 }`;
+
+export const GET_EVENT_DATA = gql `
+query AllEventsStagesTeams {
+  allEventsStagesTeams {
+    _id
+    name
+    stages {
+      _id
+      eventId
+      eventName
+      name
+      teams {
+        _id
+        creator {
+          _id
+          username
+        }
+        createdAt
+        name
+        teamArray
+        leader
+        subLeader
+        rotation1
+        rotation2
+        floaters
+        stageId
+        character1 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character2 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character3 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character4 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character5 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character6 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character7 {
+          characterId
+          role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            role
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        likes
+        strategy
+        items {
+          _id
+          id
+          type
+          description
+        }
+        supportMemory {
+          _id
+          id
+          description
+          name
+        }
+        comments {
+          createdAt
+          content
+          creator
+        }
+      }
+    }
+  }
+}`;
+
+export const GET_ONE_TEAM_POST = gql`
+query FindOnePostTeam($teamId: String) {
+  findOnePostTeam(teamId: $teamId) {
+    _id
+    likes
+    comments {
+      _id
+      createdAt
+      creator
+      content
+      teamPost
+    }
+  }
+}`;
+
+export const GET_ITEMS_DATA = gql `
+query Items {
+  items {
+    _id
+    id
+    name
+    type
+    description
+  }
+}
+`;
+
+export const GET_SUPPORT_MEMORY_DATA = gql `
+query SupportMemory {
+  supportMemory {
+    _id
+    id
+    name
+    description
+  }
+}
+`;

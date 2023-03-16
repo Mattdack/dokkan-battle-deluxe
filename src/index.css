@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .disable-zoom {
-  touch-action: pan-x pan-y;
+/* body {
+  touch-action:manipulation,
 } */
 
 .font-header {
