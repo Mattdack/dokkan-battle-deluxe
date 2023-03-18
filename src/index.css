@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  touch-action:manipulation,
-} */
+#CardSelection {
+  touch-action:manipulation;
+}
 
 .font-header {
   color: #ffac37;
