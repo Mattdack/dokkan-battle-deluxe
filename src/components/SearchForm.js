@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchForm = ({ onFormChange, isDisabled }) => {
+const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => {
   return (
     <div className="flex flex-row flex-wrap justify-around lg:mx-5">
       {/* //search field */}
@@ -28,6 +28,7 @@ const SearchForm = ({ onFormChange, isDisabled }) => {
               className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
+              onChange={handleNewCategorySelected}
             >
               <option value="">All Categories</option>
               <option>Accelerated Battle</option>

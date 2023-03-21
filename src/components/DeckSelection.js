@@ -122,7 +122,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
 
     <div className="flex p-2 mb-2 justify-center items-center">
         <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
-          Reveal Characters In Deck
+          Show Characters In Deck
         </h2>
         <div className="flex items-center">
           <label className="inline-flex relative items-center mr-5 cursor-pointer">

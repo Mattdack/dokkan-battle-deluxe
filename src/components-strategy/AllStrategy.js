@@ -97,13 +97,6 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
     middleColumn.scrollIntoView({ top: 0, left: 0 });
   };
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let eventPhoto = new CloudinaryImage(`Events/${selectedEvent?.name.replace(/\s+/g, '').toLowerCase()}`, cloudConfig, urlConfig);
-  let stagePhoto = new CloudinaryImage(`Character Categories/${selectedStage?.name.replace(/[^\w\s]/gi, '').replace(/\s+/g, '').toLowerCase()}`, cloudConfig, urlConfig);
-
   return (
     <div key={'AllStrategy'} className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       <SelectTeamToStageModal userDecks={userDecks} userData={profileData} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)}/>
@@ -113,7 +106,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
         <div className="h-[100vh] card-sm:h-[90vh] w-screen lg:w-full border-4 border-black rounded-lg">
           <div className="h-1/2 border-b-4 border-black">
             <div className="flex flex-col h-full items-center w-full overflow-y-auto">
-              <p className="font-header flex w-full justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200">Events</p>
+              <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Events</p>
               {allEvents && allEvents.map((event) =>
                 <div onClick={() => handleSetSelectedEvent(event)} className={`m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
                   <EventTab key={event.name} event={event}/>
@@ -124,10 +117,10 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           
           <div className="h-1/2">
             <div className="flex h-full flex-wrap mb-1 pb-4 justify-around overflow-y-auto">
-              <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200">Stages</p>
+              <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Stages</p>
               {selectedEvent && selectedEvent.stages.map((stage) =>
-              <div onClick={() => handleSetSelectedStage(stage)} className={`m-1 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
-                <StageTab className='w-fit h-20' key={stage.name} stageName={stage.name}/>
+              <div onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
+                <StageTab key={stage.name} stageName={stage.name}/>
               </div>
               )}
             </div>
@@ -152,12 +145,12 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           <div className="flex flex-col justify-center items-center w-full p-4">
             <div className="flex flex-row pb-2 items-center">
               <p className="font-header mr-4 text-lg card-sm:text-3xl">Event:</p>
-              {selectedEvent ? <div className="flex w-full p-2 justify-center items-center"><AdvancedImage cldImg={eventPhoto} className={`w-full`}/></div> : null}
+              {selectedEvent ? <div className="flex w-full p-2 justify-center items-center"><EventTab className='' key={selectedEvent.name} event={selectedEvent}/></div> : null}
             </div>
             <div className="flex justify-center items-center w-[95%] border-2 border-black"/>
             <div className="flex flex-row items-center">
               <p className="font-header mr-4 text-lg card-sm:text-3xl">Stage:</p>
-              {selectedStage ? <div className="flex w-full p-2 justify-center items-center"><AdvancedImage cldImg={stagePhoto} className={`h-12`}/></div> : null} 
+              {selectedStage ? <div className="flex w-full p-2 justify-center items-center"><StageTab key={selectedStage.name} stageName={selectedStage.name}/></div> : null} 
             </div>
           </div>
 
@@ -234,7 +227,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           </button>
         </div>
 
-        <div className="h-[95vh] overflow-y-auto">
+        <div className="h-[95vh] border-4 border-black rounded-lg overflow-y-auto">
             {selectedTeam ? <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary}/> : null}
         </div>
         

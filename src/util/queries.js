@@ -100,6 +100,9 @@ export const GET_USERDATA = gql`
 query FindOneUser($profileId: String!) {
   findOneUser(profileId: $profileId) {
     _id
+    username
+    savedCharacters
+    role
     decks {
       _id
       name
@@ -152,7 +155,6 @@ query FindOneUser($profileId: String!) {
         }
       }
     }
-    savedCharacters
   }
 }`;
 
@@ -166,6 +168,7 @@ query AllEventsStagesTeams {
       eventId
       eventName
       name
+      missions
       teams {
         _id
         creator {
@@ -174,6 +177,7 @@ query AllEventsStagesTeams {
         }
         createdAt
         name
+        mission
         teamArray
         leader
         subLeader

@@ -94,6 +94,8 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 
   const entireTeamObject = [team?.character1, team?.character2, team?.character3, team?.character4, team?.character5, team?.character6, team?.character7]
 
+  console.log(team)
+
   return (
     <>
     <WarningRemoveTeamPostModal profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
@@ -167,17 +169,17 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
   );
 };
 
-function CommentSection({ comments }) {
-  console.log(comments)
-  return (
-    <div className="w-full h-[200px] max-h-[200px] border-x-4 border-b-4 border-black z-50 bg-orange-100 rounded-b-lg p-4 shadow-md">
-      <p className="font-header">Comments:</p>
-      {comments && comments.map((comment) => 
-        comment
-      )}
-    </div>
-  );
-}
+// function CommentSection({ comments }) {
+//   console.log(comments)
+//   return (
+//     <div className="w-full h-[200px] max-h-[200px] border-x-4 border-b-4 border-black z-50 bg-orange-100 rounded-b-lg p-4 shadow-md">
+//       <p className="font-header">Comments:</p>
+//       {comments && comments.map((comment) => 
+//         comment
+//       )}
+//     </div>
+//   );
+// }
 
 const CharacterCard = ({individualCharacter, EZA, type}) => {
   // Set the Cloud configuration and URL configuration
@@ -192,9 +194,9 @@ const CharacterCard = ({individualCharacter, EZA, type}) => {
  
   return (
     <>
-        <div className='w-fit relative'>
+        <div className='flex w-fit justify-center items-center relative'>
           <AdvancedImage
-            className="h-[60px] card-sm:h-[80px] w-[60px] card-sm:w-[80px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
+            className="h-[60px] card-sm:h-[80px] w-[60px] card-sm:w-[80px] bg-no-repeat relative z-40"
             cldImg={characterThumb}
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
@@ -211,7 +213,7 @@ const CharacterCard = ({individualCharacter, EZA, type}) => {
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
           <AdvancedImage
-            className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
+            className="w-[80%] card-sm:w-[81%] absolute top-[13%] z-0"
             cldImg={characterTypeBackground}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />

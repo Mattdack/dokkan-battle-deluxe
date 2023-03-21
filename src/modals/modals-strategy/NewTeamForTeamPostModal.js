@@ -134,6 +134,8 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
     });
   }
 
+  console.log(stageData)
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(formRef.current);
@@ -154,14 +156,15 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             creator: userData.data._id,
             stageId: stageData._id,
             name: formObject.teamName,
+            mission: formObject.mission || 'No Mission',
             teamArray: [
-                character1Object.id,
-                character2Object.id,
-                character3Object.id,
-                character4Object.id,
-                character5Object.id,
-                character6Object.id,
-                character7Object.id,
+              character1Object.id,
+              character2Object.id,
+              character3Object.id,
+              character4Object.id,
+              character5Object.id,
+              character6Object.id,
+              character7Object.id,
             ],
             leader: team.info.leader,
             subLeader: team.info.subLeader,
@@ -287,8 +290,8 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
           <img onClick={onClose} src={closeIcon} className="absolute top-2 right-2 rounded-lg transition ease-in-out hover:bg-gray-400/[.6] cursor-pointer"/>
         <form className="flex flex-col w-full" ref={formRef} onSubmit={handleSubmit}>
 
-          <div className="flex flex-col w-full justify-around ">
-            <p className="font-header flex w-full mb-4 border-b-4 border-black justify-center items-center text-2xl card-sm:text-5xl">Team Layout</p>
+          <div className="flex flex-col w-full justify-around border-4 border-black rounded-lg">
+            <p className="font-header flex w-full mb-4 bg-orange-400 border-b-4 border-black justify-center items-center text-center text-2xl card-sm:text-5xl">Team Layout</p>
           
             <div className="flex flex-wrap mb-6 justify-around items-center">
               <div className="flex card-sm:flex-col card-sm:w-fit px-2 justify-around">
@@ -328,51 +331,75 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
 
           </div>
 
-          <h1 className="font-header card-sm:text-2xl">Team Name</h1>
-          <input
-              name='teamName'
-              className="rounded-lg px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
-              defaultValue={team.name}
-          />
-          {entireTeamObjects.map((individualCharacter) => (
-            <CharacterInfoBar
-              key={individualCharacter.role + individualCharacter.character.id} 
-              role={individualCharacter.role}
-              cardType={individualCharacter.type || ''} 
-              character={individualCharacter.character}
-              team={team}
-            />
-          ))}
-          <div className="flex flex-wrap justify-center mb-4 border-4 border-black rounded-lg">
-            <h1 className="font-header w-full card-sm:text-2xl text-center ">Item Selection</h1>
-            <div className="flex flex-wrap max-h-[30vh] justify-center overflow-y-auto">
-              {allItems.map((item) => (
-                <ItemSelection key={item.id} item={item} itemSelection={itemSelection} handleItemSelection={handleItemSelection}/>
-              ))}
+          <div className="mt-8 border-4 border-black rounded-lg">
+            <p className="font-header flex w-full bg-orange-400 border-b-4 border-black justify-center items-center text-center text-2xl card-sm:text-5xl">Team information</p>
+
+            <div className="flex flex-col w-full items-center">
+              <h1 className="font-header card-sm:text-2xl">Team Name</h1>
+              <input
+                  name='teamName'
+                  className="rounded-lg px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
+                  defaultValue={team.name}
+              />
             </div>
-          </div>
-          <div className="flex flex-wrap justify-center mb-4 border-4 border-black rounded-lg">
-            <h1 className="font-header w-full card-sm:text-2xl text-center ">Support Memory Selection</h1>
-            <div className="flex flex-wrap max-h-[30vh] justify-center overflow-y-auto">
-              {allSupportMemories.map((supportMemory) => (
-                <SupportMemorySelection key={supportMemory.id} supportMemory={supportMemory} supportMemorySelection={supportMemorySelection} setSupportMemorySelection={setSupportMemorySelection}/>
-              ))}
+
+            {stageData.missions.length > 0 &&
+              <label htmlFor='mission' className="flex flex-col lg:flex-row w-full pt-4 pb-2 justify-center items-center font-bold">
+                <p className="mr-2">Mission Accomplished: </p>
+                <select className="flex w-full card-sm:w-fit font-base text-base truncate" name='mission' id="mission">
+                    <option value='No Mission'>No Mission</option>
+                    {stageData.missions.map((mission) => (
+                      <option className="font-bold font-base" key={mission} value={mission}>
+                        {mission}
+                      </option>
+                    ))}
+                  </select>
+              </label>
+            }
+            {entireTeamObjects.map((individualCharacter) => (
+              <CharacterInfoBar
+                key={individualCharacter.role + individualCharacter.character.id} 
+                role={individualCharacter.role}
+                cardType={individualCharacter.type || ''} 
+                character={individualCharacter.character}
+                team={team}
+              />
+            ))}
+            <div className="flex flex-wrap justify-center border-t-4 border-black">
+              <h1 className="font-header w-full card-sm:text-2xl text-center ">Item Selection</h1>
+              <div className="flex flex-wrap max-h-[30vh] justify-center overflow-y-auto">
+                {allItems.map((item) => (
+                  <ItemSelection key={item.id} item={item} itemSelection={itemSelection} handleItemSelection={handleItemSelection}/>
+                ))}
+              </div>
+                <p className="w-full py-2 text-center text-gray-500">*if no item is selected, the team posted will show 4 empty item slots*</p>
             </div>
+            <div className="flex flex-wrap justify-center mb-4 border-y-4 border-black">
+              <h1 className="font-header w-full card-sm:text-2xl text-center ">Support Memory Selection</h1>
+              <div className="flex flex-wrap max-h-[30vh] justify-center overflow-y-auto">
+                {allSupportMemories.map((supportMemory) => (
+                  <SupportMemorySelection key={supportMemory.id} supportMemory={supportMemory} supportMemorySelection={supportMemorySelection} setSupportMemorySelection={setSupportMemorySelection}/>
+                ))}
+              </div>
+              <p className="w-full py-2 text-center text-gray-500">*if no support memory is selected, the team posted will show an empty support memory slot*</p>
+            </div>
+            <div className="px-4">
+              <h1 className="font-header w-full text-lg card-sm:text-2xl text-center ">Strategy for team</h1>
+              <textarea
+                name='strategy'
+                className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
+                rows="6"
+                defaultValue={team.info.notes}
+                maxlength="2500"
+                required
+              ></textarea>
+            </div>
+            <p className="text-2xl font-bold text-red-500">{errorMessage}</p>
+            <div className="flex flex-col w-full pb-4 justify-center items-center">
+              <p className="w-full pt-4 text-gray-500 text-base font-bold text-center">*POST WARNING: once a team has been posted to a stage, it currently cannot be edited, although the edit feature is under development. We encourage users to look over the character information and strategy they have entered to check for miss spellings and correct EZA / Hidden Potential information.*</p>
+              <button type="submit" className="flex w-1/2 p-2 mt-4 justify-center border-4 border-black text-2xl font-bold items-center text-center bg-orange-400 hover:bg-orange-500 transition ease-in-out">Submit</button>
+            </div>  
           </div>
-          <h1 className="font-header w-full card-sm:text-2xl text-center">Strategy with the team</h1>
-          <textarea
-            name='strategy'
-            className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
-            rows="6"
-            defaultValue={team.info.notes}
-            maxlength="2500"
-            required
-          ></textarea>
-          <p className="text-2xl font-bold text-red-500">{errorMessage}</p>
-          <div className="flex flex-col w-full justify-center items-center">
-            <p className="w-full pt-4 text-gray-500 text-base font-bold text-center">*POST WARNING: once a team has been posted to a stage, it currently cannot be edited, although the edit feature is under development. We encourage users to look over the character information and strategy they have entered to check for miss spellings and correct EZA / Hidden Potential information.*</p>
-            <button type="submit" className="flex w-fit p-2 mt-4 justify-center border-4 border-black text-2xl font-bold items-center text-center bg-orange-400 hover:bg-orange-500 transition ease-in-out">Submit</button>
-          </div>  
         </form>
       </div>
     </div>,
@@ -382,7 +409,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
 
 const CharacterInfoBar = ({ character, role, cardType, team }) => {
   return (
-    <div className="flex flex-col logo-md:flex-row items-center w-full my-2 border-4 border-black rounded-lg">
+    <div className="flex flex-col logo-md:flex-row items-center w-full border-t-4 border-black">
       <div className="flex flex-col w-fit p-2 justify-center items-center">
         <CharacterCard individualCharacter={character} type={cardType}/>
         <div>
@@ -404,7 +431,6 @@ const CharacterInfoBar = ({ character, role, cardType, team }) => {
               id={`${role}CharacterRole`}
               value={cardType}
             />
-            
             <input type="checkbox" id={`${role}HiddenPotential1`} name={`${role}HiddenPotential1`} value={true} defaultChecked={false} className={`hidden peer/1`}/>
             <label 
             htmlFor={`${role}HiddenPotential1`} 

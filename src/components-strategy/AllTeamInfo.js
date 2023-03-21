@@ -28,16 +28,16 @@ function AllTeamInfo({ team, characterDictionary }) {
   const ezaDictionary = Object.fromEntries(
     teamArrayWithCharacterData.map((characterData) => [characterData.characterId, characterData.EZA])
   );
-
-  console.log(team)
   
   return (
 
-    <div className="flex flex-wrap pt-4 border-4 border-black rounded-t-lg bg-orange-200">
+    <div className="flex flex-wrap pt-4 bg-orange-200">
       
       <div className="flex flex-col w-full mb-6 justify-center items-center">
         <p className="font-header w-[80%] text-xl card-sm:text-3xl text-center">{team.name}</p>
-        <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold border-b-4 border-black text-center">creator: {team.creator.username}</p>
+        <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold text-center">creator: {team.creator.username.replace(/(.+)@.+\..+/, "$1")}</p>
+        {team.mission === 'No Mission' ? null : <p className="w-[80%] pb-2 text-md card-sm:text-lg font-bold text-center">Mission: {team.mission}</p>}
+        <div className="w-[80%] border-b-black border-b-4"></div>
       </div>
 
       <div className="flex flex-wrap w-full justify-around">
@@ -182,31 +182,31 @@ const CharacterCard = ({individualCharacter, type, EZA}) => {
  
   return (
     <>
-        <div className='w-fit relative'>
+        <div className='flex w-fit justify-center items-center relative'>
           <AdvancedImage
-            className="h-[80px] card-sm:h-[100px] w-[80px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
+            className="h-[80px] card-sm:h-[100px] bg-no-repeat relative z-40"
             cldImg={characterThumb}
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
-            {type === 'leader' ? <img src={leaderIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null}
-            {type === 'subLeader' ? <img src={friendIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null} 
-            {EZA ? <img src={ezaIcon} className='w-[30%] bottom-[5%] right-[0%] absolute z-50'/> : null}
+          {type === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {type === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {EZA ? <img src={ezaIcon} className='w-[30%] bottom-[5%] right-[0%] absolute z-50'/> : null}
           <AdvancedImage
             cldImg={characterRarity}
             className={individualCharacter.rarity === "UR"
                 ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-                : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+                : "h-[35%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
             }
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
           <AdvancedImage
-            className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
+            className="w-[80%] card-sm:w-[81%] absolute top-[13%] z-0"
             cldImg={characterTypeBackground}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
           <AdvancedImage
-            className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
+            className="w-[45%] card-sm:w-[40%] absolute -top-[4%] card-sm:top-[0%] right-[-6%] card-sm:right-[-2%] z-50"
             cldImg={characterTypeBadge}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />

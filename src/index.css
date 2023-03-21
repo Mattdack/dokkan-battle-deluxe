@@ -24,6 +24,14 @@
     2px 2px 0 #000;
 }
 
+.text-shadow-black {
+  text-shadow:
+    -2px -2px 0 #000,  
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;
+}
+
 .hamburger-open {
   transform: translateX(0);
   transition: transform 1s ease-out;

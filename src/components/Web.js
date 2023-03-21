@@ -143,7 +143,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
       <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
         <div className="absolute top-0 right-0 bg-red-500 w-20 h-20"></div>
         <button
-        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
+        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
         <ReactFlow

@@ -12,7 +12,7 @@ function EventTab({ event }) {
   let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
-  let eventPhoto = new CloudinaryImage(`Events/${event.name.replace(/\s+/g, '').toLowerCase()}`, cloudConfig, urlConfig);
+  let eventPhoto = new CloudinaryImage(`Events/${event.name.replace(/ /g, '_').replace(/[^\w\s]|_/g, '')}`, cloudConfig, urlConfig);
 
   return (
     <div className="p-4">

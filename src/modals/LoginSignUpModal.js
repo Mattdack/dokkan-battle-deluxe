@@ -227,7 +227,7 @@ export default function LoginSignUpModal({ open, children, onClose }) {
                 name="password2"
                 value={signUpFormData.password2}
               ></input>
-              <p className="ml-1 mb-4 text-sm text-gray-400">*must be eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</p>
+              <p className="ml-1 mb-4 text-sm text-gray-400">*password must be eight characters long with at least one uppercase letter, one lowercase letter, one number and one special character*</p>
               {signUpError && <p className="w-full pb-4 text-center text-lg text-red-500 font-bold">{signUpError}</p>}
               <button
                 disabled={

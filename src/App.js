@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
 import AllComponents from "./components/AllComponents"
 import AllStrategy from "./components-strategy/AllStrategy"
-import Navbar from "./components/Navbar";
+import AllAPI from "./components-api/AllAPI"
+import Help from "./components/Help";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -44,6 +46,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={<AllComponentsWithData />} />
           <Route exact path='/strategy' element={<AllStrategiesWithData />} />
+          <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
+          <Route exact path={'/help'} element={<Help />} />
         </Routes>
       </Router>
     </ApolloProvider>

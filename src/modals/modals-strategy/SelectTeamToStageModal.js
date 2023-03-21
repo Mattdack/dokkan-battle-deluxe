@@ -81,40 +81,42 @@ export default function SelectTeamToStageModal( {userDecks, userData, stageData,
             <button disabled={handleIsTeamDisabled(team)}
             onClick={() => handleSelectedTeam(team)}
             className='disabled:grayscale'>
-              <div key={team.name} className="font-header flex w-full h-fit py-4 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center bg-orange-300 relative">
-                {team.name}
-              </div>
-              <div className="flex flex-wrap w-full h-1/4 py-2 px-1 card-sm:px-8 mb-2 border-x-4 border-b-4 border-black rounded-b-lg justify-around bg-orange-300 relative">
-                {team.characters.length === 6 &&
-                  <>
-                    <CharacterCard individualCharacter={characterDictionary[team?.info?.leader] || 0} team={team} type={'leader'} />
-                    
-                    {team.characters.map((individualCharacter) => {
-                      if (team.info.leader !== individualCharacter.id && team.info.subLeader !== individualCharacter.id) {
-                        return <CharacterCard individualCharacter={individualCharacter} team={team} key={individualCharacter.id}/>;
-                      }
-                      return null;
-                    })}
+              <div className="bg-orange-300 hover:bg-orange-400">
+                <div key={team.name} className="font-header flex w-full h-fit py-4 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center relative">
+                  {team.name}
+                </div>
+                <div className="flex flex-wrap w-full h-1/4 py-2 px-1 card-sm:px-8 mb-2 border-x-4 border-b-4 border-black rounded-b-lg justify-around relative">
+                  {team.characters.length === 6 &&
+                    <>
+                      <CharacterCard individualCharacter={characterDictionary[team?.info?.leader] || 0} team={team} type={'leader'} />
+                      
+                      {team.characters.map((individualCharacter) => {
+                        if (team.info.leader !== individualCharacter.id && team.info.subLeader !== individualCharacter.id) {
+                          return <CharacterCard individualCharacter={individualCharacter} team={team} key={individualCharacter.id}/>;
+                        }
+                        return null;
+                      })}
 
-                    <CharacterCard individualCharacter={characterDictionary[team?.info?.subLeader || 0]} team={team} type={'subleader'}/>
-                  </>
-                }
-                {team.characters.length !== 6 &&
-                  <>
-                    {team.characters.map((individualCharacter => (
-                      (team.info.leader === individualCharacter.id) ?
-                        <CharacterCard individualCharacter={individualCharacter} team={team} type={'leader'} key={'leader'}/> : null
-                    )))}
-                    {team.characters.map((individualCharacter => (
-                      (team.info.leader !== individualCharacter.id && team.info.subLeader !== individualCharacter.id) ?
-                      <CharacterCard individualCharacter={individualCharacter} team={team} key={individualCharacter.id}/> : null
-                    )))}
-                    {team.characters.map((individualCharacter => (
-                      (team.info.subLeader === individualCharacter.id && individualCharacter.id !== team.info.leader) ?
-                        <CharacterCard individualCharacter={individualCharacter} team={team} type={'subleader'} key={'subLeader'}/> : null
-                    )))}
-                  </>
-                }
+                      <CharacterCard individualCharacter={characterDictionary[team?.info?.subLeader || 0]} team={team} type={'subleader'}/>
+                    </>
+                  }
+                  {team.characters.length !== 6 &&
+                    <>
+                      {team.characters.map((individualCharacter => (
+                        (team.info.leader === individualCharacter.id) ?
+                          <CharacterCard individualCharacter={individualCharacter} team={team} type={'leader'} key={'leader'}/> : null
+                      )))}
+                      {team.characters.map((individualCharacter => (
+                        (team.info.leader !== individualCharacter.id && team.info.subLeader !== individualCharacter.id) ?
+                        <CharacterCard individualCharacter={individualCharacter} team={team} key={individualCharacter.id}/> : null
+                      )))}
+                      {team.characters.map((individualCharacter => (
+                        (team.info.subLeader === individualCharacter.id && individualCharacter.id !== team.info.leader) ?
+                          <CharacterCard individualCharacter={individualCharacter} team={team} type={'subleader'} key={'subLeader'}/> : null
+                      )))}
+                    </>
+                  }
+                </div>
               </div>
             </button>
           )).reverse()}
