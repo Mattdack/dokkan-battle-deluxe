@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .disable-zoom {
-  touch-action: pan-x pan-y;
-} */
+#CardSelection {
+  touch-action:manipulation;
+}
 
 .font-header {
   color: #ffac37;
@@ -17,6 +17,14 @@
 
 .EZA-header {
   color: #f6ff00;
+  text-shadow:
+    -2px -2px 0 #000,  
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;
+}
+
+.text-shadow-black {
   text-shadow:
     -2px -2px 0 #000,  
     2px -2px 0 #000,

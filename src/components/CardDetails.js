@@ -65,10 +65,12 @@ function CardDetails({ cardDetails }) {
             EZA
             {ezaEnabled ? 
             <img 
-            className="absolute max-w-[200%] h-[120%] -bottom-[20%] -right-[40%] z-0 object-contain"
+            className="absolute max-w-[200%] h-[120%] -bottom-[10%] -right-[50%] z-0 object-contain"
             alt='extreme awakening'
             src= {process.env.PUBLIC_URL + '/dokkanIcons/power-up.png'}
-            /> : ''}
+            /> : ''
+            }
+            
           </button>
         </div>
 
@@ -188,7 +190,7 @@ function CardDetails({ cardDetails }) {
           <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Links:
           </p>
-          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[17vh] card-sm:h-[12vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
                 return <CharacterLinkDisplay linkText={linkText} />;
@@ -200,7 +202,7 @@ function CardDetails({ cardDetails }) {
           <p className="flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Categories:
           </p>
-          <div className="h-[17vh] card-sm:h-[14vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="h-[17vh] card-sm:h-[12vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (

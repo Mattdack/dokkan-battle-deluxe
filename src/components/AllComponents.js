@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
+
 import {
   QUERY_CHARACTERS,
   GET_USERDATA,
@@ -19,15 +20,7 @@ import Auth from "../util/auth";
 import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
-function AllComponents() {
-  const { loading: allCharactersLoading, data: allCharactersData } =
-    useQuery(QUERY_CHARACTERS);
-  const allCharacters = allCharactersData?.characters || [];
-
-  const characterDictionary = Object.fromEntries(
-    allCharacters.map((characterObj) => [characterObj.id, characterObj])
-  );
-
+function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
   const [filteredCharacters, setFilteredCharacters] = useState(null);
 
   const [cardDetails, setCardDetails] = useState({
@@ -194,9 +187,7 @@ function AllComponents() {
   }
 
   const filterAndSetCharacters = (filterData) =>
-    setFilteredCharacters(
-      getFilteredCharacters(allCharacters, userCharacters, filterData)
-    );
+    [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData))];
 
   //TODO: can be optimized/look cleaner if this sort/filter was a util function
   //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
@@ -288,8 +279,6 @@ function AllComponents() {
           );
         });
 
-  const [viewableCharacters, setViewableCharacters] = useState(50);
-
   //scroll ability through buttons on mobile
   const scrollToSingleCardStats = () => {
     const middleColumn = document.getElementById("SingleCardDetails");
@@ -308,8 +297,13 @@ function AllComponents() {
   const [selectedDeck, setSelectedDeck] = useState("");
 
   const handleSelectedDeck = (deckId) => {
-    setShowCardDetails(false);
-    setSelectedDeck(deckId);
+    if (deckId === 'No Deck'){
+      setShowCardDetails(true)
+      setSelectedDeck('Decks')
+    }else {
+      setShowCardDetails(false);
+      setSelectedDeck(deckId);
+    }
   };
 
   const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] =
@@ -317,6 +311,33 @@ function AllComponents() {
   function handleShowCharactersInSelectedDeck() {
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
+
+  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const cardContainerRef = useRef(null);
+
+  const handleNewCategorySelected = () => {
+    setViewableCharacters(50)
+    cardContainerRef.current.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
+  useEffect(() => {
+    const cardContainer = cardContainerRef.current;
+
+    const handleScroll = () => {
+      if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+        setViewableCharacters(viewableCharacters + 50);
+      }
+    };
+
+    cardContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      cardContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, [viewableCharacters]);
 
   const [announcementOpen, setAnnouncementOpen] = useState(true);
 
@@ -375,6 +396,7 @@ function AllComponents() {
 
         <SearchForm
           onFormChange={filterAndSetCharacters}
+          handleNewCategorySelected={handleNewCategorySelected}
           isDisabled={allCharactersLoading}
         />
 
@@ -382,7 +404,7 @@ function AllComponents() {
           {Auth.loggedIn() ? (
             <>
               <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
-                Add Characters To My Deck
+                Save Characters
               </h2>
               <div className="flex items-center">
                 <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -424,15 +446,14 @@ function AllComponents() {
         </div>
 
         {/* //character select box */}
-        <div className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
-          {allCharactersLoading ? (
-            <div>Loading...</div>
-          ) : (
-            (window.innerWidth < 550
-              ? charactersToDisplay.slice(0, viewableCharacters)
-              : charactersToDisplay
-            )
+        <div 
+        ref={cardContainerRef}
+        className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+          {allCharactersLoading ? (<div>Loading...</div>) 
+          : (
+            (window.innerWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
               .filter((character) => character.glb_date !== null)
+              .slice(0, viewableCharacters)
               .map((character) => (
                 <div
                   id="CharacterCard"
@@ -442,43 +463,27 @@ function AllComponents() {
                       changeDeck(character.id);
                     }
                   }}
-                  // onDoubleClick={() => {
-                  //   if (!multiCardSelection) {
-                  //     if (
-                  //       webOfTeam.map((char) => char.id).includes(character.id)
-                  //     ) {
-                  //       setWebOfTeam(
-                  //         webOfTeam.filter((char) => char.id !== character.id)
-                  //       );
-                  //     } else {
-                  //       setWebOfTeam([...webOfTeam, character]);
-                  //     }
-                  //   }
-                  // }}
                 >
                   <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
                     showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-                    savedToMyCharacterDeck={
-                      multiCardSelection ? savedToMyCharacterDeck : undefined
-                    }
+                    savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
                     webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                     addToWebOfTeam={addToWebOfTeam}
+                    removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
                   />
                 </div>
               ))
           )}
-          {charactersToDisplay.length > viewableCharacters && (
-            <button
-              className="w-full py-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400"
-              onClick={() => setViewableCharacters(viewableCharacters + 75)}
+            {/* <button
+              className="w-full p-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400"
+              onClick={() => setViewableCharacters(viewableCharacters + 50)}
             >
-              Load More Characters
-            </button>
-          )}
+              Scroll Down or Click to Load More Characters
+            </button> */}
         </div>
       </div>
       {/* //middle column styling */}
@@ -527,7 +532,7 @@ function AllComponents() {
                 onChange={(e) => handleSelectedDeck(e.target.value)}
                 disabled={allCharactersLoading}
               >
-                <option value="font-bold">Decks:</option>
+                <option className="font-bold" value='No Deck'>Decks</option>
                 {userDeckData.map((deck) => (
                   <option className="font-bold" key={deck._id} value={deck._id}>
                     {deck.name}
@@ -549,6 +554,7 @@ function AllComponents() {
           />
         ) : (
           <DeckSelection
+            characterDictionary={characterDictionary}
             webOfTeam={webOfTeam}
             userDeckData={userDeckData}
             selectedDeck={selectedDeck}
@@ -596,8 +602,7 @@ function AllComponents() {
   );
 }
 
-// returns a new array of characters derived from either allCharacters or userCharacters
-// based on the criteria in filterData
+// returns a new array of characters derived from either allCharacters or userCharacters based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
   return baseChars.filter((character) => {

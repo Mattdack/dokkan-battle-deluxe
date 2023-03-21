@@ -35,7 +35,7 @@ mutation RenameDeck($profileId: String, $deckId: String, $newDeckName: String) {
 `
 
 export const ADD_TEAM_TO_DECK = gql`
-mutation Mutation($profileId: String!, $deckId: String, $team: [CharacterInput]) {
+mutation AddTeamToDeck($profileId: String!, $deckId: String, $team: PersonalTeamInput) {
   addTeamToDeck(profileId: $profileId, deckId: $deckId, team: $team) {
     _id
     decks {
@@ -50,43 +50,6 @@ mutation Mutation($profileId: String!, $deckId: String, $team: [CharacterInput])
           rotation1
           rotation2
           notes
-        }
-        characters {
-          id
-          thumb
-          art
-          name
-          title
-          rarity
-          type
-          cost
-          ls_description
-          ls_description_eza
-          sa_type
-          sa_name
-          sa_description
-          sa_description_eza
-          ultra_sa_type
-          ultra_sa_name
-          ultra_sa_description
-          ultra_sa_description_eza
-          ps_name
-          ps_description
-          ps_description_eza
-          sa_type_active
-          active_skill_name
-          active_skill
-          active_skill_condition
-          active_skill_condition_eza
-          transform_type
-          transform_condition
-          transform_condition_eza
-          link_skill
-          category
-          jp_date
-          glb_date
-          jp_date_eza
-          glb_date_eza
         }
       }
     }
@@ -128,3 +91,39 @@ mutation RemoveTeamFromDeck($profileId: String!, $deckId: String, $teamId: Strin
     }
   }
 }`;
+
+export const ADD_TEAM_POST_TO_STAGE = gql `
+mutation AddTeamPostToStage($userId: String, $stageId: String, $teamInfo: TeamPostInput) {
+  addTeamPostToStage(userId: $userId, stageId: $stageId, teamInfo: $teamInfo) {
+    _id
+    name
+    teamArray
+  }
+}
+`;
+
+export const REMOVE_TEAM_POST_FROM_STAGE = gql `
+mutation RemoveTeamPostFromStage($userId: String, $teamPostId: String, $stageId: String) {
+  removeTeamPostFromStage(userId: $userId, teamPostId: $teamPostId, stageId: $stageId) {
+    _id
+  }
+}`
+
+export const LIKE_TEAM_POST = gql`
+mutation LikeTeamPost($userId: String, $teamPostId: String) {
+  likeTeamPost(userId: $userId, teamPostId: $teamPostId) {
+    _id
+    name
+    likes
+  }
+}
+`
+
+export const REMOVE_LIKE_FROM_TEAM_POST = gql`
+mutation RemoveLikeFromTeamPost($userId: String, $teamPostId: String) {
+  removeLikeFromTeamPost(userId: $userId, teamPostId: $teamPostId) {
+    _id
+    likes
+  }
+}
+`

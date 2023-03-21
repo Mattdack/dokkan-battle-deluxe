@@ -4,7 +4,7 @@ import ReactFlow, {
   applyEdgeChanges,
   useReactFlow,
 } from "reactflow";
-import { countBy } from "lodash";
+import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
 import WebCard from "./WebCard";
@@ -67,36 +67,56 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
   
   const onNodeClick = (event, node) => {
-    setSelectedNode(node);
+    setSelectedNode(node)
   };
 
   const onNodeDrag = (event, node) => {
     setSelectedNode(null)
+    console.log('node drag')
   }
   
   const onNodeDragStart = (event, node) => {
-    setSelectedNode(null);
+    setSelectedNode(null)
+    console.log('drag start')
   };
 
   const onNodeDragStop = (event, node) => {
     setSelectedNode(null)
+    console.log('drag stop')
   }
   
   // this function launches the function removeFromWebOfTeam which was passed from AllComponents>SuggestToWeb>Web
   const onNodeDoubleClick = (event, node) => {
+    setSelectedNode(null)
     removeFromWebOfTeam(node.data);
   };
 
-  const onEdgeClick = () => {
-    // this is literally just needed for the useeffect to keep the edge selected when the label is clicked
+  const onEdgeClick = (event, edge) => {
+    // this checks to see if a selectedNode is present. If it is, then it just sets the selected edges to what ever the node is. This allows for the edges to remain orange even after a label click
+    if(selectedNode){
+      if(!edge.selected){
+        return
+      }
+      setExistingEdges((prevEdges) => {
+        const updatedEdges = combinedEdgeData.map((edge) => {
+          if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
+            return { ...edge, selected: true };
+          } else {
+            return { ...edge, selected: false };
+          }
+        });
+        return updatedEdges;
+      });
+    }
   }
 
   const onPaneClick = () => {
     setSelectedNode(null)
   }
 
-  // this is where the web can get a little touchy. This can definitely be optimized on the dependency side, currently it reaches maximum update depth, but still works great. Allows for the edges to be selected on node click and certain drag capabilities. 
+  // this useEffect updates the edges to selected if the node connected to them is clicked
   useEffect(() => {
+    console.log('use Effect being used')
     if (!selectedNode) {
       return;
     }
@@ -110,7 +130,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
       });
       return updatedEdges;
     });
-  }, [webOfTeam, onEdgesChange, onEdgeClick]);
+  }, [selectedNode]);
 
   const handleResetTeam = (webOfTeam) => {
     for (let i = 0; i < webOfTeam.length; i++) {
@@ -123,7 +143,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
       <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
         <div className="absolute top-0 right-0 bg-red-500 w-20 h-20"></div>
         <button
-        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-50"
+        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
         <ReactFlow

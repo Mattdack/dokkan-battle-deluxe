@@ -39,14 +39,7 @@ function AllComponentsCard({
   }
 }
 
-function WebCard({
-  character,
-  webOfTeam,
-  deckTeams,
-  showCharactersInSelectedDeck,
-  addToWebOfTeam,
-  newCardDetails
-}) {
+function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails}) {
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
@@ -54,6 +47,7 @@ function WebCard({
   }, [webOfTeam]);
 
   const [isInSelectedDeck, setIsInSelectedDeck] = useState([]);
+
   useEffect(() => {
     setIsInSelectedDeck(
       deckTeams
@@ -65,9 +59,12 @@ function WebCard({
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
   const ref = useRef(null);
-  const handleCardClick = () => {
+
+  const handleCardClick = (character) => {
+    newCardDetails(character.id)
     setIsCardClicked(!isCardClicked);
   };
+
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIsCardClicked(false);
@@ -114,7 +111,7 @@ function WebCard({
   return (
     <div
       ref={ref}
-      onClick={handleCardClick}
+      onClick={() => handleCardClick(character)}
       className={`${
         showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""
       } w-fit relative hover:bg-slate-900/[.4]`}
@@ -122,16 +119,10 @@ function WebCard({
       {isCardClicked ? (
         <div>
           <div
-            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-t-lg"
+            className="flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg"
             onClick={() => addToWebOfTeam(character)}
           >
             Add To Team
-          </div>
-          <div
-            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-orange-400 hover:bg-amber-600 rounded-b-lg"
-            onClick={() => newCardDetails(character.id)}
-          >
-            Details
           </div>
         </div>
       ) : (

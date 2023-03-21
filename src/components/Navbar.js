@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import Auth from "../util/auth";
 
 import HamburgerModal from "../modals/HamburgerModal"
-import LoginSignUpModal from "../modals/LoginSignUpModal";
-import HelpModal from "../modals/HelpModal";
-import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 
 const AppNavbar = () => {
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false)
-  const [updatesOpen, setUpdatesOpen] = useState(false)
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50`;
   const logo = process.env.PUBLIC_URL + "/dokkanIcons/logo.png";
@@ -20,7 +14,7 @@ const AppNavbar = () => {
       <div className="flex pr-8">
         {/* hamburger button */}
         <button
-          className="lg:hidden flex flex-col h-10 w-10 border-2 border-black rounded justify-center items-center group relative"
+          className="flex flex-col h-12 w-12 border-2 border-black rounded justify-center items-center group relative"
         >
           <div
             onClick={() => setHamburgerOpen(!hamburgerOpen)}
@@ -46,45 +40,13 @@ const AppNavbar = () => {
             />
             <div
             onClick={() => setHamburgerOpen(!hamburgerOpen)}
-            className="absolute w-full h-full top-0 right-0"
+            className="absolute w-full h-full p-2 top-0 right-0"
             />
           {hamburgerOpen ?
-          <HamburgerModal hamburgerOpen={hamburgerOpen} setHamburgerOpen={setHamburgerOpen}/>
+            <HamburgerModal open={hamburgerOpen} onClose={() => setHamburgerOpen(false)}/>
           : null}
-
         </button>
-        
-        <button
-            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            onClick={() => setHelpOpen(true)}
-        >
-            Help
-        </button>
-        <button
-            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            onClick={() => setUpdatesOpen(true)}
-        >
-            News & Updates
-        </button>
-        {Auth.loggedIn() ? (
-          <button
-            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            onClick={Auth.logout}
-          >
-            Log Out
-          </button>
-        ) : (
-          <button
-            className="hidden lg:inline-flex ml-2 flex font-header text-2xl flex w-fit col-span-1 p-4 bg-orange-200 border-2 border-black rounded-full"
-            onClick={() => setLoginOpen(true)}
-          >
-            Login/Sign Up
-          </button>
-        )}
       </div>
-      <LoginSignUpModal open={loginOpen} onClose={() => setLoginOpen(false)} />
-      <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)}/>
-      <NewsAndUpdatesModal open={updatesOpen} onClose={() => setUpdatesOpen(false)}/>
     </div>
   );
 };
