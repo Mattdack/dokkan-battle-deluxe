@@ -11,8 +11,7 @@ import { useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_ITEMS_DATA, GET_SUPPORT_MEMORY_DATA } from "../src/util/queries";
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql',
-  // uri: process.env.REACT_APP_API_KEY,
+  uri: process.env.REACT_APP_API_KEY,
   cache: new InMemoryCache(),
 });
 

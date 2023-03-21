@@ -97,6 +97,25 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
     middleColumn.scrollIntoView({ top: 0, left: 0 });
   };
 
+  //to sort the events how I wanted
+  const sortedEvents = allEvents.slice().sort((a, b) => {
+    const nameOrder = [
+      "Ultimate Red Zone Wicked Bloodline Edition",
+      "Ultimate Red Zone Red Ribbon Army Edition",
+      "Fighting Spirit of the Saiyans and Pride of the Wicked Bloodline",
+      "Collection of Epic Battles",
+      "Gods of Destruction Assemble",
+      "Fighting Legend: Vegeta",
+      "Fighting Legend: Goku",
+      "Fighting Legend: Goku GT Edition",
+      "Extreme Super Battle Road",
+      "Super Battle Road",
+    ]
+    const nameA = nameOrder.indexOf(a.name);
+    const nameB = nameOrder.indexOf(b.name);
+    return nameA - nameB;
+  });
+
   return (
     <div key={'AllStrategy'} className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       <SelectTeamToStageModal userDecks={userDecks} userData={profileData} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)}/>
@@ -107,11 +126,11 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           <div className="h-1/2 border-b-4 border-black">
             <div className="flex flex-col h-full items-center w-full overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Events</p>
-              {allEvents && allEvents.map((event) =>
+              {allEvents && sortedEvents.map(event => 
                 <div onClick={() => handleSetSelectedEvent(event)} className={`m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
                   <EventTab key={event.name} event={event}/>
                 </div>
-              )}
+              ).reverse()}
             </div>
           </div>
           

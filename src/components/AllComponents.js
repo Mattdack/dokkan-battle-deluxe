@@ -339,13 +339,21 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     };
   }, [viewableCharacters]);
 
-  const [announcementOpen, setAnnouncementOpen] = useState(true);
+  const [announcementOpen, setAnnouncementOpen] = useState(false)
+  
+  const announcementSeen = localStorage.getItem('announcementSeen')
+  const timestamp = localStorage.getItem('announcementSeenTimestamp')
+  if (!announcementSeen || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
+    setAnnouncementOpen(true);
+    localStorage.setItem('announcementSeen', 'true');
+    localStorage.setItem('announcementSeenTimestamp', Date.now());
+  }
 
   return (
     // stages formatting
     <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       {/* TODO: for important information to announce on page load */}
-      {/* <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/> */}
+      <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
       {/* //left column styling */}
       <div
