@@ -46,7 +46,7 @@ function App() {
           <Route exact path="/" element={<AllComponentsWithData />} />
           <Route exact path='/strategy' element={<AllStrategiesWithData />} />
           <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
-          <Route exact path={'/help'} element={<Help />} />
+          <Route exact path='/help' element={<Help />} />
         </Routes>
       </Router>
     </ApolloProvider>
