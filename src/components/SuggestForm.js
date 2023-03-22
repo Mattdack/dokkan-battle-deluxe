@@ -165,7 +165,7 @@ const SuggestForm = ({
                   style={{ cursor: "pointer" }}
                   className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
                 >
-                  Characters Saved
+                  Saved
                 </div>
               </label>
             </div>

@@ -17,7 +17,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Updates</p>
                 <div className="flex flex-wrap justify-around overflow-y-auto">
                   <NewsDiv date={'MAR/21/2023'} information={<>
-                    <p className="px-4 py-2 text-base font-bold indent-4">We have made a <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/help`}>Help page</a> which can be accessed in the drop-down menu at the top right of the page. We have also establish a News & Update pages to give our users information on what we have built, what we are working on, and what is coming next. Lastly, we have sucessfully added in the Team Posts. With this new update we are allowing users to post teams to specific stages. Over time, we will keep adding more stages and also be updating them if more stages are added to events.</p>
+                    <p className="px-4 py-2 text-base font-bold indent-4">The strategy section is now available! You can access it <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/strategy`}>here</a>. With this new update we are allowing users to post teams to specific stages. Over time, we will keep adding more stages and also be updating them as more stages are added to events and more events are added to the game. We also made a <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/help`}>help page</a> which can be accessed in the drop-down menu at the top right of the page. Also, the new News & Update pages to give our users information on what we have built, what we are working on, and what is coming next. We Hope you continue to enjoy our app! If you have any input (positive or negative) please go to the help page and fill out the goole form.</p>
                     {/* <li className="py-2 px-4"></li> */}
                     </>} 
                     key={1}
@@ -27,8 +27,10 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               <div className="lg:w-2/5 border-2 border-black">
               <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Upcoming Updates</p>
                 <li className="px-4 py-2 text-lg font-bold">Multi-category search</li>
-                <li className="px-4 py-2 text-lg font-bold">Adding a Remove From Team option to character cards in the main container</li>
+                <li className="px-4 py-2 text-lg font-bold">Adding a remove from team option to character cards in the main container</li>
                 <li className="px-4 py-2 text-lg font-bold">Adding in transformed characters</li>
+                <li className="px-4 py-2 text-lg font-bold">Allowing people to comment there saved characters in order for others to help formulate a team for them</li>
+                <li className="px-4 py-2 text-lg font-bold">Allowing "dry team post", making it so that people don't have to make a team at the home page but can construct one from scratch in the strategy page</li>
                 <li className="px-4 py-2 text-lg font-bold line-through decoration-2">New strategy page</li>
                 <li className="px-4 py-2 text-lg font-bold line-through decoration-2">New help page</li>
               </div>
@@ -43,7 +45,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
 function NewsDiv ({ date, information }) {
 
   return (
-    <div className="w-[90%] max-h-[300px] mt-4 mx-4 border-4 border-black rounded-lg bg-orange-300 overflow-y-auto">
+    <div className="w-[90%] max-h-[350px] mt-4 mx-4 border-4 border-black rounded-lg bg-orange-300 overflow-y-auto">
       <p className="w-full h-fit p-2 border-b-2 border-black text-xl font-bold text-center bg-orange-400">{date}</p>
       <p className="">{information}</p>
     </div>
