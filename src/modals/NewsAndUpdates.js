@@ -26,7 +26,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               </div>
               <div className="lg:w-2/5 border-2 border-black">
               <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Upcoming Updates</p>
-                
+                <li className="px-4 py-2 text-lg font-bold">Team analysis button on posted teams to see how well characters link with each other on the team</li>
                 <li className="px-4 py-2 text-lg font-bold">Adding a remove from team option to character cards in the main container</li>
                 <li className="px-4 py-2 text-lg font-bold">Adding in transformed characters</li>
                 <li className="px-4 py-2 text-lg font-bold">Allowing people to comment on stages their saved characters in order for others to help formulate a team for them</li>
