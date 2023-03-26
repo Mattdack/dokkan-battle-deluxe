@@ -1,6 +1,9 @@
 import React from "react";
 
-const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => {
+const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
+
+const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval }) => {
+
   return (
     <div className="flex flex-row flex-wrap justify-around lg:mx-5">
       {/* //search field */}
@@ -12,7 +15,6 @@ const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => 
         }}
       >
         <fieldset
-          disabled={isDisabled}
           className="flex flex-col w-full p-1 items-center"
         >
           {/* input and category selection */}
@@ -28,7 +30,7 @@ const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => 
               className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
-              onChange={handleNewCategorySelected}
+              onChange={(e) => handleNewCategorySelected(e)}
             >
               <option value="">All Categories</option>
               <option>Accelerated Battle</option>
@@ -122,9 +124,55 @@ const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => 
             </select>
           </div>
 
-          {/* //type buttons */}
+
+          {/* selected category bar */}
+          <div className="flex flex-row w-full mt-2 justify-center items-center">
+            <div className="flex flex-row w-full h-fit card-sm:h-10 mr-2 bg-white items-center text-center rounded-full border-2 border-gray-400 overflow-x-scroll whitespace-nowrap"
+              onWheel={(e) => {
+                e.preventDefault();
+                const container = e.currentTarget;
+                const containerScrollPosition = container.scrollLeft;
+                container.scrollTo({
+                  top: 0,
+                  left: containerScrollPosition + e.deltaY,
+                  behavior: "smooth"
+                });
+              }}>
+              {selectedCategories.length === 0 &&
+              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-base justify-center items-center text-center" key={'no category selection'}>
+                selected categories here
+              </div>
+              }
+              {selectedCategories.map((category) => (
+                <div className="flex flex-shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
+                  <img className="w-1/4 card-sm:w-full p-1" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
+                  <p className="text-sm card-sm:text-base">{category}</p>
+                </div>
+              ))}
+            </div>
+              <div className="flex w-fit justify-center order-2 bg-orange-300 rounded-md border-2 border-slate-900">
+                <label htmlFor="matchAllCategories">
+                  <input
+                    type="checkbox"
+                    name="matchAllCategories"
+                    id="matchAllCategories"
+                    className="hidden peer"
+                    value={true}
+                  />
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 whitespace-nowrap"
+                  >
+                    Full Match
+                  </div>
+                </label>
+            </div>
+          </div>
+
+
+          {/* type buttons */}
           <div
-            className="flex w-full my-1 card-sm:my-2 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
+            className="flex w-full pl-1 pr-2 my-1 card-sm:my-2 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
             id="box-2"
           >
             <CharacterSelectButton name="characterType" label="AGL" />
@@ -143,7 +191,7 @@ const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => 
           {/* rarity buttons */}
           <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
             <div
-              className="flex w-1/2 justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
+              className="flex w-1/2 justify-around pr-2 mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
               id="box-1"
             >
               <CharacterSelectButton name="characterRarity" label="UR" />
@@ -155,13 +203,14 @@ const SearchForm = ({ onFormChange, isDisabled, handleNewCategorySelected }) => 
                 defaultChecked
               />
             </div>
-
+          
+          {/* super and extreme buttons */}
             <div
-              className="flex w-1/2 justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold ml-1"
+              className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold ml-1"
               id="box-1"
             >
-              <CharacterSelectButton name="characterSuperOrExtreme" label="S"/>
-              <CharacterSelectButton name="characterSuperOrExtreme" label="E"/>
+              <CharacterSelectButton name="characterSuperOrExtreme" value="S" label="Super"/>
+              <CharacterSelectButton name="characterSuperOrExtreme" value="E" label="Extreme"/>
               <CharacterSelectButton
                 name="characterSuperOrExtreme"
                 value=""
@@ -209,7 +258,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center py-1 px-2 card-sm:py-2 card-sm:px-5 relative text-sm card-sm:text-base lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-base lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>

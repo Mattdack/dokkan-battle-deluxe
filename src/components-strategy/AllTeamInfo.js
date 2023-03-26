@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+ import React, { memo } from "react";
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
@@ -25,17 +25,15 @@ function AllTeamInfo({ team, characterDictionary }) {
   
   const teamArrayWithCharacterData = [team.character1, team.character2, team.character3, team.character4, team.character5, team.character6, team.character7]
 
-  const ezaDictionary = Object.fromEntries(
-    teamArrayWithCharacterData.map((characterData) => [characterData.characterId, characterData.EZA])
-  );
-  
+  const ezaDictionary = Object.fromEntries(teamArrayWithCharacterData.map((characterData) => [characterData.characterId, characterData.EZA]));
+  console.log(team)
   return (
 
     <div className="flex flex-wrap pt-4 bg-orange-200">
       
       <div className="flex flex-col w-full mb-6 justify-center items-center">
         <p className="font-header w-[80%] text-xl card-sm:text-3xl text-center">{team.name}</p>
-        <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold text-center">creator: {team.creator.username.replace(/(.+)@.+\..+/, "$1")}</p>
+        <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold text-center truncate">creator: {team.creator.username.replace(/(.+)@.+\..+/, "$1")}</p>
         {team.mission === 'No Mission' ? null : <p className="w-[80%] pb-2 text-md card-sm:text-lg font-bold text-center">Mission: {team.mission}</p>}
         <div className="w-[80%] border-b-black border-b-4"></div>
       </div>
@@ -45,9 +43,9 @@ function AllTeamInfo({ team, characterDictionary }) {
         <div className="flex flex-col justify-center items-center">
 
           <p className="font-header text-base card-sm:text-xl">Leader:</p>
-          <CharacterCard individualCharacter={characterDictionary[team.leader]} EZA={team.leader.EZA} />
+          <CharacterCard individualCharacter={characterDictionary[team.leader]} EZA={ezaDictionary[team.leader]} leaderOrSubLeader='leader'/>
           <p className="font-header text-base card-sm:text-xl">Sub Leader:</p>
-          <CharacterCard individualCharacter={characterDictionary[team.subLeader]} EZA={team.subLeader.EZA} />
+          <CharacterCard individualCharacter={characterDictionary[team.subLeader]} EZA={ezaDictionary[team.subLeader]} leaderOrSubLeader='subLeader'/>
           
         </div>
 
@@ -56,16 +54,16 @@ function AllTeamInfo({ team, characterDictionary }) {
           <div className="flex flex-col">
             <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 1:</p>
             <div className="flex justify-center w-full">
-              <CharacterCard individualCharacter={characterDictionary[team.rotation1[0]]} EZA={ezaDictionary[team.rotation1[0]]}/>
-              <CharacterCard individualCharacter={characterDictionary[team.rotation1[1]]} EZA={ezaDictionary[team.rotation1[1]]}/>
+              <CharacterCard individualCharacter={characterDictionary[team.character1.characterId]} EZA={ezaDictionary[team.character1.characterId]} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
+              <CharacterCard individualCharacter={characterDictionary[team.character2.characterId]} EZA={ezaDictionary[team.character2.characterId]} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
             </div>
           </div>
 
           <div className="flex flex-col">
             <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 2:</p>
             <div className="flex justify-center w-full">
-            <CharacterCard individualCharacter={characterDictionary[team.rotation2[0]]} EZA={ezaDictionary[team.rotation2[0]]}/>
-            <CharacterCard individualCharacter={characterDictionary[team.rotation2[1]]} EZA={ezaDictionary[team.rotation2[1]]}/>
+            <CharacterCard individualCharacter={characterDictionary[team.character3.characterId]} EZA={ezaDictionary[team.character3.characterId]} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
+            <CharacterCard individualCharacter={characterDictionary[team.character4.characterId]} EZA={ezaDictionary[team.character4.characterId]} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
             </div>
           </div>
 
@@ -75,27 +73,28 @@ function AllTeamInfo({ team, characterDictionary }) {
 
       <div className="flex flex-row w-full pt-4 justify-center items-center">
         <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Float:</p>
-        <CharacterCard individualCharacter={characterDictionary[floaterIds[0]]} EZA={ezaDictionary[floaterIds[0]]}/>
-        <CharacterCard individualCharacter={characterDictionary[floaterIds[1]]} EZA={ezaDictionary[floaterIds[1]]}/>
-        <CharacterCard individualCharacter={characterDictionary[floaterIds[2]]} EZA={ezaDictionary[floaterIds[2]]}/>
+        <CharacterCard individualCharacter={characterDictionary[team.character5.characterId]} EZA={ezaDictionary[team.character5.characterId]} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
+        <CharacterCard individualCharacter={characterDictionary[team.character6.characterId]} EZA={ezaDictionary[team.character6.characterId]} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
+        <CharacterCard individualCharacter={characterDictionary[team.character7.characterId]} EZA={ezaDictionary[team.character7.characterId]} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
       </div>
 
       <div className="flex flex-row w-full justify-center items-center">
         <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Items:</p>
         
-        {team.items.length === 0 &&
+        {(team.items.length === 0 || team.items[0].id === 0) ?
         <div className="flex flex-row p-2">
         <ItemCard item={{id:0, type:'bronze'}}/>
         <ItemCard item={{id:0, type:'bronze'}}/>
         <ItemCard item={{id:0, type:'bronze'}}/>
         <ItemCard item={{id:0, type:'bronze'}}/>
-        </div>}
-        
+        </div>
+        :
         <div className="flex flex-row p-2">
           {team.items && team.items.map((item) => (
             <ItemCard item={item} key={item.id}/>
           ))}
         </div>
+        }
       </div>
 
       <div className="flex flex-row w-full mb-4 justify-center items-center">
@@ -108,13 +107,13 @@ function AllTeamInfo({ team, characterDictionary }) {
       </div>
 
       <div className="h-full w-full border-t-4 border-black">
-        <CharacterBar singleCharacter={team.character1} characterDictionary={characterDictionary} type={team.character1.role}/>
-        <CharacterBar singleCharacter={team.character2} characterDictionary={characterDictionary} type={team.character2.role}/>
-        <CharacterBar singleCharacter={team.character3} characterDictionary={characterDictionary} type={team.character3.role}/>
-        <CharacterBar singleCharacter={team.character4} characterDictionary={characterDictionary} type={team.character4.role}/>
-        <CharacterBar singleCharacter={team.character5} characterDictionary={characterDictionary} type={team.character5.role}/>
-        <CharacterBar singleCharacter={team.character6} characterDictionary={characterDictionary} type={team.character6.role}/>
-        <CharacterBar singleCharacter={team.character7} characterDictionary={characterDictionary} type={team.character7.role}/>
+        <CharacterBar singleCharacter={team.character1} characterDictionary={characterDictionary} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character2} characterDictionary={characterDictionary} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character3} characterDictionary={characterDictionary} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character4} characterDictionary={characterDictionary} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character5} characterDictionary={characterDictionary} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character6} characterDictionary={characterDictionary} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
+        <CharacterBar singleCharacter={team.character7} characterDictionary={characterDictionary} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
       </div>
 
       <div className="flex flex-col w-full pb-4 px-2 bg-orange-300 relative">
@@ -128,12 +127,12 @@ function AllTeamInfo({ team, characterDictionary }) {
   );
 };
 
-function CharacterBar({ singleCharacter, characterDictionary, type }){
+function CharacterBar({ singleCharacter, characterDictionary, leaderOrSubLeader }){
   return (
   <div className="flex flex-row w-full h-[17vh] items-center border-b-4 border-black bg-orange-200">
     <div className="flex flex-col w-fit h-full justify-center items-center border-r-2 border-black">
       <div className="p-2">
-        <CharacterCard individualCharacter={characterDictionary[singleCharacter?.characterId]} type={type} EZA={singleCharacter.EZA}/>
+        <CharacterCard individualCharacter={characterDictionary[singleCharacter?.characterId]} leaderOrSubLeader={leaderOrSubLeader} EZA={singleCharacter.EZA}/>
       </div>
       <div className="flex w-full border-black">
           <div 
@@ -169,7 +168,7 @@ function CharacterBar({ singleCharacter, characterDictionary, type }){
   )
 }
 
-const CharacterCard = ({individualCharacter, type, EZA}) => {
+const CharacterCard = ({individualCharacter, leaderOrSubLeader, EZA}) => {
   // Set the Cloud configuration and URL configuration
   let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
 
@@ -189,8 +188,8 @@ const CharacterCard = ({individualCharacter, type, EZA}) => {
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
-          {type === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
-          {type === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {leaderOrSubLeader === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {leaderOrSubLeader === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
           {EZA ? <img src={ezaIcon} className='w-[30%] bottom-[5%] right-[0%] absolute z-50'/> : null}
           <AdvancedImage
             cldImg={characterRarity}
@@ -222,9 +221,6 @@ const ItemCard = ({item}) => {
   // Instantiate and configure a CloudinaryImage object.
   let itemThumb = new CloudinaryImage(`Items/${item.id}`, cloudConfig, urlConfig);
   let itemBackground = item.type ? new CloudinaryImage(`Items/background-${item.type.toLowerCase()}`, cloudConfig, urlConfig) : null;
-  
-  
-
   return (
     <>
         <div className='w-fit relative mx-1'>

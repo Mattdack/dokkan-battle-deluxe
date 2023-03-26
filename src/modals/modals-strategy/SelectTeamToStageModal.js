@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";
 
+import MakeTeamFromScratch from "./MakeTakeFromScratch"
 import NewTeamForTeamPostModal from "./NewTeamForTeamPostModal"
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
@@ -21,6 +22,7 @@ export default function SelectTeamToStageModal( {userDecks, userData, stageData,
 
   const [teamIsDisabled, setTeamIsDisabled] = useState(false)
 
+  const [openMakeTeamFromScratch, setOpenMakeTeamFromScratch] = useState(false)
   const [openNewTeamForTeamPostModal, setOpenNewTeamForTeamPostModal] = useState(false)
 
   const handleSelectedDeck = (deckId) => {
@@ -55,15 +57,25 @@ export default function SelectTeamToStageModal( {userDecks, userData, stageData,
   if (!open) return null;
   return ReactDom.createPortal(
     <>
+      <MakeTeamFromScratch userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openMakeTeamFromScratch} onClose={() => setOpenMakeTeamFromScratch(false)}/>
       <NewTeamForTeamPostModal team={selectedTeam} userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openNewTeamForTeamPostModal} onClose={() => setOpenNewTeamForTeamPostModal(false)}/>
 
       <div 
-      // onClick={onClose}
+      onClick={onClose}
       className="fixed top-0 left-0 right-0 bottom-0 bg-black/[.7] z-[999]">
-        <div className="flex flex-col w-4/5 lg:w-[70%] max-h-[80%] px-2 card-sm:px-4 pt-16 pb-4 card-sm:p-12 border-4 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[900] top-[10%] lg:top-[10%] right-[10%] lg:right-[15%] overflow-y-auto">
+        <div 
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col w-4/5 lg:w-[70%] max-h-[80%] px-2 card-sm:px-4 pt-16 pb-4 card-sm:p-12 border-4 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[900] top-[10%] lg:top-[10%] right-[10%] lg:right-[15%] overflow-y-auto">
           <img onClick={onClose} src={closeIcon} className="absolute top-2 right-2 rounded-lg transition ease-in-out hover:bg-gray-400/[.6] cursor-pointer"/>
-         {/* <h1 className="text-lg font-bold">Great news, we're busy! Bad news, character load times will be slower until servers can be upgraded. We apologize for the slower load times and we hope you continue to enjoy using the app!</h1> */}
-         <p className="text-lg card-sm:text-2xl font-bold my-2">Which Deck Do You Want To Select From?</p>
+          
+          <div className="flex w-full justify-center items-center">
+            <button 
+            onClick={() => setOpenMakeTeamFromScratch(true)}
+            className="w-[60%] p-2 my-2 text-lg card-sm:text-2xl border-4 border-black bg-orange-300 hover:bg-orange-400 font-bold text-center rounded-full">Make Team From Scratch</button>
+          </div>
+
+         
+         <p className="w-full text-lg card-sm:text-2xl font-bold my-2 text-center">Select A Team From Decks</p>
          <select className={`disabled:bg-gray-500 flex w-full p-2 my-2 h-fit border-2 card-sm:text-3xl font-bold border-black bg-orange-200 rounded-lg justify-center items-center text-center cursor-pointer`} 
           id="deckSelectForTeamPost" 
           value={selectedDeckName}

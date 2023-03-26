@@ -7,7 +7,6 @@ import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
 
 function EventTab({ event }) {
-  console.log(event)
   // Set the Cloud configuration and URL configuration
   let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
   let urlConfig = new URLConfig({secure: true});

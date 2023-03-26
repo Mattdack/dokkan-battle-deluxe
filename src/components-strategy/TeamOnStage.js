@@ -93,13 +93,15 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
   },[likedPostData, removeLikeOnTeamPostData])
 
   const entireTeamObject = [team?.character1, team?.character2, team?.character3, team?.character4, team?.character5, team?.character6, team?.character7]
+  const teamDeck = entireTeamObject.filter(character => character.leaderOrSubLeader !== 'subLeader')
+  const subLeaderCharacter = entireTeamObject.filter(character => character.leaderOrSubLeader === 'subLeader')[0]
 
   console.log(team)
 
   return (
     <>
     <WarningRemoveTeamPostModal profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
-      <div key={team._id} className='relative' onClick={() => handleSetSelectedTeam()}> 
+      <div key={team._id} className='relative max-w-[400px] lg:max-w-full' onClick={() => handleSetSelectedTeam()}> 
               {/* <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit p-1 mt-2 mr-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/> */}
               {/* <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/> */}
             <div className={`font-header flex w-full h-fit pt-4 pb-2 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
@@ -116,31 +118,97 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
               {team.name}
             </div>
             
-            <div className={`flex flex-wrap w-full h-1/4 pt-2 pb-10 px-6 ${showComments ? '' : 'mb-2'} border-x-4 border-b-4 border-black ${showComments ? '' : 'rounded-b-lg'} justify-around ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
-              {/* lazy sorting but it works. Basically places the leader first, subLeader last, the rest in line */}
-              {entireTeamObject &&
-                entireTeamObject
-                  .slice() // Make a copy of the array to avoid mutating the original
-                  .sort((a, b) => {
-                    if (a.role === 'leader' && b.role !== 'leader') {
-                      return -1; // a should come before b
-                    } else if (a.role !== 'leader' && b.role === 'leader') {
-                      return 1; // b should come before a
-                    } else if (a.role === 'subLeader' && b.role !== 'subLeader') {
-                      return 1; // b should come before a
-                    } else if (a.role !== 'subLeader' && b.role === 'subLeader') {
-                      return -1; // a should come before b
-                    } else {
-                      return 0; // no change in order
-                    }
-                  })
-                  .map((character) => (
-                    <CharacterCard
-                      individualCharacter={characterDictionary[character.characterId]}
-                      EZA={character.EZA}
-                      type={character.role}
-                    />
-                ))}
+            <div className={`flex flex-wrap pt-2 pb-10 px-6 ${showComments ? '' : 'mb-2'} border-x-4 border-b-4 border-black ${showComments ? '' : 'rounded-b-lg'} justify-around ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
+              
+              <div className="flex w-full justify-around items-stretch">
+                <div className="w-full grid grid-cols-2 justify-items-center">
+                  <p className="col-span-2 w-full font-header text-xl card-sm:text-2xl font-bold border-black">Team</p>
+                  {entireTeamObject &&
+                    teamDeck.sort((a, b) => {
+                        if (a.leaderOrSubLeader === 'leader' && b.leaderOrSubLeader !== 'leader') {
+                          return -1; // a should come before b
+                        } else if (a.leaderOrSubLeader !== 'leader' && b.leaderOrSubLeader === 'leader') {
+                          return 1; // b should come before a
+                        } else if (a.leaderOrSubLeader === 'subLeader' && b.leaderOrSubLeader !== 'subLeader') {
+                          return 1; // b should come before a
+                        } else if (a.leaderOrSubLeader !== 'subLeader' && b.leaderOrSubLeader === 'subLeader') {
+                          return -1; // a should come before b
+                        } else {
+                          return 0; // no change in order
+                        }
+                      }).map((character) => (
+                        <div>
+                        <CharacterCard
+                          individualCharacter={characterDictionary[character.characterId]}
+                          EZA={character.EZA}
+                          leaderOrSubLeader={character.leaderOrSubLeader}
+                        />
+                        </div>
+                    ))}
+                </div>
+
+                <div className="flex flex-col items-center justify-between">
+                  <div className="">
+                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">Friend</p>
+                    <div>
+                      <CharacterCard 
+                      individualCharacter={characterDictionary[subLeaderCharacter.characterId]}
+                      EZA={subLeaderCharacter.EZA}
+                      leaderOrSubLeader={subLeaderCharacter.leaderOrSubLeader}
+                      />
+                    </div>
+                  </div>
+                  <div className="">
+                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">items</p>
+                      {(team.items.length === 0 || team.items[0].id === 0) &&
+                      <div className="flex flex-wrap flex-row p-2 justify-center items-center">
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                      </div>
+                      }
+                      {(team.items.length === 1) &&
+                      <div className="flex flex-wrap flex-row p-2 justify-center items-center">
+                        <ItemCard item={team.items[0]} key={team.items[0].id}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                      </div>
+                      }
+                      {(team.items.length === 2) &&
+                      <div className="flex flex-wrap flex-row p-2 justify-center items-center">
+                        <ItemCard item={team.items[0]} key={team.items[0].id}/>
+                        <ItemCard item={team.items[1]} key={team.items[1].id}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                      </div>
+                      }
+                      {(team.items.length === 3) &&
+                      <div className="flex flex-wrap flex-row p-2 justify-center items-center">
+                        <ItemCard item={team.items[0]} key={team.items[0].id}/>
+                        <ItemCard item={team.items[1]} key={team.items[1].id}/>
+                        <ItemCard item={team.items[2]} key={team.items[2].id}/>
+                        <ItemCard item={{id:0, type:'bronze'}}/>
+                      </div>
+                      }
+                      {(team.items.length === 4) &&
+                      <div className="flex flex-wrap flex-row p-2 justify-center items-center">
+                      {team.items && team.items.map((item) => (
+                        <ItemCard item={item} key={item.id}/>
+                      ))}
+                    </div>
+                      }
+                  </div>
+                </div>
+              </div>
+                
+              {team.mission === 'No Mission' &&
+              <div className="flex w-full p-2">
+                <p className="font-header text-xl font-bold border-black">Mission:</p>
+                <p className="font-bold max-w-full pl-4 text-xl truncate text-left justify-center">{team.mission}</p>
+              </div>
+              }
 
                 <div className={`${arrayOfLikesOnTeamPost.includes(profileId) ? 'bg-blue-500 hover:bg-blue-700': `${profileId ? 'hover:bg-gray-500/[.75]' : ''}`} flex h-8 p-1 justify-center items-center absolute bottom-1 right-1 cursor-pointer transition ease-in-out rounded-lg z-50`}>
                   <p className="text-xl font-bold">{arrayOfLikesOnTeamPost && arrayOfLikesOnTeamPost.length}</p>
@@ -160,7 +228,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                 <img src={commentIcon} onClick={(e) => handleCommentDropDown(e, team)} className="w-8"/>
               </div> */}
               
-              <p className="p-2 card-sm:text-xl font-bold text-center absolute bottom-0 left-0 truncate">creator: {team.creator.username}</p>
+              <p className="max-w-[80%] p-2 card-sm:text-xl font-bold text-center absolute bottom-0 left-0 truncate">creator: {team.creator.username}</p>
 
             </div>
             {/* {showComments ? <CommentSection comments={team.comments}/> : null } */}
@@ -181,28 +249,28 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 //   );
 // }
 
-const CharacterCard = ({individualCharacter, EZA, type}) => {
+const CharacterCard = ({individualCharacter, EZA, leaderOrSubLeader}) => {
   // Set the Cloud configuration and URL configuration
   let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
 
   let urlConfig = new URLConfig({secure: true});
   // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${individualCharacter.id}`, cloudConfig, urlConfig);
-  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${individualCharacter.rarity}`, cloudConfig, urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${individualCharacter.type.toLowerCase()}`, cloudConfig, urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
+  let characterThumb = new CloudinaryImage(`Character Thumb/${individualCharacter.id}`, cloudConfig, urlConfig);
+  let characterRarity = new CloudinaryImage(`rarities-types/${individualCharacter.rarity}`, cloudConfig, urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`rarities-types/${individualCharacter.type.toLowerCase()}`, cloudConfig, urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
  
   return (
     <>
         <div className='flex w-fit justify-center items-center relative'>
           <AdvancedImage
-            className="h-[60px] card-sm:h-[80px] w-[60px] card-sm:w-[80px] bg-no-repeat relative z-40"
+            className="w-[80px] card-sm:w-[100px] bottom-[5%] bg-no-repeat relative z-40"
             cldImg={characterThumb}
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
-          {type === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
-          {type === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {leaderOrSubLeader === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {leaderOrSubLeader === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
           {EZA ? <img src={ezaIcon} className='w-[30%] bottom-[5%] right-[0%] absolute z-50'/> : null}
           <AdvancedImage
             cldImg={characterRarity}
@@ -224,6 +292,32 @@ const CharacterCard = ({individualCharacter, EZA, type}) => {
           />
         </div>
     </>
+  );
+}
+
+const ItemCard = ({item}) => {
+  // Set the Cloud configuration and URL configuration
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+  let urlConfig = new URLConfig({secure: true});
+  // Instantiate and configure a CloudinaryImage object.
+  let itemThumb = new CloudinaryImage(`Items/${item.id}`, cloudConfig, urlConfig);
+  let itemBackground = item.type ? new CloudinaryImage(`Items/background-${item.type.toLowerCase()}`, cloudConfig, urlConfig) : null;
+  return (
+        <div className='w-fit relative m-1'>
+          <AdvancedImage
+            className="h-[40px] card-sm:h-[50px] w-[40px] card-sm:w-[50px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
+            cldImg={itemThumb}
+            alt={item.name}
+            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+            />
+          {itemBackground && (
+            <AdvancedImage
+              className="w-[100%] card-sm:w-[100%] absolute top-[0%] card-sm:top-[0%] right-[0%] card-sm:right-[0%] z-0"
+              cldImg={itemBackground}
+              plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+            />
+          )}
+        </div>
   );
 }
 
