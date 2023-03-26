@@ -203,7 +203,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                 </div>
               </div>
                 
-              {team.mission === 'No Mission' &&
+              {team.mission !== 'No Mission' &&
               <div className="flex w-full p-2">
                 <p className="font-header text-xl font-bold border-black">Mission:</p>
                 <p className="font-bold max-w-full pl-4 text-xl truncate text-left justify-center">{team.mission}</p>
