@@ -5,11 +5,7 @@ import SuggestToWeb from "./SuggestToWeb";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
-import {
-  QUERY_CHARACTERS,
-  GET_USERDATA,
-  GET_USERCHARACTERSBYID,
-} from "../util/queries";
+import {GET_USERDATA,GET_USERCHARACTERSBYID} from "../util/queries";
 
 import { useMutation } from "@apollo/client";
 import { UPDATE_SAVED_CHARACTERS, ADD_TEAM_TO_DECK } from "../util/mutations";
@@ -21,8 +17,6 @@ import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
-  const [filteredCharacters, setFilteredCharacters] = useState(null);
-
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
     thumb: 1003310,
@@ -120,10 +114,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
 
   // lazyQuery which is called in a useEffect to find the character objects from their IDs (results in an array of the character objects saved to the user) this is used for finding characters in My Deck
-  const [
-    getUserCharacterObjects,
-    { loading: isUserCharactersLoading, data: userCharacterData },
-  ] = useLazyQuery(GET_USERCHARACTERSBYID, {
+  const [getUserCharacterObjects,{ loading: isUserCharactersLoading, data: userCharacterData }] = useLazyQuery(GET_USERCHARACTERSBYID, {
     variables: {
       dokkanIds: userCharacterIds,
     },
@@ -159,10 +150,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   const [multiCardSelection, setMultiCardSelection] = useState(false);
 
-  const [
-    updateSavedCharacters,
-    { error: updateSavedCharactersError, data: updatedSavedCharacters },
-  ] = useMutation(UPDATE_SAVED_CHARACTERS);
+  const [updateSavedCharacters,{ error: updateSavedCharactersError, data: updatedSavedCharacters }] = useMutation(UPDATE_SAVED_CHARACTERS);
   //this runs on the save button click
   async function handleUpdateSavedCharacters() {
     const profileData = Auth.getProfile();
@@ -182,32 +170,78 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     });
   }
 
-  function newCardDetails(characterId) {
-    setCardDetails(characterDictionary[characterId]);
+  function newCardDetails(characterId) {setCardDetails(characterDictionary[characterId]);}
+
+  //scroll ability through buttons on mobile
+  const scrollToSingleCardStats = () => {
+    const middleColumn = document.getElementById("SingleCardDetails");
+    middleColumn.scrollIntoView({ top: 0, left: 0 });
+  };
+  const scrollToCharacterSelection = () => {
+    const middleColumn = document.getElementById("CardSelection");
+    middleColumn.scrollIntoView({ top: 0, left: 0 });
+  };
+  const scrollToTeam = () => {
+    const middleColumn = document.getElementById("Team");
+    middleColumn.scrollIntoView({ top: 0, left: 0 });
+  };
+
+  const [showCardDetails, setShowCardDetails] = useState(true);
+  const [selectedDeck, setSelectedDeck] = useState("");
+
+  const handleSelectedDeck = (deckId) => {
+    if (deckId === 'No Deck'){
+      setShowCardDetails(true)
+      setSelectedDeck('Decks')
+    }else {
+      setShowCardDetails(false);
+      setSelectedDeck(deckId);
+    }
+  };
+
+  const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] = useState(false)
+
+  function handleShowCharactersInSelectedDeck() {
+    setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  const filterAndSetCharacters = (filterData) =>
-    [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData))];
+  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const cardContainerRef = useRef(null);
 
-  //TODO: can be optimized/look cleaner if this sort/filter was a util function
-  //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
+  useEffect(() => {
+    const cardContainer = cardContainerRef.current;
+
+    const handleScroll = () => {
+      if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+        setViewableCharacters(viewableCharacters + 50);
+      }
+    };
+
+    cardContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      cardContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, [viewableCharacters]);
+
+  const [announcementOpen, setAnnouncementOpen] = useState(false)
+  
+  const announcementSeen = localStorage.getItem('announcementSeen')
+  const timestamp = localStorage.getItem('announcementSeenTimestamp')
+  if (!announcementSeen || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
+    setAnnouncementOpen(true);
+    localStorage.setItem('announcementSeen', 'true');
+    localStorage.setItem('announcementSeenTimestamp', Date.now());
+  }
+  
+  const [newFilterData, setNewFilterData] = useState({})
+  const [filteredCharacters, setFilteredCharacters] = useState(null)
+
+  const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
+
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay =
-    filteredCharacters === null
-      ? filterByGame
-        ? allCharacters.slice().sort((a, b) => {
-            const typeOrder = [
-              "EAGL",
-              "SAGL",
-              "ETEQ",
-              "STEQ",
-              "EINT",
-              "SINT",
-              "ESTR",
-              "SSTR",
-              "EPHY",
-              "SPHY",
-            ];
+  const charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
+            const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
             const rarityOrder = ["UR", "LR"];
 
             const rarityA = rarityOrder.indexOf(a.rarity);
@@ -279,75 +313,48 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           );
         });
 
-  //scroll ability through buttons on mobile
-  const scrollToSingleCardStats = () => {
-    const middleColumn = document.getElementById("SingleCardDetails");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToCharacterSelection = () => {
-    const middleColumn = document.getElementById("CardSelection");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToTeam = () => {
-    const middleColumn = document.getElementById("Team");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-
-  const [showCardDetails, setShowCardDetails] = useState(true);
-  const [selectedDeck, setSelectedDeck] = useState("");
-
-  const handleSelectedDeck = (deckId) => {
-    if (deckId === 'No Deck'){
-      setShowCardDetails(true)
-      setSelectedDeck('Decks')
-    }else {
-      setShowCardDetails(false);
-      setSelectedDeck(deckId);
+  const handleNewCategorySelected = (e) => {
+    setViewableCharacters(50)
+    if(e.target.value === ''){
+      cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+      return setSelectedCategories([])
+    }else if(selectedCategories.includes(e.target.value)){
+      return selectedCategories
+    }else{
+      cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+      return setSelectedCategories([...selectedCategories, e.target.value])
     }
-  };
-
-  const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] =
-    useState(false);
-  function handleShowCharactersInSelectedDeck() {
-    setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
+  }
+  
+  const handleSelectedCategoryRemoval = (categoryToRemove) => {
+    setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
   }
 
-  const [viewableCharacters, setViewableCharacters] = useState(50);
-  const cardContainerRef = useRef(null);
+  // this useEffect is for automatically loading characters by increasing the viewableCharacters
+  useEffect(() => {
+    if(cardContainerRef.current !== null){
+      const cardContainer = cardContainerRef.current;
+  
+      const handleScroll = () => {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+          setViewableCharacters(viewableCharacters + 50);
+        }
+      };
+  
+      cardContainer.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        cardContainer.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [allCharactersLoading, viewableCharacters]);
 
-  const handleNewCategorySelected = () => {
-    setViewableCharacters(50)
-    cardContainerRef.current.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
+  const [selectedCategories, setSelectedCategories] = useState([])
 
   useEffect(() => {
-    const cardContainer = cardContainerRef.current;
-
-    const handleScroll = () => {
-      if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
-        setViewableCharacters(viewableCharacters + 50);
-      }
-    };
-
-    cardContainer.addEventListener("scroll", handleScroll);
-
-    return () => {
-      cardContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, [viewableCharacters]);
-
-  const [announcementOpen, setAnnouncementOpen] = useState(false)
-  
-  const announcementSeen = localStorage.getItem('announcementSeen')
-  const timestamp = localStorage.getItem('announcementSeenTimestamp')
-  if (!announcementSeen || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
-    setAnnouncementOpen(true);
-    localStorage.setItem('announcementSeen', 'true');
-    localStorage.setItem('announcementSeenTimestamp', Date.now());
-  }
+    const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
+    setFilteredCharacters(filteredChars);
+  }, [selectedCategories]);
 
   return (
     // stages formatting
@@ -389,9 +396,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               readOnly
             />
             <div
-              onClick={() => {
-                setFilterByGame(!filterByGame);
-              }}
+              onClick={() => {setFilterByGame(!filterByGame)}}
               className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
             ></div>
             <div className="ml-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
@@ -403,9 +408,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* //contains filters/buttons/search field/etc. */}
 
         <SearchForm
-          onFormChange={filterAndSetCharacters}
-          handleNewCategorySelected={handleNewCategorySelected}
           isDisabled={allCharactersLoading}
+          onFormChange={filterAndSetCharacters}
+          selectedCategories={selectedCategories}
+          handleNewCategorySelected={handleNewCategorySelected}
+          handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
         />
 
         <div className="flex w-full pb-2 items-center justify-center">
@@ -486,12 +493,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 </div>
               ))
           )}
-            {/* <button
-              className="w-full p-2 mx-10 my-4 text-center font-bold border-2 border-black bg-orange-300 hover:bg-orange-400"
-              onClick={() => setViewableCharacters(viewableCharacters + 50)}
-            >
-              Scroll Down or Click to Load More Characters
-            </button> */}
         </div>
       </div>
       {/* //middle column styling */}
@@ -567,9 +568,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             userDeckData={userDeckData}
             selectedDeck={selectedDeck}
             showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-            handleShowCharactersInSelectedDeck={
-              handleShowCharactersInSelectedDeck
-            }
+            handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
           />
         )}
       </div>
@@ -611,24 +610,18 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 }
 
 // returns a new array of characters derived from either allCharacters or userCharacters based on the criteria in filterData
-const getFilteredCharacters = (allCharacters, userCharacters, filterData) => {
+const getFilteredCharacters = (allCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
   return baseChars.filter((character) => {
     return (
-      (!filterData.searchTerm ||
-        character.name
-          .toLowerCase()
-          .includes(filterData.searchTerm.toLowerCase())) &&
-      (!filterData.characterCategory ||
-        character.category.includes(filterData.characterCategory)) &&
-      (!filterData.characterType ||
-        character.type.includes(filterData.characterType)) &&
-      (!filterData.characterSuperOrExtreme ||
-        character.type
-          .slice(0, 1)
-          .includes(filterData.characterSuperOrExtreme)) &&
-      (!filterData.characterRarity ||
-        filterData.characterRarity === character.rarity)
+      (!selectedCategories.length || (filterData.matchAllCategories
+        ? selectedCategories.every(category => character.category.includes(category))
+        : selectedCategories.some(category => character.category.includes(category))
+      )) &&
+      (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
+      (!filterData.characterType || character.type.includes(filterData.characterType)) &&
+      (!filterData.characterSuperOrExtreme || character.type.slice(0, 1).includes(filterData.characterSuperOrExtreme)) &&
+      (!filterData.characterRarity ||filterData.characterRarity === character.rarity)
     );
   });
 };

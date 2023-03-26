@@ -9,6 +9,10 @@ import {CloudinaryImage} from "@cloudinary/url-gen";
 import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
 
+import CharacterSelectionModal from "./CharacterSelectionModal"
+import { update } from "lodash";
+import { object } from "prop-types";
+
 const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/close-icon.png";
 const hiddenPotentialIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/hidden-potential.png";
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
@@ -16,102 +20,39 @@ const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png"
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 
-export default function NewTeamForTeamPostModal( {team, userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
+export default function MakeTeamFromScratch( {userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
   const [addTeamToStage, { error: teamAddedToPostError, data: teamAddedToPost }] = useMutation(ADD_TEAM_POST_TO_STAGE)
+
+  const [characterObjects, setCharacterObjects] = useState([
+    { characterObject: 'leader', role:'leader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 'subLeader', role:'subLeader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 1, id: 0, role:'character1', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 2, id: 0, role:'character2', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 3, id: 0, role:'character3', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 4, id: 0, role:'character4', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 5, id: 0, role:'character5', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 6, id: 0, role:'character6', leadeOrSub:'', type: 'none', rarity: 'none' },
+    { characterObject: 7, id: 0, role:'character7', leadeOrSub:'', type: 'none', rarity: 'none' },
+  ]);
   
-  let character1Object = {}
-  let character2Object = {}
-  let character3Object = {}
-  let character4Object = {}
-  let character5Object = {}
-  let character6Object = {}
-  let character7Object = {}
-  let entireTeamObjects = []
-  let floaterIds = []
-
-  if(team?.characters){
-    if (team.characters.length === 7) {
-      let entireTeamIdArray = team.characters.map((character) => character.id)
-      const rotationIds = [...team.info.rotation1, ...team.info.rotation2]
-      //set entire float to team array of ids
-      floaterIds = [...entireTeamIdArray]
-      for (let i = 0; i < rotationIds.length; i++) {
-        const index = floaterIds.indexOf(rotationIds[i]);
-        //remove the rotation characters to have the 3 left over characters
-        if (index > -1) {
-          floaterIds.splice(index, 1);
-        }
-      }
-
-      character1Object = characterDictionary[rotationIds[0]]
-      character2Object = characterDictionary[rotationIds[1]]
-      character3Object = characterDictionary[rotationIds[2]]
-      character4Object = characterDictionary[rotationIds[3]]
-      character5Object = characterDictionary[floaterIds[0]]
-      character6Object = characterDictionary[floaterIds[1]]
-      character7Object = characterDictionary[floaterIds[2]]
-
-      let preEntireTeamObjects = [
-        character1Object,
-        character2Object,
-        character3Object,
-        character4Object,
-        character5Object,
-        character6Object,
-        character7Object,
-      ];
-
-      entireTeamObjects = preEntireTeamObjects.map((character, index) => {
-        let leaderOrSub = character.id === team.info.leader ? 'leader' : null || character.id === team.info.subLeader ? 'subLeader' : null
-        return {
-          role: `character${index + 1}`,
-          leaderOrSub,
-          character,
-        };
-      });
-
-    } else if (team.characters.length === 6) {
-      let entireTeamIdArray = team.characters.map((character) => character.id)
-      entireTeamIdArray.push(team.info.leader)
-      const rotationIds = [...team.info.rotation1, ...team.info.rotation2]
-      //set entire float to team array of ids
-      floaterIds = [...entireTeamIdArray]
-      for (let i = 0; i < rotationIds.length; i++) {
-        const index = floaterIds.indexOf(rotationIds[i]);
-        //remove the rotation characters to have the 3 left over characters
-        if (index > -1) {
-          floaterIds.splice(index, 1);
-        }
-      }
-
-      character1Object = characterDictionary[rotationIds[0]]
-      character2Object = characterDictionary[rotationIds[1]]
-      character3Object = characterDictionary[rotationIds[2]]
-      character4Object = characterDictionary[rotationIds[3]]
-      character5Object = characterDictionary[floaterIds[0]]
-      character6Object = characterDictionary[floaterIds[1]]
-      character7Object = characterDictionary[floaterIds[2]]
-
-      let preEntireTeamObjects = [
-        character1Object,
-        character2Object,
-        character3Object,
-        character4Object,
-        character5Object,
-        character6Object,
-        character7Object,
-      ];
-
-      entireTeamObjects = preEntireTeamObjects.map((character, index) => {
-        let leaderOrSub = '';
-        return {
-          role: `character${index + 1}`,
-          leaderOrSub,
-          character,
-        };
-      });
-    }
+  const [leaderHasBeenSelected, setLeaderHasBeenSelected] = useState(false)
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  
+  function handleOpenCharacterSelection(e, index) {
+    e.preventDefault();
+    setOpenCharacterSelectionModal(true);
+    setSelectedCardIndex(index);
   }
+
+  function handleCharacterSelection(selectedCharacter) {
+    const updatedCharacterObjects = [...characterObjects];
+    updatedCharacterObjects[selectedCardIndex].id = parseInt(selectedCharacter.id)
+    updatedCharacterObjects[selectedCardIndex].type = selectedCharacter.type
+    updatedCharacterObjects[selectedCardIndex].rarity = selectedCharacter.rarity
+    setCharacterObjects(updatedCharacterObjects);
+    setOpenCharacterSelectionModal(false);
+  }
+
   const formRef = useRef(null);
 
   const [supportMemorySelection, setSupportMemorySelection] = useState({})
@@ -141,9 +82,6 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
       formObject[key] = newValue;
     }
 
-    console.log(formObject)
-
-
     addTeamToStage ({
       variables:{
           userId: userData._id,
@@ -154,26 +92,26 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             name: formObject.teamName,
             mission: formObject.mission || 'No Mission',
             teamArray: [
-              character1Object.id,
-              character2Object.id,
-              character3Object.id,
-              character4Object.id,
-              character5Object.id,
-              character6Object.id,
-              character7Object.id,
+              characterObjects[2].id,
+              characterObjects[3].id,
+              characterObjects[4].id,
+              characterObjects[5].id,
+              characterObjects[6].id,
+              characterObjects[7].id,
+              characterObjects[8].id,
             ],
-            leader: team.info.leader,
-            subLeader: team.info.subLeader,
-            rotation1: team.info.rotation1,
-            rotation2: team.info.rotation2,
-            floaters: floaterIds,
+            leader: characterObjects[0].id ,
+            subLeader: characterObjects[1].id,
+            rotation1: [characterObjects[2].id, characterObjects[3].id],
+            rotation2: [characterObjects[4].id, characterObjects[5].id],
+            floaters: [characterObjects[6].id, characterObjects[7].id, characterObjects[8].id,],
             strategy: formObject.strategy,
             items: itemSelection,
             supportMemory: supportMemorySelection._id || null,
             character1: {
               EZA: formObject?.character1EZA || false,
               leaderOrSubLeader: formObject?.character1LeaderOrSub || '',
-              characterId: character1Object.id,
+              characterId: characterObjects[2].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character1HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character1HiddenPotential2 || false,
@@ -186,7 +124,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character2: {
               EZA: formObject?.character2EZA || false,
               leaderOrSubLeader: formObject?.character2LeaderOrSub || '',
-              characterId: character2Object.id,
+              characterId: characterObjects[3].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character2HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character2HiddenPotential2 || false,
@@ -199,7 +137,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character3: {
               EZA: formObject?.character3EZA || false,
               leaderOrSubLeader: formObject?.character3LeaderOrSub || '',
-              characterId: character3Object.id,
+              characterId: characterObjects[4].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character3HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character3HiddenPotential2 || false,
@@ -212,7 +150,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character4: {
               EZA: formObject?.character4EZA || false,
               leaderOrSubLeader: formObject?.character4LeaderOrSub || '',
-              characterId: character4Object.id,
+              characterId: characterObjects[5].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character4HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character4HiddenPotential2 || false,
@@ -225,7 +163,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character5: {
               EZA: formObject?.character5EZA || false,
               leaderOrSubLeader: formObject?.character5LeaderOrSub || '',
-              characterId: character5Object.id,
+              characterId: characterObjects[6].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character5HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character5HiddenPotential2 || false,
@@ -238,7 +176,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character6: {
               EZA: formObject?.character6EZA || false,
               leaderOrSubLeader: formObject?.character6LeaderOrSub || '',
-              characterId: character6Object.id,
+              characterId: characterObjects[7].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character6HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character6HiddenPotential2 || false,
@@ -251,7 +189,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             character7: {
               EZA: formObject?.character7EZA || false,
               leaderOrSubLeader: formObject?.character7LeaderOrSub || '',
-              characterId: character7Object.id,
+              characterId: characterObjects[8].id,
               hiddenPotential: {
                 hiddenPotential1: formObject?.character7HiddenPotential1 || false,
                 hiddenPotential2: formObject?.character7HiddenPotential2 || false,
@@ -265,6 +203,17 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
         }
       })
     .then((result) => {
+      setCharacterObjects([
+        { characterObject: 'leader', role:'leader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 'subLeader', role:'subLeader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 1, id: 0, role:'character1', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 2, id: 0, role:'character2', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 3, id: 0, role:'character3', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 4, id: 0, role:'character4', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 5, id: 0, role:'character5', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 6, id: 0, role:'character6', leadeOrSub:'', type: 'none', rarity: 'none' },
+        { characterObject: 7, id: 0, role:'character7', leadeOrSub:'', type: 'none', rarity: 'none' },
+      ])
       onClose()
       closeSelectTeam()
       window.location.assign(process.env.PUBLIC_URL);
@@ -289,12 +238,34 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
     return idA - idB
   })
 
+  const [openCharacterSelectionModal, setOpenCharacterSelectionModal] = useState(false)
+
+  function handleClose () {
+    setErrorMessage('')
+    setCharacterObjects([
+      { characterObject: 'leader', role:'leader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 'subLeader', role:'subLeader', id: 0, leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 1, id: 0, role:'character1', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 2, id: 0, role:'character2', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 3, id: 0, role:'character3', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 4, id: 0, role:'character4', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 5, id: 0, role:'character5', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 6, id: 0, role:'character6', leadeOrSub:'', type: 'none', rarity: 'none' },
+      { characterObject: 7, id: 0, role:'character7', leadeOrSub:'', type: 'none', rarity: 'none' },
+    ])
+    onClose()
+  }
+
   if (!open) return null;
   return ReactDom.createPortal(
+    <>
+    <CharacterSelectionModal characterDictionary={characterDictionary} userData={userData} handleCharacterSelection={handleCharacterSelection} open={openCharacterSelectionModal} onClose={() => setOpenCharacterSelectionModal(false)}/>
      <div 
-      // onClick={onClose}
+      onClick={() => handleClose()}
       className="flex fixed top-0 left-0 right-0 bottom-0 bg-black/[.7] z-[999] justify-center items-center">
-        <div className="w-3/4 lg:w-3/4 h-[90vh] lg:max-h-3/4 px-5 logo-md:px-10 py-16  border-4 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[1000] overflow-y-auto">
+        <div 
+        onClick={(e) => e.stopPropagation()}
+        className="w-3/4 lg:w-3/4 h-[90vh] lg:max-h-3/4 px-5 logo-md:px-10 py-16  border-4 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[1000] overflow-y-auto">
           <img onClick={onClose} src={closeIcon} className="absolute top-2 right-2 rounded-lg transition ease-in-out hover:bg-gray-400/[.6] cursor-pointer"/>
         <form className="flex flex-col w-full" ref={formRef} onSubmit={handleSubmit}>
 
@@ -302,41 +273,81 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
             <p className="font-header flex w-full mb-4 bg-orange-400 border-b-4 border-black justify-center items-center text-center text-2xl card-sm:text-5xl">Team Layout</p>
           
             <div className="flex flex-wrap mb-6 justify-around items-center">
+
               <div className="flex card-sm:flex-col card-sm:w-fit px-2 justify-around">
                 <div className="flex flex-col justify-center items-center">
                   <p className="font-header flex card-sm:w-fit text-base justify-center items-center card-sm:text-xl">Leader</p>
-                  <CharacterCard individualCharacter={characterDictionary[team?.info.leader]} leaderOrSub={'leader'}/>
+                  <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 0)}>
+                    <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                    <CharacterCard individualCharacter={characterObjects[0]} leaderOrSub={'leader'}/>
+                  </button>
                 </div>
                 <div className="flex flex-col justify-center items-center">
-                  <p className="font-header flex card-sm:w-fit text-base justify-center card-sm:text-xl">Sub Leader</p>
-                  <CharacterCard individualCharacter={characterDictionary[team?.info.subLeader]} leaderOrSub={'subLeader'}/>
+                  <p className="font-header flex card-sm:w-fit text-base justify-center card-sm:text-xl">Friend</p>
+                  <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 1)}>
+                    <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                    <CharacterCard individualCharacter={characterObjects[1]} leaderOrSub={'subLeader'}/>
+                  </button>
                 </div>
+
               </div>
 
               <div className="flex flex-col px-2 justify-center items-center">
+
                 <div className="flex flex-col w-full">
+
                   <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 1</p>
                   <div className="flex justify-center w-full">
-                    <CharacterCard individualCharacter={characterDictionary[team?.info.rotation1[0]]}/>
-                    <CharacterCard individualCharacter={characterDictionary[team?.info.rotation1[1]]}/>
+                  <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 2)}>
+                    <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                    <CharacterCard individualCharacter={characterObjects[2]}/>
+                  </button>
+
+
+                    <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 3)}>
+                      <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                      <CharacterCard individualCharacter={characterObjects[3]}/>
+                    </button>
                   </div>
+
                 </div>
                 <div className="flex flex-col ">
+
                   <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 2</p>
                   <div className="flex justify-center w-full">
-                    <CharacterCard individualCharacter={characterDictionary[team?.info.rotation2[0]]}/>
-                    <CharacterCard individualCharacter={characterDictionary[team?.info.rotation2[1]]}/>
+                    <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 4)}>
+                    <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                    <CharacterCard individualCharacter={characterObjects[4]}/>
+                    </button>
+                    <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 5)}>
+                    <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                    <CharacterCard individualCharacter={characterObjects[5]}/>
+                    </button>
                   </div>
+
                 </div>
+
               </div>
+
               <div className="flex flex-row flex-wrap py-4 justify-center items-center">
+
                 <p className="font-header flex w-full text-base card-sm:text-xl justify-center">Float Characters</p>
-                <CharacterCard individualCharacter={character5Object}/>
-                <CharacterCard individualCharacter={character6Object}/>
-                <CharacterCard individualCharacter={character7Object}/>
+                <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 6)}>
+                  <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                  <CharacterCard individualCharacter={characterObjects[6]}/>
+                </button>
+                <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 7)}>
+                  <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                  <CharacterCard individualCharacter={characterObjects[7]}/>
+                </button>
+                <button className='relative' onClick={(e) => handleOpenCharacterSelection(e, 8)}>
+                  <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[1000] opacity-0 hover:opacity-100 transition-opacity duration-300">Select Character</div>
+                  <CharacterCard individualCharacter={characterObjects[8]}/>
+                </button>
+
               </div>
             </div>
-
+            <p className="flex w-full p-2 text-gray-500 justify-center items-center text-center ">*your first rotation characters are the first two characters in the Team Information down below, the next two characters are the characters in the second rotation, and the float characters are the last 3 characters*</p>
           </div>
 
           <div className="mt-8 border-4 border-black rounded-lg">
@@ -347,7 +358,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
               <input
                   name='teamName'
                   className="rounded-lg px-3 py-1.5 mb-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
-                  defaultValue={team.name}
+                  required
               />
             </div>
 
@@ -361,16 +372,20 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
                         {mission}
                       </option>
                     ))}
-                  </select>
+                </select>
               </label>
             }
-            {entireTeamObjects.map((individualCharacter) => (
+            {characterObjects
+            // slice takes out the first two.....leader/subLeader
+            .slice(2,9)
+            // map over the rest of them
+            .map((individualCharacter) => (
               <CharacterInfoBar
-                key={individualCharacter.role + individualCharacter.character.id} 
+                key={individualCharacter.characterObject + individualCharacter.id} 
                 role={individualCharacter.role}
-                leaderOrSub={individualCharacter.leaderOrSub || ''} 
-                character={individualCharacter.character}
-                team={team}
+                leadeOrSub={individualCharacter.leadeOrSub || ''} 
+                character={individualCharacter}
+                characterObjects={characterObjects}
               />
             ))}
             <div className="flex flex-wrap justify-center border-t-4 border-black">
@@ -397,7 +412,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
                 name='strategy'
                 className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-4 border-dashed border-black rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-black focus:border-solid focus:outline-none"
                 rows="6"
-                defaultValue={team.info.notes}
+                // defaultValue={team.info.notes}
                 maxLength="2500"
                 required
               ></textarea>
@@ -410,16 +425,16 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
           </div>
         </form>
       </div>
-    </div>,
-    document.getElementById("NewTeamForTeamPostModal")
+    </div>
+    </>,document.getElementById("MakeTeamFromScratch")
   );
 }
 
-const CharacterInfoBar = ({ character, role, team, leaderOrSub }) => {
+const CharacterInfoBar = ({ character, role, leadeOrSub, characterObjects }) => {
   return (
     <div className="flex flex-col logo-md:flex-row items-center w-full border-t-4 border-black">
       <div className="flex flex-col w-fit p-2 justify-center items-center">
-        <CharacterCard individualCharacter={character}/>
+        <CharacterCard individualCharacter={character} leadeOrSub={leadeOrSub}/>
         <div className="flex flex-col w-full justify-center items-center">
           <label htmlFor={`${role}EZA`} className="flex px-1 py-2 justify-center items-center font-bold">
             EZA:
@@ -431,40 +446,18 @@ const CharacterInfoBar = ({ character, role, team, leaderOrSub }) => {
               className="ml-2 w-4 h-4"
             />
           </label>
-          {team.characters.length === 6 && (character.id === team.info.leader || character.id === team.info.subLeader) &&
+          {(character.id === characterObjects[0].id || character.id === characterObjects[1].id) &&
             <select
               name={`${role}LeaderOrSub`}
               id={`${role}LeaderOrSub`}
-              className='w-fit border-2 border-black mb-3 text-center font-bold'
+              className='w-fit border-2 border-black mb-3 text-center'
             >
               <option value='leader'>Leader</option>
               <option value='subLeader'>Friend</option>
             </select>
           }
-          {(team.characters.length === 7 && character.id === team.info.leader) &&
-          <label htmlFor={`${role}LeaderOrSub`} className="flex px-2 mb-2 bg-white border-2 border-black justify-center items-center font-bold">
-            Leader
-            <input
-            type="hidden"
-            name={`${role}LeaderOrSub`}
-            id={`${role}LeaderOrSub`}
-            value={'leader'}
-            />
-          </label>
-          }
-          {(team.characters.length === 7 && character.id === team.info.subLeader) &&
-          <label htmlFor={`${role}LeaderOrSub`} className="flex px-2 mb-2 bg-white border-2 border-black justify-center items-center font-bold">
-            Friend
-            <input
-            type="hidden"
-            name={`${role}LeaderOrSub`}
-            id={`${role}LeaderOrSub`}
-            value={'subLeader'}
-            />
-            </label>
-          }
         </div>
-
+        
         <div className="flex justify-around">
             <input type="checkbox" id={`${role}HiddenPotential1`} name={`${role}HiddenPotential1`} value={true} defaultChecked={false} className={`hidden peer/1`}/>
             <label 
@@ -484,7 +477,7 @@ const CharacterInfoBar = ({ character, role, team, leaderOrSub }) => {
             className={`grayscale inline-flex items-center justify-between w-full px-1 rounded-lg cursor-pointer peer-checked/3:border-blue-600 hover:text-gray-600 dark:peer-checked/3:text-gray-300 peer-checked/3:text-gray-600 peer-checked/3:grayscale-0`}>                           
               <img src={hiddenPotentialIcon} className="card-sm:w-full w-3/4"/>
             </label>
-            <input  type="checkbox" id={`${role}HiddenPotential4`} name={`${role}HiddenPotential4`} value={true} defaultChecked={false} className={`hidden peer/4`}/>
+            <input type="checkbox" id={`${role}HiddenPotential4`} name={`${role}HiddenPotential4`} value={true} defaultChecked={false} className={`hidden peer/4`}/>
             <label 
             htmlFor={`${role}HiddenPotential4`} 
             className={`grayscale inline-flex items-center justify-between w-full px-1 rounded-lg cursor-pointer peer-checked/4:border-blue-600 hover:text-gray-600 dark:peer-checked/4:text-gray-300 peer-checked/4:text-gray-600 peer-checked/4:grayscale-0`}>                           
@@ -495,7 +488,7 @@ const CharacterInfoBar = ({ character, role, team, leaderOrSub }) => {
 
       <div className="logo-md:h-[250px] logo-md:border-2 border-black"></div>
 
-      <div className="flex flex-col w-full justify-center items-center text-center border-black">
+      <div className="flex flex-col w-full justify-center items-center text-center">
         <div className="flex flex-col w-full p-2 relative">
           <p className="flex font-header justify-center text-lg logo-md:text-2xl">
             Character Strategy:
@@ -557,31 +550,37 @@ const CharacterCard = ({individualCharacter, leaderOrSub}) => {
     <>
         <div className='w-fit relative'>
           <AdvancedImage
-            className="h-[90px] card-sm:h-[120px] w-[90px] card-sm:w-[120px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
+            className={`w-[90px] ${individualCharacter.id === 0 ? 'w-[70px] card-sm:w-[100px] m-2' : 'card-sm:w-[120px]' } bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40`}
             cldImg={characterThumb}
             alt={individualCharacter.name}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
             />
-          {leaderOrSub === 'leader' ? <img src={leaderIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null}
-          {leaderOrSub === 'subLeader' ? <img src={friendIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null}
-          <AdvancedImage
+          {individualCharacter.rarity !== 'none' && leaderOrSub === 'leader' ? <img src={leaderIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null}
+          {individualCharacter.rarity !== 'none' && leaderOrSub === 'subLeader' ? <img src={friendIcon} className='w-[72%] card-sm:w-[72%] -top-[2%] right-[33%] absolute z-50'/> : null}
+
+          {individualCharacter.rarity !== 'none' &&
+            <AdvancedImage
             cldImg={characterRarity}
             className={individualCharacter.rarity === "UR"
                 ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
                 : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
             }
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          <AdvancedImage
+          />}
+
+          {individualCharacter.type !== 'none' &&
+            <AdvancedImage
             className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
             cldImg={characterTypeBackground}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          <AdvancedImage
+          />}
+
+          {individualCharacter.type !== 'none' &&
+            <AdvancedImage
             className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
             cldImg={characterTypeBadge}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
+          />}
         </div>
     </>
   );
@@ -636,3 +635,4 @@ const SupportMemoryCard = ({supportMemory}) => {
     </>
   );
 }
+

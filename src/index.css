@@ -32,6 +32,11 @@
     2px 2px 0 #000;
 }
 
+.vertical-text {
+  writing-mode: vertical-rl; /* or vertical-lr */
+  text-orientation: mixed; /* or upright */
+}
+
 .hamburger-open {
   transform: translateX(0);
   transition: transform 1s ease-out;

@@ -120,7 +120,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
       {webOfTeam.length < 6 && <p className="w-full border border-black text-sm lg:text-base text-center rounded-lg bg-orange-200/[.75]">*team must have 6 to 7 characters in it to add it to a deck</p>}
     </div>
 
-    <div className="flex p-2 mb-2 justify-center items-center">
+    <div className="flex p-2 justify-center items-center">
         <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
           Show Characters In Deck
         </h2>
@@ -144,27 +144,67 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
     </div>
 
     <div className="h-[76vh] mb-6 overflow-y-auto">
-      <div key={allTeams}>
+      <div className="flex flex-wrap w-full justify-around" key={allTeams}>
         {allTeams ? allTeams.map(team => (
-          <div key={team._id} className='relative'> 
-              <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit p-1 mt-2 mr-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/>
+          <div key={team._id} className='flex flex-col w-full max-w-[400px] lg:max-w-full pb-12 px-4 mb-2 border-4 border-black rounded-lg justify-around bg-orange-200 hover:bg-orange-400 relative'> 
+              <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit w-full p-1 mt-2 mr-2 text-center hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/>
               {/* <button disabled={!team.info.leader || window.innerHeight<1080} onClick={() => handleTeamAnalytics(team)} className="disabled:opacity-100 w-10 h-fit p-1 mt-2 ml-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 left-0">
                 <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/>
               </button> */}
-            <div className="font-header flex w-full h-fit py-4 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center bg-orange-200 relative">
+            <div className="font-header flex w-full h-fit py-4 border-black text-2xl card-sm:text-2xl  underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center relative">
               {team.name}
             </div>
-            <div className="flex flex-wrap w-full h-1/4 py-2 px-8 mb-2 border-x-4 border-b-4 border-black rounded-b-lg justify-around bg-orange-200 relative">
-              <CharacterCard individualCharacter={characterDictionary[team.info.leader] || 0} type={'leader'} />
-                {team.characters.map((character) => 
-                  character.id !== team.info.leader && character.id !== team.info.subLeader ?
-                  <CharacterCard individualCharacter={characterDictionary[character.id]} type={''} />
-                  :
-                  null
-                )}
-              <CharacterCard individualCharacter={characterDictionary[team.info.subLeader] || 0} type={'subLeader'} />
-              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-10 h-fit p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
+            <div className="flex card-sm:w-full justify-around">
+              <div className="grid grid-cols-2 gap-y-6 justify-items-center">
+                <p className="col-span-2 font-header w-full text-xl card-sm:text-xl font-[100] border-black text-center">Team</p>
+                <div>
+                  <CharacterCard individualCharacter={characterDictionary[team.info.leader] || 0} type={'leader'} />
+                </div> 
+                  {team.characters.map((character) => 
+                    character.id !== team.info.leader && character.id !== team.info.subLeader ?
+                    <div>
+                    <CharacterCard individualCharacter={characterDictionary[character.id]} type={''} />
+                    </div>
+                    :
+                    null
+                  )}
+              </div>
+              <div className="flex flex-col items-center justify-between">
+
+                <div className="flex flex-col items-center">
+                  <p className="font-header text-xl card-sm:text-xl font-[100] border-black text-center">Sub/Friend</p>
+                    <div>
+                    <CharacterCard individualCharacter={characterDictionary[team.info.subLeader] || 0} type={'subLeader'} />
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center">
+                  <p className="font-header text-xl card-sm:text-xl font-[100] border-black text-center">Rotation 1</p>
+                    <div className="flex">
+                      <div>
+                        <CharacterCard individualCharacter={characterDictionary[team.info.rotation1[0]] || 0} />
+                      </div>
+                      <div>
+                        <CharacterCard individualCharacter={characterDictionary[team.info.rotation1[1]] || 0} />
+                      </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center">
+                  <p className="font-header text-xl card-sm:text-xl font-[100] border-black text-center">Rotation 2</p>
+                    <div className="flex">
+                      <div>
+                        <CharacterCard individualCharacter={characterDictionary[team.info.rotation2[0]] || 0} />
+                      </div>                                            
+                      <div>
+                        <CharacterCard individualCharacter={characterDictionary[team.info.rotation2[1]] || 0} />
+                      </div>
+                    </div>
+                </div>
+              </div>
+
             </div>
+              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-10 h-fit p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
           </div>
         )).reverse() : null }
       </div>
@@ -189,34 +229,34 @@ const CharacterCard = ({individualCharacter, type}) => {
  
   return (
     <>
-        <div className='w-fit relative'>
-          <AdvancedImage
-            className="h-[70px] card-sm:h-[100px] w-[70px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
-            cldImg={characterThumb}
-            alt={individualCharacter.name}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          {type === 'leader' ? <img src={leaderIcon} className='w-[56px] card-sm:w-[80px] -top-[2%] right-[33%] absolute z-50'/> : null}
-          {type === 'subLeader' ? <img src={subLeaderIcon} className='w-[56px] card-sm:w-[80px] -top-[2%] right-[33%] absolute z-50'/> : null}
-          <AdvancedImage
-            cldImg={characterRarity}
-            className={individualCharacter.rarity === "UR"
-                ? "h-[26.67%] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-                : "h-[31.67%] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
-            }
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          <AdvancedImage
-            className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
-            cldImg={characterTypeBackground}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-          <AdvancedImage
-            className="w-[40%] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
-            cldImg={characterTypeBadge}
-            plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          />
-        </div>
-    </>
+    <div className='flex w-fit justify-center items-center relative'>
+      <AdvancedImage
+        className="w-[80px] card-sm:w-[80px] bottom-[5%] bg-no-repeat relative z-40"
+        cldImg={characterThumb}
+        alt={individualCharacter.name}
+        plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+      />
+      {type === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+      {type === 'subLeader' ? <img src={subLeaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+      <AdvancedImage
+        cldImg={characterRarity}
+        className={individualCharacter.rarity === "UR"
+            ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+            : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+        }
+        plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+      />
+      <AdvancedImage
+        className="w-[80%] card-sm:w-[81%] absolute top-[13%] z-0"
+        cldImg={characterTypeBackground}
+        plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+      />
+      <AdvancedImage
+        className="w-[45%] card-sm:w-[40%] absolute -top-[5%] card-sm:-top-[5%] right-[-6%] card-sm:right-[-2%] z-50"
+        cldImg={characterTypeBadge}
+        plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
+      />
+    </div>
+</>
   );
 }

@@ -187,7 +187,7 @@ query AllEventsStagesTeams {
         stageId
         character1 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -198,7 +198,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -211,7 +211,7 @@ query AllEventsStagesTeams {
         }
         character2 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -222,7 +222,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -235,7 +235,7 @@ query AllEventsStagesTeams {
         }
         character3 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -246,7 +246,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -259,7 +259,7 @@ query AllEventsStagesTeams {
         }
         character4 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -270,7 +270,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -283,7 +283,7 @@ query AllEventsStagesTeams {
         }
         character5 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -294,7 +294,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -307,7 +307,7 @@ query AllEventsStagesTeams {
         }
         character6 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -318,7 +318,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -331,7 +331,7 @@ query AllEventsStagesTeams {
         }
         character7 {
           characterId
-          role
+          leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2
@@ -342,7 +342,7 @@ query AllEventsStagesTeams {
           info
           sub {
             characterId
-            role
+            leaderOrSubLeader
           hiddenPotential{
             hiddenPotential1
             hiddenPotential2

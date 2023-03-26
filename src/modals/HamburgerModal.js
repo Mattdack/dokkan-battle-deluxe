@@ -87,9 +87,9 @@ export default function HamburgerModal({open, onClose}) {
           {(webLocationObject.pathname === ('/strategy') || webLocationObject.pathname === ('/help')) &&
             <button
               className={`font-header text-lg card-sm:text-2xl flex justify-center items-center h-fit w-full col-span-1 p-4 bg-orange-200 border-2 border-black`}
-              onClick={(e) => handleToTeamBuild(e)}
+              onClick={(e) => window.location.assign(window.location.origin)}
             >
-              Team Build
+              Team & Deck Build
             </button>
           }
         </div>

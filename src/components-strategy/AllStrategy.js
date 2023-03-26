@@ -100,8 +100,12 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
   //to sort the events how I wanted
   const sortedEvents = allEvents.slice().sort((a, b) => {
     const nameOrder = [
-      "Ultimate Red Zone Wicked Bloodline Edition",
       "Ultimate Red Zone Red Ribbon Army Edition",
+      "Ultimate Red Zone SDBH Edition",
+      "Ultimate Red Zone Wicked Bloodline Edition",
+      "Ultimate Red Zone Movie Edition",
+      "Ultimate Red Zone GT Edition",
+      "Fearsome Activation! Cell Max",
       "Fighting Spirit of the Saiyans and Pride of the Wicked Bloodline",
       "Collection of Epic Battles",
       "Gods of Destruction Assemble",
@@ -118,7 +122,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
 
   return (
     <div key={'AllStrategy'} className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
-      <SelectTeamToStageModal userDecks={userDecks} userData={profileData} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)}/>
+      <SelectTeamToStageModal userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
 
       {/* //left column styling */}
       <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-[100vh] lg:h-[90vh] w-screen lg:w-[30%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
@@ -211,13 +215,13 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           }
 
           {selectedStage && selectedStage.teams.map((team) =>
-            <button>
+            <button className="flex flex-wrap w-full justify-around ">
               <div className={
                 filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
                   userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
                   : ''
               }>
-                <TeamOnStage team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
+                <TeamOnStage key={team._id} team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
               </div>
             </button>
           ).reverse()}
@@ -247,7 +251,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
         </div>
 
         <div className="h-[95vh] border-4 border-black rounded-lg overflow-y-auto">
-            {selectedTeam ? <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary}/> : null}
+            {selectedTeam ? <AllTeamInfo key={"selectedTeam" + selectedTeam._id} team={selectedTeam} characterDictionary={characterDictionary}/> : null}
         </div>
         
       </div>
