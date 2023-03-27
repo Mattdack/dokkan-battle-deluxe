@@ -215,15 +215,17 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           }
 
           {selectedStage && selectedStage.teams.map((team) =>
-            <button className="flex flex-wrap w-full justify-around ">
-              <div className={
-                filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
-                  userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
-                  : ''
-              }>
-                <TeamOnStage key={team._id} team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
-              </div>
-            </button>
+            team.character1.characterId ?   
+              <button className="flex flex-wrap w-full justify-around ">
+                <div className={
+                  filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
+                    userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
+                    : ''
+                }>
+                  <TeamOnStage key={team._id} team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
+                </div>
+              </button>
+            : null
           ).reverse()}
 
 
