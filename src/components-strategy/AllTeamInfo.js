@@ -26,7 +26,6 @@ function AllTeamInfo({ team, characterDictionary }) {
   const teamArrayWithCharacterData = [team.character1, team.character2, team.character3, team.character4, team.character5, team.character6, team.character7]
 
   const ezaDictionary = Object.fromEntries(teamArrayWithCharacterData.map((characterData) => [characterData.characterId, characterData.EZA]));
-  console.log(team)
   return (
 
     <div className="flex flex-wrap pt-4 bg-orange-200">

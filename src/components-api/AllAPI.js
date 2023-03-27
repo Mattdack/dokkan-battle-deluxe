@@ -19,23 +19,23 @@ function AllAPI() {
     const [getCharacterData, { loading: allCharactersLoading, data: allCharactersData }] = useLazyQuery (QUERY_CHARACTERS, {
         onCompleted: (data) => {
             if(data){
-                console.log('character data run query run')
+                // console.log('character data run query run')
                 setAllCharacters(data.characters)
             }
         },
     });
     const [allCharacters, setAllCharacters] = useState([])
-    console.log(allCharacters)
+    // console.log(allCharacters)
 
     const characterDictionary = Object.fromEntries(
       allCharacters.map((characterObj) => [characterObj.id, characterObj])
     )
-    console.log(characterDictionary)
+    // console.log(characterDictionary)
 
     const [getEventData, { loading: allEventsLoading, data: allEventsData }] = useLazyQuery(GET_EVENT_DATA, {
         onCompleted: (data) => {
             if(data){
-                console.log('event query run')
+                // console.log('event query run')
                 // setAllEvents(data.allEventsStagesTeams)
             }
         },
@@ -49,9 +49,9 @@ function AllAPI() {
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData(initialForm?.current);
-        console.log(formData)
+        // console.log(formData)
         const formObject = Object.fromEntries(formData);
-        console.log(formObject)
+        // console.log(formObject)
     }
 
     // useEffect(() => {
