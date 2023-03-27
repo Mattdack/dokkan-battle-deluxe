@@ -22,7 +22,7 @@ export default function CharacterSelectionModal( {characterDictionary, userData,
   const userCharacterObjects = userCharacterIds.map(characterId => characterDictionary[characterId])
   
   const [filteredCharacters, setFilteredCharacters] = useState(null)
-  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const [viewableCharacters, setViewableCharacters] = useState(75);
   const [newFilterData, setNewFilterData] = useState({})
 
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacterObjects, filterData, selectedCategories)),setNewFilterData(filterData)]
