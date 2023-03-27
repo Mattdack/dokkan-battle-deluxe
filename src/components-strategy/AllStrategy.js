@@ -130,7 +130,9 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           <div className="h-1/2 border-b-4 border-black">
             <div className="flex flex-col h-full items-center w-full overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Events</p>
-              {allEvents && sortedEvents.map(event => 
+              {allCharactersLoading ? <div className="flex w-[90%] bg-orange-200 p-2 m-2 text-xl text-center justify-center items-center border-4 border-black">loading...</div>
+              :
+              allEvents && sortedEvents.map(event => 
                 <div onClick={() => handleSetSelectedEvent(event)} className={`m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
                   <EventTab key={event.name} event={event}/>
                 </div>
@@ -214,16 +216,16 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             )
           }
 
-          {selectedStage && selectedStage.teams.map((team) =>
-            <button className="flex flex-wrap w-full justify-around ">
-              <div className={
-                filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
-                  userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
-                  : ''
-              }>
-                <TeamOnStage key={team._id} team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
-              </div>
-            </button>
+          {selectedStage && selectedStage.teams.map((team) =>  
+              <button className="flex flex-wrap w-full justify-around ">
+                <div className={
+                  filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
+                    userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
+                    : ''
+                }>
+                  <TeamOnStage key={team._id} team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
+                </div>
+              </button>
           ).reverse()}
 
 
