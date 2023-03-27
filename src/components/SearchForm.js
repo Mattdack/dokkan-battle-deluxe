@@ -126,8 +126,8 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
 
 
           {/* selected category bar */}
-          <div className="flex flex-row w-full mt-2 justify-center items-center">
-            <div className="flex flex-row w-full h-fit card-sm:h-10 mr-2 bg-white items-center text-center rounded-full border-2 border-gray-400 overflow-x-scroll whitespace-nowrap"
+          <div className="flex flex-row grow-0 max-w-[90%] mt-2 justify-center items-center">
+            <div className="flex flex-row h-fit min-w-[100px] max-w-[250px] card-sm:h-10 px-2 mr-2 bg-white items-center text-center rounded-full border-2 border-gray-400 overflow-x-scroll whitespace-nowrap"
               onWheel={(e) => {
                 e.preventDefault();
                 const container = e.currentTarget;
@@ -150,22 +150,22 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 </div>
               ))}
             </div>
-              <div className="flex w-fit justify-center order-2 bg-orange-300 rounded-md border-2 border-slate-900">
-                <label htmlFor="matchAllCategories">
-                  <input
-                    type="checkbox"
-                    name="matchAllCategories"
-                    id="matchAllCategories"
-                    className="hidden peer"
-                    value={true}
-                  />
-                  <div
-                    style={{ cursor: "pointer" }}
-                    className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 whitespace-nowrap"
-                  >
-                    Full Match
-                  </div>
-                </label>
+            <div className="flex w-fit justify-center order-2 bg-orange-300 rounded-md border-2 border-slate-900">
+              <label htmlFor="matchAllCategories">
+                <input
+                  type="checkbox"
+                  name="matchAllCategories"
+                  id="matchAllCategories"
+                  className="hidden peer"
+                  value={true}
+                />
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 whitespace-nowrap"
+                >
+                  Full Match
+                </div>
+              </label>
             </div>
           </div>
 
