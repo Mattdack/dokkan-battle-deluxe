@@ -72,17 +72,17 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
 
   const onNodeDrag = (event, node) => {
     setSelectedNode(null)
-    console.log('node drag')
+    // console.log('node drag')
   }
   
   const onNodeDragStart = (event, node) => {
     setSelectedNode(null)
-    console.log('drag start')
+    // console.log('drag start')
   };
 
   const onNodeDragStop = (event, node) => {
     setSelectedNode(null)
-    console.log('drag stop')
+    // console.log('drag stop')
   }
   
   // this function launches the function removeFromWebOfTeam which was passed from AllComponents>SuggestToWeb>Web
@@ -116,7 +116,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
 
   // this useEffect updates the edges to selected if the node connected to them is clicked
   useEffect(() => {
-    console.log('use Effect being used')
+    // console.log('use Effect being used')
     if (!selectedNode) {
       return;
     }

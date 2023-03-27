@@ -219,7 +219,6 @@ export default function MakeTeamFromScratch( {userData, stageData, characterDict
       window.location.assign(process.env.PUBLIC_URL);
     })
     .catch((error) => {
-      console.log(error)
       setErrorMessage(error.message)
     });
   }
@@ -446,6 +445,7 @@ const CharacterInfoBar = ({ character, role, leadeOrSub, characterObjects }) => 
               className="ml-2 w-4 h-4"
             />
           </label>
+          {/* if the character passed into the character info bard */}
           {(character.id === characterObjects[0].id || character.id === characterObjects[1].id) &&
             <select
               name={`${role}LeaderOrSub`}

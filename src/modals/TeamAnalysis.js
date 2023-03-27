@@ -37,7 +37,6 @@ export default function TeamAnalysis( {team, open, onClose} ) {
       float1 = leaderChar
       float3 = leaderChar
       float2 = teamArr.find((character) => character.id !== rotation1[0] && character.id !== rotation1[1] && character.id !== rotation2[0] && character.id !== rotation2[1] && character.id !== leaderChar.id)
-      console.log(float2)
     } else if ((rotation1.includes(team?.info?.leader) && !rotation2.includes(team?.info?.leader)) || (!rotation1.includes(team?.info?.leader) && rotation2.includes(team?.info?.leader))) {
       let leaderChar = teamArr.find((character) => character.id === team?.info?.leader)
       let remainingChars = teamArr.filter((character) => character !== Rot1Char1 && character !== Rot1Char2 && character !== Rot2Char1 && character !== Rot2Char2 && character !== leaderChar)

@@ -141,8 +141,6 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
       formObject[key] = newValue;
     }
 
-    console.log(formObject)
-
 
     addTeamToStage ({
       variables:{
@@ -270,7 +268,6 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
       window.location.assign(process.env.PUBLIC_URL);
     })
     .catch((error) => {
-      console.log(error)
       setErrorMessage(error.message)
     });
   }

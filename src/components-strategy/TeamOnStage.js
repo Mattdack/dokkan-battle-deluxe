@@ -69,7 +69,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
     .then((result) => {
     })
     .catch((error) => {
-      console.log(error)
+      // console.log(error)
     })
   }
 
@@ -84,7 +84,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
     .then((result) => {
     })
     .catch((error) => {
-      console.log(error)
+      // console.log(error)
     })
   }
 
