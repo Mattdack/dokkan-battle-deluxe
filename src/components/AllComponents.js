@@ -205,7 +205,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const [viewableCharacters, setViewableCharacters] = useState(75);
   const cardContainerRef = useRef(null);
 
   useEffect(() => {

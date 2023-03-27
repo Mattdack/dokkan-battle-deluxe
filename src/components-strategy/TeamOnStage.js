@@ -96,8 +96,6 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
   const teamDeck = entireTeamObject.filter(character => character.leaderOrSubLeader !== 'subLeader')
   const subLeaderCharacter = entireTeamObject.filter(character => character.leaderOrSubLeader === 'subLeader')[0]
 
-  console.log(team)
-
   return (
     <>
     <WarningRemoveTeamPostModal profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
