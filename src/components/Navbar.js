@@ -8,9 +8,22 @@ const AppNavbar = () => {
   const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50`;
   const logo = process.env.PUBLIC_URL + "/dokkanIcons/logo.png";
 
+  const webLocationObject = window.location
+
+  function handleToTeamBuild (e) {
+    e.stopPropagation()
+    window.location.assign(window.location.origin)
+  }
+
+  function handleToStrategy (e) {
+    e.stopPropagation()
+    window.location.assign(window.location.origin + '/strategy')
+  }
+
   return (
-    <div className="h-[10vh] flex justify-between items-center bg-slate-700 border-2 border-slate-900">
-      <img src={logo} alt='Dokkan Battle Helper' className="ml-2 sm:ml-4 h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh]" />
+    <div className="h-[10vh] flex justify-between items-center bg-slate-700 border-2 border-slate-900 cursor-pointer">
+      <img onClick={(e) => (webLocationObject.pathname === ('/strategy') || webLocationObject.pathname === ('/help')) ? handleToTeamBuild(e) : handleToStrategy(e) }
+      src={logo} alt='Dokkan Battle Helper' className="ml-2 sm:ml-4 h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh]" />
       <div className="flex pr-8">
         {/* hamburger button */}
         <button

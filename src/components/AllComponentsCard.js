@@ -14,6 +14,7 @@ function AllComponentsCard({
   showCharactersInSelectedDeck,
   addToWebOfTeam,
   newCardDetails,
+  removeFromWebOfTeam
 }) {
   const selectedDeckObj =
     userDeckData.find((deck) => deck._id === selectedDeck) || [];
@@ -26,6 +27,7 @@ function AllComponentsCard({
         deckTeams={selectedDeckTeams}
         showCharactersInSelectedDeck={showCharactersInSelectedDeck}
         addToWebOfTeam={addToWebOfTeam}
+        removeFromWebOfTeam={removeFromWebOfTeam}
         newCardDetails={newCardDetails}
       />
     );
@@ -39,7 +41,7 @@ function AllComponentsCard({
   }
 }
 
-function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails}) {
+function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck, addToWebOfTeam, removeFromWebOfTeam, newCardDetails}) {
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
@@ -48,12 +50,9 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
 
   const [isInSelectedDeck, setIsInSelectedDeck] = useState([]);
 
+  //this allows for characters in decks to be grayed out. When deckTeams is passed, useEffect launches, takes the deck teams, creates a flat array, takes a team, the team characters, and then if the character.id is included then it is grayed out
   useEffect(() => {
-    setIsInSelectedDeck(
-      deckTeams
-        .flatMap((team) => team.characters.map((char) => char.id))
-        .includes(character.id)
-    );
+    setIsInSelectedDeck(deckTeams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id));
   }, [deckTeams]);
 
   //logic for card click...allows for div to close when click outside of card is made
@@ -99,9 +98,19 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
       } w-fit relative hover:bg-slate-900/[.4]`}
     >
       {isCardClicked ? (
+        isInWeb ?
         <div>
           <div
-            className="flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg"
+            className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg`}
+            onClick={() => removeFromWebOfTeam(character)}
+          >
+            Remove From Team
+          </div>
+        </div>
+        :
+        <div>
+          <div
+            className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg`}
             onClick={() => addToWebOfTeam(character)}
           >
             Add To Team
@@ -111,8 +120,8 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
         <>
           <div
             className={`w-fit relative hover:bg-slate-900/[.4] 
-      ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
-      ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""}`}
+            ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
+            ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""}`}
           >
             <AdvancedImage
               className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
