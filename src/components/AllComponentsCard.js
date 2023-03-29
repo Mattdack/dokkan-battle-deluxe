@@ -128,12 +128,7 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
               cldImg={characterThumb}
               // onError={handleImageError}
               alt={character.name}
-              plugins={[
-                lazyload({
-                  rootMargin: "10px 20px 10px 30px",
-                  threshold: 0.05,
-                }),
-              ]}
+              // plugins={[lazyload({rootMargin: "10px 20px 10px 30px",threshold: 0.05,})]}
             ></AdvancedImage>
             <AdvancedImage
               cldImg={characterRarity}
@@ -142,32 +137,17 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
                   ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
                   : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
               }
-              plugins={[
-                lazyload({
-                  rootMargin: "10px 20px 10px 30px",
-                  threshold: 0.05,
-                }),
-              ]}
+              // plugins={[lazyload({rootMargin: "10px 20px 10px 30px",threshold: 0.05,})]}
             />
             <AdvancedImage
               className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
               cldImg={characterTypeBackground}
-              plugins={[
-                lazyload({
-                  rootMargin: "10px 20px 10px 30px",
-                  threshold: 0.05,
-                }),
-              ]}
+              // plugins={[lazyload({rootMargin: "10px 20px 10px 30px",threshold: 0.05,})]}
             />
             <AdvancedImage
               className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
               cldImg={characterTypeBadge}
-              plugins={[
-                lazyload({
-                  rootMargin: "10px 20px 10px 30px",
-                  threshold: 0.05,
-                }),
-              ]}
+              // plugins={[lazyload({rootMargin: "10px 20px 10px 30px",threshold: 0.05,})]}
             />
           </div>
         </>
@@ -208,7 +188,7 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
           // onError={handleImageError}
           cldImg={characterThumb}
           alt={character.name}
-          plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 }),]}
+          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
         ></AdvancedImage>
         <AdvancedImage
           cldImg={characterRarity}
@@ -217,17 +197,17 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
               ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
               : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
           }
-          plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 }),]}
+          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
         />
         <AdvancedImage
           className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
           cldImg={characterTypeBackground}
-          plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 }),]}
+          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
         />
         <AdvancedImage
           className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
           cldImg={characterTypeBadge}
-          plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 }),]}
+          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
         />
       </div>
     </>
