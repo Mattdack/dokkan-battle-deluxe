@@ -8,7 +8,13 @@ import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
 import { grayscale } from "@cloudinary/url-gen/actions/effect";
 
-function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
+function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
+  const [isInWeb, setIsInWeb] = useState();
+  // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
+  useEffect(() => {
+    setIsInWeb(webOfTeam.map((char) => char.id).includes(character.id));
+  }, [webOfTeam]);
+
   const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
 
   const selectedDeckObj = userDeckData.find(deck => deck._id === selectedDeck) || []
@@ -63,23 +69,29 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
         onClick={handleCardClick}
         className={`${showCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
       >
-        {isCardClicked ? (
-        <div>
-          <div 
-          className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-t-lg"
-          onClick={() =>  addToWebOfTeam(character)}
-          >
-          Add To Team
+        {isCardClicked && (
+          <div className="absolute z-[900]">
+            {isInWeb ? <div 
+            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-t-lg abosolute"
+            onClick={() =>  removeFromWebOfTeam(character)}
+            >
+              Remove From Team
+            </div>
+            :
+            <div 
+            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-sm card-sm:text-md justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-t-lg abosolute"
+            onClick={() =>  addToWebOfTeam(character)}
+            >
+              Add To Team
+            </div>}
+            <div 
+            className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-xsm card-sm:text-md justify-center items-center text-center bg-orange-400 hover:bg-amber-600 rounded-b-lg abosolute"
+            onClick={() => handleNewDetails(character.id)}
+            >
+              New Suggestion
+            </div>
           </div>
-          <div 
-          className="flex w-[80px] card-sm:w-[100px] h-[40px] card-sm:h-[50px] border-4 border-black font-header text-xsm card-sm:text-md justify-center items-center text-center bg-orange-400 hover:bg-amber-600 rounded-b-lg"
-          onClick={() => handleNewDetails(character.id)}
-          >
-            New Suggestion
-          </div>
-        </div>
-        ) : (
-          <>
+        )}
           <AdvancedImage
             className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative right-[.5%] z-50"
             cldImg={characterThumb}
@@ -107,7 +119,6 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
             cldImg={characterTypeBadge}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
           />
-
           {statsSelectedOptions === "ATK" &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
@@ -126,9 +137,6 @@ function SuggestCard({ character, selectedCharacter, handleNewDetails, addToWebO
             {linkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
           </div>
           }
-          </>
-        )
-        }
       </div>
   );
 }
