@@ -93,31 +93,27 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
     <div
       ref={ref}
       onClick={() => handleCardClick(character)}
-      className={`${
-        showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""
-      } w-fit relative hover:bg-slate-900/[.4]`}
+      className={`${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""} w-fit relative hover:bg-slate-900/[.4]`}
     >
-      {isCardClicked ? (
-        isInWeb ?
-        <div>
-          <div
-            className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg`}
-            onClick={() => removeFromWebOfTeam(character)}
-          >
-            Remove From Team
-          </div>
-        </div>
-        :
-        <div>
-          <div
-            className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg`}
-            onClick={() => addToWebOfTeam(character)}
-          >
-            Add To Team
-          </div>
-        </div>
-      ) : (
-        <>
+          {isCardClicked && (
+              <div>
+                {isInWeb ? (
+                  <div
+                    className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg absolute z-[900]`}
+                    onClick={() => removeFromWebOfTeam(character)}
+                  >
+                    Remove From Team
+                  </div>
+                ) : (
+                  <div
+                    className={`flex h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg absolute z-[900]`}
+                    onClick={() => addToWebOfTeam(character)}
+                  >
+                    Add To Team
+                  </div>
+                )}
+              </div>
+          )}
           <div
             className={`w-fit relative hover:bg-slate-900/[.4] 
             ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
@@ -150,8 +146,6 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
               // plugins={[lazyload({rootMargin: "10px 20px 10px 30px",threshold: 0.05,})]}
             />
           </div>
-        </>
-      )}
     </div>
   );
 }
