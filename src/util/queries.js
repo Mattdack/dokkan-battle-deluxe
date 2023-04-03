@@ -169,6 +169,27 @@ query AllEventsStagesTeams {
       eventName
       name
       missions
+      comments {
+        _id
+        creator {
+          _id
+          username
+        }
+        content
+        userSavedCharacters
+        replies {
+          _id
+          commentId
+          content
+          selectedCharacters
+          createdAt
+          creator {
+            _id
+            username
+          }
+        }
+        createdAt
+      }
       teams {
         _id
         creator {
@@ -367,15 +388,269 @@ query AllEventsStagesTeams {
           description
           name
         }
-        comments {
-          createdAt
-          content
-          creator
-        }
       }
     }
   }
-}`;
+}
+`;
+
+export const GET_ALL_EVENTS = gql`
+query FindAllEvents {
+  findAllEvents {
+    _id
+    name
+  }
+}
+`;
+
+export const GET_ALL_STAGES_IN_EVENT = gql`
+query FindAllStagesInEvent {
+  findAllStagesInEvent {
+    _id
+    name
+  }
+  }
+`;
+
+export const GET_ALL_TEAMS_IN_STAGE = gql `
+query FindOneStageTeams($stageId: String) {
+  findOneStageTeams (stageId: $stageId) {
+    _id
+    name
+    missions
+      teams {
+        _id
+        creator {
+          _id
+          username
+        }
+        createdAt
+        name
+        mission
+        teamArray
+        leader
+        subLeader
+        rotation1
+        rotation2
+        floaters
+        stageId
+        character1 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character2 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character3 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character4 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character5 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character6 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        character7 {
+          characterId
+          leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+          EZA
+          info
+          sub {
+            characterId
+            leaderOrSubLeader
+          hiddenPotential{
+            hiddenPotential1
+            hiddenPotential2
+            hiddenPotential3
+            hiddenPotential4
+          }
+            EZA
+            info
+          }
+        }
+        likes
+        strategy
+        items {
+          _id
+          id
+          type
+          description
+        }
+        supportMemory {
+          _id
+          id
+          description
+          name
+        }
+      }
+  }
+  }
+`;
+
+export const GET_ONE_STAGE_COMMENTS_REPLIES = gql`
+query FindOneStageCommentsReplies($stageId: String) {
+  findOneStageCommentsReplies(stageId: $stageId) {
+    _id
+    name
+    comments {
+      _id
+      stage
+      creator {
+        _id
+        username
+      }
+      content
+      userSavedCharacters
+      createdAt
+      replies {
+        _id
+        commentId
+        creator {
+          _id
+          username
+        }
+        content
+        selectedCharacters
+        createdAt
+      }
+    }
+  }
+}
+`;
 
 export const GET_ONE_TEAM_POST = gql`
 query FindOnePostTeam($teamId: String) {

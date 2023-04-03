@@ -19,7 +19,6 @@ const analysisIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/analysis-icon.
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
 const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png";
 const likeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/like-icon.png";
-const commentIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/comment-icon.png";
 const downIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/down-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
@@ -104,7 +103,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
               {/* <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/> */}
             <div className={`font-header flex w-full h-fit pt-4 pb-2 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
               {profileId === team.creator._id ? 
-                <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-fit p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-1 left-1 cursor-pointer"/>
+                <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-1 left-1 cursor-pointer"/>
                 :
                 null 
               }
@@ -120,7 +119,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
               
               <div className="flex w-full justify-around items-stretch">
                 <div className="w-full grid grid-cols-2 justify-items-center">
-                  <p className="col-span-2 w-full font-header text-xl card-sm:text-2xl font-bold border-black">Team</p>
+                  <p className="col-span-2 w-full font-header text-xl card-sm:text-2xl font-light border-black">Team</p>
                   {entireTeamObject &&
                     teamDeck.sort((a, b) => {
                         if (a.leaderOrSubLeader === 'leader' && b.leaderOrSubLeader !== 'leader') {
@@ -147,7 +146,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 
                 <div className="flex flex-col items-center justify-between">
                   <div className="">
-                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">Friend</p>
+                    <p className="font-header text-xl card-sm:text-2xl font-light border-black">Friend</p>
                     <div>
                       <CharacterCard 
                       individualCharacter={characterDictionary[subLeaderCharacter.characterId]}
@@ -157,7 +156,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                     </div>
                   </div>
                   <div className="">
-                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">items</p>
+                    <p className="font-header text-xl card-sm:text-2xl font-light border-black">items</p>
                       {(team.items.length === 0 || team.items[0].id === 0) &&
                       <div className="flex flex-wrap flex-row p-2 justify-center items-center">
                         <ItemCard item={{id:0, type:'bronze'}}/>
@@ -166,7 +165,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                         <ItemCard item={{id:0, type:'bronze'}}/>
                       </div>
                       }
-                      {(team.items.length === 1) &&
+                      {(team.items.length === 1 && team.items[0].id !== 0) &&
                       <div className="flex flex-wrap flex-row p-2 justify-center items-center">
                         <ItemCard item={team.items[0]} key={team.items[0].id}/>
                         <ItemCard item={{id:0, type:'bronze'}}/>

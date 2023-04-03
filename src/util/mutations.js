@@ -107,7 +107,8 @@ mutation RemoveTeamPostFromStage($userId: String, $teamPostId: String, $stageId:
   removeTeamPostFromStage(userId: $userId, teamPostId: $teamPostId, stageId: $stageId) {
     _id
   }
-}`
+}
+`
 
 export const LIKE_TEAM_POST = gql`
 mutation LikeTeamPost($userId: String, $teamPostId: String) {
@@ -127,3 +128,101 @@ mutation RemoveLikeFromTeamPost($userId: String, $teamPostId: String) {
   }
 }
 `
+
+export const ADD_COMMENT_TO_STAGE = gql `
+mutation AddCommentToStage($userId: String, $stageId: String, $comment: String, $userSavedCharacters: [Int]) {
+  addCommentToStage(userId: $userId, stageId: $stageId, comment: $comment, userSavedCharacters: $userSavedCharacters) {
+    _id
+    name
+    comments {
+      _id
+      stage
+      content
+      userSavedCharacters
+      createdAt
+      replies {
+        _id
+        commentId
+        creator {
+          _id
+          username
+        }
+        content
+        createdAt
+      }
+      creator {
+        _id
+        username
+      }
+    }
+  }
+}
+`
+
+export const REMOVE_COMMENT_FROM_STAGE = gql `
+mutation removeCommentFromStage($userId: String, $stageId: String, $commentId: String) {
+  removeCommentFromStage(userId: $userId, stageId: $stageId, commentId: $commentId) {
+    _id
+    name
+    comments {
+      _id
+      stage
+      content
+      userSavedCharacters
+      createdAt
+      creator {
+        _id
+        username
+      }
+      replies {
+        _id
+        commentId
+        content
+        createdAt
+        creator {
+          _id
+          username
+        }
+      }
+    }
+  }
+}
+`;
+
+export const ADD_REPLY_TO_COMMENT = gql `
+mutation AddReplyToComment($userId: String, $commentId: String, $reply: String, $selectedCharacters: [Int]) {
+  addReplyToComment(userId: $userId, commentId: $commentId, reply: $reply, selectedCharacters: $selectedCharacters) {
+    _id
+    content
+    replies {
+      _id
+      commentId
+      creator {
+        _id
+        username
+      }
+      content
+      createdAt
+    }
+  }
+}
+`;
+
+export const REMOVE_REPLY_FROM_COMMENT = gql `
+mutation RemoveReplyFromComment($userId: String, $commentId: String, $replyId: String) {
+  removeReplyFromComment(userId: $userId, commentId: $commentId, replyId: $replyId) {
+    _id
+    stage
+    replies {
+      _id
+      commentId
+      content
+      createdAt
+      creator {
+        _id
+        username
+      }
+    }
+  }
+}
+`;

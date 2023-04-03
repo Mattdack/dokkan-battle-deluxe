@@ -65,3 +65,20 @@
   background: #ff9500;
   border-radius: 10px;
 }
+
+.black-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+
+.black-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(0, 0, 0);
+}
+
+.black-scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.black-scrollbar {
+  scrollbar-color: black #f1f1f1;
+}

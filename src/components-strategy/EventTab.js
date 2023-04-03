@@ -14,7 +14,7 @@ function EventTab({ event }) {
   let eventPhoto = new CloudinaryImage(`Events/${event.name.replace(/ /g, '_').replace(/[^\w\s]|_/g, '')}`, cloudConfig, urlConfig);
 
   return (
-    <div className="p-4">
+    <div>
       <AdvancedImage cldImg={eventPhoto}/>
     </div>
   );

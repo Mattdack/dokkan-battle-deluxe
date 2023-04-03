@@ -20,14 +20,14 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-base rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-md rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
             />
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-md text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}
@@ -126,60 +126,61 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
 
 
           {/* selected category bar */}
-          <div className="flex flex-row grow-0 max-w-[90%] mt-2 justify-center items-center">
-            <div className="flex flex-row h-fit min-w-[100px] max-w-[250px] card-sm:h-10 px-2 mr-2 bg-white items-center text-center rounded-full border-2 border-gray-400 overflow-x-scroll whitespace-nowrap"
-              onMouseDown={(e) => {
-                if (e.button !== 0) { // Only start dragging on left mouse button
+          <div className="flex flex-row grow-0 max-w-[85%] mt-2 justify-center items-center">
+          <div 
+            className="flex flex-row h-fit min-w-[100px] max-w-[180px] card-sm:h-10 px-2 mr-2 bg-white items-center text-center rounded-full border-2 border-gray-400 overflow-x-scroll whitespace-nowrap"
+            onMouseDown={(e) => {
+              if (e.button !== 0) { // Only start dragging on left mouse button
+                return;
+              }
+              e.preventDefault();
+              const container = e.currentTarget;
+              const containerScrollPosition = container.scrollLeft;
+              const mouseX = e.clientX;
+              let mouseDown = true;
+              container.style.cursor = 'grabbing';
+              container.addEventListener('mousemove', onMouseMove);
+              container.addEventListener('mouseup', onMouseUp);
+              container.addEventListener('mouseleave', onMouseLeave);
+
+              function onMouseMove(e) {
+                if (!mouseDown) {
                   return;
                 }
-                e.preventDefault();
-                const container = e.currentTarget;
-                const containerScrollPosition = container.scrollLeft;
-                const mouseX = e.clientX;
-                let mouseDown = true;
-                container.style.cursor = 'grabbing';
-                container.addEventListener('mousemove', onMouseMove);
-                container.addEventListener('mouseup', onMouseUp);
-                container.addEventListener('mouseleave', onMouseLeave);
+                const dx = e.clientX - mouseX;
+                container.scrollTo({
+                  top: 0,
+                  left: containerScrollPosition - dx,
+                  behavior: "auto"
+                });
+              }
 
-                function onMouseMove(e) {
-                  if (!mouseDown) {
-                    return;
-                  }
-                  const dx = e.clientX - mouseX;
-                  container.scrollTo({
-                    top: 0,
-                    left: containerScrollPosition - dx,
-                    behavior: "auto"
-                  });
-                }
+              function onMouseUp() {
+                mouseDown = false;
+                container.style.cursor = 'grab';
+                container.removeEventListener('mousemove', onMouseMove);
+                container.removeEventListener('mouseup', onMouseUp);
+                container.removeEventListener('mouseleave', onMouseLeave);
+              }
 
-                function onMouseUp() {
-                  mouseDown = false;
-                  container.style.cursor = 'grab';
-                  container.removeEventListener('mousemove', onMouseMove);
-                  container.removeEventListener('mouseup', onMouseUp);
-                  container.removeEventListener('mouseleave', onMouseLeave);
-                }
-
-                function onMouseLeave() {
-                  mouseDown = false;
-                  container.style.cursor = 'grab';
-                  container.removeEventListener('mousemove', onMouseMove);
-                  container.removeEventListener('mouseup', onMouseUp);
-                  container.removeEventListener('mouseleave', onMouseLeave);
-                }
-              }}
-            >
+              function onMouseLeave() {
+                mouseDown = false;
+                container.style.cursor = 'grab';
+                container.removeEventListener('mousemove', onMouseMove);
+                container.removeEventListener('mouseup', onMouseUp);
+                container.removeEventListener('mouseleave', onMouseLeave);
+              }
+            }}
+          >
               {selectedCategories.length === 0 &&
-              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-base justify-center items-center text-center" key={'no category selection'}>
+              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-md justify-center items-center text-center" key={'no category selection'}>
                 selected categories here
               </div>
               }
               {selectedCategories.map((category) => (
-                <div className="flex flex-shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
-                  <img className="w-1/4 card-sm:w-full p-1" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
-                  <p className="text-sm card-sm:text-base">{category}</p>
+                <div className="flex shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
+                  <img className="w-6 card-sm:w-8 p-1 cursor-pointer" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
+                  <p className="text-xsm card-sm:text-sm">{category}</p>
                 </div>
               ))}
             </div>
@@ -194,7 +195,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 whitespace-nowrap"
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-md m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 whitespace-nowrap"
                 >
                   Full Match
                 </div>
@@ -222,8 +223,8 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
           </div>
 
           {/* rarity buttons */}
-          <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
-            <div
+          {/* <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center"> */}
+            {/* <div
               className="flex w-1/2 justify-around pr-2 mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
               id="box-1"
             >
@@ -235,10 +236,10 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 label="ALL"
                 defaultChecked
               />
-            </div>
+            </div> */}
           
           {/* super and extreme buttons */}
-            <div
+            {/* <div
               className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold ml-1"
               id="box-1"
             >
@@ -251,9 +252,9 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 defaultChecked
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
+          {/* <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
             <label htmlFor="isUserDeck">
               <input
                 type="checkbox"
@@ -264,12 +265,12 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-md m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400"
               >
                 Characters Saved
               </div>
             </label>
-          </div>
+          </div> */}
 
 
         </fieldset>
@@ -291,7 +292,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-base lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
+        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-md lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400"
       >
         {label}
       </div>
