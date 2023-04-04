@@ -28,7 +28,7 @@ function StageTab({ stageName }) {
       </div>  
     :
       <div className={`z-[900]`}>
-        <AdvancedImage cldImg={stagePhoto} className='w-fit h-fit max-h-16' onError={handleImageError}/>
+        <AdvancedImage cldImg={stagePhoto} className='w-fit h-fit ' onError={handleImageError}/>
       </div>
   );
 };
