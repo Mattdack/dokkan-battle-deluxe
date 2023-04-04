@@ -61,7 +61,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${selectedCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
   return (
-    <div className="my-2">
+    <div className="">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
 
       <div className="row-span-2 px-2 pb-2">

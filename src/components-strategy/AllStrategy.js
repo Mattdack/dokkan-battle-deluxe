@@ -117,6 +117,10 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
   }
 
   function handleSetSelectedStage (stage) {
+    if (stage === selectedStage){
+      scrollToAllTeamInStage()
+      return
+    }
     setAllTeamsOnStage(null)
     setSelectedTeam(null)
     setSelectedStage(stage)
@@ -267,15 +271,15 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
         </div>
 
         <div className="flex flex-col w-full h-full pb-10 border-4 border-black items-center rounded-lg overflow-y-auto">
-          <div className={`flex flex-row w-full p-4 pb-10 bg-orange-200 ${showComments ? 'border-b-2' : 'border-b-4 rounded-b-lg '} border-black justify-around relative`}>
-            <div className="flex flex-row pr-2 w-1/2 pb-2 items-center">
+          <div className={`flex flex-col lg:flex-row w-full p-4 pb-10 bg-orange-200 ${showComments ? 'border-b-2' : 'border-b-4 rounded-b-lg '} border-black justify-around relative`}>
+            <div className="flex flex-row pr-2 lg:w-1/2 pb-2 items-center">
               <p className="font-header mr-4 text-lg card-sm:text-xl font-light">Event</p>
               {selectedEvent ? <div className="flex w-full justify-center items-center"><EventTab key={selectedEvent.name} event={selectedEvent}/></div> : null}
             </div>
 
             <div className="flex justify-center items-center h-[95%] border-2 border-black"/>
 
-            <div className="flex flex-row pl-2 max-w-[50%] items-center">
+            <div className="flex flex-row pl-2 lg:max-w-[50%] items-center">
               <p className="font-header mr-4 text-lg card-sm:text-xl font-light">Stage</p>
               {selectedStage ? <div className="flex w-full p-4 justify-center items-center"><StageTab key={selectedStage.name} stageName={selectedStage.name}/></div> : null} 
             </div>

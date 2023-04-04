@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
@@ -16,7 +16,11 @@ import Auth from "../util/auth";
 import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
+import { UserContext } from '../App';
+
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
+  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
+
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
     thumb: 1003310,
@@ -354,28 +358,42 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   useEffect(() => {
     const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
     setFilteredCharacters(filteredChars);
-  }, [selectedCategories]);
+  }, [selectedCategories]); 
+
+  // this allows the screen to change sizes and auto update revealing/hiding the middle column
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     // stages formatting
-    <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
+    <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-900">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
+
+      {!showMiddleDiv && <div className="w-[10%] bg-slate-900"></div>}
 
       {/* //left column styling */}
       <div
         id="CardSelection"
-        className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
+        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="flex lg:hidden h-[10vh] w-screen lg:w-1/3 pr-2">
           <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToSingleCardStats()}
           >
             Details & Decks
           </button>
           <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
             onClick={() => scrollToTeam()}
           >
             Build Team
@@ -495,23 +513,18 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           )}
         </div>
       </div>
+
       {/* //middle column styling */}
       <div
         id="SingleCardDetails"
-        className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
+        className={`${!showMiddleDiv ? windowWidth < 1250 ? '' : 'hidden' : ''} h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
           <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
-            Selection
-          </button>
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
-            onClick={() => scrollToTeam()}
-          >
-            Build Team
+            Character Selection
           </button>
         </div>
 
@@ -572,24 +585,19 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           />
         )}
       </div>
+      
 
       {/* //right column styling */}
       <div
         id="Team"
-        className="h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900"
+        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 px-2 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex justify-around border-slate-900">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
           <button
-            className="font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
-            Selection
-          </button>
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
-            onClick={() => scrollToSingleCardStats()}
-          >
-            Details & Decks
+            Character Selection
           </button>
         </div>
         <SuggestToWeb
@@ -605,6 +613,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           userDeckData={userDeckData}
         />
       </div>
+
+      {!showMiddleDiv ? <div className="w-[10%] bg-slate-900"></div>: null}
     </div>
   );
 }
