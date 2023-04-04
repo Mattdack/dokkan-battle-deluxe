@@ -1,4 +1,5 @@
- import React, { memo } from "react";
+import React, { memo } from "react";
+import ReactDom from "react-dom";
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
@@ -11,7 +12,9 @@ const hiddenPotentialIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/hidden-
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 
-function AllTeamInfo({ team, characterDictionary }) {
+export default function AllTeamInfo({  team, characterDictionary, open, onClose }) {
+  if (!open) return null;
+
   const rotationIds = [...team.rotation1, ...team.rotation2];
   //set entire float to team array of ids
   let floaterIds = [...team.teamArray]
@@ -26,103 +29,112 @@ function AllTeamInfo({ team, characterDictionary }) {
   const teamArrayWithCharacterData = [team.character1, team.character2, team.character3, team.character4, team.character5, team.character6, team.character7]
 
   const ezaDictionary = Object.fromEntries(teamArrayWithCharacterData.map((characterData) => [characterData.characterId, characterData.EZA]));
-  return (
 
-    <div className="flex flex-wrap pt-4 bg-orange-200">
-      
-      <div className="flex flex-col w-full mb-6 justify-center items-center">
-        <p className="font-header w-[80%] text-xl card-sm:text-3xl text-center">{team.name}</p>
-        <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold text-center truncate">creator: {team.creator.username.replace(/(.+)@.+\..+/, "$1")}</p>
-        {team.mission === 'No Mission' ? null : <p className="w-[80%] pb-2 text-md card-sm:text-lg font-bold text-center">Mission: {team.mission}</p>}
-        <div className="w-[80%] border-b-black border-b-4"></div>
-      </div>
 
-      <div className="flex flex-wrap w-full justify-around">
-
-        <div className="flex flex-col justify-center items-center">
-
-          <p className="font-header text-base card-sm:text-xl">Leader:</p>
-          <CharacterCard individualCharacter={characterDictionary[team.leader]} EZA={ezaDictionary[team.leader]} leaderOrSubLeader='leader'/>
-          <p className="font-header text-base card-sm:text-xl">Sub Leader:</p>
-          <CharacterCard individualCharacter={characterDictionary[team.subLeader]} EZA={ezaDictionary[team.subLeader]} leaderOrSubLeader='subLeader'/>
-          
-        </div>
-
-        <div className="justify-center items-center">
-
-          <div className="flex flex-col">
-            <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 1:</p>
-            <div className="flex justify-center w-full">
-              <CharacterCard individualCharacter={characterDictionary[team.character1.characterId]} EZA={ezaDictionary[team.character1.characterId]} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
-              <CharacterCard individualCharacter={characterDictionary[team.character2.characterId]} EZA={ezaDictionary[team.character2.characterId]} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
-            </div>
-          </div>
-
-          <div className="flex flex-col">
-            <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 2:</p>
-            <div className="flex justify-center w-full">
-            <CharacterCard individualCharacter={characterDictionary[team.character3.characterId]} EZA={ezaDictionary[team.character3.characterId]} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
-            <CharacterCard individualCharacter={characterDictionary[team.character4.characterId]} EZA={ezaDictionary[team.character4.characterId]} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div className="flex flex-row w-full pt-4 justify-center items-center">
-        <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Float:</p>
-        <CharacterCard individualCharacter={characterDictionary[team.character5.characterId]} EZA={ezaDictionary[team.character5.characterId]} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
-        <CharacterCard individualCharacter={characterDictionary[team.character6.characterId]} EZA={ezaDictionary[team.character6.characterId]} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
-        <CharacterCard individualCharacter={characterDictionary[team.character7.characterId]} EZA={ezaDictionary[team.character7.characterId]} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
-      </div>
-
-      <div className="flex flex-row w-full justify-center items-center">
-        <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Items:</p>
+  return ReactDom.createPortal(
+    <div 
+    onClick={onClose}
+    className="flex fixed top-0 left-0 right-0 bottom-0 bg-black/[.7] z-[999] justify-center items-center">
+      <div 
+      onClick={(e) => e.stopPropagation()}
+      className="w-[90%] lg:w-2/5 lg:min-w-[600px] h-[75vh] py-4 border-8 border-black rounded-lg shadow-lg fixed bg-orange-200 z-[1000] overflow-y-auto">
         
-        {(team.items.length === 0 || team.items[0].id === 0) ?
-        <div className="flex flex-row p-2">
-        <ItemCard item={{id:0, type:'bronze'}}/>
-        <ItemCard item={{id:0, type:'bronze'}}/>
-        <ItemCard item={{id:0, type:'bronze'}}/>
-        <ItemCard item={{id:0, type:'bronze'}}/>
+        <div className="flex flex-col w-full mb-6 justify-center items-center">
+          <p className="font-header w-[80%] text-xl card-sm:text-3xl text-center">{team.name}</p>
+          <p className="w-[80%] pb-2 text-base card-sm:text-2xl font-bold text-center truncate">creator: {team.creator.username.replace(/(.+)@.+\..+/, "$1")}</p>
+          {team.mission === 'No Mission' ? null : <p className="w-[80%] pb-2 text-md card-sm:text-lg font-bold text-center">Mission: {team.mission}</p>}
+          <div className="w-[80%] border-b-black border-b-4"></div>
         </div>
-        :
-        <div className="flex flex-row p-2">
-          {team.items && team.items.map((item) => (
-            <ItemCard item={item} key={item.id}/>
-          ))}
+
+        <div className="flex flex-wrap w-full justify-around">
+
+          <div className="flex flex-col justify-center items-center">
+
+            <p className="font-header text-base card-sm:text-xl">Leader:</p>
+            <CharacterCard individualCharacter={characterDictionary[team.leader]} EZA={ezaDictionary[team.leader]} leaderOrSubLeader='leader'/>
+            <p className="font-header text-base card-sm:text-xl">Sub Leader:</p>
+            <CharacterCard individualCharacter={characterDictionary[team.subLeader]} EZA={ezaDictionary[team.subLeader]} leaderOrSubLeader='subLeader'/>
+            
+          </div>
+
+          <div className="justify-center items-center">
+
+            <div className="flex flex-col">
+              <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 1:</p>
+              <div className="flex justify-center w-full">
+                <CharacterCard individualCharacter={characterDictionary[team.character1.characterId]} EZA={ezaDictionary[team.character1.characterId]} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
+                <CharacterCard individualCharacter={characterDictionary[team.character2.characterId]} EZA={ezaDictionary[team.character2.characterId]} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <p className="font-header w-full text-center text-base card-sm:text-xl">Rotation 2:</p>
+              <div className="flex justify-center w-full">
+              <CharacterCard individualCharacter={characterDictionary[team.character3.characterId]} EZA={ezaDictionary[team.character3.characterId]} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
+              <CharacterCard individualCharacter={characterDictionary[team.character4.characterId]} EZA={ezaDictionary[team.character4.characterId]} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-        }
-      </div>
 
-      <div className="flex flex-row w-full mb-4 justify-center items-center">
-        <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Support Memory:</p>
-        {team.supportMemory ? 
-        <SupportMemoryCard supportMemory={team.supportMemory}/>
-        :
-        <SupportMemoryCard supportMemory={{id:0}}/>
-        }
-      </div>
+        <div className="flex flex-col lg:flex-row w-full pt-4 justify-center items-center">
+          <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Float:</p>
+          <div className="flex flex-wrap justify-center">
+            <CharacterCard individualCharacter={characterDictionary[team.character5.characterId]} EZA={ezaDictionary[team.character5.characterId]} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
+            <CharacterCard individualCharacter={characterDictionary[team.character6.characterId]} EZA={ezaDictionary[team.character6.characterId]} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
+            <CharacterCard individualCharacter={characterDictionary[team.character7.characterId]} EZA={ezaDictionary[team.character7.characterId]} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
+          </div>
 
-      <div className="h-full w-full border-t-4 border-black">
-        <CharacterBar singleCharacter={team.character1} characterDictionary={characterDictionary} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character2} characterDictionary={characterDictionary} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character3} characterDictionary={characterDictionary} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character4} characterDictionary={characterDictionary} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character5} characterDictionary={characterDictionary} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character6} characterDictionary={characterDictionary} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
-        <CharacterBar singleCharacter={team.character7} characterDictionary={characterDictionary} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
-      </div>
+        </div>
 
-      <div className="flex flex-col w-full pb-4 px-2 bg-orange-300 relative">
-        <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Team Strategy:</p>
-        <p className="lg:text-lg font-bold">
-          {team.strategy}
-        </p>
-      </div>
-    </div>
+        <div className="flex flex-row w-full justify-center items-center">
+          <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Items:</p>
+          
+          {(team.items.length === 0 || team.items[0].id === 0) ?
+          <div className="flex flex-row p-2">
+          <ItemCard item={{id:0, type:'bronze'}}/>
+          <ItemCard item={{id:0, type:'bronze'}}/>
+          <ItemCard item={{id:0, type:'bronze'}}/>
+          <ItemCard item={{id:0, type:'bronze'}}/>
+          </div>
+          :
+          <div className="flex flex-row p-2">
+            {team.items && team.items.map((item) => (
+              <ItemCard item={item} key={item.id}/>
+            ))}
+          </div>
+          }
+        </div>
 
+        <div className="flex flex-row w-full mb-4 justify-center items-center">
+          <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Support Memory:</p>
+          {team.supportMemory ? 
+          <SupportMemoryCard supportMemory={team.supportMemory}/>
+          :
+          <SupportMemoryCard supportMemory={{id:0}}/>
+          }
+        </div>
+
+        <div className="h-full w-full border-t-4 border-black">
+          <CharacterBar singleCharacter={team.character1} characterDictionary={characterDictionary} leaderOrSubLeader={team.character1.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character2} characterDictionary={characterDictionary} leaderOrSubLeader={team.character2.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character3} characterDictionary={characterDictionary} leaderOrSubLeader={team.character3.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character4} characterDictionary={characterDictionary} leaderOrSubLeader={team.character4.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character5} characterDictionary={characterDictionary} leaderOrSubLeader={team.character5.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character6} characterDictionary={characterDictionary} leaderOrSubLeader={team.character6.leaderOrSubLeader}/>
+          <CharacterBar singleCharacter={team.character7} characterDictionary={characterDictionary} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
+
+        <div className="flex flex-col w-full pb-10 justify-center items-center">
+          <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Team Strategy:</p>
+          <p className="p-4 lg:text-lg font-bold">
+            {team.strategy}
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>,document.getElementById("AllTeamInfoModal")
   );
 };
 
@@ -261,6 +273,3 @@ const SupportMemoryCard = ({supportMemory}) => {
     </>
   );
 }
-
-
-export default memo(AllTeamInfo);

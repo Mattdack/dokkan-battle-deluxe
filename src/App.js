@@ -10,6 +10,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_ITEMS_DATA, GET_SUPPORT_MEMORY_DATA } from "../src/util/queries";
 
+export const UserContext = React.createContext(null)
+
 const client = new ApolloClient({
   uri: process.env.REACT_APP_API_KEY,
   cache: new InMemoryCache(),
@@ -38,16 +40,21 @@ const AllComponentsWithData = withData(AllComponents);
 const AllStrategiesWithData = withData(AllStrategy);
 
 function App() {
+  const [showMiddleDiv, setShowMiddleDiv] = useState(false)
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
-        <Navbar/>
-        <Routes>
-          <Route exact path="/" element={<AllComponentsWithData />} />
-          <Route exact path='/strategy' element={<AllStrategiesWithData />} />
-          <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
-          <Route exact path='/help' element={<Help />} />
-        </Routes>
+        <div className="app">
+          <UserContext.Provider value={{ showMiddleDiv: showMiddleDiv, setShowMiddleDiv: setShowMiddleDiv }}>
+            <Navbar/>
+            <Routes>
+              <Route exact path="/" element={<AllComponentsWithData />} />
+              <Route exact path='/strategy' element={<AllStrategiesWithData />} />
+              <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
+              <Route exact path='/help' element={<Help />} />
+            </Routes>
+          </UserContext.Provider>
+        </div>
       </Router>
     </ApolloProvider>
   );

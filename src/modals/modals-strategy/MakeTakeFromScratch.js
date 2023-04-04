@@ -20,7 +20,7 @@ const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png"
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 
-export default function MakeTeamFromScratch( {userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
+export default function MakeTeamFromScratch( {reloadTeams, userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
   const [addTeamToStage, { error: teamAddedToPostError, data: teamAddedToPost }] = useMutation(ADD_TEAM_POST_TO_STAGE)
 
   const [characterObjects, setCharacterObjects] = useState([
@@ -216,7 +216,7 @@ export default function MakeTeamFromScratch( {userData, stageData, characterDict
       ])
       onClose()
       closeSelectTeam()
-      window.location.assign(process.env.PUBLIC_URL);
+      reloadTeams();
     })
     .catch((error) => {
       setErrorMessage(error.message)

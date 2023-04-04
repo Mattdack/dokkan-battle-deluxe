@@ -204,7 +204,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
               </div>
 
             </div>
-              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-10 h-fit p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
+              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
           </div>
         )).reverse() : null }
       </div>

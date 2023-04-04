@@ -19,26 +19,24 @@ const analysisIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/analysis-icon.
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
 const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png";
 const likeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/like-icon.png";
-const commentIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/comment-icon.png";
 const downIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/down-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
-function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam, characterDictionary }) {
+function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam, characterDictionary, reloadTeams }) {
   const [getTeamPostData, { loading: teamPostLoading, data: teamPostData }] = useLazyQuery(GET_ONE_TEAM_POST, {
     variables: {
       teamId: team._id,
     },
-    onCompleted: (data) => {
-      if(data){
-        setArrayOfLikesOnTeamPost(data.findOnePostTeam.likes)
-      }
-    },
+    onCompleted(data){
+      // console.log(data.findOnePostTeam.likes.length)
+      setArrayOfLikesOnTeamPost(data.findOnePostTeam.likes)
+    }
   });
 
   const [likeTeamPost, { error: likedPostError, data: likedPostData }] = useMutation(LIKE_TEAM_POST)
   const [removeLikeFromTeamPost, { error: removeLikeOnTeamPostError, data: removeLikeOnTeamPostData }] = useMutation(REMOVE_LIKE_FROM_TEAM_POST)
 
-  const [arrayOfLikesOnTeamPost, setArrayOfLikesOnTeamPost] = useState(team?.likes || [])
+  const [arrayOfLikesOnTeamPost, setArrayOfLikesOnTeamPost] = useState(teamPostData?.findOnePostTeam?.likes || [])
 
   const [openWarningModal, setOpenWarningModal] = useState(false)
   const [showComments, setShowComments] = useState(false)
@@ -48,7 +46,8 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 
   const profileId = Auth.getProfile()?.data?._id;
 
-  function handleWarningModal (team){
+  function handleWarningModal (e, team){
+    e.stopPropagation()
     setTeamToUse(team)
     setOpenWarningModal(true)
   }
@@ -67,6 +66,12 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
       }
     })
     .then((result) => {
+      // console.log(result)
+      // getTeamPostData({
+      //   variables: {
+      //     teamId: team._id,
+      //   }
+      // })
     })
     .catch((error) => {
       // console.log(error)
@@ -82,6 +87,12 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
       }
     })
     .then((result) => {
+      // console.log(result)
+      // getTeamPostData({
+      //   variables: {
+      //     teamId: team._id,
+      //   }
+      // })
     })
     .catch((error) => {
       // console.log(error)
@@ -98,13 +109,13 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 
   return (
     <>
-    <WarningRemoveTeamPostModal profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
+    <WarningRemoveTeamPostModal reloadTeams={reloadTeams} profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
       <div key={team._id} className='relative max-w-[400px] lg:max-w-full' onClick={() => handleSetSelectedTeam()}> 
               {/* <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit p-1 mt-2 mr-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/> */}
               {/* <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/> */}
             <div className={`font-header flex w-full h-fit pt-4 pb-2 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
               {profileId === team.creator._id ? 
-                <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-fit p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-1 left-1 cursor-pointer"/>
+                <img src={trashIcon} onClick={(e) => handleWarningModal(e, team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-1 left-1 cursor-pointer"/>
                 :
                 null 
               }
@@ -120,7 +131,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
               
               <div className="flex w-full justify-around items-stretch">
                 <div className="w-full grid grid-cols-2 justify-items-center">
-                  <p className="col-span-2 w-full font-header text-xl card-sm:text-2xl font-bold border-black">Team</p>
+                  <p className="col-span-2 w-full font-header text-xl card-sm:text-2xl font-light border-black">Team</p>
                   {entireTeamObject &&
                     teamDeck.sort((a, b) => {
                         if (a.leaderOrSubLeader === 'leader' && b.leaderOrSubLeader !== 'leader') {
@@ -135,7 +146,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                           return 0; // no change in order
                         }
                       }).map((character) => (
-                        <div>
+                        <div key={character.characterId}>
                         <CharacterCard
                           individualCharacter={characterDictionary[character.characterId]}
                           EZA={character.EZA}
@@ -147,7 +158,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
 
                 <div className="flex flex-col items-center justify-between">
                   <div className="">
-                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">Friend</p>
+                    <p className="font-header text-xl card-sm:text-2xl font-light border-black">Friend</p>
                     <div>
                       <CharacterCard 
                       individualCharacter={characterDictionary[subLeaderCharacter.characterId]}
@@ -157,7 +168,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                     </div>
                   </div>
                   <div className="">
-                    <p className="font-header text-xl card-sm:text-2xl font-bold border-black">items</p>
+                    <p className="font-header text-xl card-sm:text-2xl font-light border-black">items</p>
                       {(team.items.length === 0 || team.items[0].id === 0) &&
                       <div className="flex flex-wrap flex-row p-2 justify-center items-center">
                         <ItemCard item={{id:0, type:'bronze'}}/>
@@ -166,7 +177,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
                         <ItemCard item={{id:0, type:'bronze'}}/>
                       </div>
                       }
-                      {(team.items.length === 1) &&
+                      {(team.items.length === 1 && team.items[0].id !== 0) &&
                       <div className="flex flex-wrap flex-row p-2 justify-center items-center">
                         <ItemCard item={team.items[0]} key={team.items[0].id}/>
                         <ItemCard item={{id:0, type:'bronze'}}/>
@@ -208,16 +219,17 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
               </div>
               }
 
-                <div className={`${arrayOfLikesOnTeamPost.includes(profileId) ? 'bg-blue-500 hover:bg-blue-700': `${profileId ? 'hover:bg-gray-500/[.75]' : ''}`} flex h-8 p-1 justify-center items-center absolute bottom-1 right-1 cursor-pointer transition ease-in-out rounded-lg z-50`}>
+                <div 
+                onClick={Auth.loggedIn() ? (
+                  arrayOfLikesOnTeamPost.includes(profileId) 
+                    ? (e) => handleRemoveLikeFromTeamPost(e, team._id) 
+                    : (e) => handleLikeTeamPost(e, team._id)
+                ) : null}
+                className={`${arrayOfLikesOnTeamPost.includes(profileId) ? 'bg-blue-500 hover:bg-blue-700': `${profileId ? 'hover:bg-gray-500/[.75]' : ''}`} flex h-8 p-1 justify-center items-center absolute bottom-1 right-1 cursor-pointer transition ease-in-out rounded-lg z-50`}>
                   <p className="text-xl font-bold">{arrayOfLikesOnTeamPost && arrayOfLikesOnTeamPost.length}</p>
                   <img 
                     className='w-8'
                     src={likeIcon} 
-                    onClick={Auth.loggedIn() ? (
-                      arrayOfLikesOnTeamPost.includes(profileId) 
-                        ? (e) => handleRemoveLikeFromTeamPost(e, team._id) 
-                        : (e) => handleLikeTeamPost(e, team._id)
-                    ) : null}
                   />
                 </div>
 

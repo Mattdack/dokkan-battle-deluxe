@@ -16,8 +16,17 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               <div className="lg:w-3/5 border-2 border-black">
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Updates</p>
                 <div className="flex flex-wrap justify-around overflow-y-auto">
+                  <NewsDiv date={'APR/4/2023'} information={<>
+                    <p className="px-4 py-2 text-base font-bold indent-4">Welcome to this week's update! We are pretty excited about our new update: commenting on stages! Not only can users comment on stages, but they can also comment on their saved characters in order to receive help from other people. People can reply with characters that they have selected from your saved characters.</p>
+                    <p className="px-4 py-2 text-base font-bold indent-4">We have decided to reorient the page a bit due to some user input on the page being too cluttered. We really wanted to make this page highly focused on the ability to form and generate teams. So with that, we decided to keep the page format to a two-column layout on both pages. On the main team generating page, we allow users to select the option "Show Card Details and Decks" to reveal the middle column (this column is automatically viewable on a mobile device). Then, the strategy section is also split into two sections. The team specifics/info are now viewable in a pop-up and can be accessed by clicking on them. Again, for any feedback (positive or negative) or any errors to report, please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>google form</a>.</p>
+                    {/* <li className="py-2 px-4"></li> */}
+                    </>}
+                    key={1}
+                  />
+                </div>
+                <div className="flex flex-wrap justify-around overflow-y-auto">
                   <NewsDiv date={'MAR/21/2023'} information={<>
-                    <p className="px-4 py-2 text-base font-bold indent-4">The strategy section is now available! You can access it <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/strategy`}>here</a>. With this new update we are allowing users to post teams to specific stages. Over time, we will keep adding more stages and also be updating them as more stages are added to events and more events are added to the game. We also made a <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/help`}>help page</a> which can be accessed in the drop-down menu at the top right of the page. Also, the new News & Update pages to give our users information on what we have built, what we are working on, and what is coming next. We Hope you continue to enjoy our app! If you have any input (positive or negative) please go to the help page and fill out the goole form.</p>
+                    <p className="px-4 py-2 text-base font-bold indent-4">The strategy section is now available! You can access it <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/strategy`}>here</a>. With this new update we are allowing users to post teams to specific stages. Over time, we will keep adding more stages and also be updating them as more stages are added to events and more events are added to the game. We also made a <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/help`}>help page</a> which can be accessed in the drop-down menu at the top right of the page. Also, the new News & Update pages to give our users information on what we have built, what we are working on, and what is coming next. We Hope you continue to enjoy our app! If you have any input (positive or negative) please go to the help page and fill out the <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>google form</a>.</p>
                     {/* <li className="py-2 px-4"></li> */}
                     </>} 
                     key={1}
@@ -27,10 +36,11 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               <div className="lg:w-2/5 border-2 border-black overflow-y-auto">
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Upcoming Updates</p>
                 <li className="px-4 py-2 text-lg font-bold">Team analysis button on posted teams to see how well characters link with each other on the team</li>
-                <li className="px-4 py-2 text-lg font-bold">Adding a remove from team option to character cards in the main container</li>
                 <li className="px-4 py-2 text-lg font-bold">Adding in transformed characters</li>
-                <li className="px-4 py-2 text-lg font-bold">Allowing people to comment on stages their saved characters in order for others to help formulate a team for them</li>
                 <li className="px-4 py-2 text-lg font-bold">Filtering team posted to stages depending on users saved characters</li>
+                <li className="px-4 py-2 text-lg font-bold line-through decoration-2">Allowing people to comment on stages their saved characters in order for others to help formulate a team for them</li>
+                <li className="px-4 py-2 text-lg font-bold line-through decoration-2">Adding a remove from team option to character cards in the main container</li>
+                <li className="px-4 py-2 text-lg font-bold line-through decoration-2">Click logo to jump between home and strategy</li>
                 <li className="px-4 py-2 text-lg font-bold line-through decoration-2">Fixing categroy selected size increase off screen</li>
                 <li className="px-4 py-2 text-lg font-bold line-through decoration-2">New strategy page</li>
                 <li className="px-4 py-2 text-lg font-bold line-through decoration-2">New help page</li>

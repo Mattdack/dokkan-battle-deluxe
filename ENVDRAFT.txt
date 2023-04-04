@@ -1,3 +1,4 @@
+# make sure to change the API_KEY to the http://localhost:3001/graphql while in production....
 REACT_APP_API_KEY=
 REACT_APP_CLOUD_NAME=
 REACT_APP_API_LINK=

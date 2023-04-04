@@ -16,7 +16,7 @@ const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png"
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 
-export default function NewTeamForTeamPostModal( {team, userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
+export default function NewTeamForTeamPostModal( {reloadTeams, team, userData, stageData, characterDictionary, allItems, allSupportMemories, closeSelectTeam, open, onClose} ) {
   const [addTeamToStage, { error: teamAddedToPostError, data: teamAddedToPost }] = useMutation(ADD_TEAM_POST_TO_STAGE)
   
   let character1Object = {}
@@ -265,7 +265,7 @@ export default function NewTeamForTeamPostModal( {team, userData, stageData, cha
     .then((result) => {
       onClose()
       closeSelectTeam()
-      window.location.assign(process.env.PUBLIC_URL);
+      reloadTeams()
     })
     .catch((error) => {
       setErrorMessage(error.message)

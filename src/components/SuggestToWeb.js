@@ -61,7 +61,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${selectedCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
   return (
-    <div className="my-2">
+    <div className="">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
 
       <div className="row-span-2 px-2 pb-2">
@@ -111,13 +111,13 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
         </div>
         
         <div className="h-[28vh] card-sm:h-[29vh] overflow-auto">
-          <CharacterLinkDisplay matchCount={7} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam}statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck} />
-          <CharacterLinkDisplay matchCount={6} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
-          <CharacterLinkDisplay matchCount={5} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
-          <CharacterLinkDisplay matchCount={4} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
-          <CharacterLinkDisplay matchCount={3} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
-          <CharacterLinkDisplay matchCount={2} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
-          <CharacterLinkDisplay matchCount={1} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck} />
+          <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={4} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={3} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={2} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
+          <CharacterLinkDisplay matchCount={1} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
         </div>
       </div>
     </div>
@@ -125,7 +125,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
 }
 
 // this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
-const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck}) => {
+const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck}) => {
   return (
     <>
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
@@ -138,8 +138,10 @@ const CharacterLinkDisplay = ({matchCount, selectedCharacter, charactersWithMatc
           key={character.id}>
             <SuggestCard
               character={character}
+              webOfTeam={webOfTeam}
               selectedCharacter={selectedCharacter}
               handleNewDetails={handleNewDetails}
+              removeFromWebOfTeam={removeFromWebOfTeam}
               addToWebOfTeam={addToWebOfTeam}
               statsSelectedOptions={statsSelectedOptions}
               userDeckData={userDeckData}

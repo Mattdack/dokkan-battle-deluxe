@@ -22,13 +22,13 @@ function StageTab({ stageName }) {
   
   return (
     showStageName ? 
-      <div className={`flex w-fit p-2 justify-center items-center relative z-[900]`}>
+      <div className={`flex w-fit justify-center items-center relative z-[900]`}>
         <AdvancedImage cldImg={backgroundPhoto} className='w-fit' />
         <p text={stageName} className="w-[75%] text-white text-shadow-black card-sm:text-2xl font-bold text-center absolute truncate">{stageName}</p>
       </div>  
     :
       <div className={`z-[900]`}>
-        <AdvancedImage cldImg={stagePhoto} className='w-fit h-fit' onError={handleImageError}/>
+        <AdvancedImage cldImg={stagePhoto} className='w-fit h-fit max-h-16' onError={handleImageError}/>
       </div>
   );
 };
