@@ -174,7 +174,7 @@ export default function Comment({ comment, characterDictionary, selectedStage, r
             
               {showUsersCards && 
               <div>
-                <CharacterSelectionForReply characterDictionary={characterDictionary} usersSavedCharacterIds={comment?.userSavedCharacters} handleCommentCharacterSelection={handleCommentCharacterSelection} characterSelection={characterSelection}/>
+                <CharacterSelectionForReply characterDictionary={characterDictionary} username={comment?.creator?.username && comment?.creator?.username.replace(/(.+)@.+\..+/, "$1")} usersSavedCharacterIds={comment?.userSavedCharacters} handleCommentCharacterSelection={handleCommentCharacterSelection} characterSelection={characterSelection}/>
                 
                 <div className="flex w-full justify-center">
                   <div className="flex flex-wrap w-fit p-2 my-2 border-2 border-black justify-center">

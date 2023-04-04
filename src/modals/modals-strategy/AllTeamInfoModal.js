@@ -128,7 +128,7 @@ export default function AllTeamInfo({  team, characterDictionary, open, onClose 
 
         <div className="flex flex-col w-full pb-10 justify-center items-center">
           <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Team Strategy:</p>
-          <p className="lg:text-lg font-bold">
+          <p className="p-4 lg:text-lg font-bold">
             {team.strategy}
           </p>
         </div>

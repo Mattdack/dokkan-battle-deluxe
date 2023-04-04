@@ -13,7 +13,6 @@ import AllTeamInfo from "../modals/modals-strategy/AllTeamInfoModal"
 import SelectTeamToStageModal from "../modals/modals-strategy/SelectTeamToStageModal";
 import WarningRemoveCommentModal from "../modals/modals-strategy/WarningRemoveCommentModal";
 import Comment from "./Comment";
-import CharacterSelectionForReply from "./CharacterSelectionForReply";
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
@@ -237,7 +236,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
               {allCharactersLoading ? <div className="flex w-[90%] bg-orange-200 p-2 m-2 text-xl text-center justify-center items-center border-4 border-black">loading...</div>
               :
               allEvents && sortedEvents.map(event => 
-                <div key={event._id} onClick={() => handleSetSelectedEvent(event)} className={`p-2 m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
+                <div key={event._id} onClick={() => handleSetSelectedEvent(event)} className={`p-2 m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''} cursor-pointer`}>
                   <EventTab event={event}/>
                 </div>
               ).reverse()}
@@ -248,7 +247,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             <div className="flex h-full flex-wrap mb-1 pb-4 justify-around overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Stages</p>
               {selectedEvent && selectedEvent.stages.map((stage) =>
-              <div key={stage._id} onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
+              <div key={stage._id} onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''} cursor-pointer`}>
                 <StageTab stageName={stage.name}/>
               </div>
               )}
@@ -402,15 +401,19 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           )}
 
           {allTeamsOnStage && allTeamsOnStage.map((team) =>  
-              <button key={team._id} className="flex flex-wrap w-full justify-around ">
-                <div className={
-                  filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
-                    userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
-                    : ''
-                }>
-                  <TeamOnStage team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} reloadTeams={reloadTeams} key={team._id}/>
-                </div>
-              </button>
+            <button 
+              key={team._id} 
+              className="flex flex-wrap w-full justify-around" 
+              title="click on team to show details"
+            >
+              <div className={
+                filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
+                  userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
+                  : ''
+              }>
+                <TeamOnStage team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} reloadTeams={reloadTeams} key={team._id}/>
+              </div>
+            </button>
           ).reverse()}
 
         </div>

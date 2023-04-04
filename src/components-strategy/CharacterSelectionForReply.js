@@ -8,7 +8,7 @@ import {CloudConfig} from "@cloudinary/url-gen";
 
 import SearchFormForReply from "./SearchFormForReply";
 
-function CharacterSelectionForReply( {characterDictionary, usersSavedCharacterIds, handleCommentCharacterSelection, characterSelection} ) {
+function CharacterSelectionForReply( {characterDictionary, username, usersSavedCharacterIds, handleCommentCharacterSelection, characterSelection} ) {
   const allCharacters = usersSavedCharacterIds.map(id => {
     const value = characterDictionary[id];
     return {
@@ -133,7 +133,7 @@ function CharacterSelectionForReply( {characterDictionary, usersSavedCharacterId
       <div 
         onClick={(e) => e.stopPropagation()}
         className="w-full py-2 border-4 border-black rounded-lg shadow-lg bg-orange-200 overflow-y-auto">
-        <p className="font-header w-full pb-2 text-lg lg:text-xl text-center justify-center items-center underline underline-offset-8">Usernames Characters</p>
+        <p className="font-header w-full pb-2 text-lg lg:text-xl text-center justify-center items-center underline underline-offset-8">{username}'s Characters</p>
 
         {/* <div className="flex pt-2 pb-2 items-center justify-center">
           <span className="flex h-fit mr-4 text-md card-sm:text-lg font-bold items-center justify-center text-center">
