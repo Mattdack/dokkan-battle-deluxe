@@ -385,7 +385,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         id="CardSelection"
         className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
-        <div className="flex lg:hidden h-[10vh] w-screen lg:w-1/3 pr-2">
+        <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
           <button
             className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
             onClick={() => scrollToSingleCardStats()}
