@@ -22,8 +22,8 @@ function StageTab({ stageName }) {
   
   return (
     showStageName ? 
-      <div className={`flex w-fit justify-center items-center relative z-[900]`}>
-        <AdvancedImage cldImg={backgroundPhoto} className='w-fit' />
+      <div className={`flex w-fit h-fit justify-center items-center relative z-[900]`}>
+        <AdvancedImage cldImg={backgroundPhoto} className='w-fit h-fit' />
         <p text={stageName} className="w-[75%] text-white text-shadow-black card-sm:text-2xl font-bold text-center absolute truncate">{stageName}</p>
       </div>  
     :
