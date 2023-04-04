@@ -12,7 +12,7 @@ const hiddenPotentialIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/hidden-
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 
-export default function AllTeamInfo({ team, characterDictionary, open, onClose }) {
+export default function AllTeamInfo({  team, characterDictionary, open, onClose }) {
   if (!open) return null;
 
   const rotationIds = [...team.rotation1, ...team.rotation2];

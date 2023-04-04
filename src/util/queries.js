@@ -394,22 +394,18 @@ query AllEventsStagesTeams {
 }
 `;
 
-export const GET_ALL_EVENTS = gql`
-query FindAllEvents {
-  findAllEvents {
+export const GET_ALL_EVENTS_WITH_STAGES = gql`
+query FindAllEventsWithStages {
+  findAllEventsWithStages {
     _id
     name
+    stages {
+      _id
+      name
+      missions
+    }
   }
 }
-`;
-
-export const GET_ALL_STAGES_IN_EVENT = gql`
-query FindAllStagesInEvent {
-  findAllStagesInEvent {
-    _id
-    name
-  }
-  }
 `;
 
 export const GET_ALL_TEAMS_IN_STAGE = gql `
@@ -657,13 +653,6 @@ query FindOnePostTeam($teamId: String) {
   findOnePostTeam(teamId: $teamId) {
     _id
     likes
-    comments {
-      _id
-      createdAt
-      creator
-      content
-      teamPost
-    }
   }
 }`;
 

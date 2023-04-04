@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Auth from "../util/auth";
 
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
-import { GET_EVENT_DATA, GET_ALL_EVENTS, GET_USERDATA } from "../util/queries";
+import { GET_EVENT_DATA, GET_ALL_EVENTS_WITH_STAGES, GET_ALL_TEAMS_IN_STAGE, GET_ONE_STAGE_COMMENTS_REPLIES, GET_USERDATA } from "../util/queries";
 import { ADD_COMMENT_TO_STAGE, ADD_REPLY_TO_COMMENT, REMOVE_REPLY_FROM_COMMENT } from "../util/mutations";
 
 import EventTab from "./EventTab";
@@ -24,28 +24,13 @@ const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 const commentIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/comment-icon.png";
 
 function AllStrategy( { allCharactersLoading, characterDictionary, allItems, allSupportMemories} ) {
-  // const [allEvents, setAllEvents] = useState([])
-  const [addCommentToStage, { error: commentAddedError, data: commentAddedData }] = useMutation(ADD_COMMENT_TO_STAGE)
+  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [selectedStage, setSelectedStage] = useState(null)
+  const [selectedTeam, setSelectedTeam] = useState(null)
+  const [filterDecksBySavedCharacters, setFilterDecksBySavedCharacters] = useState(false)
 
-  const [queryAllEventsAgain, setQueryAllEventsAgain] = useState(false)
-
-  // const [getEventData, { loading: allEventsLoading, data: allEventsData }] = useLazyQuery(GET_EVENT_DATA, {
-  //   onCompleted: (data) => {
-  //     if(data){
-  //       console.log('event query run')
-  //       setAllEvents(data.allEventsStagesTeams)
-  //     }
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   console.log('loading the events, stages, and teams')
-  //   getEventData()
-  // },[allCharactersLoading])
-
-  const { loading: allEventsLoading, data: allEventsData } = useQuery(GET_ALL_EVENTS)
-  const { loading: allEventsLoadingOld, data: allEventsDataOld } = useQuery(GET_EVENT_DATA)
-  const allEvents = allEventsData?.findAllEvents || [];
+  const [openSelectTeamToStage, setOpenSelectTeamToStage] = useState(false)
+  const [openAllTeamInfoModal, setOpenAllTeamInfoModal] = useState(false)
 
   const profileData = Auth.getProfile() || [];
   const { loading: isUserDataLoading, data: userData } = useQuery(GET_USERDATA,
@@ -58,13 +43,66 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
   const userSavedCharacters = userData?.findOneUser?.savedCharacters
   const userDecks = userData?.findOneUser?.decks
 
-  const [selectedEvent, setSelectedEvent] = useState(null)
-  const [selectedStage, setSelectedStage] = useState(null)
-  const [selectedTeam, setSelectedTeam] = useState(null)
-  const [filterDecksBySavedCharacters, setFilterDecksBySavedCharacters] = useState(false)
+  const { loading: allEventsLoading, data: allEventsData } = useQuery(GET_ALL_EVENTS_WITH_STAGES)
+  const allEvents = allEventsData?.findAllEventsWithStages || [];
 
-  const [openSelectTeamToStage, setOpenSelectTeamToStage] = useState(false)
-  const [openAllTeamInfoModal, setOpenAllTeamInfoModal] = useState(false)
+  const [getAllTeamsInStage, { loading: allTeamsLoading, data: allTeamsData, error: allTeamsError }] = useLazyQuery(GET_ALL_TEAMS_IN_STAGE, {
+    variables: {
+      stageId: selectedStage?._id || "",
+    },
+    fetchPolicy: 'network-only', // Add this option to disable caching
+  });
+  const [allTeamsOnStage, setAllTeamsOnStage] = useState([])
+  
+  // this runs the query when ever a selected stage is selected and queries for that stage teams and comments/replies
+  useEffect(() => {
+    if (selectedStage) {
+      getAllTeamsInStage({
+        variables: {
+          stageId: selectedStage._id,
+        },
+      });
+      getCommentsAndReplies({
+        variables: {
+          stageId: selectedStage?._id || "",
+        },
+      });
+    }
+  }, [selectedStage]);
+  
+  // Update `allTeamsOnStage` state whenever `allTeamsData` changes
+  useEffect(() => {
+    setAllTeamsOnStage(allTeamsData?.findOneStageTeams?.teams || []);
+  }, [allTeamsData]);
+  
+  function reloadTeams () {
+    getAllTeamsInStage({
+      variables: {
+        stageId: selectedStage?._id || "",
+      },
+    });
+  }
+
+  const [getCommentsAndReplies, { loading: allCommentsAndRepliesLoading, data: allCommentsAndRepliesData, error: allCommentsAndRepliesError }] = useLazyQuery(GET_ONE_STAGE_COMMENTS_REPLIES, {
+    variables: {
+      stageId: selectedStage?._id || "",
+    },
+    fetchPolicy: 'network-only', // Add this option to disable caching
+  });
+  const [allCommentsAndReplies, setAllCommentsAndReplies] = useState()
+  
+  //Update 'allCommentsAndReplies' state whenever 'allCommentsAndRepliesData' changes
+  useEffect(() => {
+    setAllCommentsAndReplies(allCommentsAndRepliesData?.findOneStageCommentsReplies?.comments || []);
+  }, [allCommentsAndRepliesData]);
+  
+  function reloadCommentsReplies () {
+    getCommentsAndReplies({
+      variables:{
+        stageId: selectedStage?._id || "",
+      },
+    })
+  }
 
   function handleSetSelectedEvent (event) {
     if (event === selectedEvent){
@@ -75,11 +113,11 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
     setSelectedTeam(null)
     setSelectedEvent(event)
     setShowComments(false)
-    // setShowUserCards(false)
-    // setShowReplyForm(false)
+    setAllTeamsOnStage(null)
   }
 
   function handleSetSelectedStage (stage) {
+    setAllTeamsOnStage(null)
     setSelectedTeam(null)
     setSelectedStage(stage)
     scrollToAllTeamInStage()
@@ -141,6 +179,9 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
 
   const commentFormRef = useRef(null)
 
+  const [addCommentToStage, { error: commentAddedError, data: commentAddedData }] = useMutation(ADD_COMMENT_TO_STAGE)
+  const [commentInput, setCommentInput] = useState('')
+
   const handleCommentSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(commentFormRef.current);
@@ -158,12 +199,15 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
       variables:{
         userId: profileData?.data?._id,
         stageId: selectedStage._id,
-        comment: formObject.commentInput,
+        comment: commentInput,
         userSavedCharacters: userSavedCharactersInput
       }
     })
     .then((result) => {
-      console.log(result)
+      // console.log(result)
+      setCommentInput('')
+      // console.log(commentInput)
+      reloadCommentsReplies()
     })
     .catch((error) => {
       console.log(error)
@@ -174,8 +218,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
 
   return (
     <div key={'AllStrategy'} className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
-      <SelectTeamToStageModal userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
-      <AllTeamInfo key={"selectedTeam" + selectedTeam?._id} team={selectedTeam} characterDictionary={characterDictionary} open={openAllTeamInfoModal} onClose={() => setOpenAllTeamInfoModal(false)}/>
+      <SelectTeamToStageModal reloadTeams={reloadTeams} userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
+      <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary} open={openAllTeamInfoModal} onClose={() => setOpenAllTeamInfoModal(false)} key={"selectedTeam" + selectedTeam?._id}/>
 
       <div className="w-[10%] bg-slate-900"></div>
 
@@ -189,8 +233,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
               {allCharactersLoading ? <div className="flex w-[90%] bg-orange-200 p-2 m-2 text-xl text-center justify-center items-center border-4 border-black">loading...</div>
               :
               allEvents && sortedEvents.map(event => 
-                <div onClick={() => handleSetSelectedEvent(event)} className={`p-2 m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
-                  <EventTab key={event.name} event={event}/>
+                <div key={event._id} onClick={() => handleSetSelectedEvent(event)} className={`p-2 m-1 hover:bg-slate-900/[.4] ${selectedEvent?._id === event._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
+                  <EventTab event={event}/>
                 </div>
               ).reverse()}
             </div>
@@ -200,8 +244,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             <div className="flex h-full flex-wrap mb-1 pb-4 justify-around overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Stages</p>
               {selectedEvent && selectedEvent.stages.map((stage) =>
-              <div onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
-                <StageTab key={stage.name} stageName={stage.name}/>
+              <div key={stage._id} onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''}`}>
+                <StageTab stageName={stage.name}/>
               </div>
               )}
             </div>
@@ -241,9 +285,9 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             </div>
             }
           </div>
-            {showComments &&
+            {showComments && 
                 <div className="w-full min-h-[600px] max-h-[600px] border-b-4 border-black z-50 bg-orange-100 rounded-b-lg p-4 shadow-md black-scrollbar overflow-y-auto">
-                <p className="flex w-full pb-4 font-header justify-center items-center text-xl text-center underline decoration-2 underline-offset-8">Comments</p>
+                <p className="flex w-full py-6 font-header justify-center items-center text-xl text-center underline decoration-2 underline-offset-8">Comments</p>
                 {profileData?.data?._id ?
                   <form
                   ref={commentFormRef}
@@ -256,6 +300,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
                       maxLength="500"
                       placeholder="write comment here..."
                       required
+                      onChange={(e) => setCommentInput(e.target.value)}
+                      value={commentInput}
                       style={{ minHeight: "50px" }}
                     ></textarea>
                     <span className="flex w-full my-2 justify-between">
@@ -272,14 +318,23 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
                     </span>
                   </form> 
                   :
-                  null
+                  <textarea
+                      className="w-full p-2 border-2 border-black resize-none"
+                      maxLength="500"
+                      placeholder="Please log in to add a comment"
+                      style={{ minHeight: "50px" }}
+                      readOnly
+                  ></textarea>
                 }
-                {selectedStage && selectedStage.comments && selectedStage.comments.length > 0 && 
-                  selectedStage.comments
-                    .slice()
-                    .sort((a, b) => a.createdAt - b.createdAt)  
-                    .map(singleComment => 
-                      <Comment comment={singleComment} characterDictionary={characterDictionary} selectedStage={selectedStage}/>)
+                {allCommentsAndRepliesLoading ? <div className="flex w-full p-4 mt-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">Comments are loading...</div> :
+                  allCommentsAndReplies.length > 0 ? 
+                    allCommentsAndReplies
+                      .slice()
+                      .sort((a, b) => b.createdAt - a.createdAt)  
+                      .map(singleComment => 
+                        <Comment comment={singleComment} characterDictionary={characterDictionary} selectedStage={selectedStage} reloadCommentsReplies={reloadCommentsReplies} key={singleComment._id}/>)
+                :
+                  <div className="flex w-full p-4 mt-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">No comments yet</div>
                 }
               </div>
             }
@@ -321,22 +376,39 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             )
           }
 
-          {selectedStage && selectedStage.teams.map((team) =>  
+
+          {!selectedEvent &&
+          <div className="flex w-[90%] p-4 mt-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">Please select an event</div>
+          }      
+
+          {!selectedStage &&
+          <div className="flex w-[90%] p-4 mt-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">Please select a stage</div>
+          }      
+          
+          {selectedStage && allTeamsLoading && (
+            <div className="flex w-[90%] p-4 my-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">
+              Teams are loading...
+            </div>
+          )}
+
+          {selectedStage && !allTeamsLoading && allTeamsOnStage && allTeamsOnStage.length === 0 && (
+            <div className="flex w-[90%] p-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">
+              No teams have been posted for this stage yet. Have you completed this stage? Feel free to make a team and post it here!
+            </div>
+          )}
+
+          {allTeamsOnStage && allTeamsOnStage.map((team) =>  
               <button key={team._id} className="flex flex-wrap w-full justify-around ">
                 <div className={
                   filterDecksBySavedCharacters && userData?.findOneUser?.savedCharacters ?
                     userData.findOneUser.savedCharacters.every(c => team.teamArray.includes(c)) ? '' : 'grayscale'
                     : ''
                 }>
-                  <TeamOnStage team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} />
+                  <TeamOnStage team={team} handleSetSelectedTeam={() => handleSetSelectedTeam(team)} selectedStage={selectedStage} selectedTeam={selectedTeam} characterDictionary={characterDictionary} reloadTeams={reloadTeams} key={team._id}/>
                 </div>
               </button>
           ).reverse()}
 
-
-          {selectedStage && selectedStage.teams.length === 0 && 
-            <div className="flex w-[90%] p-4 text-lg font-bold border-2 border-black bg-orange-200 justify-center items-center rounded-lg">No teams have been posted for this stage yet. Have you completed this stage? Feel free to make a team and post it here!</div>
-          }
         </div>
       </div>
 

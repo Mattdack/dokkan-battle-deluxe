@@ -6,7 +6,7 @@ import { REMOVE_COMMENT_FROM_STAGE } from "../../util/mutations"
 
 const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/close-icon.png";
 
-export default function WarningRemoveCommentModal( {open, onClose, profileId, selectedStageId, commentId} ) {
+export default function WarningRemoveCommentModal( {open, onClose, profileId, selectedStageId, commentId, reloadCommentsReplies} ) {
 
   const [removeCommentFromStage, { error: removeCommentError, data: updatedStageCommentsData }] = useMutation(REMOVE_COMMENT_FROM_STAGE)
   if (!open) return null;
@@ -20,11 +20,12 @@ export default function WarningRemoveCommentModal( {open, onClose, profileId, se
       }
     })
     .then((result) => {
-      console.log(result)
+      // console.log(result)
       onClose()
+      reloadCommentsReplies()
     })
     .catch((error) => {
-      console.log(error)
+      // console.log(error)
     });
   }
   

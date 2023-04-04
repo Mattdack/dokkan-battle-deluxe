@@ -13,7 +13,7 @@ const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/close-icon.png";
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
 const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png";
 
-export default function SelectTeamToStageModal( {userDecks, userData, stageData, characterDictionary, allItems, allSupportMemories, open, onClose} ) {
+export default function SelectTeamToStageModal( {reloadTeams, userDecks, userData, stageData, characterDictionary, allItems, allSupportMemories, open, onClose} ) {
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [selectedDeckName, setSelectedDeckName] = useState(selectedDeck?.name)
   const [selectedTeam, setSelectedTeam] = useState(null)
@@ -57,8 +57,8 @@ export default function SelectTeamToStageModal( {userDecks, userData, stageData,
   if (!open) return null;
   return ReactDom.createPortal(
     <>
-      <MakeTeamFromScratch userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openMakeTeamFromScratch} onClose={() => setOpenMakeTeamFromScratch(false)}/>
-      <NewTeamForTeamPostModal team={selectedTeam} userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openNewTeamForTeamPostModal} onClose={() => setOpenNewTeamForTeamPostModal(false)}/>
+      <MakeTeamFromScratch reloadTeams={reloadTeams} userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openMakeTeamFromScratch} onClose={() => setOpenMakeTeamFromScratch(false)}/>
+      <NewTeamForTeamPostModal reloadTeams={reloadTeams} team={selectedTeam} userData={userData} stageData={stageData} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} closeSelectTeam={onClose} open={openNewTeamForTeamPostModal} onClose={() => setOpenNewTeamForTeamPostModal(false)}/>
 
       <div 
       onClick={onClose}
