@@ -327,23 +327,23 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }, [selectedCategories]); 
 
   // this useEffect is for automatically loading characters by increasing the viewableCharacters
-  // useEffect(() => {
-  //   if(cardContainerRef.current !== null){
-  //     const cardContainer = cardContainerRef.current;
+  useEffect(() => {
+    if(cardContainerRef.current !== null){
+      const cardContainer = cardContainerRef.current;
   
-  //     const handleScroll = () => {
-  //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
-  //         setViewableCharacters(viewableCharacters + 50);
-  //       }
-  //     };
+      const handleScroll = () => {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
+          setViewableCharacters(viewableCharacters + 50);
+        }
+      };
   
-  //     cardContainer.addEventListener("scroll", handleScroll);
+      cardContainer.addEventListener("scroll", handleScroll);
   
-  //     return () => {
-  //       cardContainer.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }
-  // }, [allCharactersLoading, viewableCharacters]);
+      return () => {
+        cardContainer.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [allCharactersLoading, viewableCharacters]);
 
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
@@ -533,11 +533,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
             {Auth.loggedIn() ? (
               <select
-                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${
-                  showCardDetails
-                    ? "border-2 bg-orange-200"
-                    : "border-4 bg-orange-400"
-                }`}
+                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
                 id="deckSelect"
                 value={selectedDeck}
                 onChange={(e) => handleSelectedDeck(e.target.value)}
