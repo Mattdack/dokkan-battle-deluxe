@@ -116,7 +116,7 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
               // onError={handleImageError}
               alt={character.name}
               loading="eager"
-              // plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               ></AdvancedImage>
             <AdvancedImage
               cldImg={characterRarity}
@@ -126,19 +126,19 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
                   : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
               }
               //rootMargin: top, right, bottom, left
-              // plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
             />
             <AdvancedImage
               className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
               cldImg={characterTypeBackground}
               loading="eager"
-              // plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               />
             <AdvancedImage
               className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
               cldImg={characterTypeBadge}
               loading="eager"
-              // plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               />
           </div>
     </div>
