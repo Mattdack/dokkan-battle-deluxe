@@ -106,7 +106,7 @@ export default function CharacterSelectionModal( {characterDictionary, userData,
         const cardContainer = characterSelectContainerRef.current;
     
         const handleScroll = () => {
-          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
             setViewableCharacters(viewableCharacters + 50);
           }
         };

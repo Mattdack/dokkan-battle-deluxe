@@ -212,22 +212,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const [viewableCharacters, setViewableCharacters] = useState(75);
   const cardContainerRef = useRef(null);
 
-  useEffect(() => {
-    const cardContainer = cardContainerRef.current;
-
-    const handleScroll = () => {
-      if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
-        setViewableCharacters(viewableCharacters + 50);
-      }
-    };
-
-    cardContainer.addEventListener("scroll", handleScroll);
-
-    return () => {
-      cardContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, [viewableCharacters]);
-
   const [announcementOpen, setAnnouncementOpen] = useState(false)
   
   const announcementSeen = localStorage.getItem('announcementSeen')
@@ -340,7 +324,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       const cardContainer = cardContainerRef.current;
   
       const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
           setViewableCharacters(viewableCharacters + 50);
         }
       };
