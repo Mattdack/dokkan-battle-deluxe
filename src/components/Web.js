@@ -139,9 +139,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   }
 
   return (
-    <div ref={myDivRef} className="h-[45vh] lg:h-[40vh]">
-      <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
-        <div className="absolute top-0 right-0 bg-red-500 w-20 h-20"></div>
+    <div ref={myDivRef} className="enable-dbltouch h-[45vh] lg:h-[40vh]">
+      <div className="enable-dbltouch h-full bg-slate-700 row-span-6 rounded-md relative">
         <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
@@ -161,7 +160,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
+          className="enable-dbltouch bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
         >
         </ReactFlow>
       </div>

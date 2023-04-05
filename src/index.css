@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-#CardSelection {
-  touch-action:manipulation;
+html {
+  touch-action: pan-x pan-y;
+}
+
+body {
+  touch-action: manipulation;
+}
+
+* {
+  touch-action: manipulation;
 }
 
 .font-header {

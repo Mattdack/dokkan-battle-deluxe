@@ -139,8 +139,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }, []);
 
   //adding state for saved to deck...initially composed of userCharacterIds
-  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] =
-    useState(userCharacterIds);
+  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] = useState(userCharacterIds);
   //adds or remove characters from the state deck
   function changeDeck(characterId) {
     setSavedToMyCharacterDeck((prev) => {
@@ -327,23 +326,23 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }, [selectedCategories]); 
 
   // this useEffect is for automatically loading characters by increasing the viewableCharacters
-  // useEffect(() => {
-  //   if(cardContainerRef.current !== null){
-  //     const cardContainer = cardContainerRef.current;
+  useEffect(() => {
+    if(cardContainerRef.current !== null){
+      const cardContainer = cardContainerRef.current;
   
-  //     const handleScroll = () => {
-  //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
-  //         setViewableCharacters(viewableCharacters + 50);
-  //       }
-  //     };
+      const handleScroll = () => {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
+          setViewableCharacters(viewableCharacters + 50);
+        }
+      };
   
-  //     cardContainer.addEventListener("scroll", handleScroll);
+      cardContainer.addEventListener("scroll", handleScroll);
   
-  //     return () => {
-  //       cardContainer.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }
-  // }, [allCharactersLoading, viewableCharacters]);
+      return () => {
+        cardContainer.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [allCharactersLoading, viewableCharacters]);
 
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
@@ -497,9 +496,15 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 </div>
               ))
           )}
-          <button 
-          onClick={() => setViewableCharacters(viewableCharacters + 50)}
-          className="flex w-[70%] p-2 m-2 justify-center items-center text-2xl font-bold bg-orange-300 border-2 border-black">Load More Characters</button>
+          {(viewableCharacters < charactersToDisplay.length) && 
+          <div className="flex w-full justify-center items-center">
+            <button 
+              onClick={() => setViewableCharacters(viewableCharacters + 50)}
+              className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
+                Load More Characters
+            </button>
+          </div>
+          }
         </div>
       </div>
 
