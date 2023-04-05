@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.noZoom {
-  touch-action:none;
+html {
+  touch-action: pan-x pan-y;
 }
 
 .font-header {
