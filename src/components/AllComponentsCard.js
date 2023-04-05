@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, memo } from "react";
 
 import { AdvancedImage, lazyload } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/url-gen";
@@ -41,19 +41,12 @@ function AllComponentsCard({
   }
 }
 
-function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck, addToWebOfTeam, removeFromWebOfTeam, newCardDetails}) {
-  const [isInWeb, setIsInWeb] = useState();
-  // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
-  useEffect(() => {
-    setIsInWeb(webOfTeam.map((char) => char.id).includes(character.id));
-  }, [webOfTeam]);
+const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelectedDeck, addToWebOfTeam, removeFromWebOfTeam, newCardDetails}) => {
+  const isInWeb = useMemo(() => webOfTeam.map((char) => char.id).includes(character.id), [webOfTeam, character.id]);
 
-  const [isInSelectedDeck, setIsInSelectedDeck] = useState([]);
-
-  //this allows for characters in decks to be grayed out. When deckTeams is passed, useEffect launches, takes the deck teams, creates a flat array, takes a team, the team characters, and then if the character.id is included then it is grayed out
-  useEffect(() => {
-    setIsInSelectedDeck(deckTeams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id));
-  }, [deckTeams]);
+  const isInSelectedDeck = useMemo(() => {
+    return deckTeams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id);
+  }, [deckTeams, character.id]);
 
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
@@ -147,7 +140,7 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
           </div>
     </div>
   );
-}
+})
 
 function DeckCard({ character, savedToMyCharacterDeck }) {
   //checking to see if the character.id is included in the array of character ids
