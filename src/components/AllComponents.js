@@ -358,7 +358,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   return (
     // stages formatting
-    <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-900">
+    <div className="disable-zoom overflow-hidden flex flex-wrap bg-slate-900">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
