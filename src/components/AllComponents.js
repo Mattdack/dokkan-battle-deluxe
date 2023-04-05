@@ -209,9 +209,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  const [viewableCharacters, setViewableCharacters] = useState(75);
-  const cardContainerRef = useRef(null);
-
+  
   const [announcementOpen, setAnnouncementOpen] = useState(false)
   
   const announcementSeen = localStorage.getItem('announcementSeen')
@@ -221,59 +219,60 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     localStorage.setItem('announcementSeen', 'true');
     localStorage.setItem('announcementSeenTimestamp', Date.now());
   }
-  
+
+  const [selectedCategories, setSelectedCategories] = useState([])
   const [newFilterData, setNewFilterData] = useState({})
   const [filteredCharacters, setFilteredCharacters] = useState(null)
-
+  
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
-
+  
   const [filterByGame, setFilterByGame] = useState(true);
   const charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
-            const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-            const rarityOrder = ["UR", "LR"];
-
-            const rarityA = rarityOrder.indexOf(a.rarity);
-            const rarityB = rarityOrder.indexOf(b.rarity);
-            if (rarityA === rarityB) {
-              const typeA = typeOrder.indexOf(a.type);
-              const typeB = typeOrder.indexOf(b.type);
-              if (typeA === typeB) {
-                const dateA = new Date(a.glb_date).getTime();
-                const dateB = new Date(b.glb_date).getTime();
-                return dateB - dateA;
-              }
-              return typeB - typeA;
-            }
-            return rarityB - rarityA;
-          })
-        : allCharacters.slice().sort((a, b) => {
-            if (
-              new Date(b.glb_date).getTime() -
-                new Date(a.glb_date).getTime() ===
-              0
-            ) {
-              return b.id - a.id;
-            }
-            return (
-              new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-            );
-          })
+    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
+    const rarityOrder = ["UR", "LR"];
+    
+    const rarityA = rarityOrder.indexOf(a.rarity);
+    const rarityB = rarityOrder.indexOf(b.rarity);
+    if (rarityA === rarityB) {
+      const typeA = typeOrder.indexOf(a.type);
+      const typeB = typeOrder.indexOf(b.type);
+      if (typeA === typeB) {
+        const dateA = new Date(a.glb_date).getTime();
+        const dateB = new Date(b.glb_date).getTime();
+        return dateB - dateA;
+      }
+      return typeB - typeA;
+    }
+    return rarityB - rarityA;
+  })
+  : allCharacters.slice().sort((a, b) => {
+    if (
+      new Date(b.glb_date).getTime() -
+      new Date(a.glb_date).getTime() ===
+      0
+      ) {
+        return b.id - a.id;
+      }
+      return (
+        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
+        );
+      })
       : // This is now starting the FILTERED characters (if filter form is filled out)
       filterByGame
       ? filteredCharacters.slice().sort((a, b) => {
-          const typeOrder = [
-            "EAGL",
-            "SAGL",
-            "ETEQ",
-            "STEQ",
-            "EINT",
-            "SINT",
-            "ESTR",
-            "SSTR",
-            "EPHY",
-            "SPHY",
-          ];
-          const rarityOrder = ["UR", "LR"];
+        const typeOrder = [
+          "EAGL",
+          "SAGL",
+          "ETEQ",
+          "STEQ",
+          "EINT",
+          "SINT",
+          "ESTR",
+          "SSTR",
+          "EPHY",
+          "SPHY",
+        ];
+        const rarityOrder = ["UR", "LR"];
 
           const rarityA = rarityOrder.indexOf(a.rarity);
           const rarityB = rarityOrder.indexOf(b.rarity);
@@ -289,17 +288,21 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           }
           return rarityB - rarityA;
         })
-      : filteredCharacters.slice().sort((a, b) => {
+        : filteredCharacters.slice().sort((a, b) => {
           if (
             new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
             0
-          ) {
-            return b.id - a.id;
+            ) {
+              return b.id - a.id;
           }
           return (
             new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-          );
-        });
+            );
+          });
+
+          
+  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const cardContainerRef = useRef(null);
 
   const handleNewCategorySelected = (e) => {
     setViewableCharacters(50)
@@ -317,32 +320,31 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const handleSelectedCategoryRemoval = (categoryToRemove) => {
     setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
   }
-
-  // this useEffect is for automatically loading characters by increasing the viewableCharacters
-  useEffect(() => {
-    if(cardContainerRef.current !== null){
-      const cardContainer = cardContainerRef.current;
   
-      const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
-          setViewableCharacters(viewableCharacters + 50);
-        }
-      };
-  
-      cardContainer.addEventListener("scroll", handleScroll);
-  
-      return () => {
-        cardContainer.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, [allCharactersLoading, viewableCharacters]);
-
-  const [selectedCategories, setSelectedCategories] = useState([])
-
   useEffect(() => {
     const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
     setFilteredCharacters(filteredChars);
   }, [selectedCategories]); 
+
+  // this useEffect is for automatically loading characters by increasing the viewableCharacters
+  // useEffect(() => {
+  //   if(cardContainerRef.current !== null){
+  //     const cardContainer = cardContainerRef.current;
+  
+  //     const handleScroll = () => {
+  //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
+  //         setViewableCharacters(viewableCharacters + 50);
+  //       }
+  //     };
+  
+  //     cardContainer.addEventListener("scroll", handleScroll);
+  
+  //     return () => {
+  //       cardContainer.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }
+  // }, [allCharactersLoading, viewableCharacters]);
+
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -358,7 +360,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   return (
     // stages formatting
-    <div className="disable-zoom overflow-hidden flex flex-wrap bg-slate-900">
+    <div className="disable-zoom flex flex-wrap bg-slate-900 overflow-hidden">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
@@ -468,7 +470,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
           : (
-            (window.innerWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
+            (windowWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
               .filter((character) => character.glb_date !== null)
               .slice(0, viewableCharacters)
               .map((character) => (
@@ -495,6 +497,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 </div>
               ))
           )}
+          <button 
+          onClick={() => setViewableCharacters(viewableCharacters + 50)}
+          className="flex w-[70%] p-2 m-2 justify-center items-center text-2xl font-bold bg-orange-300 border-2 border-black">Load More Characters</button>
         </div>
       </div>
 
