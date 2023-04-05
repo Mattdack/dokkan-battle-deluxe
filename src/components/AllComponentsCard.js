@@ -78,13 +78,11 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
   }, [ref]);
 
   // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({
-    cloudName: process.env.REACT_APP_CLOUD_NAME,
-  });
-
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
   let urlConfig = new URLConfig({ secure: true });
   // Instantiate and configure a CloudinaryImage object.
   let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
+  // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,{...urlConfig,quality: 'auto'});
   let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
   let characterTypeBadge = new CloudinaryImage(`rarities-types/${character.type.toLowerCase()}`,cloudConfig,urlConfig);
   let characterTypeBackground = new CloudinaryImage(`rarities-types/${character.type.slice(1, 4).toLowerCase()}-background`,cloudConfig,urlConfig);
@@ -124,7 +122,7 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
               cldImg={characterThumb}
               // onError={handleImageError}
               alt={character.name}
-              plugins={[lazyload({rootMargin: "-300px 0px 0px -300px"})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               ></AdvancedImage>
             <AdvancedImage
               cldImg={characterRarity}
@@ -134,17 +132,17 @@ function WebCard({character, webOfTeam, deckTeams, showCharactersInSelectedDeck,
                   : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
               }
               //rootMargin: top, right, bottom, left
-              plugins={[lazyload({rootMargin: "-300px 0px 0px -300px"})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
             />
             <AdvancedImage
               className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
               cldImg={characterTypeBackground}
-              plugins={[lazyload({rootMargin: "-300px 0px 0px -300px"})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               />
             <AdvancedImage
               className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
               cldImg={characterTypeBadge}
-              plugins={[lazyload({rootMargin: "-300px 0px 0px -300px"})]}
+              plugins={[lazyload({rootMargin: "-1000px 0px 0px -1000px", threshold: 0.1})]}
               />
           </div>
     </div>

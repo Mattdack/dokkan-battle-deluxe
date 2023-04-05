@@ -72,7 +72,6 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
               <>
               <AdvancedImage
                 className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative z-50"
-                // src={`https://dokkan.wiki/assets/global/en/character/thumb/card_${characterStyling.getCharacterThumbNail(selectedCharacter)}_thumb.png`}
                 cldImg={characterThumb}
                 alt={selectedCharacter.name}
               ></AdvancedImage>
