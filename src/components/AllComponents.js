@@ -359,7 +359,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   return (
     // stages formatting
-    <div className="disable-zoom flex flex-row lg:flex-wrap bg-slate-900 overflow-hidden">
+    <div className="flex flex-row lg:flex-wrap bg-slate-900 overflow-hidden">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
@@ -368,7 +368,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* //left column styling */}
       <div
         id="CardSelection"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        className={`noZoom h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
         <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
           <button
@@ -466,7 +466,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* //character select box */}
         <div 
         ref={cardContainerRef}
-        className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        className="noZoom flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
           : (
             (windowWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
@@ -475,6 +475,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               .map((character) => (
                 <div
                   id="CharacterCard"
+                  className="noZoom"
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
