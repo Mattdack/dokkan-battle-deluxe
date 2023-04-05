@@ -496,7 +496,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 </div>
               ))
           )}
-          {(viewableCharacters < charactersToDisplay.length) && 
+          {/* {(viewableCharacters < charactersToDisplay.length) && 
           <div className="flex w-full justify-center items-center">
             <button 
               onClick={() => setViewableCharacters(viewableCharacters + 50)}
@@ -504,7 +504,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 Load More Characters
             </button>
           </div>
-          }
+          } */}
         </div>
       </div>
 
