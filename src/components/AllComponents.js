@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
+import CharacterCard from "../cards/CharacterCard";
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
@@ -480,10 +481,13 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
+                    } else {
+                      addToWebOfTeam(character)
                     }
                   }}
                 >
-                  <AllComponentsCard
+                  <CharacterCard individualCharacter={character}/>
+                  {/* <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
@@ -493,7 +497,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     addToWebOfTeam={addToWebOfTeam}
                     removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
-                  />
+                  /> */}
                 </div>
               ))
           )}

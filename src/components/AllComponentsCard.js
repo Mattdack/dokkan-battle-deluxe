@@ -5,38 +5,17 @@ import { CloudinaryImage } from "@cloudinary/url-gen";
 import { URLConfig } from "@cloudinary/url-gen";
 import { CloudConfig } from "@cloudinary/url-gen";
 
-function AllComponentsCard({
-  character,
-  webOfTeam,
-  savedToMyCharacterDeck,
-  userDeckData,
-  selectedDeck,
-  showCharactersInSelectedDeck,
-  addToWebOfTeam,
-  newCardDetails,
-  removeFromWebOfTeam
-}) {
+function AllComponentsCard({ character, webOfTeam, savedToMyCharacterDeck, userDeckData, selectedDeck, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails, removeFromWebOfTeam }) {
   const selectedDeckObj =
     userDeckData.find((deck) => deck._id === selectedDeck) || [];
   const selectedDeckTeams = selectedDeckObj.teams || [];
   if (webOfTeam) {
     return (
-      <WebCard
-        character={character}
-        webOfTeam={webOfTeam}
-        deckTeams={selectedDeckTeams}
-        showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-        addToWebOfTeam={addToWebOfTeam}
-        removeFromWebOfTeam={removeFromWebOfTeam}
-        newCardDetails={newCardDetails}
-      />
+      <WebCard character={character}  webOfTeam={webOfTeam}  deckTeams={selectedDeckTeams}  showCharactersInSelectedDeck={showCharactersInSelectedDeck}  addToWebOfTeam={addToWebOfTeam}  removeFromWebOfTeam={removeFromWebOfTeam}  newCardDetails={newCardDetails}/>
     );
   } else {
     return (
-      <DeckCard
-        character={character}
-        savedToMyCharacterDeck={savedToMyCharacterDeck}
-      />
+      <DeckCard character={character} savedToMyCharacterDeck={savedToMyCharacterDeck}/>
     );
   }
 }
