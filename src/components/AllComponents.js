@@ -476,12 +476,17 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               .map((character) => (
                 <div
                   id="CharacterCard"
-                  className="noZoom"
+                  className={`
+                  ${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}
+                  `}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
                     } else {
+                      webOfTeam.map((char) => char.id).includes(character.id) ? 
+                      removeFromWebOfTeam(character)
+                      :
                       addToWebOfTeam(character)
                     }
                   }}
