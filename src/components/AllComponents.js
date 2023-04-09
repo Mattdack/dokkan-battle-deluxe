@@ -468,24 +468,15 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               .map((character) => (
                 <div
                   id="CharacterCard"
-                  className={`
-                  ${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}
-                  `}
-                  // ${savedToMyCharacterDeck ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-slate-900/[.4]"}
+                  className={`${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}`}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
-                    } else {
-                      webOfTeam.map((char) => char.id).includes(character.id) ? 
-                      removeFromWebOfTeam(character)
-                      :
-                      addToWebOfTeam(character)
                     }
                   }}
                 >
-                  <ServerSideCharacterCard individualCharacter={character}/>
-                  {/* <AllComponentsCard
+                  <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
@@ -495,7 +486,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     addToWebOfTeam={addToWebOfTeam}
                     removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
-                  /> */}
+                  />
                 </div>
               ))}
           {/* {(viewableCharacters < charactersToDisplay.length) && 

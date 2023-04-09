@@ -25,7 +25,7 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .5,
+  zoom: .75,
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
@@ -183,7 +183,7 @@ const startingPosition = (webWidth, webHeight) => {
     // console.log('no width rendered')
     return {x: 0, y:0}
   }
-  return {x: webWidth-100, y: webHeight-100}
+  return {x: webWidth-200, y: webHeight-200}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

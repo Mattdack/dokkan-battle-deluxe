@@ -193,7 +193,7 @@ function CardDetails({ cardDetails }) {
           <div className="h-[17vh] card-sm:h-[12vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
-                return <CharacterLinkDisplay linkText={linkText} />;
+                return <CharacterLinkDisplay key={linkText} linkText={linkText} />;
               })}
           </div>
         </div>
@@ -206,7 +206,7 @@ function CardDetails({ cardDetails }) {
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (
-                  <div className="h-min-10 w-full flex flex-wrap font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-xsm card-sm:text-sm">
+                  <div key={categoryText} className="h-min-10 w-full flex flex-wrap font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-xsm card-sm:text-sm">
                     {categoryText}
                   </div>
                 );

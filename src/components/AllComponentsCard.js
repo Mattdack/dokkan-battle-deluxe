@@ -6,8 +6,7 @@ import { URLConfig } from "@cloudinary/url-gen";
 import { CloudConfig } from "@cloudinary/url-gen";
 
 function AllComponentsCard({ character, webOfTeam, savedToMyCharacterDeck, userDeckData, selectedDeck, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails, removeFromWebOfTeam }) {
-  const selectedDeckObj =
-    userDeckData.find((deck) => deck._id === selectedDeck) || [];
+  const selectedDeckObj = userDeckData.find((deck) => deck._id === selectedDeck) || [];
   const selectedDeckTeams = selectedDeckObj.teams || [];
   if (webOfTeam) {
     return (
@@ -49,15 +48,16 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
     };
   }, [ref]);
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-  let urlConfig = new URLConfig({ secure: true });
-  // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
-  // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,{...urlConfig,quality: 'auto'});
-  let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`rarities-types/${character.type.toLowerCase()}`,cloudConfig,urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`rarities-types/${character.type.slice(1, 4).toLowerCase()}-background`,cloudConfig,urlConfig);
+  //TODO: this is the cloudinary rendering
+  // // Set the Cloud configuration and URL configuration
+  // let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+  // let urlConfig = new URLConfig({ secure: true });
+  // // Instantiate and configure a CloudinaryImage object.
+  // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
+  // // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,{...urlConfig,quality: 'auto'});
+  // let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
+  // let characterTypeBadge = new CloudinaryImage(`rarities-types/${character.type.toLowerCase()}`,cloudConfig,urlConfig);
+  // let characterTypeBackground = new CloudinaryImage(`rarities-types/${character.type.slice(1, 4).toLowerCase()}-background`,cloudConfig,urlConfig);
 
   return (
     <div
@@ -89,7 +89,31 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
             ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
             ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""}`}
           >
-            <AdvancedImage
+            <img
+              className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
+              src={process.env.PUBLIC_URL + '/characterArt/' + character.id + '.png'}
+              loading='eager'
+              alt={character.name}
+              />
+            <img
+              className={character.rarity === "UR"
+                  ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+                  : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+              }
+              src={process.env.PUBLIC_URL + '/dokkanIcons/rarities/' + character.rarity + '.png'}
+              loading='eager'
+            />
+            <img
+              className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
+              src={process.env.PUBLIC_URL + '/dokkanIcons/types/' + character.type.slice(1, 4).toLowerCase() + '-background.png'}
+              loading='eager'
+              />
+            <img
+              className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
+              src={process.env.PUBLIC_URL + '/dokkanIcons/types/' + character.type.toLowerCase() + '.png'}
+              loading='eager'
+            />
+            {/* <AdvancedImage
               className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
               cldImg={characterThumb}
               loading='eager'
@@ -112,7 +136,7 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
               className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
               cldImg={characterTypeBadge}
               loading='eager'
-            />
+            /> */}
           </div>
     </div>
   );
@@ -144,7 +168,7 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
         className={`w-fit relative ${isSavedCharacter ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-slate-900/[.4]"} `}
       >
         <AdvancedImage
-          className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
+          className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
           // onError={handleImageError}
           cldImg={characterThumb}
           alt={character.name}
