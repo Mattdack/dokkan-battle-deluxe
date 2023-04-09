@@ -120,9 +120,7 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
 
 function DeckCard({ character, savedToMyCharacterDeck }) {
   //checking to see if the character.id is included in the array of character ids
-  const [isSavedCharacter, setIsSavedCharacter] = useState(
-    savedToMyCharacterDeck.includes(character.id)
-  );
+  const [isSavedCharacter, setIsSavedCharacter] = useState(savedToMyCharacterDeck.includes(character.id));
   // this use effect allows the setIsSavedCharacter to true/false depending on whether it is in the savedDeck or not (updates when new prop or character passed in)
   useEffect(() => {
     setIsSavedCharacter(savedToMyCharacterDeck.includes(character.id));

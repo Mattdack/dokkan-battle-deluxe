@@ -9,7 +9,7 @@ const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png"
 const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
-const CharacterCard = ({individualCharacter, EZA, leaderOrSubLeader}) => {
+const ServerSideCharacterCard = ({individualCharacter, EZA, leaderOrSubLeader}) => {
     // Set the Cloud configuration and URL configuration
     let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
 
@@ -55,4 +55,4 @@ const CharacterCard = ({individualCharacter, EZA, leaderOrSubLeader}) => {
     );
     }
 
-export default CharacterCard;
+export default ServerSideCharacterCard;

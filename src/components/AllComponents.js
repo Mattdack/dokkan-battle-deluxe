@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
-import CharacterCard from "../cards/CharacterCard";
+import ServerSideCharacterCard from '../cards/ServerSideCharacterCard';
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
@@ -224,10 +224,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const [newFilterData, setNewFilterData] = useState({})
   const [filteredCharacters, setFilteredCharacters] = useState(null)
   
+  // this function allows for filtered characters to be set to the reults of the getFilteredCharacters (which is extracted from the search form)
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
   
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
+  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
     const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
     const rarityOrder = ["UR", "LR"];
     
@@ -260,18 +261,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       : // This is now starting the FILTERED characters (if filter form is filled out)
       filterByGame
       ? filteredCharacters.slice().sort((a, b) => {
-        const typeOrder = [
-          "EAGL",
-          "SAGL",
-          "ETEQ",
-          "STEQ",
-          "EINT",
-          "SINT",
-          "ESTR",
-          "SSTR",
-          "EPHY",
-          "SPHY",
-        ];
+        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
         const rarityOrder = ["UR", "LR"];
 
           const rarityA = rarityOrder.indexOf(a.rarity);
@@ -300,7 +290,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             );
           });
 
-          
+    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+      charactersToDisplay = []
+    }
+
   const [viewableCharacters, setViewableCharacters] = useState(50);
   const cardContainerRef = useRef(null);
 
@@ -469,8 +462,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         ref={cardContainerRef}
         className="noZoom flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
-          : (
-            (windowWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
+          : charactersToDisplay
               .filter((character) => character.glb_date !== null)
               .slice(0, viewableCharacters)
               .map((character) => (
@@ -479,6 +471,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                   ${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}
                   `}
+                  // ${savedToMyCharacterDeck ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-slate-900/[.4]"}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
@@ -491,7 +484,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     }
                   }}
                 >
-                  <CharacterCard individualCharacter={character}/>
+                  <ServerSideCharacterCard individualCharacter={character}/>
                   {/* <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
@@ -504,8 +497,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     newCardDetails={newCardDetails}
                   /> */}
                 </div>
-              ))
-          )}
+              ))}
           {/* {(viewableCharacters < charactersToDisplay.length) && 
           <div className="flex w-full justify-center items-center">
             <button 

@@ -110,7 +110,7 @@ function TeamOnStage({ team, handleSetSelectedTeam, selectedStage, selectedTeam,
   return (
     <>
     <WarningRemoveTeamPostModal reloadTeams={reloadTeams} profileId={profileId} team={teamToUse} selectedStage={selectedStage} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
-      <div key={team._id} className='relative max-w-[400px] lg:max-w-full' onClick={() => handleSetSelectedTeam()}> 
+      <div key={team._id} className='relative max-w-[450px]' onClick={() => handleSetSelectedTeam()}> 
               {/* <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit p-1 mt-2 mr-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/> */}
               {/* <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/> */}
             <div className={`font-header flex w-full h-fit pt-4 pb-2 border-x-4 border-t-4 border-black text-xl card-sm:text-2xl underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center ${selectedTeam && selectedTeam._id === team._id ? 'bg-orange-400' : 'bg-orange-200'} relative`}>
