@@ -52,11 +52,11 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
       className={`
       ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
       ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""} 
-      w-fit relative hover:bg-slate-900/[.4]
+      w-fit h-fit relative hover:bg-slate-900/[.4]
       `}
     >
       {isCardClicked && (
-        <button>
+        <button className="absolute">
           {isInWeb ? (
             <button
               className={`flex h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg absolute z-[900]`}
