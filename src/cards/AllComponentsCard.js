@@ -50,37 +50,37 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
       ref={ref}
       onClick={() => handleCardClick(character)}
       className={`
-      ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
+      ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.4]"}
       ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""} 
-      w-fit h-fit relative hover:bg-slate-900/[.4]
+      w-fit h-fit relative
       `}
     >
       {isCardClicked && (
-        <button className="absolute">
+        <div className="absolute">
           {isInWeb ? (
-            <button
+            <div
               className={`flex h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg absolute z-[900]`}
               onClick={() => removeFromWebOfTeam(character)}
             >
               Remove From Team
-            </button>
+            </div>
           ) : (
-            <button
+            <div
               className={`flex h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg absolute z-[900]`}
               onClick={() => addToWebOfTeam(character)}
             >
               Add To Team
-            </button>
+            </div>
           )}
-        </button>
+        </div>
       )}
-      <button>
+      <div>
         <CharacterCard
           individualCharacter={character}
           mobileSize={"60px"}
           desktopSize={"85px"}
         />
-      </button>
+      </div>
     </button>
   );
 })

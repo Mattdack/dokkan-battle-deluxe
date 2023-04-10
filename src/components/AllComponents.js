@@ -467,11 +467,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               .slice(0, viewableCharacters)
               .map((character) => (
                 <div
-                  id="CharacterCard"
-                  className={`
-                  ${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}
-                  
-                  `}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
