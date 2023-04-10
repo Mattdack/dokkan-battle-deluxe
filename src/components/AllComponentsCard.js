@@ -169,30 +169,28 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
         className={`w-fit relative ${isSavedCharacter ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-slate-900/[.4]"} `}
       >
         <AdvancedImage
-          className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[10%] card-sm:top-[0%] right-[2%] card-sm:right-[0%]"
-          // onError={handleImageError}
+          className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
           cldImg={characterThumb}
+          loading='eager'
           alt={character.name}
-          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
-        ></AdvancedImage>
+          />
         <AdvancedImage
           cldImg={characterRarity}
-          className={
-            character.rarity === "UR"
-              ? "h-[16px] card-sm:h-[25px] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-              : "h-[19px] card-sm:h-[34px] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+          loading='eager'
+          className={character.rarity === "UR"
+              ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+              : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
           }
-          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
         />
         <AdvancedImage
-          className="w-[48px] card-sm:w-[81px] absolute top-[14%] card-sm:top-[13%] right-[12%] card-sm:right-[9.75%] z-0"
+          className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
           cldImg={characterTypeBackground}
-          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
+          loading='eager'
         />
         <AdvancedImage
-          className="w-[24px] card-sm:w-[40px] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-2%] z-50"
+          className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
           cldImg={characterTypeBadge}
-          // plugins={[lazyload({ rootMargin: "10px 20px 10px 30px", threshold: 0.05 })]}
+          loading='eager'
         />
       </div>
     </>

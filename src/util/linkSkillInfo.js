@@ -621,8 +621,14 @@ export const linkSkillStatBoosts = (linkSkills) => {
         linkSkillBuffs.DEF.push(stat);
       }
     }
-    if (lvl1_stats.includes("Ki")) {
-      linkSkillBuffs.Ki.push(stat);
+    if (lvl1_stats.includes("Ki +1")) {
+      linkSkillBuffs.Ki.push(1);
+    }
+    if (lvl1_stats.includes("Ki +2")) {
+      linkSkillBuffs.Ki.push(2);
+    }
+    if (lvl1_stats.includes("Ki +3")) {
+      linkSkillBuffs.Ki.push(3);
     }
   });
   

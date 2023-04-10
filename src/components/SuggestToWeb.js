@@ -65,38 +65,37 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
 
       <div className="row-span-2 px-2 pb-2">
-        {/* image on mobile */}
         <div className="flex justify-around items-center">
-          <div className="lg:hidden w-[100px] card-sm:w-[120px]">
+          {/* image on mobile */}
+          <div className="w-[100px] card-sm:w-[120px]">
             <div className="w-fit relative">
-              <>
-              <AdvancedImage
-                className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative z-50"
-                cldImg={characterThumb}
-                alt={selectedCharacter.name}
-              ></AdvancedImage>
-              {selectedCharacter.rarity && (
-                <AdvancedImage
-                  // src={characterStyling.getCharacterRarityBackground(selectedCharacter)}
-                  cldImg={characterRarity}
-                  className={
-                    selectedCharacter.rarity === "UR"
-                      ? "h-[20px] card-sm:h-[25px] absolute bottom-[6%] left-[-5%] z-50"
-                      : "h-[25px] card-sm:h-[34px] absolute bottom-[5.5%] left-[0%] z-50"
-                  }
-                />
-              )}
-              <AdvancedImage
-                className="w-[65px] card-sm:w-[81px] absolute top-[13%] right-[9.5%] z-0"
-                // src={characterStyling.getCharacterTypeBackground(selectedCharacter)}
-                cldImg={characterTypeBackground}
+            <div
+            className={`w-fit relative`}>
+            <AdvancedImage
+              className="h-[80px] card-sm:h-[95px] w-[80px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[3%] card-sm:right-[0%] z-40"
+              cldImg={characterThumb}
+              loading='eager'
+              alt={selectedCharacter.name}
               />
-              <AdvancedImage
-                className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
-                // src={characterStyling.getCharacterTypeText(selectedCharacter)}
-                cldImg={characterTypeBadge}
-              />
-              </>
+            <AdvancedImage
+              cldImg={characterRarity}
+              loading='eager'
+              className={selectedCharacter.rarity === "UR"
+                  ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
+                  : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
+              }
+            />
+            <AdvancedImage
+              className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
+              cldImg={characterTypeBackground}
+              loading='eager'
+            />
+            <AdvancedImage
+              className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
+              cldImg={characterTypeBadge}
+              loading='eager'
+            />
+            </div>
             </div>   
           </div>
 
@@ -130,7 +129,7 @@ const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charact
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
     <>
       <h3 className="h-fit font-header text-start text-md card-sm:text-xl">Characters with {matchCount} Links:</h3>
-      <div className="flex flex-wrap min-h-[100px] max-h-[220px] card-sm:min-h-[120px] card-sm:max-h-[220px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
+      <div className="flex flex-wrap min-h-[100px] max-h-[180px] card-sm:min-h-[120px] card-sm:max-h-[220px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
         {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id && character.glb_date !== null).map((character) => (
           <div 
           id='CharacterCard'
