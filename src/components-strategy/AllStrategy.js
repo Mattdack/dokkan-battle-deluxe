@@ -220,7 +220,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
   
 
   return (
-    <div key={'AllStrategy'} className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
+    <div key={'AllStrategy'} className="overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
       <SelectTeamToStageModal reloadTeams={reloadTeams} userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
       <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary} open={openAllTeamInfoModal} onClose={() => setOpenAllTeamInfoModal(false)} key={"selectedTeam" + selectedTeam?._id}/>
 

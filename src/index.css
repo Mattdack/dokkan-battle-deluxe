@@ -5,6 +5,7 @@
 /* remove all double touch actions */
 html, body {
   touch-action: manipulation;
+  zoom: reset;
 }
 
 .font-header {
