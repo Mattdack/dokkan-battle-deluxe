@@ -146,6 +146,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[52px] card-sm:h-[62px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div
+            key={'web'+character.id.toString()}
             className="card-sm:min-w-[60px]"
             onClick={() => removeFromWebOfTeam(character)}
             >
