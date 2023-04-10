@@ -3,19 +3,15 @@
 @tailwind utilities;
 
 /* remove all double touch actions */
-html, body {
+html, body, img, div {
   touch-action: manipulation;
   zoom: reset;
 }
 
 img {
-  touch-action: manipulation;
-  zoom: reset;
-}
-
-div {
-  touch-action: manipulation;
-  zoom: reset;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .font-header {
