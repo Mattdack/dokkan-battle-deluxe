@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
-import { QUERY_7LINKS } from "../util/queries";
-import SuggestCard from "../cards/SuggestCard";
-import SuggestForm from "./SuggestForm";
+
 import Web from "./Web";
+import SuggestForm from "./SuggestForm";
+import SuggestCard from "../cards/SuggestCard";
+import CharacterCard from "../cards/CharacterCard";
+
 import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
-import CharacterCard from "../cards/CharacterCard";
 
-
-function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading, showCharactersInSelectedDeck, userDeckData, selectedDeck }) {
+function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading, showCharactersInSelectedDeck, userDeckData, selectedDeck }) {
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
   const handleStatsSelectedOptions = (event) => {
@@ -26,23 +21,14 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   // this console.log brings up a lot of repatative values, is that okay?
   // console.log(userCharacters)
   const [filteredSuggestedCharacters, setFilteredSuggestedCharacters] = useState([])
-  
-  const {loading: isLinkedCharactersLoading, data:linkedCharactersData,} = useQuery(QUERY_7LINKS, {
-    variables: {
-      link1: selectedCharacter.link_skill[0],
-      link2: selectedCharacter.link_skill[1],
-      link3: selectedCharacter.link_skill[2],
-      link4: selectedCharacter.link_skill[3],
-      link5: selectedCharacter.link_skill[4],
-      link6: selectedCharacter.link_skill[5],
-      link7: selectedCharacter.link_skill[6],
-    }
+
+  const selectedLinks = selectedCharacter.link_skill;
+
+  const linkedCharacters = allCharacters.filter(character => {
+    const characterLinks = character.link_skill;
+    return characterLinks.some(link => selectedLinks.includes(link));
   });
-  
-  //TODO: finding all characters by the links of the selected character
-  const linkedCharacters = linkedCharactersData?.characters7Link || [];
-  // console.log(linkedCharacters)
-  
+
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
   const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
   // console.log(filteredSuggestedCharacters)

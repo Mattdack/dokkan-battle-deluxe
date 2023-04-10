@@ -593,6 +593,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           addToWebOfTeam={addToWebOfTeam}
           webOfTeam={webOfTeam}
           removeFromWebOfTeam={removeFromWebOfTeam}
+          allCharacters={allCharacters}
           allCharactersLoading={allCharactersLoading}
           selectedDeck={selectedDeck}
           showCharactersInSelectedDeck={showCharactersInSelectedDeck}
