@@ -16,7 +16,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               <div className="lg:w-3/5 border-2 border-black">
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Updates</p>
                 <div className="flex flex-wrap justify-around overflow-y-auto">
-                  <NewsDiv date={'APR/4/2023'} information={<>
+                  <NewsDiv date={'APR/10/2023'} information={<>
                     <p className="px-4 py-2 text-base font-bold indent-4">Finally got to looking over all the responses. We fixed one large error that wouldn't allow people to post a team onto a stage if the team contained a friend which was not also their leader (but still on the team). The algo we have tracks characters selected for leader and friend and then provides the option to select Leader or Friend on that specific character in the rotation. We also only allow people to submit a team with one leader and one friend. This caused an issue because there would be three characters that could be tagged Leader or Friend, causing the team to not be submitted. We fixed the issue by allowing a third option of 'Neither'. This will allow people to post teams in which their Leader and Friend do not match.</p>
                     <p className="px-4 py-2 text-base font-bold indent-4">Also a very exciting update, we changed the team web format. It is now centered on characters, instead of the edges. We think this makes a better and more seemless design. Next on the list is to add Japan units. This will take a bit longer just because we need to gather all the data and make sure everything checks out.</p>
                     {/* <li className="py-2 px-4"></li> */}
