@@ -33,7 +33,7 @@ const CustomEdge = (props) => {
 
   return (
     <> 
-      <path key={id} id={id} className="react-flow__edge-path" d={edgePath} style={{ stroke: edgeSelected?"orange":"white", strokeWidth: edgeSelected?"6px":"3px" }}/>
+      <path key={id} id={id} className="react-flow__edge-path" d={edgePath} style={{ stroke: edgeSelected?"orange":"white", strokeWidth: edgeSelected?"6px":"3px", zIndex: edgeSelected ? '1000' : '1' }}/>
 
       <EdgeLabelRenderer>
       <div

@@ -17,6 +17,15 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Updates</p>
                 <div className="flex flex-wrap justify-around overflow-y-auto">
                   <NewsDiv date={'APR/4/2023'} information={<>
+                    <p className="px-4 py-2 text-base font-bold indent-4">Finally got to looking over all the responses. We fixed one large error that wouldn't allow people to post a team onto a stage if the team contained a friend which was not also their leader (but still on the team). The algo we have tracks characters selected for leader and friend and then provides the option to select Leader or Friend on that specific character in the rotation. We also only allow people to submit a team with one leader and one friend. This caused an issue because there would be three characters that could be tagged Leader or Friend, causing the team to not be submitted. We fixed the issue by allowing a third option of 'Neither'. This will allow people to post teams in which their Leader and Friend do not match.</p>
+                    <p className="px-4 py-2 text-base font-bold indent-4">Also a very exciting update, we changed the team web format. It is now centered on characters, instead of the edges. We think this makes a better and more seemless design. Next on the list is to add Japan units. This will take a bit longer just because we need to gather all the data and make sure everything checks out.</p>
+                    {/* <li className="py-2 px-4"></li> */}
+                    </>}
+                    key={1}
+                  />
+                </div>
+                <div className="flex flex-wrap justify-around overflow-y-auto">
+                  <NewsDiv date={'APR/4/2023'} information={<>
                     <p className="px-4 py-2 text-base font-bold indent-4">Welcome to this week's update! We are pretty excited about our new update: commenting on stages! Not only can users comment on stages, but they can also comment on their saved characters in order to receive help from other people. People can reply with characters that they have selected from your saved characters.</p>
                     <p className="px-4 py-2 text-base font-bold indent-4">We have decided to reorient the page a bit due to some user input on the page being too cluttered. We really wanted to make this page highly focused on the ability to form and generate teams. So with that, we decided to keep the page format to a two-column layout on both pages. On the main team generating page, we allow users to select the option "Show Card Details and Decks" to reveal the middle column (this column is automatically viewable on a mobile device). Then, the strategy section is also split into two sections. The team specifics/info are now viewable in a pop-up and can be accessed by clicking on them. Again, for any feedback (positive or negative) or any errors to report, please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>google form</a>.</p>
                     {/* <li className="py-2 px-4"></li> */}
@@ -35,6 +44,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               </div>
               <div className="lg:w-2/5 border-2 border-black overflow-y-auto">
                 <p className="font-header w-full h-fit border-b-4 border-black text-4xl text-center bg-orange-300">Upcoming Updates</p>
+                <li className="px-4 py-2 text-lg font-bold">Adding in Japan units</li>
                 <li className="px-4 py-2 text-lg font-bold">Team analysis button on posted teams to see how well characters link with each other on the team</li>
                 <li className="px-4 py-2 text-lg font-bold">Adding in transformed characters</li>
                 <li className="px-4 py-2 text-lg font-bold">Filtering team posted to stages depending on users saved characters</li>

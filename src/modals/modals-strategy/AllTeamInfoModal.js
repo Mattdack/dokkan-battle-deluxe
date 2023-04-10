@@ -127,7 +127,7 @@ export default function AllTeamInfo({  team, characterDictionary, open, onClose 
           <CharacterBar singleCharacter={team.character7} characterDictionary={characterDictionary} leaderOrSubLeader={team.character7.leaderOrSubLeader}/>
 
         <div className="flex flex-col w-full pb-10 justify-center items-center">
-          <p className="font-header flex mr-4 justify-around text-base card-sm:text-xl">Team Strategy:</p>
+          <p className="font-header flex pt-2 justify-around text-base card-sm:text-xl">Team Strategy:</p>
           <p className="p-4 lg:text-lg font-bold">
             {team.strategy}
           </p>
@@ -167,7 +167,7 @@ function CharacterBar({ singleCharacter, characterDictionary, leaderOrSubLeader 
 
     <div className="flex flex-col h-full w-full justify-center items-center text-center bg-orange-300">
       <div className="flex flex-col w-full h-full p-2 flex-grow">
-        <p className="flex font-header justify-center text-lg logo-md:text-lg border-b-2 border-black">
+        <p className="flex font-header font-light justify-center text-md logo-md:text-lg border-b-2 border-black">
           Character Strategy:
         </p>
         <p className="flex h-full text-sm lg:text-base font-bold overflow-y-auto">
