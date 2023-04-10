@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* remove all double touch actions */
 html, body {
   touch-action: manipulation;
 }

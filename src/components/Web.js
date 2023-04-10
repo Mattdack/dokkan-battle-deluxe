@@ -7,13 +7,14 @@ import ReactFlow, {
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
-import WebCard from "./WebCard";
+import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
+import CharacterCard from "../cards/CharacterCard";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
-import { none } from "@cloudinary/transformation-builder-sdk/qualifiers/progressive";
-import { color } from "d3-color";
+
+const rightArrowIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png";
 
 const nodeTypes = {
   custom: WebCard,
@@ -25,7 +26,7 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .75,
+  zoom: .65,
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
@@ -36,6 +37,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
   const [webHeight, setWebHeight] = useState(null)
+  const [showRemoveFromTeam, setShowRemoveFromTeam] = useState(true)
 
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
@@ -46,7 +48,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   const onNodesChange = useCallback(
     (changes) => {
       setExistingNodes((prevNodes) =>
-        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight))
+        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight, removeFromWebOfTeam))
       );
     },
     [setExistingNodes, setExistingEdges, webOfTeam]
@@ -61,7 +63,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
     [setExistingEdges, webOfTeam]
   );
 
-  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight);
+  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight, removeFromWebOfTeam);
   const combinedEdgeData = buildAllEdges(combinedNodeData, existingEdges);
 
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
@@ -139,7 +141,25 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   }
 
   return (
-    <div ref={myDivRef} className="h-[45vh] lg:h-[40vh]">
+    <div ref={myDivRef} className="h-[45vh] relative">
+      <div className="flex w-full rounded-tl-lg absolute z-[995]">
+        <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[52px] card-sm:h-[62px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
+          {webOfTeam.map(character => 
+            <div
+            className="card-sm:min-w-[60px]"
+            onClick={() => removeFromWebOfTeam(character)}
+            >
+              <CharacterCard individualCharacter={character} mobileSize={'50px'} desktopSize={'60px'}/>  
+            </div>
+          )}
+        </div>
+        <img 
+          src={rightArrowIcon}
+          onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
+          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-r-2 rounded-tl-lg' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
+        />
+      </div>
       <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
         <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
@@ -160,7 +180,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black rounded-t-lg"
         >
         </ReactFlow>
       </div>
@@ -180,7 +200,6 @@ const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
 
 const startingPosition = (webWidth, webHeight) => {
   if (webHeight === null || typeof webWidth === 'undefined'){
-    // console.log('no width rendered')
     return {x: 0, y:0}
   }
   return {x: webWidth-200, y: webHeight-200}

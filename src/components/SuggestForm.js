@@ -17,7 +17,7 @@ const SuggestForm = ({
   }, [allCharactersLoading]);
   
   return (
-    <div className="h-[17vh] flex flex-col justify-center items-center ">
+    <div className="h-fit flex flex-col justify-center items-center ">
       {/* //search field */}
       <form
         onSubmit={(e) => e.preventDefault()}
@@ -31,14 +31,14 @@ const SuggestForm = ({
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-xsm card-sm:text-base text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-xsm card-sm:text-[.8rem] text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTermSuggest"
             />
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.8rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategorySuggest"
             >
@@ -163,7 +163,7 @@ const SuggestForm = ({
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-base text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-[.8rem] text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
                 >
                   Saved
                 </div>
@@ -174,7 +174,7 @@ const SuggestForm = ({
       </form>
 
       <div className="flex justify-center items-center">
-        <p className="text-sm card-sm:text-lg mr-4 font-bold text-center">stats affected:</p>
+        <p className="text-sm card-sm:text-[.8rem] mr-4 font-bold text-center">stats buffed:</p>
         <div className="">
           <input
             className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
@@ -186,7 +186,7 @@ const SuggestForm = ({
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.8rem]"
             htmlFor="inlineRadio10"
           >
             None
@@ -203,7 +203,7 @@ const SuggestForm = ({
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.8rem]"
             htmlFor="inlineRadio10"
           >
             ATK
@@ -220,7 +220,7 @@ const SuggestForm = ({
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.8rem]"
             htmlFor="inlineRadio20"
           >
             DEF
@@ -237,7 +237,7 @@ const SuggestForm = ({
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-base"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.8rem]"
             htmlFor="inlineRadio30"
           >
             Ki
@@ -261,7 +261,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-base lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-[.8rem] lg:hover:bg-orange-400 peer-checked:bg-orange-400"
       >
         {label}
       </div>

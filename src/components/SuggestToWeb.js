@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_7LINKS } from "../util/queries";
-import SuggestCard from "./SuggestCard";
+import SuggestCard from "../cards/SuggestCard";
 import SuggestForm from "./SuggestForm";
 import Web from "./Web";
 import { add, countBy, groupBy } from "lodash";
@@ -13,6 +13,7 @@ import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
+import CharacterCard from "../cards/CharacterCard";
 
 
 function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading, showCharactersInSelectedDeck, userDeckData, selectedDeck }) {
@@ -50,16 +51,6 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
   // console.log(charactersWithMatchedLinks)
 
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${selectedCharacter.id}`, cloudConfig, urlConfig);
-  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${selectedCharacter.rarity}`, cloudConfig, urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${selectedCharacter.type.toLowerCase()}`, cloudConfig, urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${selectedCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
-
   return (
     <div className="">
       <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
@@ -68,35 +59,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
         <div className="flex justify-around items-center">
           {/* image on mobile */}
           <div className="w-[100px] card-sm:w-[120px]">
-            <div className="w-fit relative">
-            <div
-            className={`w-fit relative`}>
-            <AdvancedImage
-              className="h-[80px] card-sm:h-[95px] w-[80px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[3%] card-sm:right-[0%] z-40"
-              cldImg={characterThumb}
-              loading='eager'
-              alt={selectedCharacter.name}
-              />
-            <AdvancedImage
-              cldImg={characterRarity}
-              loading='eager'
-              className={selectedCharacter.rarity === "UR"
-                  ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-                  : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
-              }
-            />
-            <AdvancedImage
-              className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
-              cldImg={characterTypeBackground}
-              loading='eager'
-            />
-            <AdvancedImage
-              className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
-              cldImg={characterTypeBadge}
-              loading='eager'
-            />
-            </div>
-            </div>   
+              <CharacterCard individualCharacter={selectedCharacter} mobileSize={'85px'} desktopSize={'85px'}/>
           </div>
 
           <SuggestForm 
@@ -108,7 +71,7 @@ function SuggestToWeb({ selectedCharacter, userCharacters, handleNewDetails, web
           />
         </div>
         
-        <div className="h-[28vh] card-sm:h-[29vh] overflow-auto">
+        <div className="h-[28vh] overflow-auto">
           <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck} />
           <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
           <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
@@ -129,11 +92,12 @@ const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charact
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
     <>
       <h3 className="h-fit font-header text-start text-md card-sm:text-xl">Characters with {matchCount} Links:</h3>
-      <div className="flex flex-wrap min-h-[100px] max-h-[180px] card-sm:min-h-[120px] card-sm:max-h-[220px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
+      <div className="flex flex-wrap min-h-[95px] max-h-[190px] card-sm:min-h-[95px] card-sm:max-h-[190px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
         {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id && character.glb_date !== null).map((character) => (
           <div 
           id='CharacterCard'
-          key={character.id}>
+          key={'suggest' + character.id.toString()}
+          >
             <SuggestCard
               character={character}
               webOfTeam={webOfTeam}

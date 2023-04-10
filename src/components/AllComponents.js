@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import AllComponentsCard from "./AllComponentsCard";
+import AllComponentsCard from "../cards/AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
 import ServerSideCharacterCard from '../cards/ServerSideCharacterCard';
@@ -468,7 +468,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               .map((character) => (
                 <div
                   id="CharacterCard"
-                  className={`${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}`}
+                  className={`
+                  ${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}
+                  
+                  `}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
@@ -504,11 +507,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* //middle column styling */}
       <div
         id="SingleCardDetails"
-        className={`${!showMiddleDiv ? windowWidth < 1250 ? '' : 'hidden' : ''} h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        className={`${!showMiddleDiv ? windowWidth < 1000 ? '' : 'hidden' : ''} h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
           <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
             Character Selection
@@ -575,9 +578,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         id="Team"
         className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
+        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
           <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
+            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
             Character Selection
