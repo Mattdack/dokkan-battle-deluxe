@@ -52,13 +52,13 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
   // uses the linkSkillInfo function which only grabs the stats that were changed
   const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
 
-  // Set the Cloud configuration and URL configuration
-  // let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-  // let urlConfig = new URLConfig({secure: true});
-  // let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
-  // let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${character.rarity}`, cloudConfig, urlConfig);
-  // let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${character.type.toLowerCase()}`, cloudConfig, urlConfig);
-  // let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${character.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
+  // TODO: Set the Cloud configuration and URL configuration
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+  let urlConfig = new URLConfig({secure: true, params: { "cache_control": "max-age=2592000" }})
+  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${character.id}`, cloudConfig, urlConfig);
+  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${character.rarity}`, cloudConfig, urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${character.type.toLowerCase()}`, cloudConfig, urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${character.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
 
   return (
@@ -90,7 +90,7 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
             </div>
           </div>
         )}
-            <img
+            {/* <img
               className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
               src={process.env.PUBLIC_URL + '/characterArt/' + character.id + '.png'}
               loading='eager'
@@ -113,8 +113,9 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
               className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
               src={process.env.PUBLIC_URL + '/dokkanIcons/types/' + character.type.toLowerCase() + '.png'}
               loading='eager'
-            />
-          {/* <AdvancedImage
+            /> */}
+            {/* TODO: render cloud image */}
+          <AdvancedImage
             className="h-[80px] card-sm:h-[100px] card-sm:w-[100px] w-[80px] bg-no-repeat relative right-[.5%] z-50"
             cldImg={characterThumb}
             // onError={handleImageError}
@@ -140,7 +141,7 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
             className="w-[30px] card-sm:w-[40px] absolute top-[0%] right-[-2%] z-50"
             cldImg={characterTypeBadge}
             plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-          /> */}
+          />
           {statsSelectedOptions === "ATK" &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>

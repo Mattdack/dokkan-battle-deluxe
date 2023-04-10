@@ -49,15 +49,15 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
   }, [ref]);
 
   //TODO: this is the cloudinary rendering
-  // // Set the Cloud configuration and URL configuration
-  // let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-  // let urlConfig = new URLConfig({ secure: true });
-  // // Instantiate and configure a CloudinaryImage object.
-  // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
-  // // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,{...urlConfig,quality: 'auto'});
-  // let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
-  // let characterTypeBadge = new CloudinaryImage(`rarities-types/${character.type.toLowerCase()}`,cloudConfig,urlConfig);
-  // let characterTypeBackground = new CloudinaryImage(`rarities-types/${character.type.slice(1, 4).toLowerCase()}-background`,cloudConfig,urlConfig);
+  // Set the Cloud configuration and URL configuration
+  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
+  let urlConfig = new URLConfig({ secure: true, params: { "cache_control": "max-age=2592000" } });
+  // Instantiate and configure a CloudinaryImage object.
+  let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
+  // let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,{...urlConfig,quality: 'auto'});
+  let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
+  let characterTypeBadge = new CloudinaryImage(`rarities-types/${character.type.toLowerCase()}`,cloudConfig,urlConfig);
+  let characterTypeBackground = new CloudinaryImage(`rarities-types/${character.type.slice(1, 4).toLowerCase()}-background`,cloudConfig,urlConfig);
 
   return (
     <div
@@ -89,7 +89,7 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
             ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : ""}
             ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""}`}
           >
-            <img
+            {/* <img
               className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
               src={process.env.PUBLIC_URL + '/characterArt/' + character.id + '.png'}
               loading='eager'
@@ -112,8 +112,9 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
               className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
               src={process.env.PUBLIC_URL + '/dokkanIcons/types/' + character.type.toLowerCase() + '.png'}
               loading='eager'
-            />
-            {/* <AdvancedImage
+            /> */}
+            {/* TODO: this is the cloudinary image render */}
+            <AdvancedImage
               className="h-[60px] card-sm:h-[95px] w-[60px] card-sm:w-[95px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
               cldImg={characterThumb}
               loading='eager'
@@ -136,7 +137,7 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
               className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
               cldImg={characterTypeBadge}
               loading='eager'
-            /> */}
+            />
           </div>
     </div>
   );
