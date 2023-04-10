@@ -156,7 +156,7 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
     cloudName: process.env.REACT_APP_CLOUD_NAME,
   });
 
-  let urlConfig = new URLConfig({ secure: true });
+  let urlConfig = new URLConfig({ secure: true, params: { "cache_control": "max-age=2592000" } });
   // Instantiate and configure a CloudinaryImage object.
   let characterThumb = new CloudinaryImage(`Character Thumb/${character.id}`,cloudConfig,urlConfig);
   let characterRarity = new CloudinaryImage(`rarities-types/${character.rarity}`,cloudConfig,urlConfig);
