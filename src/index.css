@@ -13,6 +13,11 @@ img {
   zoom: reset;
 }
 
+div {
+  touch-action: manipulation;
+  zoom: reset;
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
