@@ -11,7 +11,6 @@ import { UserContext } from '../App';
 export default function HamburgerModal({open, onClose}) {
 
   const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
-  console.log(showMiddleDiv)
 
   const [loginOpen, setLoginOpen] = useState(false);
   const [updatesOpen, setUpdatesOpen] = useState(false)

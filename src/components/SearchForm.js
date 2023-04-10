@@ -178,7 +178,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               }
               {selectedCategories.map((category) => (
                 <div className="flex flex-shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
-                  <img className="w-1/4 card-sm:w-full p-1" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
+                  <img className="w-1/4 card-sm:w-full p-1 cursor-pointer" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
                   <p className="text-sm card-sm:text-base">{category}</p>
                 </div>
               ))}

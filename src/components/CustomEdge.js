@@ -1,12 +1,12 @@
 import { data } from "autoprefixer";
 import { all } from "axios";
 import React, { useEffect, useState } from "react";
-import { EdgeProps, getBezierPath, EdgeLabelRenderer, useEdgesState } from "reactflow";
+import { EdgeProps, getStraightPath, EdgeLabelRenderer, useEdgesState } from "reactflow";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
 const CustomEdge = (props) => {
   const {id,sourceX,sourceY,targetX,targetY,sourcePosition,targetPosition,data} = props;
-  const [edgePath, labelX, labelY] = getBezierPath({sourceX,sourceY,sourcePosition,targetX,targetY,targetPosition,});
+  const [edgePath, labelX, labelY] = getStraightPath({sourceX,sourceY,sourcePosition,targetX,targetY,targetPosition,});
   
   const [showLinkInfo, setShowLinkInfo] = useState(false);
   const [edgeSelected, setEdgeSelected] = useState(false);
@@ -33,7 +33,7 @@ const CustomEdge = (props) => {
 
   return (
     <> 
-      <path key={id} id={id} className="react-flow__edge-path" d={edgePath} style={{ stroke: edgeSelected?"orange":"white", strokeWidth: edgeSelected?"5px":"1px" }}/>
+      <path key={id} id={id} className="react-flow__edge-path" d={edgePath} style={{ stroke: edgeSelected?"orange":"white", strokeWidth: edgeSelected?"6px":"3px" }}/>
 
       <EdgeLabelRenderer>
       <div
@@ -58,7 +58,7 @@ const CustomEdge = (props) => {
           : 
           (matchedLinkInfo.map((linkSkillInfo) => {
               return (
-                <div className="nodrag nopan p-1 w-20 text-md border-b border-black"> {linkSkillInfo} </div>
+                <div key={id} className="nodrag nopan p-1 w-20 text-md border-b border-black"> {linkSkillInfo} </div>
               );
             })
           )}

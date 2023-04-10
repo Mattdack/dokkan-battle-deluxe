@@ -25,7 +25,7 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .5,
+  zoom: .75,
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
@@ -141,7 +141,6 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   return (
     <div ref={myDivRef} className="h-[45vh] lg:h-[40vh]">
       <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
-        <div className="absolute top-0 right-0 bg-red-500 w-20 h-20"></div>
         <button
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
@@ -161,7 +160,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black"
         >
         </ReactFlow>
       </div>
@@ -184,7 +183,7 @@ const startingPosition = (webWidth, webHeight) => {
     // console.log('no width rendered')
     return {x: 0, y:0}
   }
-  return {x: webWidth-100, y: webHeight-100}
+  return {x: webWidth-200, y: webHeight-200}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

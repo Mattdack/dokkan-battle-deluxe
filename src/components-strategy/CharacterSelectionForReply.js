@@ -21,40 +21,46 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
   const [viewableCharacters, setViewableCharacters] = useState(75);
   const [newFilterData, setNewFilterData] = useState({})
 
-  const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
+  const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, filterData, selectedCategories)), setNewFilterData(filterData)]
 
   //TODO: can be optimized/look cleaner if this sort/filter was a util function
   //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay = filteredCharacters === null ? filterByGame ? allCharacters.slice().sort((a, b) => {
-            const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-            const rarityOrder = ["UR", "LR"];
-
-            const rarityA = rarityOrder.indexOf(a.rarity);
-            const rarityB = rarityOrder.indexOf(b.rarity);
-            if (rarityA === rarityB) {
-              const typeA = typeOrder.indexOf(a.type);
-              const typeB = typeOrder.indexOf(b.type);
-              if (typeA === typeB) {
-                const dateA = new Date(a.glb_date).getTime();
-                const dateB = new Date(b.glb_date).getTime();
-                return dateB - dateA;
-              }
-              return typeB - typeA;
-            }
-            return rarityB - rarityA;
-          })
-        : allCharacters.slice().sort((a, b) => {
-            if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
-              return b.id - a.id;
-            }
-            return (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime());
-          })
+  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
+    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
+    const rarityOrder = ["UR", "LR"];
+    
+    const rarityA = rarityOrder.indexOf(a.rarity);
+    const rarityB = rarityOrder.indexOf(b.rarity);
+    if (rarityA === rarityB) {
+      const typeA = typeOrder.indexOf(a.type);
+      const typeB = typeOrder.indexOf(b.type);
+      if (typeA === typeB) {
+        const dateA = new Date(a.glb_date).getTime();
+        const dateB = new Date(b.glb_date).getTime();
+        return dateB - dateA;
+      }
+      return typeB - typeA;
+    }
+    return rarityB - rarityA;
+  })
+  : allCharacters.slice().sort((a, b) => {
+    if (
+      new Date(b.glb_date).getTime() -
+      new Date(a.glb_date).getTime() ===
+      0
+      ) {
+        return b.id - a.id;
+      }
+      return (
+        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
+        );
+      })
       : // This is now starting the FILTERED characters (if filter form is filled out)
       filterByGame
       ? filteredCharacters.slice().sort((a, b) => {
-          const typeOrder = ["EAGL","SAGL","ETEQ","STEQ","EINT","SINT","ESTR","SSTR","EPHY","SPHY",];
-          const rarityOrder = ["UR", "LR"];
+        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
+        const rarityOrder = ["UR", "LR"];
 
           const rarityA = rarityOrder.indexOf(a.rarity);
           const rarityB = rarityOrder.indexOf(b.rarity);
@@ -70,12 +76,21 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
           }
           return rarityB - rarityA;
         })
-      : filteredCharacters.slice().sort((a, b) => {
-          if (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() === 0) {
-            return b.id - a.id;
+        : filteredCharacters.slice().sort((a, b) => {
+          if (
+            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
+            0
+            ) {
+              return b.id - a.id;
           }
-          return (new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime());
-        });
+          return (
+            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
+            );
+          });
+
+    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+      charactersToDisplay = []
+    }
 
     const characterSelectContainerRef = useRef(null)
 
@@ -103,7 +118,7 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
         const cardContainer = characterSelectContainerRef.current;
     
         const handleScroll = () => {
-          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
             setViewableCharacters(viewableCharacters + 50);
           }
         };

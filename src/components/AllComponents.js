@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import AllComponentsCard from "./AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
+import ServerSideCharacterCard from '../cards/ServerSideCharacterCard';
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
@@ -139,8 +140,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }, []);
 
   //adding state for saved to deck...initially composed of userCharacterIds
-  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] =
-    useState(userCharacterIds);
+  const [savedToMyCharacterDeck, setSavedToMyCharacterDeck] = useState(userCharacterIds);
   //adds or remove characters from the state deck
   function changeDeck(characterId) {
     setSavedToMyCharacterDeck((prev) => {
@@ -209,25 +209,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  const [viewableCharacters, setViewableCharacters] = useState(75);
-  const cardContainerRef = useRef(null);
-
-  useEffect(() => {
-    const cardContainer = cardContainerRef.current;
-
-    const handleScroll = () => {
-      if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
-        setViewableCharacters(viewableCharacters + 50);
-      }
-    };
-
-    cardContainer.addEventListener("scroll", handleScroll);
-
-    return () => {
-      cardContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, [viewableCharacters]);
-
+  
   const [announcementOpen, setAnnouncementOpen] = useState(false)
   
   const announcementSeen = localStorage.getItem('announcementSeen')
@@ -237,59 +219,50 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     localStorage.setItem('announcementSeen', 'true');
     localStorage.setItem('announcementSeenTimestamp', Date.now());
   }
-  
+
+  const [selectedCategories, setSelectedCategories] = useState([])
   const [newFilterData, setNewFilterData] = useState({})
   const [filteredCharacters, setFilteredCharacters] = useState(null)
-
+  
+  // this function allows for filtered characters to be set to the reults of the getFilteredCharacters (which is extracted from the search form)
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
-
+  
   const [filterByGame, setFilterByGame] = useState(true);
-  const charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
-            const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-            const rarityOrder = ["UR", "LR"];
-
-            const rarityA = rarityOrder.indexOf(a.rarity);
-            const rarityB = rarityOrder.indexOf(b.rarity);
-            if (rarityA === rarityB) {
-              const typeA = typeOrder.indexOf(a.type);
-              const typeB = typeOrder.indexOf(b.type);
-              if (typeA === typeB) {
-                const dateA = new Date(a.glb_date).getTime();
-                const dateB = new Date(b.glb_date).getTime();
-                return dateB - dateA;
-              }
-              return typeB - typeA;
-            }
-            return rarityB - rarityA;
-          })
-        : allCharacters.slice().sort((a, b) => {
-            if (
-              new Date(b.glb_date).getTime() -
-                new Date(a.glb_date).getTime() ===
-              0
-            ) {
-              return b.id - a.id;
-            }
-            return (
-              new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-            );
-          })
+  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
+    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
+    const rarityOrder = ["UR", "LR"];
+    
+    const rarityA = rarityOrder.indexOf(a.rarity);
+    const rarityB = rarityOrder.indexOf(b.rarity);
+    if (rarityA === rarityB) {
+      const typeA = typeOrder.indexOf(a.type);
+      const typeB = typeOrder.indexOf(b.type);
+      if (typeA === typeB) {
+        const dateA = new Date(a.glb_date).getTime();
+        const dateB = new Date(b.glb_date).getTime();
+        return dateB - dateA;
+      }
+      return typeB - typeA;
+    }
+    return rarityB - rarityA;
+  })
+  : allCharacters.slice().sort((a, b) => {
+    if (
+      new Date(b.glb_date).getTime() -
+      new Date(a.glb_date).getTime() ===
+      0
+      ) {
+        return b.id - a.id;
+      }
+      return (
+        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
+        );
+      })
       : // This is now starting the FILTERED characters (if filter form is filled out)
       filterByGame
       ? filteredCharacters.slice().sort((a, b) => {
-          const typeOrder = [
-            "EAGL",
-            "SAGL",
-            "ETEQ",
-            "STEQ",
-            "EINT",
-            "SINT",
-            "ESTR",
-            "SSTR",
-            "EPHY",
-            "SPHY",
-          ];
-          const rarityOrder = ["UR", "LR"];
+        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
+        const rarityOrder = ["UR", "LR"];
 
           const rarityA = rarityOrder.indexOf(a.rarity);
           const rarityB = rarityOrder.indexOf(b.rarity);
@@ -305,17 +278,24 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           }
           return rarityB - rarityA;
         })
-      : filteredCharacters.slice().sort((a, b) => {
+        : filteredCharacters.slice().sort((a, b) => {
           if (
             new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
             0
-          ) {
-            return b.id - a.id;
+            ) {
+              return b.id - a.id;
           }
           return (
             new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-          );
-        });
+            );
+          });
+
+    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+      charactersToDisplay = []
+    }
+
+  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const cardContainerRef = useRef(null);
 
   const handleNewCategorySelected = (e) => {
     setViewableCharacters(50)
@@ -333,6 +313,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const handleSelectedCategoryRemoval = (categoryToRemove) => {
     setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
   }
+  
+  useEffect(() => {
+    const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
+    setFilteredCharacters(filteredChars);
+  }, [selectedCategories]); 
 
   // this useEffect is for automatically loading characters by increasing the viewableCharacters
   useEffect(() => {
@@ -340,7 +325,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       const cardContainer = cardContainerRef.current;
   
       const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
           setViewableCharacters(viewableCharacters + 50);
         }
       };
@@ -353,12 +338,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     }
   }, [allCharactersLoading, viewableCharacters]);
 
-  const [selectedCategories, setSelectedCategories] = useState([])
-
-  useEffect(() => {
-    const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
-    setFilteredCharacters(filteredChars);
-  }, [selectedCategories]); 
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -374,7 +353,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   return (
     // stages formatting
-    <div className="disable-zoom overflow-hidden flex flex-row lg:flex-wrap bg-slate-900">
+    <div className="flex flex-row lg:flex-wrap bg-slate-900 overflow-hidden">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
@@ -383,7 +362,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* //left column styling */}
       <div
         id="CardSelection"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        className={`noZoom h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
         <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
           <button
@@ -481,15 +460,15 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* //character select box */}
         <div 
         ref={cardContainerRef}
-        className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        className="noZoom flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
-          : (
-            (window.innerWidth < 550 ? charactersToDisplay.slice(0, viewableCharacters) : charactersToDisplay)
+          : charactersToDisplay
               .filter((character) => character.glb_date !== null)
               .slice(0, viewableCharacters)
               .map((character) => (
                 <div
                   id="CharacterCard"
+                  className={`${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}`}
                   key={character.id}
                   onClick={() => {
                     if (multiCardSelection) {
@@ -509,8 +488,16 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     newCardDetails={newCardDetails}
                   />
                 </div>
-              ))
-          )}
+              ))}
+          {/* {(viewableCharacters < charactersToDisplay.length) && 
+          <div className="flex w-full justify-center items-center">
+            <button 
+              onClick={() => setViewableCharacters(viewableCharacters + 50)}
+              className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
+                Load More Characters
+            </button>
+          </div>
+          } */}
         </div>
       </div>
 
@@ -544,11 +531,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
             {Auth.loggedIn() ? (
               <select
-                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${
-                  showCardDetails
-                    ? "border-2 bg-orange-200"
-                    : "border-4 bg-orange-400"
-                }`}
+                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
                 id="deckSelect"
                 value={selectedDeck}
                 onChange={(e) => handleSelectedDeck(e.target.value)}
