@@ -5,16 +5,13 @@ import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_EVENT_DATA, GET_ITEMS_DATA, GET_SUPPORT_MEMORY_DATA } from "../util/queries";
 import {  } from "../util/mutations";
 
-
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
+import CharacterCard from "../cards/CharacterCard";
 
 const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 
 function AllAPI() {
     const initialForm = useRef(null);
+    const [initialOption, setInitialOption] = useState('')
 
     const [getCharacterData, { loading: allCharactersLoading, data: allCharactersData }] = useLazyQuery (QUERY_CHARACTERS, {
         onCompleted: (data) => {
@@ -45,41 +42,74 @@ function AllAPI() {
 
     const [getMemoryData, { loading: allSupportMemoryoading, data: allSupperMemoryData }] = useLazyQuery(GET_SUPPORT_MEMORY_DATA);
 
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const formData = new FormData(initialForm?.current);
-        // console.log(formData)
-        const formObject = Object.fromEntries(formData);
-        // console.log(formObject)
+    const handleSelection = (e) => {
+        console.log(e.target.value)
+        if(e.target.value === 'Edit Character'){
+            console.log('we are in the edit character')
+        }
     }
-
-    // useEffect(() => {
-    //   console.log('')
-    //   getCharacterData()
-    // },[])
+    // const handleSubmit = (e) => {
+    //     e.preventDefault()
+    //     const formData = new FormData(initialForm?.current);
+    //     // console.log(formData)
+    //     const formObject = Object.fromEntries(formData);
+    //     console.log(formObject)
+    // }
 
   return (
-    <div>
-        <form ref={initialForm} onSubmit={handleSubmit}>
+    <div className="flex flex-col w-1/3 border-2 border-black bg-gray-500">
+        <div>
             What would you like to do?
             <label htmlFor='selectAPIChange' className="flex flex-col card-sm:flex-row w-full pt-4 pb-2 justify-center items-center font-bold">
 
                 <select className="flex w-full card-sm:w-fit font-base text-base truncate border-2 border-black" 
                 name='selectAPIChange' 
-                id="selectAPIChange">
+                id="selectAPIChange"
+                onChange={(e) => handleSelection(e)}
+                >
                     <option value=''>Nothing</option>
                     <option value='Add Character' >Add Character</option>
-                    <option value=''>Edit Character</option>
-                    <option value=''>Add stage</option>
-                    <option value=''>Edit stage</option>
+                    <option value='Edit Character'>Edit Character</option>
+                    <option value='New Category Added'>New Category Added</option>
+                    <option value='Add Event'>Add event</option>
+                    <option value='Edit Event'>Edit event</option>
+                    <option value='Add Stage'>Add stage</option>
+                    <option value='Edit Stage'>Edit stage</option>
                 </select>
             </label>
-            <button type='submit' className="flex w-fit p-2 mt-4 justify-center border-4 border-black text-2xl font-bold items-center text-center bg-orange-400 hover:bg-orange-500 transition ease-in-out">Submit</button>
-            {/* {formToShow === 'Add Character' &&
-            <div>Add Character</div>
-            } */}
-        </form>
+        </div>
+
+        {initialOption === 'Edit Character' && 
+            <div className="w-full bg-blue-500">
+                <div 
+                className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+                {allCharactersLoading ? (<div>Loading...</div>) 
+                : allCharacters
+                    .filter((character) => character.glb_date !== null)
+                    .map((character) => (
+                        <div
+                        key={character.id}
+                        onClick={() => {
+                            
+                        }}
+                        >
+                        <CharacterCard
+                            individualCharacter={character}
+                        />
+                        </div>
+                    ))}
+                {/* {(viewableCharacters < charactersToDisplay.length) && 
+                <div className="flex w-full justify-center items-center">
+                    <button 
+                    onClick={() => setViewableCharacters(viewableCharacters + 50)}
+                    className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
+                        Load More Characters
+                    </button>
+                </div>
+                } */}
+                </div>
+            </div>
+        }
     </div>
 )}
 

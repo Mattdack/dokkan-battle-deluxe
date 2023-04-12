@@ -8,7 +8,10 @@ import {CloudConfig} from "@cloudinary/url-gen";
 
 import SearchFormForReply from "./SearchFormForReply";
 
+import * as sort from "../util/sorting"
+
 function CharacterSelectionForReply( {characterDictionary, username, usersSavedCharacterIds, handleCommentCharacterSelection, characterSelection} ) {
+  
   const allCharacters = usersSavedCharacterIds.map(id => {
     const value = characterDictionary[id];
     return {
@@ -23,126 +26,65 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
 
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, filterData, selectedCategories)), setNewFilterData(filterData)]
 
-  //TODO: can be optimized/look cleaner if this sort/filter was a util function
-  //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
   const [filterByGame, setFilterByGame] = useState(true);
-  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
-    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-    const rarityOrder = ["UR", "LR"];
-    
-    const rarityA = rarityOrder.indexOf(a.rarity);
-    const rarityB = rarityOrder.indexOf(b.rarity);
-    if (rarityA === rarityB) {
-      const typeA = typeOrder.indexOf(a.type);
-      const typeB = typeOrder.indexOf(b.type);
-      if (typeA === typeB) {
-        const dateA = new Date(a.glb_date).getTime();
-        const dateB = new Date(b.glb_date).getTime();
-        return dateB - dateA;
-      }
-      return typeB - typeA;
+
+  let charactersToDisplay = sort.sortCharacters(allCharacters,filteredCharacters,filterByGame)
+
+  if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+    charactersToDisplay = []
+  }
+
+  const characterSelectContainerRef = useRef(null)
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const handleNewCategorySelected = (e) => {
+    setViewableCharacters(50)
+    if(e.target.value === ''){
+      setSelectedCategories([])
     }
-    return rarityB - rarityA;
-  })
-  : allCharacters.slice().sort((a, b) => {
-    if (
-      new Date(b.glb_date).getTime() -
-      new Date(a.glb_date).getTime() ===
-      0
-      ) {
-        return b.id - a.id;
-      }
-      return (
-        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-        );
-      })
-      : // This is now starting the FILTERED characters (if filter form is filled out)
-      filterByGame
-      ? filteredCharacters.slice().sort((a, b) => {
-        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
-        const rarityOrder = ["UR", "LR"];
-
-          const rarityA = rarityOrder.indexOf(a.rarity);
-          const rarityB = rarityOrder.indexOf(b.rarity);
-          if (rarityA === rarityB) {
-            const typeA = typeOrder.indexOf(a.type);
-            const typeB = typeOrder.indexOf(b.type);
-            if (typeA === typeB) {
-              const dateA = new Date(a.glb_date).getTime();
-              const dateB = new Date(b.glb_date).getTime();
-              return dateB - dateA;
-            }
-            return typeB - typeA;
-          }
-          return rarityB - rarityA;
-        })
-        : filteredCharacters.slice().sort((a, b) => {
-          if (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
-            0
-            ) {
-              return b.id - a.id;
-          }
-          return (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-            );
-          });
-
-    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
-      charactersToDisplay = []
+    if(selectedCategories.includes(e.target.value)){
+      return selectedCategories
+    }else{
+      setSelectedCategories([...selectedCategories, e.target.value])
     }
+    characterSelectContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
-    const characterSelectContainerRef = useRef(null)
+  const handleSelectedCategoryRemoval = (categoryToRemove) => {
+    setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
+  }
 
-    const [selectedCategories, setSelectedCategories] = useState([]);
-
-    const handleNewCategorySelected = (e) => {
-      setViewableCharacters(50)
-      if(e.target.value === ''){
-        setSelectedCategories([])
-      }
-      if(selectedCategories.includes(e.target.value)){
-        return selectedCategories
-      }else{
-        setSelectedCategories([...selectedCategories, e.target.value])
-      }
-      characterSelectContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+  useEffect(() => {
+    if(characterSelectContainerRef.current !== null){
+      const cardContainer = characterSelectContainerRef.current;
+  
+      const handleScroll = () => {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
+          setViewableCharacters(viewableCharacters + 50);
+        }
+      };
+  
+      cardContainer.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        cardContainer.removeEventListener("scroll", handleScroll);
+      };
     }
+  }, [viewableCharacters]);
 
-    const handleSelectedCategoryRemoval = (categoryToRemove) => {
-      setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
-    }
+  //this useEffect allows the filtered characters to be "automatically" loaded when ever the selected categories change
+  useEffect(() => {
+    const filteredChars = getFilteredCharacters(allCharacters, newFilterData, selectedCategories);
+    setFilteredCharacters(filteredChars)
+  }, [selectedCategories])
 
-    useEffect(() => {
-      if(characterSelectContainerRef.current !== null){
-        const cardContainer = characterSelectContainerRef.current;
-    
-        const handleScroll = () => {
-          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
-            setViewableCharacters(viewableCharacters + 50);
-          }
-        };
-    
-        cardContainer.addEventListener("scroll", handleScroll);
-    
-        return () => {
-          cardContainer.removeEventListener("scroll", handleScroll);
-        };
-      }
-    }, [viewableCharacters]);
-
-    //this useEffect allows the filtered characters to be "automatically" loaded when ever the selected categories change
-    useEffect(() => {
-      const filteredChars = getFilteredCharacters(allCharacters, newFilterData, selectedCategories);
-      setFilteredCharacters(filteredChars)
-    }, [selectedCategories])
-
-    // this useEffect sets all the form data to null besides the selected category state (helps selecting people more)
-    useEffect(() => {
-      setNewFilterData({})
-      const filteredChars = getFilteredCharacters(allCharacters, newFilterData, selectedCategories);
-      setFilteredCharacters(filteredChars)
-    }, [])
+  // this useEffect sets all the form data to null besides the selected category state (helps selecting people more)
+  useEffect(() => {
+    setNewFilterData({})
+    const filteredChars = getFilteredCharacters(allCharacters, newFilterData, selectedCategories);
+    setFilteredCharacters(filteredChars)
+  }, [])
     
   return (
       <div 
@@ -187,7 +129,6 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
         className="flex flex-wrap h-[25vh] justify-around items-center p-1 mx-1 lg:mx-2 mt-2 lg:mt-3 lg:mb-4 border-2 border-slate-900 overflow-y-auto bg-orange-100">
            
           {charactersToDisplay
-              .filter((character) => character.glb_date !== null)
               .slice(0, viewableCharacters)
               .map((character) => (
                 <div 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import CharacterCard from "../cards/CharacterCard";
 import AllComponentsCard from "../cards/AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
-import ServerSideCharacterCard from '../cards/ServerSideCharacterCard';
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
@@ -228,71 +228,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
   
   const [filterByGame, setFilterByGame] = useState(true);
-  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
-    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-    const rarityOrder = ["UR", "LR"];
-    
-    const rarityA = rarityOrder.indexOf(a.rarity);
-    const rarityB = rarityOrder.indexOf(b.rarity);
-    if (rarityA === rarityB) {
-      const typeA = typeOrder.indexOf(a.type);
-      const typeB = typeOrder.indexOf(b.type);
-      if (typeA === typeB) {
-        const dateA = new Date(a.glb_date).getTime();
-        const dateB = new Date(b.glb_date).getTime();
-        return dateB - dateA;
-      }
-      return typeB - typeA;
-    }
-    return rarityB - rarityA;
-  })
-  : allCharacters.slice().sort((a, b) => {
-    if (
-      new Date(b.glb_date).getTime() -
-      new Date(a.glb_date).getTime() ===
-      0
-      ) {
-        return b.id - a.id;
-      }
-      return (
-        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-        );
-      })
-      : // This is now starting the FILTERED characters (if filter form is filled out)
-      filterByGame
-      ? filteredCharacters.slice().sort((a, b) => {
-        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
-        const rarityOrder = ["UR", "LR"];
 
-          const rarityA = rarityOrder.indexOf(a.rarity);
-          const rarityB = rarityOrder.indexOf(b.rarity);
-          if (rarityA === rarityB) {
-            const typeA = typeOrder.indexOf(a.type);
-            const typeB = typeOrder.indexOf(b.type);
-            if (typeA === typeB) {
-              const dateA = new Date(a.glb_date).getTime();
-              const dateB = new Date(b.glb_date).getTime();
-              return dateB - dateA;
-            }
-            return typeB - typeA;
-          }
-          return rarityB - rarityA;
-        })
-        : filteredCharacters.slice().sort((a, b) => {
-          if (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
-            0
-            ) {
-              return b.id - a.id;
-          }
-          return (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-            );
-          });
+  let charactersToDisplay = sort.sortCharacters(allCharacters, filteredCharacters, filterByGame)
 
-    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
-      charactersToDisplay = []
-    }
+  if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+    charactersToDisplay = []
+  }
 
   const [viewableCharacters, setViewableCharacters] = useState(50);
   const cardContainerRef = useRef(null);
@@ -357,12 +298,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
-      {!showMiddleDiv && <div className="w-[10%] bg-slate-900"></div>}
+      {!showMiddleDiv && <div className="w-[5%] bg-slate-900"></div>}
 
       {/* //left column styling */}
       <div
         id="CardSelection"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[45%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
       >
         <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
           <button
@@ -463,8 +404,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         className="flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
           : charactersToDisplay
-              .filter((character) => character.glb_date !== null)
-              .slice(0, viewableCharacters)
+              // .filter((character) => character.glb_date !== null)
+              // .slice(0, viewableCharacters)
               .map((character) => (
                 <div
                   key={character.id}
@@ -474,7 +415,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     }
                   }}
                 >
-                  <AllComponentsCard
+                  <CharacterCard 
+                  individualCharacter={character}
+                  mobileSize={'60px'}
+                  desktopSize={'80px'}
+                  />
+                  {/* <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
@@ -484,7 +430,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     addToWebOfTeam={addToWebOfTeam}
                     removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
-                  />
+                  /> */}
                 </div>
               ))}
           {/* {(viewableCharacters < charactersToDisplay.length) && 
@@ -571,7 +517,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* //right column styling */}
       <div
         id="Team"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
+        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[45%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
       >
         <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
           <button
@@ -596,7 +542,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         />
       </div>
 
-      {!showMiddleDiv ? <div className="w-[10%] bg-slate-900"></div>: null}
+      {!showMiddleDiv ? <div className="w-[5%] bg-slate-900"></div>: null}
     </div>
   );
 }

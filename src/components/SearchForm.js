@@ -1,5 +1,7 @@
 import React from "react";
 
+import allCategoryOptions from '../util/allCategoryOptions'
+
 const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
 
 const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval }) => {
@@ -15,112 +17,24 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
         }}
       >
         <fieldset
-          className="flex flex-col w-full p-1 items-center"
+          className="flex flex-col w-full items-center"
         >
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-base rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 card-sm:p-2.5 mr-1 text-xsm card-sm:text-[.72rem] rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
             />
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-base text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}
             >
-              <option value="">All Categories</option>
-              <option>Accelerated Battle</option>
-              <option>All-Out Struggle</option>
-              <option>Androids</option>
-              <option>Androids/Cell Saga</option>
-              <option>Artificial Life Forms</option>
-              <option>Battle of Fate</option>
-              <option>Battle of Wits</option>
-              <option>Bond of Friendship</option>
-              <option>Bond of Master and Disciple</option>
-              <option>Bond of Parent and Child</option>
-              <option>Connected Hope</option>
-              <option>Corroded Body and Mind</option>
-              <option>Crossover</option>
-              <option>DB Saga</option>
-              <option>Defenders of Justice</option>
-              <option>Dragon Ball Heroes</option>
-              <option>Dragon Ball Seekers</option>
-              <option>Earthlings</option>
-              <option>Entrusted Will</option>
-              <option>Exploding Rage</option>
-              <option>Final Trump Card</option>
-              <option>Full Power</option>
-              <option>Fused Fighters</option>
-              <option>Fusion</option>
-              <option>Future Saga</option>
-              <option>GT Bosses</option>
-              <option>GT Heroes</option>
-              <option>Giant Ape Power</option>
-              <option>Giant Form</option>
-              <option>Gifted Warriors</option>
-              <option>Ginyu Force</option>
-              <option>Goku's Family</option>
-              <option>Heavenly Events</option>
-              <option>Hybrid Saiyans</option>
-              <option>Inhuman Deeds</option>
-              <option>Joined Forces</option>
-              <option>Kamehameha</option>
-              <option>Legendary Existence</option>
-              <option>Low-Class Warrior</option>
-              <option>Majin Buu Saga</option>
-              <option>Majin Power</option>
-              <option>Mastered Evolution</option>
-              <option>Miraculous Awakening</option>
-              <option>Movie Bosses</option>
-              <option>Movie Heroes</option>
-              <option>Namekians</option>
-              <option>Otherworld Warriors</option>
-              <option>Peppy Gals</option>
-              <option>Planet Namek Saga</option>
-              <option>Planetary Destruction</option>
-              <option>Potara</option>
-              <option>Power Absorption</option>
-              <option>Power Beyond Super Saiyan</option>
-              <option>Powerful Comeback</option>
-              <option>Pure Saiyans</option>
-              <option>Rapid Growth</option>
-              <option>Realm of Gods</option>
-              <option>Representatives of Universe 7</option>
-              <option>Resurrected Warriors</option>
-              <option>Revenge</option>
-              <option>Saiyan Saga</option>
-              <option>Saviors</option>
-              <option>Shadow Dragon Saga</option>
-              <option>Siblings' Bond</option>
-              <option>Space-Traveling Warriors</option>
-              <option>Special Pose</option>
-              <option>Storied Figures</option>
-              <option>Super Heroes</option>
-              <option>Super Saiyan 2</option>
-              <option>Super Saiyan 3</option>
-              <option>Super Saiyans</option>
-              <option>Sworn Enemies</option>
-              <option>Target Goku</option>
-              <option>Team Bardock</option>
-              <option>Terrifying Conquerors</option>
-              <option>Time Limit</option>
-              <option>Time Travelers</option>
-              <option>Transformation Boost</option>
-              <option>Turtle School</option>
-              <option>Universe 11</option>
-              <option>Universe 6</option>
-              <option>Universe Survival Saga</option>
-              <option>Vegeta's Family</option>
-              <option>Wicked Bloodline</option>
-              <option>World Tournament</option>
-              <option>Worldwide Chaos</option>
-              <option>Worthy Rivals</option>
-              <option>Youth</option>
+              {allCategoryOptions.map(category => category)}
             </select>
           </div>
 
@@ -172,14 +86,14 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               }}
             >
               {selectedCategories.length === 0 &&
-              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-base justify-center items-center text-center" key={'no category selection'}>
+              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-[.72rem] justify-center items-center text-center" key={'no category selection'}>
                 selected categories here
               </div>
               }
               {selectedCategories.map((category) => (
                 <div className="flex flex-shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
-                  <img className="w-1/4 card-sm:w-full p-1 cursor-pointer" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
-                  <p className="text-sm card-sm:text-base">{category}</p>
+                  <img className="w-1/4 card-sm:w-full cursor-pointer" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
+                  <p className="text-sm card-sm:text-[.72rem]">{category}</p>
                 </div>
               ))}
             </div>
@@ -194,7 +108,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
                 >
                   Full Match
                 </div>
@@ -264,7 +178,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               />
               <div
                 style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-base m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
               >
                 Characters Saved
               </div>
@@ -291,7 +205,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-base lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-[.72rem] lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
       >
         {label}
       </div>

@@ -26,7 +26,7 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .65,
+  zoom: .55,
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {

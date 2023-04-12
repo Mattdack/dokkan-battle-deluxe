@@ -224,11 +224,11 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
       <SelectTeamToStageModal reloadTeams={reloadTeams} userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
       <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary} open={openAllTeamInfoModal} onClose={() => setOpenAllTeamInfoModal(false)} key={"selectedTeam" + selectedTeam?._id}/>
 
-      <div className="w-[10%] bg-slate-900"></div>
+      <div className="w-[5%] bg-slate-900"></div>
 
 
       {/* //left column styling */}
-      <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-[100vh] lg:h-[90vh] w-screen lg:w-[30%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
+      <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-[100vh] lg:h-[90vh] w-screen lg:w-[35%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
         <div className="h-[100vh] card-sm:h-[90vh] w-screen lg:w-full border-4 border-black rounded-lg">
           <div className="h-1/2 border-b-4 border-black">
             <div className="flex flex-col h-full items-center w-full overflow-y-auto">
@@ -258,8 +258,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
       </div>
 
         
-      {/* //middle column styling */}
-      <div key={'middleColumn'} id="stageAllTeams" className="h-[100vh] lg:h-[90vh] w-screen lg:w-[50%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
+      {/* //right column styling */}
+      <div key={'middleColumn'} id="stageAllTeams" className="h-[100vh] lg:h-[90vh] w-screen lg:w-[55%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-slate-900">
         <div className="lg:hidden h-[5vh] w-screen lg:w-[37.5%] pr-2 flex justify-around">
           <button
             className="flex font-header text-lg card-sm:text-2xl h-[5vh] w-full bg-orange-200 border-4 border-black justify-center text-center items-center rounded-lg"
@@ -419,7 +419,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
         </div>
       </div>
 
-      <div className="w-[10%] bg-slate-900"></div>
+      <div className="w-[5%] bg-slate-900"></div>
     </div>
 )}
 
