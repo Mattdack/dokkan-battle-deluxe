@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, memo } from "react";
 
 import CharacterCard from "./CharacterCard";
+import CloudCharacterCard from "./CloudCharacterCard"
 
 function AllComponentsCard({ character, webOfTeam, savedToMyCharacterDeck, userDeckData, selectedDeck, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails, removeFromWebOfTeam }) {
   const selectedDeckObj = userDeckData.find((deck) => deck._id === selectedDeck) || [];
@@ -75,7 +76,12 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
         </div>
       )}
       <div>
-        <CharacterCard
+        {/* <CharacterCard
+          individualCharacter={character}
+          mobileSize={"60px"}
+          desktopSize={"85px"}
+        /> */}
+        <CloudCharacterCard
           individualCharacter={character}
           mobileSize={"60px"}
           desktopSize={"85px"}
