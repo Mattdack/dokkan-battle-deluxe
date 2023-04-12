@@ -401,7 +401,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* //character select box */}
         <div 
         ref={cardContainerRef}
-        className="characterContainer flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        className="characterContainer flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 min-h-0 relative overflow-y-auto bg-orange-100">
           {allCharactersLoading ? (<div>Loading...</div>) 
           : charactersToDisplay
               // .filter((character) => character.glb_date !== null)
