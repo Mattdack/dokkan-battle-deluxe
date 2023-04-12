@@ -415,12 +415,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     }
                   }}
                 >
-                  <CharacterCard 
+                  {/* <CharacterCard 
                   individualCharacter={character}
                   mobileSize={'60px'}
                   desktopSize={'80px'}
-                  />
-                  {/* <AllComponentsCard
+                  /> */}
+                  <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
@@ -430,7 +430,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     addToWebOfTeam={addToWebOfTeam}
                     removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
-                  /> */}
+                  />
                 </div>
               ))}
           {/* {(viewableCharacters < charactersToDisplay.length) && 
