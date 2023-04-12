@@ -6,12 +6,9 @@
 
 # trying to set a cache for images on netlify
 [[headers]]
-  for = "/*.png"
+  for = "/images/*"
   [headers.values]
-    Cache-Control = '''
-      public
-      max-age=2678400
-    '''
+    Cache-Control = "public, max-age=2678400"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
