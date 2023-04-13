@@ -126,7 +126,7 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
         <div
         id='characterSelectContainerRef' 
         ref={characterSelectContainerRef}
-        className="flex flex-wrap h-[25vh] justify-around items-center p-1 mx-1 lg:mx-2 mt-2 lg:mt-3 lg:mb-4 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        className="characterContainer flex flex-wrap h-[25vh] justify-around items-center p-1 mx-1 lg:mx-2 mt-2 lg:mt-3 lg:mb-4 border-2 border-slate-900 min-h-0 relative overflow-y-auto bg-orange-100">
            
           {charactersToDisplay
               .slice(0, viewableCharacters)

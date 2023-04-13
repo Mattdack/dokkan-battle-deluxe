@@ -412,15 +412,21 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
+                    } else {
+                      {webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)}
                     }
                   }}
+                  className={`
+                  ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
+                  
+                  `}
                 >
-                  {/* <CharacterCard 
+                  <CharacterCard 
                   individualCharacter={character}
                   mobileSize={'60px'}
                   desktopSize={'80px'}
-                  /> */}
-                  <AllComponentsCard
+                  />
+                  {/* <AllComponentsCard
                     character={character}
                     userDeckData={userDeckData}
                     selectedDeck={selectedDeck}
@@ -430,7 +436,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     addToWebOfTeam={addToWebOfTeam}
                     removeFromWebOfTeam={removeFromWebOfTeam}
                     newCardDetails={newCardDetails}
-                  />
+                  /> */}
                 </div>
               ))}
           {/* {(viewableCharacters < charactersToDisplay.length) && 

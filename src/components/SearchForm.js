@@ -22,14 +22,14 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 card-sm:p-2.5 mr-1 text-xsm card-sm:text-[.72rem] rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-[.72rem] rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
             />
 
             <select
-              className="flex w-1/2 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 p-1 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}

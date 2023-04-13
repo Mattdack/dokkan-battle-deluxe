@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactDom from "react-dom";
 
-import CharacterCard from "../../cards/CharacterCard";
+import CharacterCard from "../../cards/ServerCharacterCard";
 import SearchForm from "../../components/SearchForm";
 
 import * as sort from "../../util/sorting";
@@ -127,7 +127,7 @@ export default function CharacterSelectionModal( {characterDictionary, userData,
         <div
         id='characterSelectContainerRef' 
         ref={characterSelectContainerRef}
-        className="flex flex-wrap h-[48vh] card-sm:h-[40vh] justify-around items-center p-1 mx-1 lg:mx-2 mt-2 lg:mt-3 lg:mb-4 border-2 border-slate-900 overflow-y-auto bg-orange-100">
+        className="characterContainer flex flex-wrap h-[48vh] card-sm:h-[40vh] justify-around items-center p-1 mx-1 lg:mx-2 mt-2 lg:mt-3 lg:mb-4 border-2 border-slate-900 min-h-0 relative overflow-y-auto bg-orange-100">
            
           {charactersToDisplay
               .slice(0, viewableCharacters)
@@ -146,49 +146,6 @@ export default function CharacterSelectionModal( {characterDictionary, userData,
     </div>,document.getElementById("CharacterSelectionModal")
   )
 }
-
-// const CharacterCard = ({individualCharacter}) => {
-//   // Set the Cloud configuration and URL configuration
-//   let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-
-//   let urlConfig = new URLConfig({secure: true});
-//   // Instantiate and configure a CloudinaryImage object.
-//   let characterThumb = new CloudinaryImage(`Character Thumb/${individualCharacter.id}`, cloudConfig, urlConfig);
-//   let characterRarity = new CloudinaryImage(`rarities-types/${individualCharacter.rarity}`, cloudConfig, urlConfig);
-//   let characterTypeBadge = new CloudinaryImage(`rarities-types/${individualCharacter.type.toLowerCase()}`, cloudConfig, urlConfig);
-//   let characterTypeBackground = new CloudinaryImage(`rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
- 
-//   return (
-//     <>
-//         <div className='w-fit relative'>
-//           <AdvancedImage
-//             className="h-[60px] card-sm:h-[100px] w-[60px] card-sm:w-[100px] bg-no-repeat relative z-50 top-[1%] card-sm:top-[.5%] right-[0%] card-sm:right-[0%] z-40"
-//             cldImg={characterThumb}
-//             alt={individualCharacter.name}
-//             // plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-//             />
-//           <AdvancedImage
-//             cldImg={characterRarity}
-//             className={individualCharacter.rarity === "UR"
-//                 ? "h-[26.67%] card-sm:h-[27%] absolute bottom-[6%] card-sm:bottom-[6%] left-[-2%] card-sm:left-[-5%] z-50"
-//                 : "h-[31.67%] card-sm:h-[32%] absolute bottom-[6%] card-sm:bottom-[5%] left-[0%] card-sm:left-[-1%] z-50"
-//             }
-//             // plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-//           />
-//           <AdvancedImage
-//             className="w-[80%] card-sm:w-[83%] absolute top-[14%] card-sm:top-[11.5%] right-[12%] card-sm:right-[8%] z-0"
-//             cldImg={characterTypeBackground}
-//             // plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-//           />
-//           <AdvancedImage
-//             className="w-[40%] card-sm:w-[40%] absolute top-[0%] card-sm:top-[0%] right-[-1%] card-sm:right-[-6%] z-50"
-//             cldImg={characterTypeBadge}
-//             // plugins={[lazyload({rootMargin: '10px 20px 10px 30px', threshold: 0.05})]}
-//           />
-//         </div>
-//     </>
-//   );
-// }
 
 // returns a new array of characters derived from either allCharacters or userCharacters based on the criteria in filterData
 const getFilteredCharacters = (allCharacters, userCharacters, filterData, selectedCategories) => {

@@ -37,11 +37,30 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
   // console.log(charactersWithMatchedLinks)
 
+  const [showSuggestedCards, setShowSuggestedCards] = useState(false)
+  function handleSetShowSuggestedCards () {
+    setShowSuggestedCards(!showSuggestedCards)
+  }
+
   return (
     <div className="">
-      <Web webOfTeam={webOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} allCharactersLoading={allCharactersLoading} />
+      <Web 
+      webOfTeam={webOfTeam} 
+      removeFromWebOfTeam={removeFromWebOfTeam} 
+      allCharactersLoading={allCharactersLoading} 
+      selectedCharacter={selectedCharacter}
+      charactersWithMatchedLinks={charactersWithMatchedLinks}
+      handleNewDetails={handleNewDetails}
+      addToWebOfTeam={addToWebOfTeam}
+      statsSelectedOptions={statsSelectedOptions}
+      userDeckData={userDeckData}
+      selectedDeck={selectedDeck}
+      showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+      showSuggestedCards={showSuggestedCards}
+      handleSetShowSuggestedCards={handleSetShowSuggestedCards}
+      />
 
-      <div className="row-span-2 px-2 pb-2">
+      <div className={`${showSuggestedCards ? '' : 'hidden'} row-span-2 px-2 pb-2`}>
         <div className="flex justify-around items-center">
           {/* image on mobile */}
           <div className="w-[100px] card-sm:w-[120px]">
@@ -57,7 +76,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
           />
         </div>
         
-        <div className="h-[28vh] overflow-auto">
+        <div className={`h-[24vh] overflow-auto`}>
           <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck} />
           <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
           <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
@@ -77,9 +96,9 @@ const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charact
     <>
     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
     <>
-      <h3 className="h-fit font-header text-start text-md card-sm:text-xl">Characters with {matchCount} Links:</h3>
-      <div className="flex flex-wrap min-h-[95px] max-h-[190px] card-sm:min-h-[95px] card-sm:max-h-[190px] justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
-        {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id && character.glb_date !== null).map((character) => (
+      <h3 className="h-fit py-2 font-header text-center text-md card-sm:text-xl underline decoration-2 underline-offset-4">Characters with {matchCount} Links</h3>
+      <div className="flex flex-wrap min-h-[95px] max-h-fit card-sm:min-h-[95px] card-sm:max-h-fit justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
+        {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
           <div 
           id='CharacterCard'
           key={'suggest' + character.id.toString()}

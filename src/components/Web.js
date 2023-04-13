@@ -9,10 +9,10 @@ import * as linkSkillInfo from "../util/linkSkillInfo";
 
 import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
-import CharacterCard from "../cards/CharacterCard";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
+import SuggestCard from "../cards/SuggestCard";
 
 const rightArrowIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png";
 
@@ -29,7 +29,7 @@ const viewPort = {
   zoom: .55,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
@@ -141,16 +141,26 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   }
 
   return (
-    <div ref={myDivRef} className="h-[45vh] relative">
+    <div ref={myDivRef} className={`${showSuggestedCards ? 'h-[48vh]' : 'h-[86vh]' } relative`}>
       <div className="flex w-full rounded-tl-lg absolute z-[995]">
-        <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[52px] card-sm:h-[62px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
+        <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div
             key={'web'+character.id.toString()}
             className="card-sm:min-w-[60px]"
-            onClick={() => removeFromWebOfTeam(character)}
             >
-              <CharacterCard individualCharacter={character} mobileSize={'50px'} desktopSize={'60px'}/>  
+              <SuggestCard
+              character={character}
+              webOfTeam={webOfTeam}
+              selectedCharacter={selectedCharacter}
+              handleNewDetails={handleNewDetails}
+              removeFromWebOfTeam={removeFromWebOfTeam}
+              addToWebOfTeam={addToWebOfTeam}
+              statsSelectedOptions={statsSelectedOptions}
+              userDeckData={userDeckData}
+              selectedDeck={selectedDeck}
+              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+            />  
             </div>
           )}
         </div>
@@ -166,6 +176,10 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
         className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
+        <button
+        className="p-2 text-sm card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
+        onClick={() => handleSetShowSuggestedCards()}
+        >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}
@@ -203,7 +217,7 @@ const startingPosition = (webWidth, webHeight) => {
   if (webHeight === null || typeof webWidth === 'undefined'){
     return {x: 0, y:0}
   }
-  return {x: webWidth-200, y: webHeight-200}
+  return {x: webWidth-125, y: webHeight-125}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

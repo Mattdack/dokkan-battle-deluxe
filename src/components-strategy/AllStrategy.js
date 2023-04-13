@@ -231,7 +231,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
       <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-[100vh] lg:h-[90vh] w-screen lg:w-[35%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
         <div className="h-[100vh] card-sm:h-[90vh] w-screen lg:w-full border-4 border-black rounded-lg">
           <div className="h-1/2 border-b-4 border-black">
-            <div className="flex flex-col h-full items-center w-full overflow-y-auto">
+            <div className="flex flex-col h-full items-center w-full pb-14 overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Events</p>
               {allCharactersLoading ? <div className="flex w-[90%] bg-orange-200 p-2 m-2 text-xl text-center justify-center items-center border-4 border-black">loading...</div>
               :
@@ -244,7 +244,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           </div>
           
           <div className="h-1/2">
-            <div className="flex h-full flex-wrap mb-1 pb-4 justify-around overflow-y-auto">
+            <div className="flex h-full flex-wrap mb-1 pb-14 justify-around overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Stages</p>
               {selectedEvent && selectedEvent.stages.map((stage) =>
               <div key={stage._id} onClick={() => handleSetSelectedStage(stage)} className={`my-2 mx-4 hover:bg-slate-900/[.4] ${selectedStage?._id === stage._id ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : ''} cursor-pointer`}>
@@ -269,8 +269,8 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
           </button>
         </div>
 
-        <div className="flex flex-col w-full h-full pb-10 border-4 border-black items-center rounded-lg overflow-y-auto">
-          <div className={`flex flex-col lg:flex-row w-full p-4 pb-10 bg-orange-200 ${showComments ? 'border-b-2' : 'border-b-4 rounded-b-lg '} border-black justify-around relative`}>
+        <div className="flex flex-col w-full h-full pb-14 border-4 border-black items-center rounded-lg overflow-y-auto">
+          <div className={`flex flex-col lg:flex-row w-full p-4 pb-14 bg-orange-200 ${showComments ? 'border-b-2' : 'border-b-4 rounded-b-lg '} border-black justify-around relative`}>
             <div className="flex flex-row pr-2 lg:w-1/2 pb-2 items-center">
               <p className="font-header mr-4 text-lg card-sm:text-xl font-light">Event</p>
               {selectedEvent ? <div className="flex w-full justify-center items-center"><EventTab key={selectedEvent.name} event={selectedEvent}/></div> : null}
@@ -289,7 +289,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
             }
           </div>
             {showComments && 
-                <div className="w-full min-h-[600px] max-h-[600px] border-b-4 border-black z-50 bg-orange-100 rounded-b-lg p-4 shadow-md black-scrollbar overflow-y-auto">
+                <div className="w-full min-h-[600px] max-h-[600px] border-b-4 border-black z-50 bg-orange-100 rounded-b-lg p-4 pb-14 shadow-md black-scrollbar overflow-y-auto">
                 <p className="flex w-full py-6 font-header justify-center items-center text-xl text-center underline decoration-2 underline-offset-8">Comments</p>
                 {profileData?.data?._id ?
                   <form
