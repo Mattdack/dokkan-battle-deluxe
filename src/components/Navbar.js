@@ -24,12 +24,12 @@ const AppNavbar = ({handleShowSingleCardStats, handleShowCharacterSelection, han
   console.log(showTeamWeb)
 
   return (
-    <div className="flex flex-col w-screen justify-between items-center bg-slate-700">
-      <div className="flex items-center">
+    <div className="flex flex-col w-screen p-2 justify-between items-center border-b-4 border-black bg-slate-700">
+      <div className="flex w-full p-2 justify-between items-center">
         <img onClick={(e) => (webLocationObject.pathname === ('/strategy') || webLocationObject.pathname === ('/help')) ? handleToTeamBuild(e) : handleToStrategy(e) }
         src={logo} alt='Dokkan Battle Helper' className="h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh] cursor-pointer" />
-        <div className="flex">
           {/* hamburger button */}
+        <div className="flex">
           <button
             className="flex flex-col h-12 w-12 border-2 border-black rounded justify-center items-center group relative"
           >

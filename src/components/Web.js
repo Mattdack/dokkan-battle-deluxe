@@ -141,8 +141,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   }
 
   return (
-    <div ref={myDivRef} className={`${showSuggestedCards ? 'h-[50vh]' : 'h-full' } relative`}>
-      <div className="flex w-full absolute z-[995]">
+    <div ref={myDivRef} className={`h-full relative`}>
+      <div className="flex flex-1 w-full absolute z-[995]">
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div

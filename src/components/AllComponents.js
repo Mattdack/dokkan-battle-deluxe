@@ -308,260 +308,259 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [showFilters, setShowFilters] = useState(false)
 
   return (
-    <div className="fixed flex flex-wrap lg:flex-row h-full bg-slate-900">
+    <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
       <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
-      
-      <div className="w-[5%]"></div>
 
-      {/* TODO: Card selection styling */}
-      <div
-        id="CardSelection"
-        className={`${showCardSelection ? '' : 'hidden'} flex flex-col h-[90%] w-screen lg:w-[45%] pb-14 bg-gradient-radial overflow-y-auto`}
-      >
+      {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
+      <div className="flex flex-1 h-0">
 
-        {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
-
-
-        <div className="bg-orange-200 border border-black">
-          <p 
-          onClick={() => setShowFilters(!showFilters)}
-          className="font-header flex h-fit items-center justify-center text-center text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
-
-          {showFilters && <div>
-
-            <div className="flex pb-2 items-center justify-center">
-              <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
-                Game Filter
-              </span>
-              <label className="inline-flex relative items-center mr-5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only peer"
-                  checked={!filterByGame}
-                  readOnly
-                />
-                <div
-                  onClick={() => {setFilterByGame(!filterByGame)}}
-                  className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-                ></div>
-                <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
-                  Release Date
-                </div>
-              </label>
-            </div>
-
-            {/* //contains filters/buttons/search field/etc. */}
-            <SearchForm
-              isDisabled={allCharactersLoading}
-              onFormChange={filterAndSetCharacters}
-              selectedCategories={selectedCategories}
-              handleNewCategorySelected={handleNewCategorySelected}
-              handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
-            />
-          
-            <div className="flex w-full pb-2 items-center justify-center">
-              {Auth.loggedIn() ? (
-                <>
-                  <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
-                    Save Characters
-                  </h2>
-                  <div className="flex items-center">
-                    <label className="inline-flex relative items-center mr-5 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={multiCardSelection}
-                        readOnly
-                      />
-                      <div
-                        onClick={() => {
-                          setMultiCardSelection(!multiCardSelection);
-                        }}
-                        className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-                      ></div>
-                      <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
-                        ON
-                      </span>
-                    </label>
-                  </div>
-                  <div className="flex space-x-2 justify-center">
-                    <button
-                      disabled={!multiCardSelection || allCharactersLoading}
-                      type="button"
-                      data-mdb-ripple="true"
-                      data-mdb-ripple-color="light"
-                      className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                      onClick={() => handleUpdateSavedCharacters()}
-                    >
-                      Save
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <h2 className="p-2 text-sm lg:text-base font-bold">
-                  Please log in to add players
-                </h2>
-              )}
-            </div>
-          </div>}
-
-        </div>
-
-
-        {/* //character select box */}
-        <div 
-        ref={cardContainerRef}
-        className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-slate-900 min-h-0 relative bg-orange-100 overflow-y-auto">
-          {allCharactersLoading ? (<div>Loading...</div>) 
-          : charactersToDisplay
-              // .filter((character) => character.glb_date !== null)
-              // .slice(0, viewableCharacters)
-              .map((character) => (
-                <div
-                  key={character.id}
-                  onClick={() => {
-                    if (multiCardSelection) {
-                      changeDeck(character.id);
-                    } else {
-                      {webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)}
-                    }
-                  }}
-                  className={`
-                  ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
-                  
-                  `}
-                >
-                  <CharacterCard 
-                  individualCharacter={character}
-                  mobileSize={'60px'}
-                  desktopSize={'80px'}
-                  />
-                  {/* <AllComponentsCard
-                    character={character}
-                    userDeckData={userDeckData}
-                    selectedDeck={selectedDeck}
-                    showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-                    savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
-                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                    addToWebOfTeam={addToWebOfTeam}
-                    removeFromWebOfTeam={removeFromWebOfTeam}
-                    newCardDetails={newCardDetails}
-                  /> */}
-                </div>
-              ))}
-          {/* {(viewableCharacters < charactersToDisplay.length) && 
-          <div className="flex w-full justify-center items-center">
-            <button 
-              onClick={() => setViewableCharacters(viewableCharacters + 50)}
-              className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
-                Load More Characters
-            </button>
-          </div>
-          } */}
-        </div>
-      </div>
-
-      {/* TODO: card detail styling */}
-      <div
-        id="SingleCardDetails"
-        className={`${showCardStats ? '' : 'hidden'} h-full lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        {/* TODO: Card selection styling */}
+        <div
+          id="CardSelection"
+          className={`${showCardSelection ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
         >
-        {/* <div className="lg:hidden w-screen lg:w-1/3 pr-2">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
-            onClick={() => scrollToCharacterSelection()}
-          >
-            Character Selection
-          </button>
-        </div> */}
 
-        <div className="flex flex-row w-full px-2 mt-2">
-          <div className="w-1/2">
-            <div
-              onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
-              className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
-                showCardDetails
-                  ? "border-4 bg-orange-400"
-                  : "border-2 bg-orange-200"
-              }`}
-            >
-              Card Details
-            </div>
-          </div>
-          <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
-            {Auth.loggedIn() ? (
-              <select
-                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
-                id="deckSelect"
-                value={selectedDeck}
-                onChange={(e) => handleSelectedDeck(e.target.value)}
-                disabled={allCharactersLoading}
-              >
-                <option className="font-bold" value='No Deck'>Decks</option>
-                {userDeckData.map((deck) => (
-                  <option className="font-bold" key={deck._id} value={deck._id}>
-                    {deck.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
-                Log In To See Decks
+          {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
+
+
+          <div className="bg-orange-200 border-b-4 border-x-4 border-black">
+            <p 
+            onClick={() => setShowFilters(!showFilters)}
+            className="font-header flex h-fit items-center justify-center text-center text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
+
+            {showFilters && <div>
+
+              <div className="flex pb-2 items-center justify-center">
+                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                  Game Filter
+                </span>
+                <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={!filterByGame}
+                    readOnly
+                  />
+                  <div
+                    onClick={() => {setFilterByGame(!filterByGame)}}
+                    className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                  ></div>
+                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                    Release Date
+                  </div>
+                </label>
               </div>
-            )}
+
+              {/* //contains filters/buttons/search field/etc. */}
+              <SearchForm
+                isDisabled={allCharactersLoading}
+                onFormChange={filterAndSetCharacters}
+                selectedCategories={selectedCategories}
+                handleNewCategorySelected={handleNewCategorySelected}
+                handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
+              />
+            
+              <div className="flex w-full pb-2 items-center justify-center">
+                {Auth.loggedIn() ? (
+                  <>
+                    <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
+                      Save Characters
+                    </h2>
+                    <div className="flex items-center">
+                      <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={multiCardSelection}
+                          readOnly
+                        />
+                        <div
+                          onClick={() => {
+                            setMultiCardSelection(!multiCardSelection);
+                          }}
+                          className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                        ></div>
+                        <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
+                          ON
+                        </span>
+                      </label>
+                    </div>
+                    <div className="flex space-x-2 justify-center">
+                      <button
+                        disabled={!multiCardSelection || allCharactersLoading}
+                        type="button"
+                        data-mdb-ripple="true"
+                        data-mdb-ripple-color="light"
+                        className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                        onClick={() => handleUpdateSavedCharacters()}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <h2 className="p-2 text-sm lg:text-base font-bold">
+                    Please log in to add players
+                  </h2>
+                )}
+              </div>
+            </div>}
+
+          </div>
+
+
+          {/* //character select box */}
+          <div 
+          ref={cardContainerRef}
+          className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-slate-900 min-h-0 relative bg-orange-100 overflow-y-auto">
+            {allCharactersLoading ? (<div>Loading...</div>) 
+            : charactersToDisplay
+                // .filter((character) => character.glb_date !== null)
+                // .slice(0, viewableCharacters)
+                .map((character) => (
+                  <div
+                    key={character.id}
+                    onClick={() => {
+                      if (multiCardSelection) {
+                        changeDeck(character.id);
+                      } else {
+                        {webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)}
+                      }
+                    }}
+                    className={`
+                    ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
+                    
+                    `}
+                  >
+                    <CharacterCard 
+                    individualCharacter={character}
+                    mobileSize={'60px'}
+                    desktopSize={'80px'}
+                    />
+                    {/* <AllComponentsCard
+                      character={character}
+                      userDeckData={userDeckData}
+                      selectedDeck={selectedDeck}
+                      showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+                      savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
+                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                      addToWebOfTeam={addToWebOfTeam}
+                      removeFromWebOfTeam={removeFromWebOfTeam}
+                      newCardDetails={newCardDetails}
+                    /> */}
+                  </div>
+                ))}
+            {/* {(viewableCharacters < charactersToDisplay.length) && 
+            <div className="flex w-full justify-center items-center">
+              <button 
+                onClick={() => setViewableCharacters(viewableCharacters + 50)}
+                className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
+                  Load More Characters
+              </button>
+            </div>
+            } */}
           </div>
         </div>
 
-        {showCardDetails ? (
-          <CardDetails
-            cardDetails={cardDetails}
-            userCharacterIds={userCharacterIds}
-          />
-        ) : (
-          <DeckSelection
-            characterDictionary={characterDictionary}
+        {/* TODO: team web styling */}
+        <div
+          id="Team"
+          className={`${showTeamWeb || (windowWidth > 800) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
+        >
+          {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
+            <button
+              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => scrollToCharacterSelection()}
+            >
+              Character Selection
+            </button>
+          </div> */}
+          <SuggestToWeb
+            selectedCharacter={cardDetails}
+            userCharacters={userCharacters}
+            handleNewDetails={newCardDetails}
+            addToWebOfTeam={addToWebOfTeam}
             webOfTeam={webOfTeam}
-            userDeckData={userDeckData}
+            removeFromWebOfTeam={removeFromWebOfTeam}
+            allCharacters={allCharacters}
+            allCharactersLoading={allCharactersLoading}
             selectedDeck={selectedDeck}
             showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-            handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            userDeckData={userDeckData}
           />
-        )}
-      </div>
-      
+        </div>
 
-      {/* TODO: team web styling */}
-      <div
-        id="Team"
-        className={`${showTeamWeb || (windowWidth > 1000) ? '' : 'hidden'} flex flex-col w-screen lg:w-[45%] h-[85%] lg:h-[90%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
-      >
-        {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
-            onClick={() => scrollToCharacterSelection()}
+        {/* TODO: card detail styling */}
+        <div
+          id="SingleCardDetails"
+          className={`${showCardStats ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
           >
-            Character Selection
-          </button>
-        </div> */}
-        <SuggestToWeb
-          selectedCharacter={cardDetails}
-          userCharacters={userCharacters}
-          handleNewDetails={newCardDetails}
-          addToWebOfTeam={addToWebOfTeam}
-          webOfTeam={webOfTeam}
-          removeFromWebOfTeam={removeFromWebOfTeam}
-          allCharacters={allCharacters}
-          allCharactersLoading={allCharactersLoading}
-          selectedDeck={selectedDeck}
-          showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-          userDeckData={userDeckData}
-        />
+          {/* <div className="lg:hidden w-screen lg:w-1/3 pr-2">
+            <button
+              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => scrollToCharacterSelection()}
+            >
+              Character Selection
+            </button>
+          </div> */}
+
+          <div className="flex flex-row w-full px-2 mt-2">
+            <div className="w-1/2">
+              <div
+                onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
+                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
+                  showCardDetails
+                    ? "border-4 bg-orange-400"
+                    : "border-2 bg-orange-200"
+                }`}
+              >
+                Card Details
+              </div>
+            </div>
+            <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
+              {Auth.loggedIn() ? (
+                <select
+                  className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
+                  id="deckSelect"
+                  value={selectedDeck}
+                  onChange={(e) => handleSelectedDeck(e.target.value)}
+                  disabled={allCharactersLoading}
+                >
+                  <option className="font-bold" value='No Deck'>Decks</option>
+                  {userDeckData.map((deck) => (
+                    <option className="font-bold" key={deck._id} value={deck._id}>
+                      {deck.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                  Log In To See Decks
+                </div>
+              )}
+            </div>
+          </div>
+
+          {showCardDetails ? (
+            <CardDetails
+              cardDetails={cardDetails}
+              userCharacterIds={userCharacterIds}
+            />
+          ) : (
+            <DeckSelection
+              characterDictionary={characterDictionary}
+              webOfTeam={webOfTeam}
+              userDeckData={userDeckData}
+              selectedDeck={selectedDeck}
+              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+              handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            />
+          )}
+        </div>
       </div>
-      
-      <div className="w-[5%]"></div>
 
     </div>
   );

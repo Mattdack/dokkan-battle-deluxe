@@ -97,7 +97,7 @@ export default function HamburgerModal({open, onClose}) {
               Team & Deck Build
             </button>
           }
-          {(webLocationObject.pathname === ('/') && window.innerWidth > 1000) &&
+          {/* {(webLocationObject.pathname === ('/') && window.innerWidth > 1000) &&
             <button 
             onClick={(e) => e.stopPropagation()}
             className="font-header text-lg card-sm:text-2xl flex justify-center items-center h-1/3 w-full col-span-1 p-2 bg-orange-200 border-2 border-black">
@@ -119,7 +119,7 @@ export default function HamburgerModal({open, onClose}) {
               </label>
               </span>
             </button>
-          }
+          } */}
         </div>
       </div>
     </>,

@@ -43,7 +43,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   }
 
   return (
-    <div className="h-full">
+    <div className={`flex flex-col flex-1 ${showSuggestedCards ? 'h-1/2' : 'h-full'}`}>
       <Web 
       webOfTeam={webOfTeam} 
       removeFromWebOfTeam={removeFromWebOfTeam} 
@@ -60,7 +60,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       handleSetShowSuggestedCards={handleSetShowSuggestedCards}
       />
 
-      <div className={`${showSuggestedCards ? '' : 'hidden'} row-span-2 px-2 pb-2`}>
+    <div className={`flex flex-col ${showSuggestedCards ? 'h-1/2' : 'hidden'}`}>
         <div className="flex justify-around items-center">
           {/* image on mobile */}
           <div className="w-[100px] card-sm:w-[120px]">
@@ -76,7 +76,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
           />
         </div>
         
-        <div className={`h-[24vh] overflow-auto`}>
+        <div className={`flex-1 overflow-y-auto`}>
           <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck} />
           <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
           <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions} userDeckData={userDeckData} selectedDeck={selectedDeck} showCharactersInSelectedDeck={showCharactersInSelectedDeck}/>
