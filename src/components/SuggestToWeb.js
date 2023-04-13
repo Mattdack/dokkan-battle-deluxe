@@ -43,7 +43,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   }
 
   return (
-    <div className="">
+    <div className="h-full">
       <Web 
       webOfTeam={webOfTeam} 
       removeFromWebOfTeam={removeFromWebOfTeam} 

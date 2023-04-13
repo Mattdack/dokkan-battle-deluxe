@@ -141,8 +141,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   }
 
   return (
-    <div ref={myDivRef} className={`${showSuggestedCards ? 'h-[48vh]' : 'h-[86vh]' } relative`}>
-      <div className="flex w-full rounded-tl-lg absolute z-[995]">
+    <div ref={myDivRef} className={`${showSuggestedCards ? 'h-[50vh]' : 'h-full' } relative`}>
+      <div className="flex w-full absolute z-[995]">
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div
@@ -167,17 +167,17 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <img 
           src={rightArrowIcon}
           onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
-          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-r-2 rounded-tl-lg' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-r-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
           title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
         />
       </div>
-      <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
+      <div className="h-full bg-slate-700 row-span-6 relative">
         <button
-        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
+        className="p-2 text-md card-sm:text-lg border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg absolute bottom-0 left-0 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
         <button
-        className="p-2 text-sm card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
+        className="p-2 text-md card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
         onClick={() => handleSetShowSuggestedCards()}
         >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
         <ReactFlow
@@ -195,7 +195,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black rounded-t-lg"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black"
         >
         </ReactFlow>
       </div>

@@ -9,15 +9,12 @@ import EventTab from "./EventTab";
 import StageTab from "./StageTab";
 import TeamOnStage from "./TeamOnStage"
 import AllTeamInfo from "../modals/modals-strategy/AllTeamInfoModal"
+import Navbar from "../components/Navbar"
 
 import SelectTeamToStageModal from "../modals/modals-strategy/SelectTeamToStageModal";
 import WarningRemoveCommentModal from "../modals/modals-strategy/WarningRemoveCommentModal";
 import Comment from "./Comment";
 
-import {AdvancedImage, lazyload} from '@cloudinary/react';
-import {CloudinaryImage} from "@cloudinary/url-gen";
-import {URLConfig} from "@cloudinary/url-gen";
-import {CloudConfig} from "@cloudinary/url-gen";
 
 const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 const commentIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/comment-icon.png";
@@ -220,16 +217,17 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
   
 
   return (
-    <div key={'AllStrategy'} className="overflow-hidden flex flex-row lg:flex-wrap bg-slate-700">
+    <div key={'AllStrategy'} className="flex flex-row h-full lg:flex-wrap bg-slate-700">
       <SelectTeamToStageModal reloadTeams={reloadTeams} userDecks={userDecks} userData={userData?.findOneUser} stageData={selectedStage} characterDictionary={characterDictionary} allItems={allItems} allSupportMemories={allSupportMemories} open={openSelectTeamToStage} onClose={() => setOpenSelectTeamToStage(!openSelectTeamToStage)} key={'selectTeamToStageModal'}/>
       <AllTeamInfo team={selectedTeam} characterDictionary={characterDictionary} open={openAllTeamInfoModal} onClose={() => setOpenAllTeamInfoModal(false)} key={"selectedTeam" + selectedTeam?._id}/>
 
       <div className="w-[5%] bg-slate-900"></div>
 
+      <Navbar />
 
       {/* //left column styling */}
-      <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-[100vh] lg:h-[90vh] w-screen lg:w-[35%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
-        <div className="h-[100vh] card-sm:h-[90vh] w-screen lg:w-full border-4 border-black rounded-lg">
+      <div key={'leftColumn'} id="stageSelection" className="flex flex-col h-full lg:h-[90vh] w-screen lg:w-[35%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
+        <div className="h-full card-sm:h-[90vh] w-screen lg:w-full border-4 border-black rounded-lg">
           <div className="h-1/2 border-b-4 border-black">
             <div className="flex flex-col h-full items-center w-full pb-14 overflow-y-auto">
               <p className="font-header flex w-full h-fit justify-center items-center text-3xl sticky top-0 border-x-4 border-b-4 border-black bg-orange-200 z-[998]">Events</p>

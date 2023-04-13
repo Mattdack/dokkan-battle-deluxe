@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import Navbar from "../components/Navbar"
 import CharacterCard from "../cards/CharacterCard";
 import AllComponentsCard from "../cards/AllComponentsCard";
 import SearchForm from "./SearchForm";
@@ -20,7 +21,6 @@ import Announcement from "../modals/Announcement";
 import { UserContext } from '../App';
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
-  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -176,20 +176,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   function newCardDetails(characterId) {setCardDetails(characterDictionary[characterId]);}
 
-  //scroll ability through buttons on mobile
-  const scrollToSingleCardStats = () => {
-    const middleColumn = document.getElementById("SingleCardDetails");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToCharacterSelection = () => {
-    const middleColumn = document.getElementById("CardSelection");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToTeam = () => {
-    const middleColumn = document.getElementById("Team");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-
   const [showCardDetails, setShowCardDetails] = useState(true);
   const [selectedDeck, setSelectedDeck] = useState("");
 
@@ -292,116 +278,143 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     };
   }, []);
 
+  const [showCardSelection, setShowCardSelection] = useState(true)
+  const [showTeamWeb, setShowTeamWeb] = useState(false)
+  const [showCardStats, setShowCardStats] = useState(false)
+
+    //scroll ability through buttons on mobile
+    const handleShowSingleCardStats = () => {
+      setShowCardSelection(false)
+      setShowTeamWeb(false)
+      setShowCardStats(true)
+      const middleColumn = document.getElementById("SingleCardDetails");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+    const handleShowCharacterSelection = () => {
+      setShowCardSelection(true)
+      setShowTeamWeb(false)
+      setShowCardStats(false)
+      const middleColumn = document.getElementById("CardSelection");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+    const handleShowTeam = () => {
+      setShowCardSelection(false)
+      setShowTeamWeb(true)
+      setShowCardStats(false)
+      const middleColumn = document.getElementById("Team");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+  
+    const [showFilters, setShowFilters] = useState(false)
+
   return (
-    // stages formatting
-    <div className="flex flex-row lg:flex-wrap bg-slate-900 overflow-hidden">
+    <div className="fixed flex flex-wrap lg:flex-row h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
       <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
 
-      {!showMiddleDiv && <div className="w-[5%] bg-slate-900"></div>}
+      <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
+      
+      <div className="w-[5%]"></div>
 
-      {/* //left column styling */}
+      {/* TODO: Card selection styling */}
       <div
         id="CardSelection"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[45%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        className={`${showCardSelection ? '' : 'hidden'} flex flex-col h-[90%] w-screen lg:w-[45%] pb-14 bg-gradient-radial overflow-y-auto`}
       >
-        <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
-            onClick={() => scrollToSingleCardStats()}
-          >
-            Details & Decks
-          </button>
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
-            onClick={() => scrollToTeam()}
-          >
-            Build Team
-          </button>
-        </div>
 
         {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 
-        <div className="flex pt-4 pb-2 items-center justify-center">
-          <span className="mr-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
-            Game Filter
-          </span>
-          <label className="inline-flex relative items-center mr-5 cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={!filterByGame}
-              readOnly
-            />
-            <div
-              onClick={() => {setFilterByGame(!filterByGame)}}
-              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-            ></div>
-            <div className="ml-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
-              Release Date
+
+        <div className="bg-orange-200 border border-black">
+          <p 
+          onClick={() => setShowFilters(!showFilters)}
+          className="font-header flex h-fit items-center justify-center text-center text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
+
+          {showFilters && <div>
+
+            <div className="flex pb-2 items-center justify-center">
+              <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                Game Filter
+              </span>
+              <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={!filterByGame}
+                  readOnly
+                />
+                <div
+                  onClick={() => {setFilterByGame(!filterByGame)}}
+                  className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                ></div>
+                <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                  Release Date
+                </div>
+              </label>
             </div>
-          </label>
+
+            {/* //contains filters/buttons/search field/etc. */}
+            <SearchForm
+              isDisabled={allCharactersLoading}
+              onFormChange={filterAndSetCharacters}
+              selectedCategories={selectedCategories}
+              handleNewCategorySelected={handleNewCategorySelected}
+              handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
+            />
+          
+            <div className="flex w-full pb-2 items-center justify-center">
+              {Auth.loggedIn() ? (
+                <>
+                  <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
+                    Save Characters
+                  </h2>
+                  <div className="flex items-center">
+                    <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={multiCardSelection}
+                        readOnly
+                      />
+                      <div
+                        onClick={() => {
+                          setMultiCardSelection(!multiCardSelection);
+                        }}
+                        className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                      ></div>
+                      <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
+                        ON
+                      </span>
+                    </label>
+                  </div>
+                  <div className="flex space-x-2 justify-center">
+                    <button
+                      disabled={!multiCardSelection || allCharactersLoading}
+                      type="button"
+                      data-mdb-ripple="true"
+                      data-mdb-ripple-color="light"
+                      className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                      onClick={() => handleUpdateSavedCharacters()}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <h2 className="p-2 text-sm lg:text-base font-bold">
+                  Please log in to add players
+                </h2>
+              )}
+            </div>
+          </div>}
+
         </div>
 
-        {/* //contains filters/buttons/search field/etc. */}
-
-        <SearchForm
-          isDisabled={allCharactersLoading}
-          onFormChange={filterAndSetCharacters}
-          selectedCategories={selectedCategories}
-          handleNewCategorySelected={handleNewCategorySelected}
-          handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
-        />
-
-        <div className="flex w-full pb-2 items-center justify-center">
-          {Auth.loggedIn() ? (
-            <>
-              <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
-                Save Characters
-              </h2>
-              <div className="flex items-center">
-                <label className="inline-flex relative items-center mr-5 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    checked={multiCardSelection}
-                    readOnly
-                  />
-                  <div
-                    onClick={() => {
-                      setMultiCardSelection(!multiCardSelection);
-                    }}
-                    className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-                  ></div>
-                  <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
-                    ON
-                  </span>
-                </label>
-              </div>
-              <div className="flex space-x-2 justify-center">
-                <button
-                  disabled={!multiCardSelection || allCharactersLoading}
-                  type="button"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light"
-                  className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                  onClick={() => handleUpdateSavedCharacters()}
-                >
-                  Save
-                </button>
-              </div>
-            </>
-          ) : (
-            <h2 className="p-2 text-sm lg:text-base font-bold">
-              Please log in to add players
-            </h2>
-          )}
-        </div>
 
         {/* //character select box */}
         <div 
         ref={cardContainerRef}
-        className="characterContainer flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 min-h-0 relative overflow-y-auto bg-orange-100">
+        className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-slate-900 min-h-0 relative bg-orange-100 overflow-y-auto">
           {allCharactersLoading ? (<div>Loading...</div>) 
           : charactersToDisplay
               // .filter((character) => character.glb_date !== null)
@@ -451,19 +464,19 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         </div>
       </div>
 
-      {/* //middle column styling */}
+      {/* TODO: card detail styling */}
       <div
         id="SingleCardDetails"
-        className={`${!showMiddleDiv ? windowWidth < 1000 ? '' : 'hidden' : ''} h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
-      >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
+        className={`${showCardStats ? '' : 'hidden'} h-full lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
+        >
+        {/* <div className="lg:hidden w-screen lg:w-1/3 pr-2">
           <button
             className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
             Character Selection
           </button>
-        </div>
+        </div> */}
 
         <div className="flex flex-row w-full px-2 mt-2">
           <div className="w-1/2">
@@ -520,19 +533,19 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       </div>
       
 
-      {/* //right column styling */}
+      {/* TODO: team web styling */}
       <div
         id="Team"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[45%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
+        className={`${showTeamWeb || (windowWidth > 1000) ? '' : 'hidden'} flex flex-col w-screen lg:w-[45%] h-[85%] lg:h-[90%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
       >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
+        {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
           <button
             className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
             onClick={() => scrollToCharacterSelection()}
           >
             Character Selection
           </button>
-        </div>
+        </div> */}
         <SuggestToWeb
           selectedCharacter={cardDetails}
           userCharacters={userCharacters}
@@ -547,8 +560,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           userDeckData={userDeckData}
         />
       </div>
+      
+      <div className="w-[5%]"></div>
 
-      {!showMiddleDiv ? <div className="w-[5%] bg-slate-900"></div>: null}
     </div>
   );
 }
