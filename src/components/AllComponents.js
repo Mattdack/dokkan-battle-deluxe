@@ -303,6 +303,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
     }
 
+    function handleCharacterSelection(character){
+      webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)
+      setCardDetails(character)
+    }
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -331,7 +336,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               className="font-header text-2xl font-light cursor-pointer">Filters</p>
               <img
               src={arrow}
-              className={`w-[7.5%] card-sm:w-[5%] ml-4 cursor-pointer transform rotate-90 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"} transition-transform duration-300 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"}`}
+              className={`w-[7.5%] card-sm:w-[4%] ml-4 mb-1 cursor-pointer transform rotate-90 transition-transform duration-300 ${showFilters ? "scale-y-[-1] scale-x-[-1]" : "scale-y-[-1]"}`}
               />
             </div>
 
@@ -430,7 +435,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                       if (multiCardSelection) {
                         changeDeck(character.id);
                       } else {
-                        {webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)}
+                        handleCharacterSelection(character)
                       }
                     }}
                     className={`
