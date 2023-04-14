@@ -28,3 +28,6 @@ yarn-error.log*
 
 # VS CODE SETTINGS folder
 .vscode
+
+#redirects removed for coverage
+/_redirects

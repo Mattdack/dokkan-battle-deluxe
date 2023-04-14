@@ -301,7 +301,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       middleColumn.scrollIntoView({ top: 0, left: 0 });
     };
   
-    const [showFilters, setShowFilters] = useState(false)
+    const [showFilters, setShowFilters] = useState(true)
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -311,7 +311,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
 
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
-      <div className="flex flex-1 h-0">
+      <div className="flex flex-1 h-0 lg:px-10 xl:px-20">
 
         {/* TODO: Card selection styling */}
         <div
@@ -326,7 +326,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             <div 
             onClick={() => setShowFilters(!showFilters)}
             className="flex flex h-fit items-center justify-center"
-            title='click to show filters'>
+            title={showFilters ? 'click to hide filters' : 'click to show filters'}>
               <p
               className="font-header text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
               <img
@@ -337,7 +337,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
             <div className={`max-h-0 overflow-hidden transition-all duration-500 ${showFilters ? 'max-h-[100vh] ease-in-out' : ''}`}>
               <div className="flex pb-2 items-center justify-center">
-                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
                   Game Filter
                 </span>
                 <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -349,9 +349,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   />
                   <div
                     onClick={() => {setFilterByGame(!filterByGame)}}
-                    className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                    className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                   ></div>
-                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
+                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
                     Release Date
                   </div>
                 </label>
@@ -418,7 +418,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           {/* //character select box */}
           <div 
           ref={cardContainerRef}
-          className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-slate-900 min-h-0 relative bg-orange-100 overflow-y-auto">
+          className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
                 // .filter((character) => character.glb_date !== null)
@@ -470,7 +470,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: team web styling */}
         <div
           id="Team"
-          className={`${showTeamWeb || (windowWidth > 800) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
+          className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
           {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
             <button

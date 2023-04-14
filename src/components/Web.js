@@ -168,7 +168,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <img 
           src={rightArrowIcon}
           onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
-          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-r-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
           title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
         />
       </div>
@@ -196,7 +196,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
         >
         </ReactFlow>
       </div>
