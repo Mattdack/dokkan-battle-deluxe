@@ -70,21 +70,21 @@ function CardDetails({ cardDetails }) {
       {!cardDetails.active_skill_name && cardDetails.ultra_sa_description && (
         <div className="flex flex-wrap pt-1">
           <div className="flex flex-wrap w-full justify-center">
-            <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
-            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-            {!ezaEnabled ? 
-              <CardDescription text={cardDetails.ps_description} />
-              : 
-              <CardDescription text={cardDetails.ps_description_eza} />}
-            </div>
-          </div>
-          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
             {!ezaEnabled ? 
               <CardDescription text={cardDetails.ultra_sa_description} />
               : 
               <CardDescription text={cardDetails.ultra_sa_description_eza} />}
+            </div>
+          </div>
+          <div className="flex flex-wrap w-full justify-center">
+            <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
+            {!ezaEnabled ? 
+              <CardDescription text={cardDetails.ps_description} />
+              : 
+              <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
         </div>
@@ -115,16 +115,6 @@ function CardDetails({ cardDetails }) {
       {cardDetails.active_skill_name && cardDetails.ultra_sa_description && (
         <div className="flex flex-wrap p-1">
           <div className="flex flex-wrap w-full justify-center">
-            <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name}/>
-            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-              {!ezaEnabled ? 
-                <CardDescription text={cardDetails.ps_description} />
-                : 
-                <CardDescription text={cardDetails.ps_description_eza} />}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
             <div className="flex mt-1 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
@@ -137,6 +127,17 @@ function CardDetails({ cardDetails }) {
                 <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
+
+          <div className="flex flex-wrap w-full justify-center">
+            <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name}/>
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
+              {!ezaEnabled ? 
+                <CardDescription text={cardDetails.ps_description} />
+                : 
+                <CardDescription text={cardDetails.ps_description_eza} />}
+            </div>
+          </div>
+
         </div>
       )}
 
