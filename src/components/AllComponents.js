@@ -14,16 +14,18 @@ import { UPDATE_SAVED_CHARACTERS, ADD_TEAM_TO_DECK } from "../util/mutations";
 import CardDetails from "./CardDetails";
 import DeckSelection from "./DeckSelection.js";
 import Auth from "../util/auth";
-
-import * as sort from "../util/sorting";
+import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 import Announcement from "../modals/Announcement";
 
+import * as sort from "../util/sorting";
+
 import { UserContext } from '../App';
-import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 
 const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
+
+  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -316,7 +318,82 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
 
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
-      <div className="flex flex-1 h-0 lg:px-10 xl:px-20">
+      <div className={`flex flex-1 h-0 ${showMiddleDiv ? '' : 'lg:px-10 xl:px-20'} relative`}>
+
+        {(!showMiddleDiv && (windowWidth > 850)) && 
+          <button 
+          onClick={()=> setShowMiddleDiv(!showMiddleDiv)}
+          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300 transform rotate-90 origin-bottom-left absolute left-0 -top-10">
+            Show Cards and Decks
+          </button>
+        }
+
+        {/* TODO: card detail styling */}
+        <div
+          id="SingleCardDetails"
+          className={`${showCardStats || (showMiddleDiv && (windowWidth > 850)) ? '' : 'hidden'} flex flex-col w-screen lg:w-1/4 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
+          >
+
+          <div className="w-full p-2">
+            {(showMiddleDiv && (window.innerWidth > 850)) &&
+            <button
+            onClick={() => setShowMiddleDiv(false)}
+            className="flex py-2 px-4 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
+            >
+              Hide Character Details
+            </button>
+            }
+          </div>
+
+          <div className="flex flex-row w-full px-2 mt-2">
+            <div className="w-1/2">
+              <div
+                onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
+                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
+              >
+                Card Details
+              </div>
+            </div>
+            <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
+              {Auth.loggedIn() ? (
+                <select
+                  className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
+                  id="deckSelect"
+                  value={selectedDeck}
+                  onChange={(e) => handleSelectedDeck(e.target.value)}
+                  disabled={allCharactersLoading}
+                >
+                  <option className="font-bold" value='No Deck'>Decks</option>
+                  {userDeckData.map((deck) => (
+                    <option className="font-bold" key={deck._id} value={deck._id}>
+                      {deck.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                  Log In To See Decks
+                </div>
+              )}
+            </div>
+          </div>
+
+          {showCardDetails ? (
+            <CardDetails
+              cardDetails={cardDetails}
+              userCharacterIds={userCharacterIds}
+            />
+          ) : (
+            <DeckSelection
+              characterDictionary={characterDictionary}
+              webOfTeam={webOfTeam}
+              userDeckData={userDeckData}
+              selectedDeck={selectedDeck}
+              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+              handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            />
+          )}
+        </div>
 
         {/* TODO: Card selection styling */}
         <div
@@ -499,74 +576,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             userDeckData={userDeckData}
           />
         </div>
-
-        {/* TODO: card detail styling */}
-        <div
-          id="SingleCardDetails"
-          className={`${showCardStats ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
-          >
-          {/* <div className="lg:hidden w-screen lg:w-1/3 pr-2">
-            <button
-              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
-              onClick={() => scrollToCharacterSelection()}
-            >
-              Character Selection
-            </button>
-          </div> */}
-
-          <div className="flex flex-row w-full px-2 mt-2">
-            <div className="w-1/2">
-              <div
-                onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
-                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
-                  showCardDetails
-                    ? "border-4 bg-orange-400"
-                    : "border-2 bg-orange-200"
-                }`}
-              >
-                Card Details
-              </div>
-            </div>
-            <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
-              {Auth.loggedIn() ? (
-                <select
-                  className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
-                  id="deckSelect"
-                  value={selectedDeck}
-                  onChange={(e) => handleSelectedDeck(e.target.value)}
-                  disabled={allCharactersLoading}
-                >
-                  <option className="font-bold" value='No Deck'>Decks</option>
-                  {userDeckData.map((deck) => (
-                    <option className="font-bold" key={deck._id} value={deck._id}>
-                      {deck.name}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
-                  Log In To See Decks
-                </div>
-              )}
-            </div>
-          </div>
-
-          {showCardDetails ? (
-            <CardDetails
-              cardDetails={cardDetails}
-              userCharacterIds={userCharacterIds}
-            />
-          ) : (
-            <DeckSelection
-              characterDictionary={characterDictionary}
-              webOfTeam={webOfTeam}
-              userDeckData={userDeckData}
-              selectedDeck={selectedDeck}
-              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-              handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
-            />
-          )}
-        </div>
       </div>
 
     </div>
@@ -577,11 +586,13 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 const getFilteredCharacters = (allCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters;
   return baseChars.filter((character) => {
+    const leaderNumbers = character.ls_description.match(/\d+/g)
     return (
       (!selectedCategories.length || (filterData.matchAllCategories
         ? selectedCategories.every(category => character.category.includes(category))
         : selectedCategories.some(category => character.category.includes(category))
       )) &&
+      (!filterData.isCommonLeader || (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false)) &&
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
       (!filterData.characterType || character.type.includes(filterData.characterType)) &&
       (!filterData.characterSuperOrExtreme || character.type.slice(0, 1).includes(filterData.characterSuperOrExtreme)) &&

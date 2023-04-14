@@ -96,54 +96,57 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
     <EditTeamForm team={teamUsedInForm} selectedDeck={selectedDeck} open={openEditTeamForm} onClose={() => setOpenEditTeamForm(false)}/>
     <WarningModal profileId={profileId} selectedDeck={selectedDeckObj} team={teamUsedInForm} open={openWarningModal} onClose={() => setOpenWarningModal(false)}/>
     <ErrorModal errorMessage={errorMessage} open={openErrorModal} onClose={() => setOpenErrorModal(false)} />
-    <div className="flex flex-wrap px-2 justify-center items-center card-sm:justify-between">
-      <form className='flex flew-wrap mt-2 w-full' onSubmit={handleRenameDeck}>
-        {/* input field for new deck name */}
-        <input 
-          type="text" 
-          id="newDeckName" 
-          name="newDeckName" 
-          value={newDeckName} 
-          onChange={(e) => setNewDeckName(e.target.value)} 
-          className="w-full h-full border-2 border-gray-400 p-2 rounded-lg" 
-          placeholder="New Deck Name" 
-          maxLength="50"
-          required 
-        />
-        <button type="submit" className="-ml-11 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-lg">
-        🗸
+
+
+    <div className="mb-6">
+
+      <div className="flex flex-wrap px-2 justify-center items-center card-sm:justify-between">
+        <form className='flex flew-wrap mt-2 w-full' onSubmit={handleRenameDeck}>
+          {/* input field for new deck name */}
+          <input 
+            type="text" 
+            id="newDeckName" 
+            name="newDeckName" 
+            value={newDeckName} 
+            onChange={(e) => setNewDeckName(e.target.value)} 
+            className="w-full h-full border-2 border-gray-400 p-2 rounded-lg" 
+            placeholder="New Deck Name" 
+            maxLength="50"
+            required 
+          />
+          <button type="submit" className="-ml-11 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-lg">
+          🗸
+          </button>
+        </form>
+        <button disabled={webOfTeam.length < 6 || webOfTeam.length >= 8} onClick={() => handleAddTeamToDeck()} className="disabled:bg-gray-500 flex justify-center items-center w-full h-12 my-2 border-4 border-black text-md lg:text-base font-bold rounded-full bg-orange-200 hover:bg-orange-400 transition ease-in-out">
+          <img src={addIcon} className="w-8 mr-2"/>ADD TEAM TO DECK
         </button>
-      </form>
-      <button disabled={webOfTeam.length < 6 || webOfTeam.length >= 8} onClick={() => handleAddTeamToDeck()} className="disabled:bg-gray-500 flex justify-center items-center w-full h-12 my-2 border-4 border-black text-md card-sm:text-lg font-bold rounded-full bg-orange-200 hover:bg-orange-400 transition ease-in-out">
-        <img src={addIcon} className="w-8 mr-2"/>ADD TEAM TO DECK
-      </button>
-      {webOfTeam.length < 6 && <p className="w-full border border-black text-sm lg:text-base text-center rounded-lg bg-orange-200/[.75]">*team must have 6 to 7 characters in it to add it to a deck</p>}
-    </div>
+        {webOfTeam.length < 6 && <p className="w-full border border-black text-sm lg:text-base text-center rounded-lg bg-orange-200/[.75]">*team must have 6 to 7 characters in it to add it to a deck</p>}
+      </div>
 
-    <div className="flex p-2 justify-center items-center">
-        <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
-          Show Characters In Deck
-        </h2>
-        <div className="flex items-center">
-          <label className="inline-flex relative items-center mr-5 cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={showCharactersInSelectedDeck}
-              readOnly
-            />
-            <div
-              onClick={() => {handleShowCharactersInSelectedDeck()}}
-              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-            ></div>
-            <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
-              ON
-            </span>
-          </label>
-        </div>
-    </div>
+      <div className="flex p-2 justify-center items-center">
+          <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
+            Show Characters In Deck
+          </h2>
+          <div className="flex items-center">
+            <label className="inline-flex relative items-center mr-5 cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={showCharactersInSelectedDeck}
+                readOnly
+              />
+              <div
+                onClick={() => {handleShowCharactersInSelectedDeck()}}
+                className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+              ></div>
+              <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
+                ON
+              </span>
+            </label>
+          </div>
+      </div>
 
-    <div className="h-[76vh] mb-6 overflow-y-auto">
       <div className="flex flex-wrap w-full justify-around" key={allTeams}>
         {allTeams ? allTeams.map(team => (
           <div key={team._id} className='flex flex-col w-full max-w-[400px] lg:max-w-full pb-12 px-4 mb-2 border-4 border-black rounded-lg justify-around bg-orange-200 hover:bg-orange-400 relative'> 
@@ -154,7 +157,9 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
             <div className="font-header flex w-full h-fit py-4 border-black text-2xl card-sm:text-2xl  underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center relative">
               {team.name}
             </div>
-            <div className="flex card-sm:w-full justify-around">
+            {/* start at flex row, 850 to 1285 pxls we go to stack, then 1285 after we go back to row*/}
+            <div className="flex lg:flex-col xl:flex-row justify-around">
+
               <div className="grid grid-cols-2 gap-y-6 justify-items-center">
                 <p className="col-span-2 font-header w-full text-xl card-sm:text-xl font-[100] border-black text-center">Team</p>
                 <div>
@@ -169,8 +174,8 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
                     null
                   )}
               </div>
-              <div className="flex flex-col items-center justify-between">
 
+              <div className="flex flex-col items-center justify-between">
                 <div className="flex flex-col items-center">
                   <p className="font-header text-xl card-sm:text-xl font-[100] border-black text-center">Sub/Friend</p>
                     <div>

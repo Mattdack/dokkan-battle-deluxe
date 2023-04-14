@@ -42,9 +42,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
-  }, [allCharactersLoading, showSuggestedCards]);
-  
-  console.log(webHeight)
+  }, [allCharactersLoading, showSuggestedCards, window.innerWidth]);
   
   const onNodesChange = useCallback(
     (changes) => {
@@ -215,10 +213,11 @@ const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
 };
 
 const startingPosition = (webWidth, webHeight) => {
-  if (webHeight === null || typeof webWidth === 'undefined'){
-    return {x: 0, y:0}
+  if (webWidth === 0 || webHeight === null || typeof webWidth === undefined){
+    return {x: window.innerWidth-125, y:window.innerHeight-200}
+  } else {
+    return {x: webWidth-125, y: webHeight-125}
   }
-  return {x: webWidth-125, y: webHeight-125}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

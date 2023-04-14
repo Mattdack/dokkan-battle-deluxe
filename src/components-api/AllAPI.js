@@ -43,7 +43,6 @@ function AllAPI() {
     const [getMemoryData, { loading: allSupportMemoryoading, data: allSupperMemoryData }] = useLazyQuery(GET_SUPPORT_MEMORY_DATA);
 
     const handleSelection = (e) => {
-        console.log(e.target.value)
         if(e.target.value === 'Edit Character'){
             console.log('we are in the edit character')
         }

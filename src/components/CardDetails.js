@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect,  } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo";
-import { set } from "lodash";
 
 import {AdvancedImage, lazyload} from '@cloudinary/react';
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
+import CharacterCard from "../cards/CharacterCard";
 
 function CardDetails({ cardDetails }) {
   const divRef1 = useRef(null);
@@ -14,48 +14,19 @@ function CardDetails({ cardDetails }) {
 
   //clears EZA button selection. Withoutit, if EZA is selected, all characters become EZA'd and descriptions become empty if characters are not EZAs
   useEffect(() => {
-    setEzaEnabled(false);
+    setEzaEnabled(false)
   }, [cardDetails])
-
-  // Set the Cloud configuration and URL configuration
-  let cloudConfig = new CloudConfig({cloudName: process.env.REACT_APP_CLOUD_NAME});
-
-  let urlConfig = new URLConfig({secure: true});
-  // Instantiate and configure a CloudinaryImage object.
-  let characterThumb = new CloudinaryImage(`v1676235853/Character Thumb/${cardDetails.id}`, cloudConfig, urlConfig);
-  let characterRarity = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.rarity}`, cloudConfig, urlConfig);
-  let characterTypeBadge = new CloudinaryImage(`v1676242408/rarities-types/${cardDetails.type.toLowerCase()}`, cloudConfig, urlConfig);
-  let characterTypeBackground = new CloudinaryImage(`v1676242381/rarities-types/${cardDetails.type.slice(1,4).toLowerCase()}-background`, cloudConfig, urlConfig);
 
   return (
     <div className="flex flex-col">
-      <div className="w-full flex flex-wrap">
+      <div className="w-full flex flex-col">
         {/* character name, thumb, EZA button*/}
-        <div className="w-1/2 h-[33vh] flex flex-col justify-center items-center">
-          
+        <div className="flex flex-col justify-center items-center">
+          <ScrollingDiv divRef={divRef1} text={cardDetails.title}/>
           <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
-          <div className="w-fit relative">
-            <AdvancedImage
-              className="h-[100px] card-sm:h-[161px] w-[100px] card-sm:w-[161px] bg-no-repeat relative z-50"
-              cldImg={characterThumb}
-            ></AdvancedImage>
-            <AdvancedImage
-              className={
-                cardDetails && cardDetails.rarity === "UR"
-                  ? "h-[22px] card-sm:h-[35px] absolute bottom-[5%] -left-[3%] z-50"
-                  : "h-[35px] card-sm:h-[56px] absolute bottom-[5%] -left-[0%] z-50"
-              }
-              cldImg={characterRarity}
-            />
-            <AdvancedImage
-              className="w-[81px] card-sm:w-[131px] absolute top-[13%] right-[9%] z-0"
-              cldImg={characterTypeBackground}
-            />
-            <AdvancedImage
-              className="w-[40px] card-sm:w-[65px] absolute top-[0%] -right-[5%] z-50"
-              cldImg={characterTypeBadge}
-            />
+          <div>
+            <CharacterCard individualCharacter={cardDetails} mobileSize={'100px'} desktopSize={'170px'}/>
           </div>
 
           <button
@@ -75,43 +46,41 @@ function CardDetails({ cardDetails }) {
         </div>
 
         {/* leader and super APPLY TO ALL CHARACTERS */}
-        <div className="h-[33vh] w-1/2 pt-2 pr-2">
-          <div className="h-[50%]">
-            <p className="h-fit font-header text-center text-lg card-sm:text-2xl overflow-y-auto">
+          <div className="p-2">
+            <p className="h-fit font-header text-center text-lg card-sm:text-2xl">
               Leader Skill:
             </p>
-            <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="w-full h-fit px-2 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? cardDetails.ls_description: cardDetails.ls_description_eza}
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center h-[50%] w-full">
+          <div className="w-full p-2">
             <ScrollingDiv divRef={divRef1} text={cardDetails.sa_name} />
-            <div className="w-full h-[72.5%] lg:h-[75%] overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="w-full h-fit px-2 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
                 <CardDescription text={cardDetails.sa_description} />
                 : 
                 <CardDescription text={cardDetails.sa_description_eza} />}
             </div>
           </div>
-        </div>
       </div>
 
       {/* ONLY ultra */}
       {!cardDetails.active_skill_name && cardDetails.ultra_sa_description && (
-        <div className="flex pt-1">
-          <div className="flex flex-wrap justify-center w-1/2">
+        <div className="flex flex-wrap pt-1">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
-            <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
             {!ezaEnabled ? 
               <CardDescription text={cardDetails.ps_description} />
               : 
               <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
-          <div className="flex flex-wrap justify-center w-1/2">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
-            <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
             {!ezaEnabled ? 
               <CardDescription text={cardDetails.ultra_sa_description} />
               : 
@@ -123,19 +92,19 @@ function CardDetails({ cardDetails }) {
 
       {/* ONLY active */}
       {cardDetails.active_skill_name && !cardDetails.ultra_sa_description && (
-        <div className="flex pt-1">
-          <div className="flex flex-wrap justify-center w-1/2">
+        <div className="flex flex-wrap pt-1">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
-            <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
                 <CardDescription text={cardDetails.ps_description} />
                 : 
                 <CardDescription text={cardDetails.ps_description_eza} />}
             </div>
           </div>
-          <div className="flex flex-wrap justify-center w-1/2">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
-            <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
@@ -144,10 +113,10 @@ function CardDetails({ cardDetails }) {
 
       {/* ultra AND active */}
       {cardDetails.active_skill_name && cardDetails.ultra_sa_description && (
-        <div className="flex pt-1">
-          <div className="flex flex-wrap justify-center w-1/2">
+        <div className="flex flex-wrap p-1">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name}/>
-            <div className="flex h-[25vh] overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
                 <CardDescription text={cardDetails.ps_description} />
                 : 
@@ -155,16 +124,16 @@ function CardDetails({ cardDetails }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center w-[48%]">
+          <div className="flex flex-wrap w-full justify-center">
             <ScrollingDiv divRef={divRef1} text={cardDetails.ultra_sa_name} />
-            <div className="flex h-[10vh] mt-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex mt-1 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
                 <CardDescription text={cardDetails.ultra_sa_description} />
                 : 
                 <CardDescription text={cardDetails.ultra_sa_description_eza} />}
             </div>
             <ScrollingDiv divRef={divRef1} text={cardDetails.active_skill_name} />
-            <div className="flex h-[10vh] mb-1 overflow-y-auto font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+            <div className="flex mb-1 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
                 <CardDescription text={cardDetails.active_skill_condition} />
             </div>
           </div>
@@ -173,24 +142,25 @@ function CardDetails({ cardDetails }) {
 
       {/* no ultra or active */}
       {!cardDetails.active_skill_name && !cardDetails.ultra_sa_description && (
-      <div className="flex flex-wrap justify-center pt-1">
+      <div className="flex flex-wrap w-full p-1 justify-center">
         <ScrollingDiv divRef={divRef1} text={cardDetails.ps_name} />
-        <div className="flex h-[25vh] w-full overflow-y-auto font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-xsm card-sm:text-sm">
+        <div className="flex w-full font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
           {!ezaEnabled ? 
-                <CardDescription text={cardDetails.ps_description} />
-                : 
-                <CardDescription text={cardDetails.ps_description_eza} />}
+            <CardDescription text={cardDetails.ps_description} />
+            : 
+            <CardDescription text={cardDetails.ps_description_eza} />
+          }
         </div>
       </div>
       )}
 
       {/* links + categories */}
-      <div className="w-full flex flex-row">
-        <div className="w-1/2">
+      <div className="flex flex-wrap w-full">
+        <div className="w-full">
           <p className="h-fit flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Links:
           </p>
-          <div className="h-[17vh] card-sm:h-[12vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="flex flex-wrap w-full text-sm card-sm:text-md justify-center items-center">
             {cardDetails.link_skill &&
               cardDetails.link_skill.map((linkText) => {
                 return <CharacterLinkDisplay key={linkText} linkText={linkText} />;
@@ -198,15 +168,15 @@ function CardDetails({ cardDetails }) {
           </div>
         </div>
 
-        <div className="w-1/2 pr-2">
+        <div className="w-full pb-4">
           <p className="flex w-full font-header text-lg card-sm:text-2xl justify-center">
             Categories:
           </p>
-          <div className="h-[17vh] card-sm:h-[12vh] pr-2 pl-2 overflow-auto text-xsm card-sm:text-sm">
+          <div className="flex flex-wrap text-sm card-sm:text-md justify-center items-center">
             {cardDetails.category &&
               cardDetails.category.map((categoryText) => {
                 return (
-                  <div key={categoryText} className="h-min-10 w-full flex flex-wrap font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-xsm card-sm:text-sm">
+                  <div key={categoryText} className="w-fit font-bold bg-orange-100 border-2 border-black mt-1 mx-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm card-sm:text-md">
                     {categoryText}
                   </div>
                 );
@@ -300,17 +270,17 @@ const CharacterLinkDisplay = ({ linkText }) => {
     <>
       <div className="relative">
         {showPopUp && (
-          <div className="absolute top-[-100%] p-2 bg-gray-200 text-gray-700 z-50">
+          <div className="absolute top-[-110%] p-2 bg-gray-200 text-gray-700 z-50">
             {linkSkillInfo.getLinkSkillInfo(linkText)[2]}
           </div>
         )}
-        <button
-          className="h-min-10 w-full flex flex-wrap font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-xsm card-sm:text-sm"
+        <div
+          className="w-fit mx-2 font-bold bg-orange-100 border-2 border-black mt-1 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] text-sm card-sm:text-md"
           // onMouseEnter={() => setShowPopUp(true)}
           // onMouseLeave={() => setShowPopUp(false)}
         >
           {linkText}
-        </button>
+        </div>
       </div>
     </>
   );
