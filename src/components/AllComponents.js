@@ -19,6 +19,7 @@ import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
 import { UserContext } from '../App';
+import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 
 const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
@@ -191,17 +192,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  
-  const [announcementOpen, setAnnouncementOpen] = useState(false)
-  
-  const announcementSeen = localStorage.getItem('announcementSeen')
-  const timestamp = localStorage.getItem('announcementSeenTimestamp')
-  if (!announcementSeen || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
-    setAnnouncementOpen(true);
-    localStorage.setItem('announcementSeen', 'true');
-    localStorage.setItem('announcementSeenTimestamp', Date.now());
-  }
-
   const [selectedCategories, setSelectedCategories] = useState([])
   const [newFilterData, setNewFilterData] = useState({})
   const [filteredCharacters, setFilteredCharacters] = useState(null)
@@ -303,11 +293,21 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
     const [showFilters, setShowFilters] = useState(true)
 
+    const [openNewsModal, setOpenNewsModal] = useState(false)
+    const [announcementOpen, setAnnouncementOpen] = useState(false)
+    const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
+    const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
+    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
+      setOpenNewsModal(true);
+      localStorage.setItem('firstLogInNewShow', 'true');
+      localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
+    }
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
-      <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
-
+      {/* <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/> */}
+      <NewsAndUpdatesModal open={openNewsModal} onClose={() => setOpenNewsModal(false)}/>
       <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
 
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
