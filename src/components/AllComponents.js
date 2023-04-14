@@ -20,6 +20,8 @@ import Announcement from "../modals/Announcement";
 
 import { UserContext } from '../App';
 
+const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
+
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
   const [cardDetails, setCardDetails] = useState({
@@ -91,16 +93,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   // These are both needed to edit the teams, this logic is what is also passed to SuggestToWeb for editing the Web there too
   function addToWebOfTeam(character) {
     setWebOfTeam((prev) => {
-      if (prev.includes(character)) {
-        return prev;
-      } else {
         return [...prev, character];
-      }
-    });
+    })
   }
-  function removeFromWebOfTeam(character) {
-    setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id));
-  }
+  function removeFromWebOfTeam(character) {setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id));}
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
@@ -326,13 +322,20 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 
 
-          <div className="bg-orange-200 border-b-4 border-x-4 border-black">
-            <p 
+          <div className={`bg-orange-200 border-b-4 border-x-4 border-black`}>
+            <div 
             onClick={() => setShowFilters(!showFilters)}
-            className="font-header flex h-fit items-center justify-center text-center text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
+            className="flex flex h-fit items-center justify-center"
+            title='click to show filters'>
+              <p
+              className="font-header text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
+              <img
+              src={arrow}
+              className={`w-[7.5%] card-sm:w-[5%] ml-4 cursor-pointer transform rotate-90 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"} transition-transform duration-300 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"}`}
+              />
+            </div>
 
-            {showFilters && <div>
-
+            <div className={`max-h-0 overflow-hidden transition-all duration-500 ${showFilters ? 'max-h-[100vh] ease-in-out' : ''}`}>
               <div className="flex pb-2 items-center justify-center">
                 <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-xl font-bold">
                   Game Filter
@@ -407,7 +410,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   </h2>
                 )}
               </div>
-            </div>}
+            </div>
 
           </div>
 
@@ -432,7 +435,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     }}
                     className={`
                     ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
-                    
                     `}
                   >
                     <CharacterCard 

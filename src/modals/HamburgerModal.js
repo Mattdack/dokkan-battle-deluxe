@@ -53,7 +53,7 @@ export default function HamburgerModal({open, onClose}) {
       <div 
       onClick={() => onClose()} 
       className={`fixed top-0 left-0 right-0 bottom-0 bg-black/[.1] z-[999]`}>
-        <div className={`flex flex-col w-[30vh] justify-center absolute top-[7vh] right-[1vh] border-2 border-black rounded-lg z-[1000]`}>
+        <div className={`flex flex-col w-[30vh] justify-center absolute top-[7vh] right-[1vh] border-4 border-black rounded-lg z-[1000]`}>
         {Auth.loggedIn() ? 
             <button
             className={`font-header text-lg card-sm:text-2xl flex justify-center items-center h-1/3 w-full col-span-1 p-4 bg-orange-200 border-2 border-black`}

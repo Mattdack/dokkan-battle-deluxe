@@ -42,9 +42,10 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
-  }, [allCharactersLoading]);
+  }, [allCharactersLoading, showSuggestedCards]);
   
-
+  console.log(webHeight)
+  
   const onNodesChange = useCallback(
     (changes) => {
       setExistingNodes((prevNodes) =>

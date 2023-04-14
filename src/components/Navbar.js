@@ -3,7 +3,11 @@ import Auth from "../util/auth";
 
 import HamburgerModal from "../modals/HamburgerModal"
 
-const AppNavbar = ({handleShowSingleCardStats, handleShowCharacterSelection, handleShowTeam, showCardSelection, showTeamWeb, showCardStats}) => {
+const AppNavbar = (
+  // handles from home page
+  {handleShowSingleCardStats, handleShowCharacterSelection, handleShowTeam, showCardSelection, showTeamWeb, showCardStats,
+  // handles from strategy 
+  handleShowStagesAndEvents, showEventsAndStages}) => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50`;
   const logo = process.env.PUBLIC_URL + "/dokkanIcons/logo.png";
@@ -19,9 +23,6 @@ const AppNavbar = ({handleShowSingleCardStats, handleShowCharacterSelection, han
     e.stopPropagation()
     window.location.assign(window.location.origin + '/strategy')
   }
-
-  console.log(showCardStats)
-  console.log(showTeamWeb)
 
   return (
     <div className="flex flex-col w-screen p-2 justify-between items-center border-b-4 border-black bg-slate-700">
@@ -66,15 +67,15 @@ const AppNavbar = ({handleShowSingleCardStats, handleShowCharacterSelection, han
         </div>
       </div>
       <div className="lg:hidden w-screen lg:w-1/3">
+          {/* TODO: homepage search buttons on mobile */}
           {(showCardStats || showTeamWeb) && 
           <div className="p-2">
-
-          <button
-            className="flex font-header text-lg card-sm:text-2xl p-2 w-full border-2 border-black bg-orange-200 justify-center text-center items-center rounded-lg"
-            onClick={() => handleShowCharacterSelection()}
-          >
-            Character Selection
-          </button>
+            <button
+              className="flex font-header text-lg card-sm:text-2xl p-2 w-full border-2 border-black bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => handleShowCharacterSelection()}
+            >
+              Character Selection
+            </button>
           </div>
           }
 
@@ -91,6 +92,18 @@ const AppNavbar = ({handleShowSingleCardStats, handleShowCharacterSelection, han
               onClick={() => handleShowTeam()}
             >
               Build Team
+            </button>
+          </div>
+          }
+
+          {/* TODO: strategy search buttons on mobile */}
+          {showEventsAndStages === false &&
+          <div className="p-2">
+            <button
+              className="flex font-header text-lg card-sm:text-2xl p-2 w-full border-2 border-black bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => handleShowStagesAndEvents()}
+            >
+              Event & Stage Selection
             </button>
           </div>
           }
