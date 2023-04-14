@@ -328,7 +328,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             className="flex flex h-fit items-center justify-center"
             title={showFilters ? 'click to hide filters' : 'click to show filters'}>
               <p
-              className="font-header text-xl card-sm:text-2xl font-light cursor-pointer">Filters</p>
+              className="font-header text-2xl font-light cursor-pointer">Filters</p>
               <img
               src={arrow}
               className={`w-[7.5%] card-sm:w-[5%] ml-4 cursor-pointer transform rotate-90 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"} transition-transform duration-300 ${showFilters ? "scale-y-[-1]" : "scale-x-[-1] scale-y-[-1]"}`}
