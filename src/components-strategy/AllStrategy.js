@@ -114,6 +114,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
 
   function handleSetSelectedStage (stage) {
     if (stage === selectedStage){
+      handleShowAllTeamsOnStage()
       return
     }
     setAllTeamsOnStage(null)
@@ -240,7 +241,7 @@ function AllStrategy( { allCharactersLoading, characterDictionary, allItems, all
       <div className="flex flex-1 h-0 w-full lg:px-10">
 
         {/* //left column styling */}
-        
+
         {(showEventsAndStages || (windowWidth > 800)) &&
         <div key={'leftColumn'} id="eventAndStageSelection" className="flex flex-col w-screen lg:w-2/5 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-slate-900">
 
