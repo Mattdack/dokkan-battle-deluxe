@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import AllComponentsCard from "./AllComponentsCard";
+import Navbar from "../components/Navbar"
+import CharacterCard from "../cards/CharacterCard";
+import AllComponentsCard from "../cards/AllComponentsCard";
 import SearchForm from "./SearchForm";
 import SuggestToWeb from "./SuggestToWeb";
-import ServerSideCharacterCard from '../cards/ServerSideCharacterCard';
 
 import { useQuery, useLazyQuery } from "@apollo/client";
 
@@ -18,9 +19,11 @@ import * as sort from "../util/sorting";
 import Announcement from "../modals/Announcement";
 
 import { UserContext } from '../App';
+import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
+
+const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
-  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -91,16 +94,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   // These are both needed to edit the teams, this logic is what is also passed to SuggestToWeb for editing the Web there too
   function addToWebOfTeam(character) {
     setWebOfTeam((prev) => {
-      if (prev.includes(character)) {
-        return prev;
-      } else {
         return [...prev, character];
-      }
-    });
+    })
   }
-  function removeFromWebOfTeam(character) {
-    setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id));
-  }
+  function removeFromWebOfTeam(character) {setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id));}
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
@@ -176,20 +173,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   function newCardDetails(characterId) {setCardDetails(characterDictionary[characterId]);}
 
-  //scroll ability through buttons on mobile
-  const scrollToSingleCardStats = () => {
-    const middleColumn = document.getElementById("SingleCardDetails");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToCharacterSelection = () => {
-    const middleColumn = document.getElementById("CardSelection");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-  const scrollToTeam = () => {
-    const middleColumn = document.getElementById("Team");
-    middleColumn.scrollIntoView({ top: 0, left: 0 });
-  };
-
   const [showCardDetails, setShowCardDetails] = useState(true);
   const [selectedDeck, setSelectedDeck] = useState("");
 
@@ -209,17 +192,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
   }
 
-  
-  const [announcementOpen, setAnnouncementOpen] = useState(false)
-  
-  const announcementSeen = localStorage.getItem('announcementSeen')
-  const timestamp = localStorage.getItem('announcementSeenTimestamp')
-  if (!announcementSeen || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
-    setAnnouncementOpen(true);
-    localStorage.setItem('announcementSeen', 'true');
-    localStorage.setItem('announcementSeenTimestamp', Date.now());
-  }
-
   const [selectedCategories, setSelectedCategories] = useState([])
   const [newFilterData, setNewFilterData] = useState({})
   const [filteredCharacters, setFilteredCharacters] = useState(null)
@@ -228,71 +200,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   const filterAndSetCharacters = (filterData) => [setFilteredCharacters(getFilteredCharacters(allCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
   
   const [filterByGame, setFilterByGame] = useState(true);
-  let charactersToDisplay = (filteredCharacters === null || filteredCharacters.length === 0) ? filterByGame ? allCharacters.slice().sort((a, b) => {
-    const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",]
-    const rarityOrder = ["UR", "LR"];
-    
-    const rarityA = rarityOrder.indexOf(a.rarity);
-    const rarityB = rarityOrder.indexOf(b.rarity);
-    if (rarityA === rarityB) {
-      const typeA = typeOrder.indexOf(a.type);
-      const typeB = typeOrder.indexOf(b.type);
-      if (typeA === typeB) {
-        const dateA = new Date(a.glb_date).getTime();
-        const dateB = new Date(b.glb_date).getTime();
-        return dateB - dateA;
-      }
-      return typeB - typeA;
-    }
-    return rarityB - rarityA;
-  })
-  : allCharacters.slice().sort((a, b) => {
-    if (
-      new Date(b.glb_date).getTime() -
-      new Date(a.glb_date).getTime() ===
-      0
-      ) {
-        return b.id - a.id;
-      }
-      return (
-        new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-        );
-      })
-      : // This is now starting the FILTERED characters (if filter form is filled out)
-      filterByGame
-      ? filteredCharacters.slice().sort((a, b) => {
-        const typeOrder = ["EAGL", "SAGL", "ETEQ", "STEQ", "EINT", "SINT", "ESTR", "SSTR", "EPHY", "SPHY",];
-        const rarityOrder = ["UR", "LR"];
 
-          const rarityA = rarityOrder.indexOf(a.rarity);
-          const rarityB = rarityOrder.indexOf(b.rarity);
-          if (rarityA === rarityB) {
-            const typeA = typeOrder.indexOf(a.type);
-            const typeB = typeOrder.indexOf(b.type);
-            if (typeA === typeB) {
-              const dateA = new Date(a.glb_date).getTime();
-              const dateB = new Date(b.glb_date).getTime();
-              return dateB - dateA;
-            }
-            return typeB - typeA;
-          }
-          return rarityB - rarityA;
-        })
-        : filteredCharacters.slice().sort((a, b) => {
-          if (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime() ===
-            0
-            ) {
-              return b.id - a.id;
-          }
-          return (
-            new Date(b.glb_date).getTime() - new Date(a.glb_date).getTime()
-            );
-          });
+  let charactersToDisplay = sort.sortCharacters(allCharacters, filteredCharacters, filterByGame)
 
-    if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
-      charactersToDisplay = []
-    }
+  if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
+    charactersToDisplay = []
+  }
 
   const [viewableCharacters, setViewableCharacters] = useState(50);
   const cardContainerRef = useRef(null);
@@ -351,253 +264,311 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     };
   }, []);
 
+  const [showCardSelection, setShowCardSelection] = useState(true)
+  const [showTeamWeb, setShowTeamWeb] = useState(false)
+  const [showCardStats, setShowCardStats] = useState(false)
+
+    //scroll ability through buttons on mobile
+    const handleShowSingleCardStats = () => {
+      setShowCardSelection(false)
+      setShowTeamWeb(false)
+      setShowCardStats(true)
+      const middleColumn = document.getElementById("SingleCardDetails");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+    const handleShowCharacterSelection = () => {
+      setShowCardSelection(true)
+      setShowTeamWeb(false)
+      setShowCardStats(false)
+      const middleColumn = document.getElementById("CardSelection");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+    const handleShowTeam = () => {
+      setShowCardSelection(false)
+      setShowTeamWeb(true)
+      setShowCardStats(false)
+      const middleColumn = document.getElementById("Team");
+      middleColumn.scrollIntoView({ top: 0, left: 0 });
+    };
+  
+    const [showFilters, setShowFilters] = useState(true)
+
+    const [openNewsModal, setOpenNewsModal] = useState(false)
+    const [announcementOpen, setAnnouncementOpen] = useState(false)
+    const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
+    const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
+    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
+      setOpenNewsModal(true);
+      localStorage.setItem('firstLogInNewShow', 'true');
+      localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
+    }
+
+    function handleCharacterSelection(character){
+      webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)
+      setCardDetails(character)
+    }
+
   return (
-    // stages formatting
-    <div className="flex flex-row lg:flex-wrap bg-slate-900 overflow-hidden">
+    <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
-      <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/>
+      {/* <Announcement open={announcementOpen} onClose={() => setAnnouncementOpen(false)}/> */}
+      <NewsAndUpdatesModal open={openNewsModal} onClose={() => setOpenNewsModal(false)}/>
+      <Navbar handleShowSingleCardStats={handleShowSingleCardStats} handleShowCharacterSelection={handleShowCharacterSelection} handleShowTeam={handleShowTeam} showCardSelection={showCardSelection} showTeamWeb={showTeamWeb} showCardStats={showCardStats}/>
 
-      {!showMiddleDiv && <div className="w-[10%] bg-slate-900"></div>}
+      {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
+      <div className="flex flex-1 h-0 lg:px-10 xl:px-20">
 
-      {/* //left column styling */}
-      <div
-        id="CardSelection"
-        className={`noZoom h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
-      >
-        <div className="flex lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-l-lg"
-            onClick={() => scrollToSingleCardStats()}
-          >
-            Details & Decks
-          </button>
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-1/2 h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-r-lg"
-            onClick={() => scrollToTeam()}
-          >
-            Build Team
-          </button>
-        </div>
+        {/* TODO: Card selection styling */}
+        <div
+          id="CardSelection"
+          className={`${showCardSelection ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
+        >
 
-        {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
+          {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 
-        <div className="flex pt-4 pb-2 items-center justify-center">
-          <span className="mr-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
-            Game Filter
-          </span>
-          <label className="inline-flex relative items-center mr-5 cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={!filterByGame}
-              readOnly
-            />
-            <div
-              onClick={() => {setFilterByGame(!filterByGame)}}
-              className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[15%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-            ></div>
-            <div className="ml-4 font-header flex h-fit items-center justify-center text-center text-base card-sm:text-xl font-bold">
-              Release Date
+
+          <div className={`bg-orange-200 border-b-4 border-x-4 border-black`}>
+            <div 
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex flex h-fit items-center justify-center"
+            title={showFilters ? 'click to hide filters' : 'click to show filters'}>
+              <p
+              className="font-header text-2xl font-light cursor-pointer">Filters</p>
+              <img
+              src={arrow}
+              className={`w-[7.5%] card-sm:w-[4%] ml-4 mb-1 cursor-pointer transform rotate-90 transition-transform duration-300 ${showFilters ? "scale-y-[-1] scale-x-[-1]" : "scale-y-[-1]"}`}
+              />
             </div>
-          </label>
-        </div>
 
-        {/* //contains filters/buttons/search field/etc. */}
-
-        <SearchForm
-          isDisabled={allCharactersLoading}
-          onFormChange={filterAndSetCharacters}
-          selectedCategories={selectedCategories}
-          handleNewCategorySelected={handleNewCategorySelected}
-          handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
-        />
-
-        <div className="flex w-full pb-2 items-center justify-center">
-          {Auth.loggedIn() ? (
-            <>
-              <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
-                Save Characters
-              </h2>
-              <div className="flex items-center">
+            <div className={`max-h-0 overflow-hidden transition-all duration-500 ${showFilters ? 'max-h-[100vh] ease-in-out' : ''}`}>
+              <div className="flex pb-2 items-center justify-center">
+                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                  Game Filter
+                </span>
                 <label className="inline-flex relative items-center mr-5 cursor-pointer">
                   <input
                     type="checkbox"
                     className="sr-only peer"
-                    checked={multiCardSelection}
+                    checked={!filterByGame}
                     readOnly
                   />
                   <div
-                    onClick={() => {
-                      setMultiCardSelection(!multiCardSelection);
-                    }}
-                    className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                    onClick={() => {setFilterByGame(!filterByGame)}}
+                    className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                   ></div>
-                  <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
-                    ON
-                  </span>
+                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                    Release Date
+                  </div>
                 </label>
               </div>
-              <div className="flex space-x-2 justify-center">
-                <button
-                  disabled={!multiCardSelection || allCharactersLoading}
-                  type="button"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light"
-                  className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                  onClick={() => handleUpdateSavedCharacters()}
-                >
-                  Save
-                </button>
+
+              {/* //contains filters/buttons/search field/etc. */}
+              <SearchForm
+                isDisabled={allCharactersLoading}
+                onFormChange={filterAndSetCharacters}
+                selectedCategories={selectedCategories}
+                handleNewCategorySelected={handleNewCategorySelected}
+                handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
+              />
+            
+              <div className="flex w-full pb-2 items-center justify-center">
+                {Auth.loggedIn() ? (
+                  <>
+                    <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
+                      Save Characters
+                    </h2>
+                    <div className="flex items-center">
+                      <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={multiCardSelection}
+                          readOnly
+                        />
+                        <div
+                          onClick={() => {
+                            setMultiCardSelection(!multiCardSelection);
+                          }}
+                          className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                        ></div>
+                        <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
+                          ON
+                        </span>
+                      </label>
+                    </div>
+                    <div className="flex space-x-2 justify-center">
+                      <button
+                        disabled={!multiCardSelection || allCharactersLoading}
+                        type="button"
+                        data-mdb-ripple="true"
+                        data-mdb-ripple-color="light"
+                        className="disabled:bg-gray-500 inline-block px-4 card-sm:px-6 py-1.5 card-sm:py-2.5 bg-blue-600 text-white font-medium text-sm card-sm:text-base leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                        onClick={() => handleUpdateSavedCharacters()}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <h2 className="p-2 text-sm lg:text-base font-bold">
+                    Please log in to add players
+                  </h2>
+                )}
               </div>
-            </>
-          ) : (
-            <h2 className="p-2 text-sm lg:text-base font-bold">
-              Please log in to add players
-            </h2>
-          )}
-        </div>
-
-        {/* //character select box */}
-        <div 
-        ref={cardContainerRef}
-        className="noZoom flex flex-wrap justify-center items-center p-1 mx-1 mb-14 card-sm:mb-16 lg:mx-2 lg:mt-3 lg:mb-6 border-2 border-slate-900 overflow-y-auto bg-orange-100">
-          {allCharactersLoading ? (<div>Loading...</div>) 
-          : charactersToDisplay
-              .filter((character) => character.glb_date !== null)
-              .slice(0, viewableCharacters)
-              .map((character) => (
-                <div
-                  id="CharacterCard"
-                  className={`${webOfTeam.map((char) => char.id).includes(character.id) && 'bg-slate-900/[.4]'}`}
-                  key={character.id}
-                  onClick={() => {
-                    if (multiCardSelection) {
-                      changeDeck(character.id);
-                    }
-                  }}
-                >
-                  <AllComponentsCard
-                    character={character}
-                    userDeckData={userDeckData}
-                    selectedDeck={selectedDeck}
-                    showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-                    savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
-                    webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                    addToWebOfTeam={addToWebOfTeam}
-                    removeFromWebOfTeam={removeFromWebOfTeam}
-                    newCardDetails={newCardDetails}
-                  />
-                </div>
-              ))}
-          {/* {(viewableCharacters < charactersToDisplay.length) && 
-          <div className="flex w-full justify-center items-center">
-            <button 
-              onClick={() => setViewableCharacters(viewableCharacters + 50)}
-              className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
-                Load More Characters
-            </button>
-          </div>
-          } */}
-        </div>
-      </div>
-
-      {/* //middle column styling */}
-      <div
-        id="SingleCardDetails"
-        className={`${!showMiddleDiv ? windowWidth < 1250 ? '' : 'hidden' : ''} h-[100vh] lg:h-[90vh] w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg`}
-      >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
-            onClick={() => scrollToCharacterSelection()}
-          >
-            Character Selection
-          </button>
-        </div>
-
-        <div className="flex flex-row w-full px-2 mt-2">
-          <div className="w-1/2">
-            <div
-              onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
-              className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
-                showCardDetails
-                  ? "border-4 bg-orange-400"
-                  : "border-2 bg-orange-200"
-              }`}
-            >
-              Card Details
             </div>
+
           </div>
-          <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
-            {Auth.loggedIn() ? (
-              <select
-                className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
-                id="deckSelect"
-                value={selectedDeck}
-                onChange={(e) => handleSelectedDeck(e.target.value)}
-                disabled={allCharactersLoading}
-              >
-                <option className="font-bold" value='No Deck'>Decks</option>
-                {userDeckData.map((deck) => (
-                  <option className="font-bold" key={deck._id} value={deck._id}>
-                    {deck.name}
-                  </option>
+
+
+          {/* //character select box */}
+          <div 
+          ref={cardContainerRef}
+          className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
+            {allCharactersLoading ? (<div>Loading...</div>) 
+            : charactersToDisplay
+                // .filter((character) => character.glb_date !== null)
+                // .slice(0, viewableCharacters)
+                .map((character) => (
+                  <div
+                    key={character.id}
+                    onClick={() => {
+                      if (multiCardSelection) {
+                        changeDeck(character.id);
+                      } else {
+                        handleCharacterSelection(character)
+                      }
+                    }}
+                    className={`
+                    ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
+                    `}
+                  >
+                    <CharacterCard 
+                    individualCharacter={character}
+                    mobileSize={'60px'}
+                    desktopSize={'80px'}
+                    />
+                    {/* <AllComponentsCard
+                      character={character}
+                      userDeckData={userDeckData}
+                      selectedDeck={selectedDeck}
+                      showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+                      savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
+                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
+                      addToWebOfTeam={addToWebOfTeam}
+                      removeFromWebOfTeam={removeFromWebOfTeam}
+                      newCardDetails={newCardDetails}
+                    /> */}
+                  </div>
                 ))}
-              </select>
-            ) : (
-              <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
-                Log In To See Decks
-              </div>
-            )}
+            {/* {(viewableCharacters < charactersToDisplay.length) && 
+            <div className="flex w-full justify-center items-center">
+              <button 
+                onClick={() => setViewableCharacters(viewableCharacters + 50)}
+                className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
+                  Load More Characters
+              </button>
+            </div>
+            } */}
           </div>
         </div>
 
-        {showCardDetails ? (
-          <CardDetails
-            cardDetails={cardDetails}
-            userCharacterIds={userCharacterIds}
-          />
-        ) : (
-          <DeckSelection
-            characterDictionary={characterDictionary}
+        {/* TODO: team web styling */}
+        <div
+          id="Team"
+          className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
+        >
+          {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
+            <button
+              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => scrollToCharacterSelection()}
+            >
+              Character Selection
+            </button>
+          </div> */}
+          <SuggestToWeb
+            selectedCharacter={cardDetails}
+            userCharacters={userCharacters}
+            handleNewDetails={newCardDetails}
+            addToWebOfTeam={addToWebOfTeam}
             webOfTeam={webOfTeam}
-            userDeckData={userDeckData}
+            removeFromWebOfTeam={removeFromWebOfTeam}
+            allCharacters={allCharacters}
+            allCharactersLoading={allCharactersLoading}
             selectedDeck={selectedDeck}
             showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-            handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            userDeckData={userDeckData}
           />
-        )}
-      </div>
-      
-
-      {/* //right column styling */}
-      <div
-        id="Team"
-        className={`h-[100vh] lg:h-[90vh] w-screen ${!showMiddleDiv ? 'lg:w-[40%]' : 'lg:w-1/3'} bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 flex flex-col border-4 border-black rounded-lg `}
-      >
-        <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pl-2 pr-4">
-          <button
-            className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 border-2 border-slate-900 justify-center text-center items-center rounded-lg"
-            onClick={() => scrollToCharacterSelection()}
-          >
-            Character Selection
-          </button>
         </div>
-        <SuggestToWeb
-          selectedCharacter={cardDetails}
-          userCharacters={userCharacters}
-          handleNewDetails={newCardDetails}
-          addToWebOfTeam={addToWebOfTeam}
-          webOfTeam={webOfTeam}
-          removeFromWebOfTeam={removeFromWebOfTeam}
-          allCharactersLoading={allCharactersLoading}
-          selectedDeck={selectedDeck}
-          showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-          userDeckData={userDeckData}
-        />
+
+        {/* TODO: card detail styling */}
+        <div
+          id="SingleCardDetails"
+          className={`${showCardStats ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/3 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
+          >
+          {/* <div className="lg:hidden w-screen lg:w-1/3 pr-2">
+            <button
+              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
+              onClick={() => scrollToCharacterSelection()}
+            >
+              Character Selection
+            </button>
+          </div> */}
+
+          <div className="flex flex-row w-full px-2 mt-2">
+            <div className="w-1/2">
+              <div
+                onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
+                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${
+                  showCardDetails
+                    ? "border-4 bg-orange-400"
+                    : "border-2 bg-orange-200"
+                }`}
+              >
+                Card Details
+              </div>
+            </div>
+            <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
+              {Auth.loggedIn() ? (
+                <select
+                  className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
+                  id="deckSelect"
+                  value={selectedDeck}
+                  onChange={(e) => handleSelectedDeck(e.target.value)}
+                  disabled={allCharactersLoading}
+                >
+                  <option className="font-bold" value='No Deck'>Decks</option>
+                  {userDeckData.map((deck) => (
+                    <option className="font-bold" key={deck._id} value={deck._id}>
+                      {deck.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                  Log In To See Decks
+                </div>
+              )}
+            </div>
+          </div>
+
+          {showCardDetails ? (
+            <CardDetails
+              cardDetails={cardDetails}
+              userCharacterIds={userCharacterIds}
+            />
+          ) : (
+            <DeckSelection
+              characterDictionary={characterDictionary}
+              webOfTeam={webOfTeam}
+              userDeckData={userDeckData}
+              selectedDeck={selectedDeck}
+              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+              handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+            />
+          )}
+        </div>
       </div>
 
-      {!showMiddleDiv ? <div className="w-[10%] bg-slate-900"></div>: null}
     </div>
   );
 }

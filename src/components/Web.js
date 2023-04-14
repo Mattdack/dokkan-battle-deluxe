@@ -7,13 +7,14 @@ import ReactFlow, {
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
-import WebCard from "./WebCard";
+import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
-import { none } from "@cloudinary/transformation-builder-sdk/qualifiers/progressive";
-import { color } from "d3-color";
+import SuggestCard from "../cards/SuggestCard";
+
+const rightArrowIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png";
 
 const nodeTypes = {
   custom: WebCard,
@@ -25,10 +26,10 @@ const edgeTypes = {
 const viewPort = {
   x: 0,
   y: 0,
-  zoom: .75,
+  zoom: .55,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
@@ -36,17 +37,19 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
   const [webHeight, setWebHeight] = useState(null)
+  const [showRemoveFromTeam, setShowRemoveFromTeam] = useState(true)
 
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
-  }, [allCharactersLoading]);
+  }, [allCharactersLoading, showSuggestedCards]);
   
-
+  console.log(webHeight)
+  
   const onNodesChange = useCallback(
     (changes) => {
       setExistingNodes((prevNodes) =>
-        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight))
+        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight, removeFromWebOfTeam))
       );
     },
     [setExistingNodes, setExistingEdges, webOfTeam]
@@ -61,7 +64,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
     [setExistingEdges, webOfTeam]
   );
 
-  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight);
+  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight, removeFromWebOfTeam);
   const combinedEdgeData = buildAllEdges(combinedNodeData, existingEdges);
 
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
@@ -139,12 +142,45 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   }
 
   return (
-    <div ref={myDivRef} className="h-[45vh] lg:h-[40vh]">
-      <div className="h-full bg-slate-700 row-span-6 rounded-md relative">
+    <div ref={myDivRef} className={`h-full relative`}>
+      <div className="flex flex-1 w-full absolute z-[995]">
+        <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
+          {webOfTeam.map(character => 
+            <div
+            key={'web'+character.id.toString()}
+            className="card-sm:min-w-[60px]"
+            >
+              <SuggestCard
+              character={character}
+              webOfTeam={webOfTeam}
+              selectedCharacter={selectedCharacter}
+              handleNewDetails={handleNewDetails}
+              removeFromWebOfTeam={removeFromWebOfTeam}
+              addToWebOfTeam={addToWebOfTeam}
+              statsSelectedOptions={statsSelectedOptions}
+              userDeckData={userDeckData}
+              selectedDeck={selectedDeck}
+              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
+            />  
+            </div>
+          )}
+        </div>
+        <img 
+          src={rightArrowIcon}
+          onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
+          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
+        />
+      </div>
+      <div className="h-full bg-slate-700 row-span-6 relative">
         <button
-        className="p-2 text-sm card-sm:text-lg text-black bg-white rounded-lg absolute bottom-2 left-2 z-40"
+        className="p-2 text-md card-sm:text-lg border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg absolute bottom-0 left-0 z-40"
         onClick={() => handleResetTeam(webOfTeam)}
         >Reset Team</button>
+        <button
+        className="p-2 text-md card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
+        onClick={() => handleSetShowSuggestedCards()}
+        >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}
@@ -160,7 +196,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           defaultViewport={viewPort}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-black"
+          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
         >
         </ReactFlow>
       </div>
@@ -180,10 +216,9 @@ const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
 
 const startingPosition = (webWidth, webHeight) => {
   if (webHeight === null || typeof webWidth === 'undefined'){
-    // console.log('no width rendered')
     return {x: 0, y:0}
   }
-  return {x: webWidth-200, y: webHeight-200}
+  return {x: webWidth-125, y: webHeight-125}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({

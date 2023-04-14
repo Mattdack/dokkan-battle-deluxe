@@ -454,6 +454,7 @@ const CharacterInfoBar = ({ character, role, leadeOrSub, characterObjects }) => 
             >
               <option value='leader'>Leader</option>
               <option value='subLeader'>Friend</option>
+              <option value=''>Neither</option>
             </select>
           }
         </div>

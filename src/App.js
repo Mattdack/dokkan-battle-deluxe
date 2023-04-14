@@ -46,7 +46,6 @@ function App() {
       <Router basename={process.env.PUBLIC_URL}>
         <div className="app">
           <UserContext.Provider value={{ showMiddleDiv: showMiddleDiv, setShowMiddleDiv: setShowMiddleDiv }}>
-            <Navbar/>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />
               <Route exact path='/strategy' element={<AllStrategiesWithData />} />
