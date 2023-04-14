@@ -208,12 +208,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
     charactersToDisplay = []
   }
-
-  const [viewableCharacters, setViewableCharacters] = useState(50);
+  
   const cardContainerRef = useRef(null);
-
   const handleNewCategorySelected = (e) => {
-    setViewableCharacters(50)
     if(e.target.value === ''){
       cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
       return setSelectedCategories([])
@@ -233,26 +230,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
     setFilteredCharacters(filteredChars);
   }, [selectedCategories]); 
-
-  // this useEffect is for automatically loading characters by increasing the viewableCharacters
-  useEffect(() => {
-    if(cardContainerRef.current !== null){
-      const cardContainer = cardContainerRef.current;
-  
-      const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 240)) {
-          setViewableCharacters(viewableCharacters + 50);
-        }
-      };
-  
-      cardContainer.addEventListener("scroll", handleScroll);
-  
-      return () => {
-        cardContainer.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, [allCharactersLoading, viewableCharacters]);
-
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -320,8 +297,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
       <div className={`flex flex-1 h-0 ${showMiddleDiv ? '' : 'lg:px-10 xl:px-20'} relative`}>
 
-        {(!showMiddleDiv && (windowWidth > 850)) && 
-          <button 
+        {(!showMiddleDiv && (windowWidth > 850)) && <button 
           onClick={()=> setShowMiddleDiv(!showMiddleDiv)}
           className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300 transform rotate-90 origin-bottom-left absolute left-0 -top-10">
             Show Cards and Decks
@@ -519,12 +495,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
                     `}
                   >
-                    <CharacterCard 
+                    {/* <CharacterCard 
                     individualCharacter={character}
                     mobileSize={'60px'}
                     desktopSize={'80px'}
-                    />
-                    {/* <AllComponentsCard
+                    /> */}
+                    <AllComponentsCard
                       character={character}
                       userDeckData={userDeckData}
                       selectedDeck={selectedDeck}
@@ -534,7 +510,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                       addToWebOfTeam={addToWebOfTeam}
                       removeFromWebOfTeam={removeFromWebOfTeam}
                       newCardDetails={newCardDetails}
-                    /> */}
+                    />
                   </div>
                 ))}
             {/* {(viewableCharacters < charactersToDisplay.length) && 

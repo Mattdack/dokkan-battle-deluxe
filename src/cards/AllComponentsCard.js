@@ -24,63 +24,15 @@ const WebCard = memo(({character, webOfTeam, deckTeams, showCharactersInSelected
     return deckTeams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id);
   }, [deckTeams, character.id]);
 
-  //logic for card click...allows for div to close when click outside of card is made
-  const [isCardClicked, setIsCardClicked] = useState(false);
-  const ref = useRef(null);
-
-  const handleCardClick = (character) => {
-    newCardDetails(character.id)
-    setIsCardClicked(!isCardClicked);
-  };
-
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setIsCardClicked(false);
-    }
-  };
-  // this allows for an out of click from the suggestion card to bring it back to the regular card
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-
   return (
     <div
-      ref={ref}
-      onClick={() => handleCardClick(character)}
       className={`
-      ${isInWeb ? "bg-slate-900/[.75] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.4]"}
+      ${isInWeb ? "bg-slate-900/[.5] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
       ${showCharactersInSelectedDeck && isInSelectedDeck ? "grayscale" : ""} 
       w-fit h-fit relative
       `}
     >
-      {isCardClicked && (
-        <div>
-          {isInWeb ? (
-            <div
-              className={`flex h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-lg absolute z-[900]`}
-              onClick={() => removeFromWebOfTeam(character)}
-            >
-              Remove From Team
-            </div>
-          ) : (
-            <div
-              className={`flex h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] border-2 card-sm:border-4 border-black font-header text-sm card-sm:text-lg justify-center items-center text-center bg-sky-500 hover:bg-sky-700 rounded-lg absolute z-[900]`}
-              onClick={() => addToWebOfTeam(character)}
-            >
-              Add To Team
-            </div>
-          )}
-        </div>
-      )}
       <div>
-        {/* <CharacterCard
-          individualCharacter={character}
-          mobileSize={"60px"}
-          desktopSize={"85px"}
-        /> */}
         <CharacterCard
           individualCharacter={character}
           mobileSize={"60px"}

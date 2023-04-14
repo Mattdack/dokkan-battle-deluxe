@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* remove all double touch actions */
-html, body, img, div {
+/* html, body, img, div {
   touch-action: manipulation;
   zoom: reset;
 }
@@ -12,9 +12,9 @@ img {
   -webkit-user-drag: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-}
+} */
 
-
+/* allows for smooth scroll on character container */
 .characterContainer {
   transform: translateZ(0);
   overflow: overlay;
