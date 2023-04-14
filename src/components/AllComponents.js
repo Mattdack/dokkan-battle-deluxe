@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import Navbar from "../components/Navbar"
 import CharacterCard from "../cards/CharacterCard";
 import AllComponentsCard from "../cards/AllComponentsCard";
@@ -99,7 +99,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         return [...prev, character];
     })
   }
-  function removeFromWebOfTeam(character) {setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id));}
+  function removeFromWebOfTeam(character) {
+    setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id))
+  }
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
@@ -367,6 +369,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               selectedDeck={selectedDeck}
               showCharactersInSelectedDeck={showCharactersInSelectedDeck}
               handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
+              addToWebOfTeam={addToWebOfTeam}
+              removeFromWebOfTeam={removeFromWebOfTeam}
             />
           )}
         </div>
@@ -472,7 +476,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
           </div>
 
-
           {/* //character select box */}
           <div 
           ref={cardContainerRef}
@@ -483,16 +486,27 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 // .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
-                    key={character.id}
-                    onClick={() => {
-                      if (multiCardSelection) {
-                        changeDeck(character.id);
-                      } else {
-                        handleCharacterSelection(character)
-                      }
-                    }}
+                  key={character.id}
+                  className={`
+                    cursor-pointer
+                    ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
+                    ${showCharactersInSelectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
+                    ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
+                  `}
+                  onClick={() => {
+                    if (multiCardSelection) {
+                      changeDeck(character.id);
+                    } else {
+                      handleCharacterSelection(character)
+                    }
+                  }}
                   >
-                    <AllComponentsCard
+                    <CharacterCard 
+                    individualCharacter={character} 
+                    mobileSize={'60px'} 
+                    desktopSize={'85px'}
+                    />
+                    {/* <AllComponentsCard
                       character={character}
                       userDeckData={userDeckData}
                       selectedDeck={selectedDeck}
@@ -502,7 +516,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                       addToWebOfTeam={addToWebOfTeam}
                       removeFromWebOfTeam={removeFromWebOfTeam}
                       newCardDetails={newCardDetails}
-                    />
+                    /> */}
                   </div>
                 ))}
           </div>

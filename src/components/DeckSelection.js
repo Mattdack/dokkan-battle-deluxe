@@ -18,11 +18,12 @@ const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 const trashIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/trash-icon.png";
 const editIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/edit-icon.png";
 const analysisIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/analysis-icon.png";
+const teamToWebIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-team-to-web.png";
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
 const subLeaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/subleader-icon.png";
 
 
-export default function DeckSelection({ characterDictionary, webOfTeam, userDeckData, selectedDeck, showCharactersInSelectedDeck, handleShowCharactersInSelectedDeck }) {
+export default function DeckSelection({ characterDictionary, webOfTeam, userDeckData, selectedDeck, showCharactersInSelectedDeck, handleShowCharactersInSelectedDeck, addToWebOfTeam, removeFromWebOfTeam }) {
   const [openErrorModal, setOpenErrorModal] = useState(false)
   const [openWarningModal, setOpenWarningModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -88,6 +89,16 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
     setOpenWarningModal(true)
   }
 
+  function handleAddTeamToWeb (team){
+    console.log(team.characters)
+    webOfTeam.map(character => {
+      removeFromWebOfTeam(character)
+    })
+    team.characters.map(character => {
+      addToWebOfTeam(character)
+    })
+  }
+
   
   return (
     <>
@@ -126,7 +137,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
 
       <div className="flex p-2 justify-center items-center">
           <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
-            Show Characters In Deck
+            Gray Characters In Deck
           </h2>
           <div className="flex items-center">
             <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -147,10 +158,12 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
           </div>
       </div>
 
-      <div className="flex flex-wrap w-full justify-around" key={allTeams}>
+      <div className="flex flex-wrap w-full p-2 justify-around" key={allTeams}>
         {allTeams ? allTeams.map(team => (
           <div key={team._id} className='flex flex-col w-full max-w-[400px] lg:max-w-full pb-12 px-4 mb-2 border-4 border-black rounded-lg justify-around bg-orange-200 hover:bg-orange-400 relative'> 
               <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit w-full p-1 mt-2 mr-2 text-center hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/>
+              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
+              <img src={teamToWebIcon} title='clear current team web and add this team to web' onClick={() => handleAddTeamToWeb(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 ml-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 left-0 cursor-pointer"/>
               {/* <button disabled={!team.info.leader || window.innerHeight<1080} onClick={() => handleTeamAnalytics(team)} className="disabled:opacity-100 w-10 h-fit p-1 mt-2 ml-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 left-0">
                 <img src={analysisIcon} className={`${!team.info.leader || window.innerHeight<1080 ? 'hidden' : ''}`}/>
               </button> */}
@@ -209,7 +222,6 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
               </div>
 
             </div>
-              <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
           </div>
         )).reverse() : null }
       </div>
