@@ -90,7 +90,6 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
   }
 
   function handleAddTeamToWeb (team){
-    console.log(team.characters)
     webOfTeam.map(character => {
       removeFromWebOfTeam(character)
     })
