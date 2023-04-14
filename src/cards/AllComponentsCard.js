@@ -6,6 +6,7 @@ import ServerCharacterCard from "./ServerCharacterCard"
 function AllComponentsCard({ character, webOfTeam, savedToMyCharacterDeck, userDeckData, selectedDeck, showCharactersInSelectedDeck, addToWebOfTeam, newCardDetails, removeFromWebOfTeam }) {
   const selectedDeckObj = userDeckData.find((deck) => deck._id === selectedDeck) || [];
   const selectedDeckTeams = selectedDeckObj.teams || [];
+
   if (webOfTeam) {
     return (
       <WebCard character={character}  webOfTeam={webOfTeam}  deckTeams={selectedDeckTeams}  showCharactersInSelectedDeck={showCharactersInSelectedDeck}  addToWebOfTeam={addToWebOfTeam}  removeFromWebOfTeam={removeFromWebOfTeam}  newCardDetails={newCardDetails}/>
@@ -55,7 +56,7 @@ function DeckCard({ character, savedToMyCharacterDeck }) {
     <>
       <div 
       className={`
-      ${isSavedCharacter ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-slate-900/[.4]"} 
+      ${isSavedCharacter ? "bg-amber-900/[.75] hover:bg-amber-900/[.9]" : "hover:bg-amber-900/[.4]"} 
       `}
       >
         <CharacterCard

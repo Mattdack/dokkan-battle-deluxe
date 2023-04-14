@@ -491,9 +491,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                         handleCharacterSelection(character)
                       }
                     }}
-                    className={`
-                    ${webOfTeam.includes(character) ? 'bg-slate-900/[.75] hover:bg-slate-900/[.9]' : 'hover:bg-slate-900/[.4]'}
-                    `}
                   >
                     {/* <CharacterCard 
                     individualCharacter={character}
