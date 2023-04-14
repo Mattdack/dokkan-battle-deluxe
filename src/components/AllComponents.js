@@ -272,8 +272,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
     const [showFilters, setShowFilters] = useState(true)
 
-    const [openNewsModal, setOpenNewsModal] = useState(false)
     const [announcementOpen, setAnnouncementOpen] = useState(false)
+    const [openNewsModal, setOpenNewsModal] = useState(false)
     const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
     const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
     if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
@@ -492,11 +492,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                       }
                     }}
                   >
-                    {/* <CharacterCard 
-                    individualCharacter={character}
-                    mobileSize={'60px'}
-                    desktopSize={'80px'}
-                    /> */}
                     <AllComponentsCard
                       character={character}
                       userDeckData={userDeckData}
@@ -510,15 +505,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     />
                   </div>
                 ))}
-            {/* {(viewableCharacters < charactersToDisplay.length) && 
-            <div className="flex w-full justify-center items-center">
-              <button 
-                onClick={() => setViewableCharacters(viewableCharacters + 50)}
-                className="flex w-[70%] p-2 m-2 justify-center items-center text-mg lg:text-2xl font-bold bg-orange-300 border-2 border-black">
-                  Load More Characters
-              </button>
-            </div>
-            } */}
           </div>
         </div>
 
@@ -527,14 +513,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           id="Team"
           className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
-          {/* <div className="lg:hidden h-[5vh] w-screen lg:w-1/3 pr-2 border-b-4 border-black">
-            <button
-              className="flex font-header text-lg card-sm:text-2xl w-full h-full bg-orange-200 justify-center text-center items-center rounded-lg"
-              onClick={() => scrollToCharacterSelection()}
-            >
-              Character Selection
-            </button>
-          </div> */}
           <SuggestToWeb
             selectedCharacter={cardDetails}
             userCharacters={userCharacters}
