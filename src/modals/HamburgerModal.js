@@ -111,7 +111,7 @@ export default function HamburgerModal({open, onClose}) {
                   />
                 <div
                   onClick={() => {setShowMiddleDiv(!showMiddleDiv)}}
-                  className="w-10 card-sm:w-16 h-4 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[37%] card-sm:after:top-[33%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                  className="w-10 card-sm:w-16 h-4 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[37%] card-sm:after:top-[39%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                   ></div>
                 <div className="font-header flex h-3/4 ml-4  items-center justify-center text-center text-base card-sm:text-xl font-light">
                 Show Card Details and Decks

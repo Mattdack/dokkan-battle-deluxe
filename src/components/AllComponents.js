@@ -241,7 +241,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [window.innerWidth]);
 
   const [showCardSelection, setShowCardSelection] = useState(true)
   const [showTeamWeb, setShowTeamWeb] = useState(false)
