@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useContext } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
 import CharacterCard from './CharacterCard'
 
-function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
+import { UserContext } from "../App";
+
+function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck }) {
+  const { grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext)
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
@@ -53,7 +57,7 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
       <div
         ref={ref}
         onClick={handleCardClick}
-        className={`${showCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
+        className={`${grayCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
       >
         {isCardClicked && (
           <div className="absolute z-[900]">

@@ -6,6 +6,7 @@ import {AdvancedImage, lazyload, accessibility, responsive, placeholder} from '@
 
 const leaderIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/leader-icon.png";
 const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png";
+const subIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/subleader-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 const CharacterCard = ({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader }) => {
@@ -41,6 +42,7 @@ const CharacterCard = ({ individualCharacter, mobileSize, desktopSize, EZA, lead
                 />
                 {leaderOrSubLeader === 'leader' ? <img src={leaderIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
                 {leaderOrSubLeader === 'subLeader' ? <img src={friendIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
+                {leaderOrSubLeader === 'sub' ? <img src={subIcon} className='w-[80%] -top-[2%] right-[33%] absolute z-50'/> : null}
                 {EZA ? <img src={ezaIcon} className='w-[30%] bottom-[5%] right-[0%] absolute z-50'/> : null}
                 <AdvancedImage
                     cldImg={characterRarity}

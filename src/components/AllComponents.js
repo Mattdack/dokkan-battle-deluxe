@@ -25,7 +25,7 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -102,6 +102,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   function removeFromWebOfTeam(character) {
     setWebOfTeam((prev) => prev.filter((c) => c.id !== character.id))
   }
+  
+  // useEffect(() => {
+    // // setWebOfTeam();
+  // }, [addToWebOfTeam, removeFromWebOfTeam]);
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
@@ -175,25 +179,29 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     });
   }
 
-  function newCardDetails(characterId) {setCardDetails(characterDictionary[characterId]);}
+  function newCardDetails(characterId) {
+    setCardDetails(characterDictionary[characterId])
+  }
 
   const [showCardDetails, setShowCardDetails] = useState(true);
   const [selectedDeck, setSelectedDeck] = useState("");
-
-  const handleSelectedDeck = (deckId) => {
-    if (deckId === 'No Deck'){
-      setShowCardDetails(true)
-      setSelectedDeck('Decks')
-    }else {
-      setShowCardDetails(false);
-      setSelectedDeck(deckId);
+  const handleSelectedDeckOptionClick = (deckId) => {
+    if (deckId === ''){
+      return
+    } else if(deckId === selectedDeck){
+      setShowCardDetails(false)
     }
-  };
-
-  const [showCharactersInSelectedDeck, setShowCharactersInSelectedDeck] = useState(false)
-
-  function handleShowCharactersInSelectedDeck() {
-    setShowCharactersInSelectedDeck(!showCharactersInSelectedDeck);
+  }
+  const handleSelectedDeck = (deckId) => {
+    if (deckId === ''){
+      setShowCardDetails(true)
+      setSelectedDeck('')
+    }else if (deckId === selectedDeck){
+      setShowCardDetails(false);
+    }else{
+      setShowCardDetails(false);
+      setSelectedDeck(deckId)
+    }
   }
 
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -285,8 +293,13 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     }
 
     function handleCharacterSelection(character){
-      webOfTeam.includes(character) ? removeFromWebOfTeam(character) : addToWebOfTeam(character)
-      setCardDetails(character)
+      const existingCharacter = webOfTeam.find(webCharacter => webCharacter.id === character.id)
+      if (existingCharacter) {
+        removeFromWebOfTeam(existingCharacter)
+      } else {
+        addToWebOfTeam(character)
+        setCardDetails(character)
+      }
     }
 
   return (
@@ -326,7 +339,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           <div className="flex flex-row w-full px-2 mt-2">
             <div className="w-1/2">
               <div
-                onClick={() => [setShowCardDetails(true), setSelectedDeck("")]}
+                onClick={() => setShowCardDetails(true)}
                 className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
               >
                 Card Details
@@ -339,6 +352,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   id="deckSelect"
                   value={selectedDeck}
                   onChange={(e) => handleSelectedDeck(e.target.value)}
+                  onClick={(e) => handleSelectedDeckOptionClick(e.target.value)}
                   disabled={allCharactersLoading}
                 >
                   <option className="font-bold" value=''>Decks</option>
@@ -367,8 +381,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
               webOfTeam={webOfTeam}
               userDeckData={userDeckData}
               selectedDeck={selectedDeck}
-              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
-              handleShowCharactersInSelectedDeck={handleShowCharactersInSelectedDeck}
               addToWebOfTeam={addToWebOfTeam}
               removeFromWebOfTeam={removeFromWebOfTeam}
             />
@@ -387,7 +399,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           <div className={`bg-orange-200 border-b-4 border-x-4 border-black`}>
             <div 
             onClick={() => setShowFilters(!showFilters)}
-            className="flex flex h-fit items-center justify-center"
+            className="flex flex h-fit pt-1 items-center justify-center"
             title={showFilters ? 'click to hide filters' : 'click to show filters'}>
               <p
               className="font-header text-2xl font-light cursor-pointer">Filters</p>
@@ -428,7 +440,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                 handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
               />
             
-              <div className="flex w-full pb-2 items-center justify-center">
+              <div className="flex w-full py-1 items-center justify-center">
                 {Auth.loggedIn() ? (
                   <>
                     <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base text-center font-bold">
@@ -490,7 +502,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${showCharactersInSelectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
+                    ${grayCharactersInSelectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                   `}
                   onClick={() => {
@@ -510,7 +522,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                       character={character}
                       userDeckData={userDeckData}
                       selectedDeck={selectedDeck}
-                      showCharactersInSelectedDeck={showCharactersInSelectedDeck}
                       savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
                       webOfTeam={!multiCardSelection ? webOfTeam : undefined}
                       addToWebOfTeam={addToWebOfTeam}
@@ -537,7 +548,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             allCharacters={allCharacters}
             allCharactersLoading={allCharactersLoading}
             selectedDeck={selectedDeck}
-            showCharactersInSelectedDeck={showCharactersInSelectedDeck}
             userDeckData={userDeckData}
           />
         </div>

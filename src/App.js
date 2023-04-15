@@ -42,6 +42,7 @@ const AllStrategiesWithData = withData(AllStrategy);
 function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(false)
   const [showSummationLinks, setShowSummationLinks] = useState(false)
+  const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
@@ -50,7 +51,9 @@ function App() {
             showMiddleDiv: showMiddleDiv, 
             setShowMiddleDiv: setShowMiddleDiv,
             showSummationLinks: showSummationLinks,
-            setShowSummationLinks: setShowSummationLinks
+            setShowSummationLinks: setShowSummationLinks,
+            grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,
+            setGrayCharactersInSelectedDeck: setGrayCharactersInSelectedDeck
              }}>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />

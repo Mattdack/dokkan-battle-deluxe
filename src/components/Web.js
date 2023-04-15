@@ -31,10 +31,11 @@ const viewPort = {
   zoom: .55,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
+  
   const { showSummationLinks, setShowSummationLinks } = useContext(UserContext);
 
   const myDivRef = useRef(null);
@@ -161,7 +162,6 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
               statsSelectedOptions={statsSelectedOptions}
               userDeckData={userDeckData}
               selectedDeck={selectedDeck}
-              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
             />  
             </div>
           )}
@@ -202,7 +202,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           onNodeDoubleClick={onNodeDoubleClick}
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
-          defaultViewport={viewPort}
+          defaultViewport={viewPort} 
+          zoomOnDoubleClick={false}
           className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
         >
         </ReactFlow>
