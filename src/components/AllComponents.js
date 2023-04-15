@@ -302,7 +302,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
-    const allCharactersInDeck = userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters)
+    const allCharactersInDeck = selectedDeck !== '' ? userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters) : []
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -491,6 +491,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           {/* //character select box */}
           <div 
           ref={cardContainerRef}
+          id={'characterContainer'}
           className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
@@ -504,7 +505,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                     `}
-                    // ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && allCharactersInDeck.map((characterInDeck) => characterInDeck.id).includes(character.id) && "grayscale"}
+                    // ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && allCharactersInDeck.map((characterInDeck) => characterInDeck.id) === (character.id) && "grayscale"}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
@@ -517,6 +518,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     individualCharacter={character} 
                     mobileSize={'60px'} 
                     desktopSize={'85px'}
+                    isInDeck={allCharactersInDeck.some(characterInDeck => characterInDeck.id === character.id)}
                     />
                     {/* <AllComponentsCard
                       character={character}
