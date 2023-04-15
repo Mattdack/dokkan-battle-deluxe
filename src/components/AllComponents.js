@@ -455,9 +455,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                           readOnly
                         />
                         <div
-                          onClick={() => {
-                            setMultiCardSelection(!multiCardSelection);
-                          }}
+                          onClick={() => {setMultiCardSelection(!multiCardSelection)}}
                           className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[18%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                         ></div>
                         <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
@@ -502,7 +500,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${grayCharactersInSelectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
+                    ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                   `}
                   onClick={() => {
