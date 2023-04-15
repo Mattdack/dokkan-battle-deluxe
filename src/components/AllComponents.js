@@ -341,7 +341,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   onChange={(e) => handleSelectedDeck(e.target.value)}
                   disabled={allCharactersLoading}
                 >
-                  <option className="font-bold" value='No Deck'>Decks</option>
+                  <option className="font-bold" value=''>Decks</option>
                   {userDeckData.map((deck) => (
                     <option className="font-bold" key={deck._id} value={deck._id}>
                       {deck.name}
