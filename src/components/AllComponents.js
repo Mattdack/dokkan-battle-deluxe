@@ -335,7 +335,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
               {Auth.loggedIn() ? (
                 <select
-                  className={`disabled:bg-gray-500 flex w-full h-full border-black bg-orange-200 rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
+                  className={`disabled:bg-gray-500 flex w-full h-full border-black rounded-r-lg justify-center items-center text-center cursor-pointer ${showCardDetails? "border-2 bg-orange-200" : "border-4 bg-orange-400"}`}
                   id="deckSelect"
                   value={selectedDeck}
                   onChange={(e) => handleSelectedDeck(e.target.value)}
