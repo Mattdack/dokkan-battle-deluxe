@@ -378,7 +378,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: Card selection styling */}
         <div
           id="CardSelection"
-          className={`${showCardSelection ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
+          className={`${(showCardSelection || (windowWidth > 850)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
         >
 
           {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}

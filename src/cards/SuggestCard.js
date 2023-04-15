@@ -79,19 +79,29 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
           </div>
         )}
           <CharacterCard individualCharacter={character} mobileSize={'80px'} desktopSize={'85px'}/>
-          {statsSelectedOptions === "ATK" &&
+          {selectedCharacter.id === character.id && statsSelectedOptions !== 'None' &&
           <div
-            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
-            {linkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
+            className='w-[20px] card-sm:w-[25px] h-[20px] card-sm:h-[25px] border-2 border-black rounded-full bg-green-500 absolute bottom-[5%] right-[7%] z-50'>
+              
           </div>
           }
-          {statsSelectedOptions === "DEF" &&
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "ATK") &&
+          <div
+            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
+            {selectedCharacter.name !== character.name ?
+            linkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+            :
+            0
+            }%
+          </div>
+          }
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "DEF") &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
             {linkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
           </div>
           }
-          {statsSelectedOptions === "Ki" &&
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "Ki") &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
             {linkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}

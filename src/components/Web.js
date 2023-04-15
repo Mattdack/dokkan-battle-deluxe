@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useContext } from "react";
 import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
@@ -9,6 +9,8 @@ import * as linkSkillInfo from "../util/linkSkillInfo";
 
 import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
+
+import { UserContext } from "../App";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
@@ -33,6 +35,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
+  const { showSummationLinks, setShowSummationLinks } = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -124,9 +127,9 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     setExistingEdges((prevEdges) => {
       const updatedEdges = combinedEdgeData.map((edge) => {
         if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
-          return { ...edge, selected: true };
+          return { ...edge, zIndex: 1001, selected: true };
         } else {
-          return { ...edge, selected: false };
+          return { ...edge, zIndex: 1, selected: false };
         }
       });
       return updatedEdges;
@@ -171,14 +174,20 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         />
       </div>
       <div className="h-full bg-slate-700 row-span-6 relative">
-        <button
-        className="p-2 text-md card-sm:text-lg border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg absolute bottom-0 left-0 z-40"
-        onClick={() => handleResetTeam(webOfTeam)}
-        >Reset Team</button>
-        <button
-        className="p-2 text-md card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
-        onClick={() => handleSetShowSuggestedCards()}
-        >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+        <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
+          <button
+          className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
+          onClick={() => handleResetTeam(webOfTeam)}
+          >Reset Team</button>
+          <button
+          className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
+          onClick={() => setShowSummationLinks(!showSummationLinks)}
+          >{showSummationLinks ? '# of Links' : 'Summation'}</button>
+          <button
+          className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
+          onClick={() => handleSetShowSuggestedCards()}
+          >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+        </div>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}
@@ -228,7 +237,7 @@ const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => 
   style: {
     visibility: "visible",
   },
-  zIndex: 1,
+  zIndex: 1003,
   ...existingNode,
 });
 
@@ -250,7 +259,7 @@ const toEdge = (source, target, existingEdge = {}) => {
         targetNode: target,
       },
       labelStyle:
-      {style: {zIndex:1000}},
+      {style: {zIndex:1}},
       source: source.id,
       target: target.id,
       interactionWidth: 0,
