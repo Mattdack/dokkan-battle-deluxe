@@ -302,6 +302,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
+    const allCharactersInDeck = userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters)
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -500,7 +502,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map((char) => char.id)).includes(character.id) && "grayscale"}
+                    ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && allCharactersInDeck.map((characterInDeck) => characterInDeck.id).includes(character.id) && "grayscale"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                   `}
                   onClick={() => {
