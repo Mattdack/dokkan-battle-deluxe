@@ -25,7 +25,7 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -502,9 +502,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && allCharactersInDeck.map((characterInDeck) => characterInDeck.id).includes(character.id) && "grayscale"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
-                  `}
+                    `}
+                    // ${grayCharactersInSelectedDeck && userDeckData && selectedDeck && allCharactersInDeck.map((characterInDeck) => characterInDeck.id).includes(character.id) && "grayscale"}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
