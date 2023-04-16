@@ -10,7 +10,7 @@ const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png"
 const subIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/subleader-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
-const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader, isInDeck }) => {
+const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader, isInDeckArray }) => {
 
     const { grayCharactersInSelectedDeck } = useContext(UserContext);
 
@@ -35,12 +35,14 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
     }
     const characterTypeBackground = cld.image(`rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`)
 
+    const grayCharacter = isInDeckArray.includes(character.id)
+
     return (
         <div 
         className={`
-        flex w-fit justify-center items-center relative`
-        }>
-            {/* ${grayCharactersInSelectedDeck && isInDeck && 'grayscale'} */}
+        flex w-fit justify-center items-center relative
+        ${grayCharactersInSelectedDeck && grayCharacter && 'grayscale'}
+        `}>
             <AdvancedImage
                 className={`w-[${mobileSize}] card-sm:w-[${desktopSize}] bottom-[5%] bg-no-repeat relative z-40`}
                 cldImg={characterThumb}
