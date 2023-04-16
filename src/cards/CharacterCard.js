@@ -35,7 +35,7 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
     }
     const characterTypeBackground = cld.image(`rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`)
 
-    const grayCharacter = isInDeckArray.includes(character.id)
+    const grayCharacter = isInDeckArray?.includes(individualCharacter.id)
 
     return (
         <div 
