@@ -331,8 +331,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       await cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
       setViewableCharacters(100);
       setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck);
-    };
-    
+    };    
     
 
   return (
@@ -561,8 +560,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
-                    ${grayCharactersInSelectedDeck && allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id) && "grayscale"}
                     `}
+                    // ${grayCharactersInSelectedDeck && allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id) && "grayscale"}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
@@ -575,7 +574,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     individualCharacter={character} 
                     mobileSize={'60px'} 
                     desktopSize={'85px'}
-                    // isInDeck={allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id)}
+                    isInDeck={allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id)}
                     />
                     {/* <AllComponentsCard
                       character={character}
