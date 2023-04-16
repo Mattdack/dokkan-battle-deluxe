@@ -221,6 +221,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const cardContainerRef = useRef(null);
   const handleNewCategorySelected = (e) => {
+    setViewableCharacters(100)
     if(e.target.value === ''){
       cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
       return setSelectedCategories([])
@@ -302,7 +303,37 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
-    const allCharacterIDsInDeck = selectedDeck !== '' ? userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map(character => character.id)) : []
+    const allCharacterIDsInDeck = useMemo(() => {
+      return userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map(character => character.id)) || []
+    }, [selectedDeck]);
+
+    // this useEffect is for automatically loading characters by increasing the viewableCharacters
+    const [viewableCharacters, setViewableCharacters] = useState(100);
+    useEffect(() => {
+      if(cardContainerRef.current !== null){
+        const cardContainer = cardContainerRef.current;
+    
+        const handleScroll = () => {
+          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 500)) {
+            setViewableCharacters(viewableCharacters + 100);
+          }
+        };
+    
+        cardContainer.addEventListener("scroll", handleScroll);
+    
+        return () => {
+          cardContainer.removeEventListener("scroll", handleScroll);
+        };
+      }
+    }, [allCharactersLoading, viewableCharacters]);
+
+    const handleGrayCharacters = async () => {
+      await cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      setViewableCharacters(100);
+      setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck);
+    };
+    
+    
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -493,7 +524,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                               readOnly
                             />
                             <div
-                              onClick={() => {setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck)}}
+                              onClick={() => handleGrayCharacters()}
                               className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                             ></div>
                             <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
@@ -522,7 +553,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
                 // .filter((character) => character.glb_date !== null)
-                // .slice(0, viewableCharacters)
+                .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
                   key={character.id}
