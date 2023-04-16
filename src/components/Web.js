@@ -31,7 +31,7 @@ const viewPort = {
   zoom: .55,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, showSuggestedCards, handleSetShowSuggestedCards }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
@@ -160,8 +160,6 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
               removeFromWebOfTeam={removeFromWebOfTeam}
               addToWebOfTeam={addToWebOfTeam}
               statsSelectedOptions={statsSelectedOptions}
-              userDeckData={userDeckData}
-              selectedDeck={selectedDeck}
             />  
             </div>
           )}

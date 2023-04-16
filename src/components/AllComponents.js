@@ -598,8 +598,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             removeFromWebOfTeam={removeFromWebOfTeam}
             allCharacters={allCharacters}
             allCharactersLoading={allCharactersLoading}
-            selectedDeck={selectedDeck}
-            userDeckData={userDeckData}
           />
         </div>
       </div>

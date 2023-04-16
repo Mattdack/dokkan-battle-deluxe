@@ -7,8 +7,9 @@ import CharacterCard from './CharacterCard'
 
 import { UserContext } from "../App";
 
-function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck }) {
+function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions }) {
   const { grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext)
+
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
@@ -16,12 +17,6 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
   }, [webOfTeam]);
 
   const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
-
-  const selectedDeckObj = userDeckData.find(deck => deck._id === selectedDeck) || []
-  const selectedDeckTeams = selectedDeckObj.teams || []
-  useEffect(() => {
-    setIsInSelectedDeck(selectedDeckTeams.flatMap(team => team.characters.map(char => char.id)).includes(character.id));
-  }, [selectedDeck]);
 
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
@@ -57,7 +52,10 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
       <div
         ref={ref}
         onClick={handleCardClick}
-        className={`${grayCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
+        className={`
+        w-fit relative hover:bg-slate-900/[.4]
+        `}
+        // ${grayCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} 
       >
         {isCardClicked && (
           <div className="absolute z-[900]">
