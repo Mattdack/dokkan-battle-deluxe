@@ -221,7 +221,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const cardContainerRef = useRef(null);
   const handleNewCategorySelected = (e) => {
-    setViewableCharacters(100)
+    // setViewableCharacters(100)
     if(e.target.value === ''){
       cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
       return setSelectedCategories([])
@@ -307,29 +307,29 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       return userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map(character => character.id)) || []
     }, [selectedDeck]);
 
-    // this useEffect is for automatically loading characters by increasing the viewableCharacters
-    const [viewableCharacters, setViewableCharacters] = useState(100);
-    useEffect(() => {
-      if(cardContainerRef.current !== null){
-        const cardContainer = cardContainerRef.current;
+    // // this useEffect is for automatically loading characters by increasing the viewableCharacters
+    // const [viewableCharacters, setViewableCharacters] = useState(100);
+    // useEffect(() => {
+    //   if(cardContainerRef.current !== null){
+    //     const cardContainer = cardContainerRef.current;
     
-        const handleScroll = () => {
-          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 500)) {
-            setViewableCharacters(viewableCharacters + 100);
-          }
-        };
+    //     const handleScroll = () => {
+    //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 500)) {
+    //         setViewableCharacters(viewableCharacters + 100);
+    //       }
+    //     };
     
-        cardContainer.addEventListener("scroll", handleScroll);
+    //     cardContainer.addEventListener("scroll", handleScroll);
     
-        return () => {
-          cardContainer.removeEventListener("scroll", handleScroll);
-        };
-      }
-    }, [allCharactersLoading, viewableCharacters]);
+    //     return () => {
+    //       cardContainer.removeEventListener("scroll", handleScroll);
+    //     };
+    //   }
+    // }, [allCharactersLoading, viewableCharacters]);
 
     const handleGrayCharacters = async () => {
-      await cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-      setViewableCharacters(100);
+      // await cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      // setViewableCharacters(100);
       setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck);
     };    
     
@@ -552,7 +552,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
                 // .filter((character) => character.glb_date !== null)
-                .slice(0, viewableCharacters)
+                // .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
                   key={character.id}
