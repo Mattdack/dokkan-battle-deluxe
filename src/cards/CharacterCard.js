@@ -12,7 +12,7 @@ const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader, isInDeckArray }) => {
 
-    const { grayCharactersInSelectedDeck } = useContext(UserContext);
+    // const { grayCharactersInSelectedDeck } = useContext(UserContext);
 
     // Set the Cloud configuration and URL configuration
     const cld = new Cloudinary({
@@ -35,14 +35,12 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
     }
     const characterTypeBackground = cld.image(`rarities-types/${individualCharacter.type.slice(1,4).toLowerCase()}-background`)
 
-    const grayCharacter = isInDeckArray?.includes(individualCharacter.id)
-
     return (
         <div 
         className={`
         flex w-fit justify-center items-center relative
-        ${grayCharactersInSelectedDeck && grayCharacter && 'grayscale'}
         `}>
+            {/* ${grayCharactersInSelectedDeck && SOMETHING && 'grayscale'} */}
             <AdvancedImage
                 className={`w-[${mobileSize}] card-sm:w-[${desktopSize}] bottom-[5%] bg-no-repeat relative z-40`}
                 cldImg={characterThumb}
@@ -73,6 +71,6 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
             />
         </div>
     );
-    })
+})
 
 export default memo(CharacterCard);
