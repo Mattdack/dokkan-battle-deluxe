@@ -25,7 +25,7 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -303,8 +303,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
-    const allCharacterIDsInDeck = useMemo(() => {
-      return userDeckData.find((deck) => deck._id === selectedDeck)?.teams.flatMap((team) => team.characters.map(character => character.id)) || []
+    useEffect(() => {
+      const newIDs = userDeckData.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)) || [];
+      setAllCharacterIDsInDeck(newIDs);
     }, [selectedDeck]);
 
     // this useEffect is for automatically loading characters by increasing the viewableCharacters
@@ -553,7 +554,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     cursor-pointer
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
-                    ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "grayscale" : ""}
+                    ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "grayscaleCSS" : ""}
                     `}
                   onClick={() => {
                     if (multiCardSelection) {

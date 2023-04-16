@@ -10,7 +10,7 @@ const friendIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/friend-icon.png"
 const subIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/subleader-icon.png";
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
-const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader,  }) => {
+const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader }) => {
 
     // const { grayCharactersInSelectedDeck } = useContext(UserContext);
 

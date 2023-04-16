@@ -43,6 +43,7 @@ function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(false)
   const [showSummationLinks, setShowSummationLinks] = useState(false)
   const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
+  const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
@@ -53,7 +54,9 @@ function App() {
             showSummationLinks: showSummationLinks,
             setShowSummationLinks: setShowSummationLinks,
             grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,
-            setGrayCharactersInSelectedDeck: setGrayCharactersInSelectedDeck
+            setGrayCharactersInSelectedDeck: setGrayCharactersInSelectedDeck,
+            allCharacterIDsInDeck: allCharacterIDsInDeck,
+            setAllCharacterIDsInDeck, setAllCharacterIDsInDeck
              }}>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />

@@ -20,6 +20,10 @@ img {
   overflow: overlay;
 }
 
+.grayscaleCSS {
+  filter: brightness(40%);
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:
