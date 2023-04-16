@@ -327,13 +327,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     //   }
     // }, [allCharactersLoading, viewableCharacters]);
 
-    const handleGrayCharacters = async () => {
-      // await cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-      // setViewableCharacters(100);
-      setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck);
-    };    
-    
-
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -523,7 +516,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                               readOnly
                             />
                             <div
-                              onClick={() => handleGrayCharacters()}
+                              onClick={() => setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck)}
                               className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                             ></div>
                             <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
@@ -558,10 +551,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   key={character.id}
                   className={`
                     cursor-pointer
+                    ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "grayscale" : ""}
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                     `}
-                    // ${grayCharactersInSelectedDeck && allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id) && "grayscale"}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
@@ -574,7 +567,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     individualCharacter={character} 
                     mobileSize={'60px'} 
                     desktopSize={'85px'}
-                    isInDeck={allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id)}
+                    // isInDeck={allCharacterIDsInDeck.some(characterInDeck => characterInDeck === character.id)}
                     />
                     {/* <AllComponentsCard
                       character={character}
