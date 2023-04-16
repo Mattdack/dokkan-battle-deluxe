@@ -61,7 +61,7 @@ const CustomEdge = (props) => {
           onClick={() => handleShowLinkInfo()}
         >
           {!showLinkInfo ? 
-            showSummationLinks ?
+            edgeSelected && showSummationLinks ?
               <div className="flex flex-col p-1 justify-center items-center">
                 <p className="text-base">ATK: {summationLinkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%</p>
                 <p className="text-base">DEF: {summationLinkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%</p>
