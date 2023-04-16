@@ -17,12 +17,21 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                 <p className="font-header w-full h-fit border-b-4 border-black text-2xl card-sm:text-4xl text-center bg-orange-300">Updates</p>
 
                 <div className="flex flex-wrap justify-around">
+                  <NewsDiv date={'APR/16/2023'} information={<>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Just a little style and processing update. Was making ultimate clash teams in one of my decks on my phone and realized once I had too many teams in a deck, my browser would crash when I tried to 'Gray Characters in Deck'. The issue was that just enough processing power was needed to filter through the characters and add a grayscale effect on them that a computer could do it easily, but on a phone it would crash the browser. I found a quick solution to simply just gray out the entire character when the mode is switched to on. Doesn't look as cool, but works perfectly. Taking a little break this week and then off to add the ability for people to edit team posts (debating adding the ability to edit comments and replies), work on transoforming characters, and then maybe adding SSRs. There is also some back end stuff I want to attend to. Until then, enjoy the app!</p>
+                    {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
+                    </>}
+                    key={'Update 5'}
+                  />
+                </div>
+
+                <div className="flex flex-wrap justify-around">
                   <NewsDiv date={'APR/13/2023'} information={<>
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">SUPER PUMPED for this update.....Japan units are now supported! We also did a ton of more styling changes, mostly optimizing mobile settings so the app is easier to use on a phone. We have added in smooth scrolling through all characters (this has been an issue we have been trying to tackle for 2 months now and finally got it!), single tap character addition to teams (it seems like this is the best way to go), and allowing for players to suggest characters that are already in their team web, and lastly a way better mobile design to allow functionality on all platforms/browsers. We have been working tirelessly to have the mobile version be easy to use, and we can proudly say we are happy with where it is at now.</p>
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">We still have some styling changes to do (deciding whether to put the card details on the page or have it as a pop-up option). Next on the list of updates is filtering characters on the home page and teams on the strategy page by GLB or JPN units and then we will add transforming characters and then hopefully SSRs after.</p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>}
-                    key={1}
+                    key={'Update 4'}
                   />
                 </div>
 
@@ -32,7 +41,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Also a very exciting update, we changed the team web format. It is now centered on characters, instead of the edges. We think this makes a better and more seemless design. Next on the list is to add Japan units. This will take a bit longer just because we need to gather all the data and make sure everything checks out.</p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>}
-                    key={1}
+                    key={'Update 3'}
                   />
                 </div>
 
@@ -42,7 +51,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">We have decided to reorient the page a bit due to some user input on the page being too cluttered. We really wanted to make this page highly focused on the ability to form and generate teams. So with that, we decided to keep the page format to a two-column layout on both pages. On the main team generating page, we allow users to select the option "Show Card Details and Decks" to reveal the middle column (this column is automatically viewable on a mobile device). Then, the strategy section is also split into two sections. The team specifics/info are now viewable in a pop-up and can be accessed by clicking on them. Again, for any feedback (positive or negative) or any errors to report, please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>google form</a>.</p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>}
-                    key={1}
+                    key={'Update 2'}
                   />
                 </div>
                 <div className="flex flex-wrap justify-around">
@@ -50,7 +59,7 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">The strategy section is now available! You can access it <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/strategy`}>here</a>. With this new update we are allowing users to post teams to specific stages. Over time, we will keep adding more stages and also be updating them as more stages are added to events and more events are added to the game. We also made a <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/help`}>help page</a> which can be accessed in the drop-down menu at the top right of the page. Also, the new News & Update pages to give our users information on what we have built, what we are working on, and what is coming next. We Hope you continue to enjoy our app! If you have any input (positive or negative) please go to the help page and fill out the <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>google form</a>.</p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>} 
-                    key={1}
+                    key={'Update 1'}
                   />
                 </div>
               </div>
