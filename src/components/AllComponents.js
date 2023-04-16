@@ -551,10 +551,9 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   <div
                   key={character.id}
                   className={`
-                    cursor-pointer
+                    cursor-pointer relative
                     ${webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
-                    ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "grayscaleCSS" : ""}
                     `}
                   onClick={() => {
                     if (multiCardSelection) {
@@ -564,6 +563,10 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     }
                   }}
                   >
+                    <div className={`
+                    absolute h-[60px] card-sm:h-[85px] w-[60px] card-sm:w-[85px] bg-black
+                    ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "" : "hidden"}
+                    `}></div>
                     <CharacterCard 
                     individualCharacter={character} 
                     mobileSize={'60px'} 
