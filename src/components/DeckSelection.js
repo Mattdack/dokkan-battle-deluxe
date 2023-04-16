@@ -134,7 +134,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
         {webOfTeam.length < 6 && <p className="w-full border border-black text-sm lg:text-base text-center rounded-lg bg-orange-200/[.75]">*team must have 6 to 7 characters in it to add it to a deck</p>}
       </div>
 
-      <div className="flex p-2 justify-center items-center">
+      {/* <div className="flex p-2 justify-center items-center">
           <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
             Gray Characters In Deck
           </h2>
@@ -155,12 +155,12 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
               </span>
             </label>
           </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-wrap w-full p-2 justify-around" key={allTeams}>
         {allTeams ? allTeams.map(team => (
           <div key={team._id} className='flex flex-col w-full max-w-[400px] lg:max-w-full pb-12 px-4 mb-2 border-4 border-black rounded-lg justify-around bg-orange-200 hover:bg-orange-400 relative'> 
-              <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-10 h-fit w-full p-1 mt-2 mr-2 text-center hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/>
+              <img src={editIcon} onClick={() => handleEditTeamInfo(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mt-2 mr-2 text-center hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 right-0 cursor-pointer"/>
               <img src={trashIcon} onClick={() => handleWarningModal(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 mr-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 right-0 cursor-pointer"/>
               <img src={teamToWebIcon} title='clear current team web and add this team to web' onClick={() => handleAddTeamToWeb(team)} className="w-8 card-sm:w-10 h-8 card-sm:h-10 p-1 mb-1 ml-1 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute bottom-0 left-0 cursor-pointer"/>
               {/* <button disabled={!team.info.leader || window.innerHeight<1080} onClick={() => handleTeamAnalytics(team)} className="disabled:opacity-100 w-10 h-fit p-1 mt-2 ml-2 hover:bg-gray-500/[.75] transition ease-in-out rounded-lg z-50 absolute top-0 left-0">
