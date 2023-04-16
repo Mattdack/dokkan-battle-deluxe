@@ -40,9 +40,9 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
     return (
             <div 
             className={`
-            ${grayCharactersInSelectedDeck && isInDeck && 'grayscale'}
             flex w-fit justify-center items-center relative`
             }>
+            {/* ${grayCharactersInSelectedDeck && isInDeck && 'grayscale'} */}
                 <AdvancedImage
                     className={`w-[${mobileSize}] card-sm:w-[${desktopSize}] bottom-[5%] bg-no-repeat relative z-40`}
                     cldImg={characterThumb}
