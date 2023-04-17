@@ -145,7 +145,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   return (
     <div ref={myDivRef} className={`h-full relative`}>
-      <div className="flex flex-1 w-full absolute z-[995]">
+      <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div
@@ -167,7 +167,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <img 
           src={rightArrowIcon}
           onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
-          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          className={`${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2 w-[7.5%] card-sm:w-[7%] ' : 'border-r-2 w-3/4'} border-b-2 border-black bg-slate-800 cursor-pointer`}
           title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
         />
       </div>
