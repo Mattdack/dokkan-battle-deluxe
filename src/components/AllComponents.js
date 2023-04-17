@@ -287,7 +287,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [openNewsModal, setOpenNewsModal] = useState(false)
     const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
     const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
-    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000)) {
+    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
       localStorage.setItem('firstLogInNewShow', 'true');
       localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
