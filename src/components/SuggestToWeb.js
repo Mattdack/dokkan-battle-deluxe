@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 import Web from "./Web";
 import SuggestForm from "./SuggestForm";
@@ -8,8 +8,6 @@ import CharacterCard from "../cards/CharacterCard";
 import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
-
-
 
 function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
