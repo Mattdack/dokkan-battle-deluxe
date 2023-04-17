@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Auth from "../util/auth";
 
 import HamburgerModal from "../modals/HamburgerModal"
@@ -24,12 +24,25 @@ const AppNavbar = (
     window.location.assign(window.location.origin + '/strategy')
   }
 
+  // this allows the screen to change sizes and auto update revealing/hiding the middle column
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [window.innerWidth]);
+
   return (
     <div className="flex flex-col w-screen p-2 justify-between items-center border-b-4 border-black bg-slate-700">
       <div className="flex w-full p-2 justify-between items-center">
         <img onClick={(e) => (webLocationObject.pathname === ('/strategy') || webLocationObject.pathname === ('/help')) ? handleToTeamBuild(e) : handleToStrategy(e) }
         src={logo} alt='Dokkan Battle Helper' className="h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh] cursor-pointer" />
-          {/* hamburger button */}
+        
+        {/* hamburger button */}
         <div className="flex">
           <button
             className="flex flex-col h-12 w-12 border-2 border-black rounded justify-center items-center group relative"

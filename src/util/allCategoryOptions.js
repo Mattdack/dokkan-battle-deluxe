@@ -1,4 +1,5 @@
 const allCategoryOptions = [
+<option value="" key="all-categories">All Categories</option>,
 <option value="Accelerated Battle" key="accelerated-battle">Accelerated Battle</option>,
 <option value="All-Out Struggle" key="all-out-struggle">All-Out Struggle</option>,
 <option value="Androids" key="androids">Androids</option>,

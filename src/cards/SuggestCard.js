@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useContext } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
 import CharacterCard from './CharacterCard'
 
-function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck }) {
+import { UserContext } from "../App";
+
+function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions }) {
+  const { grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext)
+
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
@@ -12,12 +17,6 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
   }, [webOfTeam]);
 
   const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
-
-  const selectedDeckObj = userDeckData.find(deck => deck._id === selectedDeck) || []
-  const selectedDeckTeams = selectedDeckObj.teams || []
-  useEffect(() => {
-    setIsInSelectedDeck(selectedDeckTeams.flatMap(team => team.characters.map(char => char.id)).includes(character.id));
-  }, [selectedDeck]);
 
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
@@ -53,7 +52,10 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
       <div
         ref={ref}
         onClick={handleCardClick}
-        className={`${showCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} w-fit relative hover:bg-slate-900/[.4]`}
+        className={`
+        w-fit relative hover:bg-slate-900/[.4]
+        `}
+        // ${grayCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} 
       >
         {isCardClicked && (
           <div className="absolute z-[900]">
@@ -79,19 +81,29 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
           </div>
         )}
           <CharacterCard individualCharacter={character} mobileSize={'80px'} desktopSize={'85px'}/>
-          {statsSelectedOptions === "ATK" &&
+          {selectedCharacter.id === character.id && statsSelectedOptions !== 'None' &&
           <div
-            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
-            {linkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
+            className='w-[20px] card-sm:w-[25px] h-[20px] card-sm:h-[25px] border-2 border-black rounded-full bg-green-500 absolute bottom-[5%] right-[7%] z-50'>
+              
           </div>
           }
-          {statsSelectedOptions === "DEF" &&
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "ATK") &&
+          <div
+            className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
+            {selectedCharacter.name !== character.name ?
+            linkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+            :
+            0
+            }%
+          </div>
+          }
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "DEF") &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
             {linkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}%
           </div>
           }
-          {statsSelectedOptions === "Ki" &&
+          {(selectedCharacter.id !== character.id && statsSelectedOptions === "Ki") &&
           <div
             className='flex w-[30px] card-sm:w-[40px] px-5 card-sm:px-6 justify-center items-center text-center border-2 border-black rounded-full bg-orange-200 text-sm card-sm:text-base text-black font-bold absolute bottom-[4%] right-[0%] z-50'>
             {linkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}

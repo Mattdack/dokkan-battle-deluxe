@@ -20,7 +20,7 @@ function WebCard({ id, data: { midpoint, ...character }, xPos, yPos }) {
 
 
   return (
-  <div className="relative w-[125px] h-[125px]">
+  <div style={{zIndex: 5000}} className="relative w-[125px] h-[125px]">
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <Handle type="source" position="top"/>
       <Handle type="target" position="bottom"/>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useContext } from "react";
 import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
@@ -9,6 +9,8 @@ import * as linkSkillInfo from "../util/linkSkillInfo";
 
 import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
+
+import { UserContext } from "../App";
 
 // TODO: there wasn't a way to just import the style.css for the reactflow so for now I am just placing it in the index.css
 import "reactflow/dist/style.css";
@@ -29,10 +31,12 @@ const viewPort = {
   zoom: .55,
 };
 
-function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, userDeckData, selectedDeck, showCharactersInSelectedDeck, showSuggestedCards, handleSetShowSuggestedCards }) {
+function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, showSuggestedCards, handleSetShowSuggestedCards }) {
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
+  
+  const { showSummationLinks, setShowSummationLinks } = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -42,9 +46,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
-  }, [allCharactersLoading, showSuggestedCards]);
-  
-  console.log(webHeight)
+  }, [allCharactersLoading, showSuggestedCards, window.innerWidth]);
   
   const onNodesChange = useCallback(
     (changes) => {
@@ -126,9 +128,9 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     setExistingEdges((prevEdges) => {
       const updatedEdges = combinedEdgeData.map((edge) => {
         if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
-          return { ...edge, selected: true };
+          return { ...edge, zIndex: 1001, selected: true };
         } else {
-          return { ...edge, selected: false };
+          return { ...edge, zIndex: 1, selected: false };
         }
       });
       return updatedEdges;
@@ -143,7 +145,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   return (
     <div ref={myDivRef} className={`h-full relative`}>
-      <div className="flex flex-1 w-full absolute z-[995]">
+      <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
           {webOfTeam.map(character => 
             <div
@@ -158,9 +160,6 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
               removeFromWebOfTeam={removeFromWebOfTeam}
               addToWebOfTeam={addToWebOfTeam}
               statsSelectedOptions={statsSelectedOptions}
-              userDeckData={userDeckData}
-              selectedDeck={selectedDeck}
-              showCharactersInSelectedDeck={showCharactersInSelectedDeck}
             />  
             </div>
           )}
@@ -168,19 +167,25 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <img 
           src={rightArrowIcon}
           onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
-          className={`w-[7.5%] card-sm:w-[5%] ${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2' : 'border-r-2'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+          className={`${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2 w-[7.5%] card-sm:w-[7%] ' : 'border-r-2 w-3/4'} border-b-2 border-black bg-slate-800 cursor-pointer`}
           title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
         />
       </div>
       <div className="h-full bg-slate-700 row-span-6 relative">
-        <button
-        className="p-2 text-md card-sm:text-lg border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg absolute bottom-0 left-0 z-40"
-        onClick={() => handleResetTeam(webOfTeam)}
-        >Reset Team</button>
-        <button
-        className="p-2 text-md card-sm:text-lg border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg absolute bottom-0 right-0 z-40"
-        onClick={() => handleSetShowSuggestedCards()}
-        >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+        <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
+          <button
+          className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
+          onClick={() => handleResetTeam(webOfTeam)}
+          >Reset Team</button>
+          <button
+          className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
+          onClick={() => setShowSummationLinks(!showSummationLinks)}
+          >{showSummationLinks ? '# of Links' : 'Summation'}</button>
+          <button
+          className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
+          onClick={() => handleSetShowSuggestedCards()}
+          >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+        </div>
         <ReactFlow
           nodes={combinedNodeData}
           edges={combinedEdgeData}
@@ -195,7 +200,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           onNodeDoubleClick={onNodeDoubleClick}
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
-          defaultViewport={viewPort}
+          defaultViewport={viewPort} 
+          zoomOnDoubleClick={false}
           className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
         >
         </ReactFlow>
@@ -215,10 +221,11 @@ const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
 };
 
 const startingPosition = (webWidth, webHeight) => {
-  if (webHeight === null || typeof webWidth === 'undefined'){
-    return {x: 0, y:0}
+  if (webWidth === 0 || webHeight === null || typeof webWidth === undefined){
+    return {x: window.innerWidth-125, y:window.innerHeight-200}
+  } else {
+    return {x: webWidth-125, y: webHeight-125}
   }
-  return {x: webWidth-125, y: webHeight-125}
 };
 
 const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => ({
@@ -229,7 +236,7 @@ const toNode = (character, midpoint, existingNode = {}, webWidth, webHeight) => 
   style: {
     visibility: "visible",
   },
-  zIndex: 1,
+  zIndex: 1003,
   ...existingNode,
 });
 
@@ -251,7 +258,7 @@ const toEdge = (source, target, existingEdge = {}) => {
         targetNode: target,
       },
       labelStyle:
-      {style: {zIndex:1000}},
+      {style: {zIndex:1}},
       source: source.id,
       target: target.id,
       interactionWidth: 0,

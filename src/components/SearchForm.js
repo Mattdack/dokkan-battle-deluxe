@@ -167,22 +167,42 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
             </div>
           </div>
 
-          <div className="flex w-fit justify-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
-            <label htmlFor="isUserDeck">
-              <input
-                type="checkbox"
-                name="isUserDeck"
-                id="isUserDeck"
-                className="hidden peer"
-                value={true}
-              />
-              <div
-                style={{ cursor: "pointer" }}
-                className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
-              >
-                Characters Saved
-              </div>
-            </label>
+          <div className="flex w-full justify-between order-5">
+            <div className="flex w-fit justify-center bg-orange-300 rounded-md border-2 border-slate-900">
+              <label htmlFor="isCommonLeader">
+                <input
+                  type="checkbox"
+                  name="isCommonLeader"
+                  id="isCommonLeader"
+                  className="hidden peer"
+                  value={true}
+                />
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                >
+                  Common Leaders
+                </div>
+              </label>
+            </div>
+
+            <div className="flex w-fit justify-center bg-orange-300 rounded-md border-2 border-slate-900">
+              <label htmlFor="isUserDeck">
+                <input
+                  type="checkbox"
+                  name="isUserDeck"
+                  id="isUserDeck"
+                  className="hidden peer"
+                  value={true}
+                />
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+                >
+                  Characters Saved
+                </div>
+              </label>
+            </div>
           </div>
 
 

@@ -41,11 +41,23 @@ const AllStrategiesWithData = withData(AllStrategy);
 
 function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(false)
+  const [showSummationLinks, setShowSummationLinks] = useState(false)
+  const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
+  const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
         <div className="app">
-          <UserContext.Provider value={{ showMiddleDiv: showMiddleDiv, setShowMiddleDiv: setShowMiddleDiv }}>
+          <UserContext.Provider value={{ 
+            showMiddleDiv: showMiddleDiv, 
+            setShowMiddleDiv: setShowMiddleDiv,
+            showSummationLinks: showSummationLinks,
+            setShowSummationLinks: setShowSummationLinks,
+            grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,
+            setGrayCharactersInSelectedDeck: setGrayCharactersInSelectedDeck,
+            allCharacterIDsInDeck: allCharacterIDsInDeck,
+            setAllCharacterIDsInDeck, setAllCharacterIDsInDeck
+             }}>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />
               <Route exact path='/strategy' element={<AllStrategiesWithData />} />
