@@ -8,15 +8,13 @@ import CharacterCard from './CharacterCard'
 import { UserContext } from "../App";
 
 function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions }) {
-  const { grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck } = useContext(UserContext)
+  const { grayCharactersInSelectedDeck, allCharacterIDsInDeck } = useContext(UserContext)
 
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
   useEffect(() => {
     setIsInWeb(webOfTeam.map((char) => char.id).includes(character.id));
   }, [webOfTeam]);
-
-  const [isInSelectedDeck, setIsInSelectedDeck] = useState([])
 
   //logic for card click...allows for div to close when click outside of card is made
   const [isCardClicked, setIsCardClicked] = useState(false);
@@ -57,8 +55,12 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
         `}
         // ${grayCharactersInSelectedDeck && isInSelectedDeck ? 'grayscale' : ''} 
       >
+        <div className={`
+        absolute h-[80px] card-sm:h-[85px] w-[80px] card-sm:w-[85px] bg-gray-900 z-[60] opacity-70
+        ${(grayCharactersInSelectedDeck && allCharacterIDsInDeck.includes(character.id)) ? "" : "hidden"}
+        `}></div>
         {isCardClicked && (
-          <div className="absolute z-[900]">
+          <div className="absolute z-[59]">
             {isInWeb ? <div 
             className="flex w-[80px] card-sm:w-[85px] h-[40px] card-sm:h-[43px] border-4 border-black font-header font-light text-sm card-sm:text-md justify-center items-center text-center bg-red-500 hover:bg-red-700 rounded-t-lg abosolute"
             onClick={() =>  removeFromWebOfTeam(character)}
