@@ -2,3 +2,5 @@
 REACT_APP_API_KEY=
 REACT_APP_CLOUD_NAME=
 REACT_APP_API_LINK=
+
+also, ensure that the redirect for the character edit is in

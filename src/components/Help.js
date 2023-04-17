@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Auth from "../util/auth";
 
+import Navbar from "../components/Navbar"
+
 import {  } from "@apollo/client";
 import {  } from "../util/queries";
 import {  } from "../util/mutations";
@@ -23,7 +25,8 @@ function Help() {
     const [showTeamBuildHelp, setShowTeamBuildHelp] = useState(true)
 
   return (
-    <div className="flex flex-col w-full h-[90vh] card-sm:px-20 items-center bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto">
+    <div className="flex flex-1 flex-col w-full card-sm:px-20 items-center bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto">
+        <Navbar />
         <p className="font-header w-full text-5xl text-center">Welcome to Dokkan Battle Helper!</p>
         <div className="p-4 m-4 bg-orange-200 border-4 border-black">
             <p className="font-header text-3xl">Why Dokkan Battle Helper?</p>
