@@ -33,4 +33,4 @@ yarn-error.log*
 /_redirects
 
 #components-api folder hidden
-/components-api
+/src/components-api
