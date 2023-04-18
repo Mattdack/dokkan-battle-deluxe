@@ -4,6 +4,7 @@ export const QUERY_CHARACTERS = gql`
 query Characters {
   characters {
     id
+    wiki_link
     thumb
     art
     name
@@ -40,6 +41,15 @@ query Characters {
   }
 }
 `;
+
+export const GET_CHARACTER_WIKI_LINK = gql `
+query CharacterWikiLink($dokkanId: Int) {
+  characterWikiLink(dokkanId: $dokkanId) {
+    wiki_link
+  }
+}
+`
+;
 
 export const GET_USERCHARACTERSBYID = gql`
 query CharactersWithIds($dokkanIds: [Int]) {

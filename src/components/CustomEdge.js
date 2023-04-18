@@ -1,5 +1,3 @@
-import { data } from "autoprefixer";
-import { all } from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { EdgeProps, getStraightPath, EdgeLabelRenderer, useEdgesState } from "reactflow";
 import * as linkSkillInfo from "../util/linkSkillInfo";

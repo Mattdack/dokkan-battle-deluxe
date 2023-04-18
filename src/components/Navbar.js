@@ -14,14 +14,27 @@ const AppNavbar = (
 
   const webLocationObject = window.location
 
-  function handleToTeamBuild (e) {
-    e.stopPropagation()
-    window.location.assign(window.location.origin)
+  function handleToTeamBuild() {
+    window.location.assign(window.location.origin);
   }
-
-  function handleToStrategy (e) {
-    e.stopPropagation()
-    window.location.assign(window.location.origin + '/strategy')
+  
+  function handleToStrategy() {
+    window.location.assign(window.location.origin + '/strategy');
+  }
+  
+  const currentPath = window.location.pathname;
+  
+  let linkToRender;
+  if (currentPath === '/strategy') {
+    linkToRender = {
+      url: '/',
+      onClick: handleToTeamBuild
+    };
+  } else {
+    linkToRender = {
+      url: '/strategy',
+      onClick: handleToStrategy
+    };
   }
 
   // this allows the screen to change sizes and auto update revealing/hiding the middle column
@@ -39,8 +52,9 @@ const AppNavbar = (
   return (
     <div className="flex flex-col w-screen p-2 justify-between items-center border-b-4 border-black bg-slate-700">
       <div className="flex w-full p-2 justify-between items-center">
-        <img onClick={(e) => (webLocationObject.pathname === ('/strategy') || webLocationObject.pathname === ('/help')) ? handleToTeamBuild(e) : handleToStrategy(e) }
-        src={logo} alt='Dokkan Battle Helper' className="h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh] cursor-pointer" />
+        <a href={linkToRender.url} onClick={linkToRender.onClick}>
+          <img src={logo} alt='Dokkan Battle Helper' className="h-[3vh] sm:h-[4vh] logo-md:h-[6vh] md:h-[7.2vh] cursor-pointer" />
+        </a>
         
         {/* hamburger button */}
         <div className="flex">
