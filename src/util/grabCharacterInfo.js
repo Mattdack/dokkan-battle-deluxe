@@ -172,7 +172,7 @@ export default function getCharacterInfo (characterInfo) {
                 charCost.push(myline.replace('|cost', '').replace(':', '"', 1).replace('" ','').replace('\n', '",\n'))
             }
             if (myline.includes('|ID:')){
-                charID.push(myline.replace('|ID', '').replace('ID', 'id').replace(':', ': ', 1).replace('\n', ',\n'))
+                charID.push(myline.replace('|ID', '').replace('ID', 'id').replace(':', '', 1).replace('\n', ',\n'))
             }
             if (myline.includes('|LS description:')){
                 charLS.push(myline.replace('|LS description', '').replace("LS description", "ls_description").replace(':', '"', 1).replace('" ','').replace('\n', '",\n'))

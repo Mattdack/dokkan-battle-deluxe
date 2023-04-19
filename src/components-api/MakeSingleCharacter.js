@@ -2,11 +2,14 @@ import React, { useState, useEffect, useMemo } from 'react'
 
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
-import { GET_CHARACTER_WIKI_LINK } from "../util/queries";
+import { ADD_CHARACTER } from "../util/mutations";
+
 
 import getCharacterInfo from '../util/grabCharacterInfo';
 
-export default function SingleCharacterSearch({ selectedCharacterId }) {
+export default function MakeSingleCharacter({ }) {
+  const [addCharacter,{ error: addCharacterError, data: addCharacterData }] = useMutation(ADD_CHARACTER);
+
   const [newCharacterInput, setNewCharacterInput] = useState('')
   const [characterClean, setCharacterClean] = useState({
     id: '',
@@ -47,33 +50,94 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
     glb_date_eza: '',
 })
 
-    const [getCharacterLink, { loading: characterLinkLoading, data: characterLinkData }] = useLazyQuery(GET_CHARACTER_WIKI_LINK, {
-        variables: {
-            dokkanId: selectedCharacterId
-        }
-    })
+  function characterFormChange(e) {
+    e.preventDefault()
+    console.log(newCharacterInput)
+    setCharacterClean(getCharacterInfo(newCharacterInput))
+  }
 
-    useEffect(()=>{
-        getCharacterLink()
-    },[selectedCharacterId])
-
-    const characterLink = useMemo(() => {
-        return characterLinkData?.characterWikiLink?.wiki_link
-    }, [characterLinkLoading, characterLinkData])
-
-    function handleNewCharacterSubmit (e) {
-      e.preventDefault()
-      console.log(newCharacterInput)
-      setCharacterClean(getCharacterInfo(newCharacterInput))
+  function handleCharacterInputChange(e) {
+    let value = e.target.value
+    if (value === ''){
+      value = null
     }
+    setCharacterClean({
+      ...characterClean,
+      [e.target.name]: value,
+    });
+  }
 
-    console.log(characterClean)
+  function handleAddCharacter (e) {
+    e.preventDefault();
+    
+    // Convert the required values to integers
+    const formattedCharacter = {
+      ...characterClean,
+      id: parseInt(characterClean.id) || null,
+      art: parseInt(characterClean.art) || null,
+      thumb: parseInt(characterClean.thumb),
+      cost: parseInt(characterClean.cost),
+    };
+
+    console.log(formattedCharacter);
+    console.log(formattedCharacter.wiki_link)
+
+    addCharacter ({
+      variables: {
+        character: {
+          wiki_link:formattedCharacter?.wiki_link,
+          id: formattedCharacter?.id,
+          thumb: formattedCharacter?.thumb,
+          art: formattedCharacter?.art,
+          name: formattedCharacter?.name,
+          title: formattedCharacter?.title,
+          rarity: formattedCharacter?.rarity,
+          type: formattedCharacter?.type,
+          cost: formattedCharacter?.cost,
+          ls_description: formattedCharacter?.ls_description,
+          ls_description_eza: formattedCharacter?.ls_description_eza,
+          sa_type: formattedCharacter?.sa_type,
+          sa_name: formattedCharacter?.sa_name,
+          sa_description: formattedCharacter?.sa_description,
+          sa_description_eza: formattedCharacter?.sa_description_eza,
+          ultra_sa_type: formattedCharacter?.ultra_sa_type,
+          ultra_sa_name: formattedCharacter?.ultra_sa_name,
+          ultra_sa_description: formattedCharacter?.ultra_sa_description,
+          ultra_sa_description_eza: formattedCharacter?.ultra_sa_description_eza,
+          ps_name: formattedCharacter?.ps_name,
+          ps_description: formattedCharacter?.ps_description,
+          ps_description_eza: formattedCharacter?.ps_description_eza,
+          sa_type_active: formattedCharacter?.sa_type_active,
+          active_skill_name: formattedCharacter?.active_skill_name,
+          active_skill: formattedCharacter?.active_skill,
+          active_skill_condition: formattedCharacter?.active_skill_condition,
+          active_skill_condition_eza: formattedCharacter?.active_skill_condition_eza,
+          transform_type: formattedCharacter?.transform_type,
+          transform_condition: formattedCharacter?.transform_condition,
+          transform_condition_eza: formattedCharacter?.transform_condition_eza,
+          link_skill: formattedCharacter?.link_skill,
+          category: formattedCharacter?.category,
+          jp_date: formattedCharacter?.jp_date,
+          glb_date: formattedCharacter?.glb_date,
+          jp_date_eza: formattedCharacter?.jp_date_eza,
+          glb_date_eza: formattedCharacter?.glb_date_eza
+        }
+      }
+    })
+      .then((results) => {
+        console.log(results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
 
   return (
     <div className='flex flex-col w-full'>
         <p>CHARACTER INFO FROM WIKI</p>
         <form 
-        onSubmit={(e) => handleNewCharacterSubmit(e)}
+        onChange={(e) => characterFormChange(e)}
         className='w-full p-2'>
           <textarea
           className='w-full border border-black' 
@@ -81,26 +145,36 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
           onChange={(e) => setNewCharacterInput(e.target.value)}
           rows={25}
           />
-          <button>SUBMIT</button>
         </form>
-        <form 
-            className="w-full">
+        <form
+        onSubmit={(e) => handleAddCharacter(e)}
+        className="w-full">
                 <label className="flex p-2">
                 id
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='id'
                   value={characterClean?.id}
+                  />
+                </label>
+                <label className="flex p-2">
+                wiki_link
+                  <textarea 
+                  className="w-full h-fit p-1 border border-black"
+                  placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
+                  name='wiki_link'
+                  value={characterClean?.wiki_link}
                   />
                 </label>
                 <label className="flex p-2">
                   thumb
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='thumb'
                   value={characterClean?.thumb}
                   />
@@ -109,8 +183,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   art
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='art'
                   value={characterClean?.art}
                   />
@@ -119,8 +193,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   title
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='title'
                   value={characterClean?.title}
                   />
@@ -129,8 +203,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   name
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='name'
                   value={characterClean?.name}
                   />
@@ -139,8 +213,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   rarity
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='rarity'
                   value={characterClean?.rarity}
                   />
@@ -149,8 +223,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   type
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='type'
                   value={characterClean?.type}
                   />
@@ -159,8 +233,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   cost
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='cost'
                   value={characterClean?.cost}
                   />
@@ -169,8 +243,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ls_description
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ls_description'
                   value={characterClean?.ls_description}
                   />
@@ -179,8 +253,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ls_description_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ls_description_eza'
                   value={characterClean?.ls_description_eza}
                   />
@@ -189,8 +263,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   sa_type
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='sa_type'
                   value={characterClean?.sa_type}
                   />
@@ -199,8 +273,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   sa_name
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='sa_name'
                   value={characterClean?.sa_name}
                   />
@@ -209,8 +283,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   sa_description
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='sa_description'
                   value={characterClean?.sa_description}
                   />
@@ -219,8 +293,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   sa_description_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='sa_description_eza'
                   value={characterClean?.sa_description_eza}
                   />
@@ -229,8 +303,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ultra_sa_name
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ultra_sa_name'
                   value={characterClean?.ultra_sa_name}
                   />
@@ -239,8 +313,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ultra_sa_type
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ultra_sa_type'
                   value={characterClean?.ultra_sa_type}
                   />
@@ -249,8 +323,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ultra_sa_description
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ultra_sa_description'
                   value={characterClean?.ultra_sa_description}
                   />
@@ -259,8 +333,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ultra_sa_description_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ultra_sa_description_eza'
                   value={characterClean?.ultra_sa_description_eza}
                   />
@@ -269,8 +343,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ps_name
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ps_name'
                   value={characterClean?.ps_name}
                   />
@@ -279,8 +353,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ps_description
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ps_description'
                   value={characterClean?.ps_description}
                   />
@@ -289,8 +363,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   ps_description_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='ps_description_eza'
                   value={characterClean?.ps_description_eza}
                   />
@@ -299,8 +373,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   sa_type_active
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='sa_type_active'
                   value={characterClean?.sa_type_active}
                   />
@@ -309,8 +383,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   active_skill_name
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='active_skill_name'
                   value={characterClean?.active_skill_name}
                   />
@@ -319,8 +393,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   active_skill
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='active_skill'
                   value={characterClean?.active_skill}
                   />
@@ -329,8 +403,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   active_skill_condition
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='active_skill_condition'
                   value={characterClean?.active_skill_condition}
                   />
@@ -339,8 +413,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   active_skill_condition_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='active_skill_condition_eza'
                   value={characterClean?.active_skill_condition_eza}
                   />
@@ -349,8 +423,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   transform_type
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='transform_type'
                   value={characterClean?.transform_type}
                   />
@@ -359,8 +433,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   transform_condition
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='transform_condition'
                   value={characterClean?.transform_condition}
                   />
@@ -369,8 +443,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   transform_condition_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='transform_condition_eza'
                   value={characterClean?.transform_condition_eza}
                   />
@@ -379,8 +453,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   link_skill
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='link_skill'
                   value={characterClean?.link_skill}
                   />
@@ -389,8 +463,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   category
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='category'
                   value={characterClean?.category}
                   />
@@ -399,8 +473,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   jp_date
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='jp_date'
                   value={characterClean?.jp_date}
                   />
@@ -409,8 +483,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   glb_date
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='glb_date'
                   value={characterClean?.glb_date}
                   />
@@ -419,8 +493,8 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   jp_date_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='jp_date_eza'
                   value={characterClean?.jp_date_eza}
                   />
@@ -429,12 +503,13 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
                   glb_date_eza
                   <textarea 
                   className="w-full h-fit p-1 border border-black"
-                  type='readOnly'
                   placeholder='null'
+                  onChange={(e)=>handleCharacterInputChange(e)}
                   name='glb_date_eza'
                   value={characterClean?.glb_date_eza}
                   />
                 </label>
+                <button>SUBMIT</button>
             </form>
     </div>
   )

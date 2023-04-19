@@ -47,20 +47,6 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
     glb_date_eza: '',
 })
 
-    const [getCharacterLink, { loading: characterLinkLoading, data: characterLinkData }] = useLazyQuery(GET_CHARACTER_WIKI_LINK, {
-        variables: {
-            dokkanId: selectedCharacterId
-        }
-    })
-
-    useEffect(()=>{
-        getCharacterLink()
-    },[selectedCharacterId])
-
-    const characterLink = useMemo(() => {
-        return characterLinkData?.characterWikiLink?.wiki_link
-    }, [characterLinkLoading, characterLinkData])
-
     function handleNewCharacterSubmit (e) {
       e.preventDefault()
       console.log(newCharacterInput)

@@ -10,6 +10,7 @@ import SearchForm from "../components/SearchForm";
 import CharacterCard from "../cards/CharacterCard";
 import EditCharacter from "./EditCharacter";
 import SingleCharacterSearch from "./SingleCharacterSearch";
+import MakeSingleCharacter from "./MakeSingleCharacter";
 
 const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 const arrows = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png";
@@ -51,6 +52,8 @@ function AllAPI() {
     if (e.target.value === "Edit Character") {
       setInitialOption(e.target.value);
       getCharacterData();
+    } else if (e.target.value === "Add Character") {
+      setInitialOption(e.target.value);
     }
   };
 
@@ -232,119 +235,124 @@ function AllAPI() {
 
       <div className={`flex flex-1 h-0 relative`}>
 
-        <div className="flex flex-1 flex-col border-2 border-black bg-gray-500">
-          {initialOption === "Edit Character" && (
+        {initialOption === "Edit Character" && (
+          <div
+            id="CardSelection"
+            className={`
+            flex flex-1 flex-col bg-gradient-radial overflow-y-auto
+            `}
+            //   ${windowWidth > 850 ? "" : "hidden"}
+          >
+            {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
+
             <div
-              id="CardSelection"
-              className={`
-              flex flex-1 flex-col bg-gradient-radial overflow-y-auto
-              `}
-              //   ${windowWidth > 850 ? "" : "hidden"}
+              className={`bg-orange-200 border-b-4 border-x-4 border-black`}
             >
-              {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
-
               <div
-                className={`bg-orange-200 border-b-4 border-x-4 border-black`}
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex flex h-fit pt-1 items-center justify-center"
+                title={
+                  showFilters
+                    ? "click to hide filters"
+                    : "click to show filters"
+                }
               >
-                <div
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex flex h-fit pt-1 items-center justify-center"
-                  title={
-                    showFilters
-                      ? "click to hide filters"
-                      : "click to show filters"
-                  }
-                >
-                  <p className="font-header text-2xl font-light cursor-pointer">
-                    Filters
-                  </p>
-                  <img
-                    src={arrows}
-                    className={`w-[7.5%] card-sm:w-[4%] ml-4 mb-1 cursor-pointer transform rotate-90 transition-transform duration-300 ${
-                      showFilters ? "scale-y-[-1] scale-x-[-1]" : "scale-y-[-1]"
-                    }`}
-                  />
-                </div>
-
-                <div
-                  className={`max-h-0 overflow-hidden transition-all duration-500 ${
-                    showFilters ? "max-h-[100vh] ease-in-out" : ""
+                <p className="font-header text-2xl font-light cursor-pointer">
+                  Filters
+                </p>
+                <img
+                  src={arrows}
+                  className={`w-[7.5%] card-sm:w-[4%] ml-4 mb-1 cursor-pointer transform rotate-90 transition-transform duration-300 ${
+                    showFilters ? "scale-y-[-1] scale-x-[-1]" : "scale-y-[-1]"
                   }`}
-                >
-                  <div className="flex pb-2 items-center justify-center">
-                    <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
-                      Game Filter
-                    </span>
-                    <label className="inline-flex relative items-center mr-5 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={!filterByGame}
-                        readOnly
-                      />
-                      <div
-                        onClick={() => {
-                          setFilterByGame(!filterByGame);
-                        }}
-                        className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-                      ></div>
-                      <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
-                        Release Date
-                      </div>
-                    </label>
-                  </div>
-
-                  {/* //contains filters/buttons/search field/etc. */}
-                  <SearchForm
-                    isDisabled={allCharactersLoading}
-                    onFormChange={filterAndSetCharacters}
-                    selectedCategories={selectedCategories}
-                    handleNewCategorySelected={handleNewCategorySelected}
-                    handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
-                  />
-                </div>
+                />
               </div>
 
-              {/* //character select box */}
               <div
-                ref={cardContainerRef}
-                id={"characterContainer"}
-                className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto"
+                className={`max-h-0 overflow-hidden transition-all duration-500 ${
+                  showFilters ? "max-h-[100vh] ease-in-out" : ""
+                }`}
               >
-                {allCharactersLoading ? (
-                  <div>Loading...</div>
-                ) : (
-                  charactersToDisplay.map((character) => (
+                <div className="flex pb-2 items-center justify-center">
+                  <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                    Game Filter
+                  </span>
+                  <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={!filterByGame}
+                      readOnly
+                    />
                     <div
-                      key={character.id}
-                      className={`
-                      cursor-pointer relative hover:bg-slate-900/[.3]
-                      ${selectedCharacter?.id === character.id && 'bg-slate-900/[.7] hover:bg-slate-900/[.9]'}
-                      `}
-                      onClick={() => handleCharacterClick(character)}
-                    >
-                      <CharacterCard
-                        individualCharacter={character}
-                        mobileSize={"60px"}
-                        desktopSize={"85px"}
-                      />
+                      onClick={() => {
+                        setFilterByGame(!filterByGame);
+                      }}
+                      className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
+                    ></div>
+                    <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                      Release Date
                     </div>
-                  ))
-                )}
+                  </label>
+                </div>
+
+                {/* //contains filters/buttons/search field/etc. */}
+                <SearchForm
+                  isDisabled={allCharactersLoading}
+                  onFormChange={filterAndSetCharacters}
+                  selectedCategories={selectedCategories}
+                  handleNewCategorySelected={handleNewCategorySelected}
+                  handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
+                />
               </div>
             </div>
-          )}
-        </div>
 
-        <div className="flex flex-1 bg-white overflow-y-auto">
-          {(initialOption === "Edit Character") &&
+            {/* //character select box */}
+            <div
+              ref={cardContainerRef}
+              id={"characterContainer"}
+              className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto"
+            >
+              {allCharactersLoading ? (
+                <div>Loading...</div>
+              ) : (
+                charactersToDisplay.map((character) => (
+                  <div
+                    key={character.id}
+                    className={`
+                    cursor-pointer relative hover:bg-slate-900/[.3]
+                    ${selectedCharacter?.id === character.id && 'bg-slate-900/[.7] hover:bg-slate-900/[.9]'}
+                    `}
+                    onClick={() => handleCharacterClick(character)}
+                  >
+                    <CharacterCard
+                      individualCharacter={character}
+                      mobileSize={"60px"}
+                      desktopSize={"85px"}
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {(initialOption === "Edit Character") &&
+        <>
+          <div className="flex flex-1 bg-white overflow-y-auto">
             <EditCharacter characterForm={characterForm} setCharacterForm={setCharacterForm} setSelectedCharacter={setSelectedCharacter}/>
-          }
-        </div>
+          </div>
+          <div className="flex flex-1 bg-green-500 overflow-y-auto">
+            <SingleCharacterSearch selectedCharacterId={selectedCharacter?.id}/>
+          </div>
+        </>
+        }
 
-        <div className="flex flex-1 bg-green-500 overflow-y-auto">
-          <SingleCharacterSearch selectedCharacterId={selectedCharacter?.id}/>
+        {(initialOption === "Add Character") &&
+        <div className="flex flex-1 bg-white overflow-y-auto">
+          <MakeSingleCharacter />
         </div>
+        }
       </div>
     </div>
     )
