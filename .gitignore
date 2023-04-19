@@ -31,6 +31,3 @@ yarn-error.log*
 
 #redirects removed for coverage
 /_redirects
-
-#components-api folder hidden
-/src/components-api
