@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import Web from "./Web";
 import SuggestForm from "./SuggestForm";
@@ -35,18 +35,25 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   const handleNewCategorySelected = (e) => {
     // setViewableCharacters(100)
     if(e.target.value === ''){
+      suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
+      setViewableCharacters(50)
       return setSelectedCategories([])
     }else if(selectedCategories.includes(e.target.value)){
       return selectedCategories
     }else{
+      suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
+      setViewableCharacters(50)
       return setSelectedCategories([...selectedCategories, e.target.value])
     }
   }
   
   const handleSelectedCategoryRemoval = (categoryToRemove) => {
     if(categoryToRemove === 'Remove All Categories'){
+      suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
+      setViewableCharacters(50)
       return setSelectedCategories([])
     }
+    setViewableCharacters(50)
     setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
   }
   
@@ -61,6 +68,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
 
   const [showSuggestedCards, setShowSuggestedCards] = useState(false)
   function handleSetShowSuggestedCards () {
+    setViewableCharacters(50)
     setShowSuggestedCards(!showSuggestedCards)
   }
 
@@ -74,6 +82,36 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       window.removeEventListener('resize', handleResize);
     };
   }, [window.innerWidth]);
+
+  const [viewableCharacters, setViewableCharacters] = useState(50);
+  console.log(viewableCharacters)
+  
+  const suggestedCardContainer = useRef(null)
+  // this useEffect is for automatically loading characters by increasing the viewableCharacters
+  useEffect(() => {
+    if(suggestedCardContainer.current !== null){
+      console.log(viewableCharacters)
+      console.log(filteredSuggestedCharacters.length)
+      console.log(linkedCharacters.length)
+      if((viewableCharacters >= filteredSuggestedCharacters.length) || (viewableCharacters >= linkedCharacters.length)){
+        console.log('no more scroll please')
+        return
+      }
+      const cardContainer = suggestedCardContainer.current;
+  
+      const handleScroll = () => {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+          setViewableCharacters(viewableCharacters + 100);
+        }
+      };
+  
+      cardContainer.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        cardContainer.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [allCharactersLoading, viewableCharacters]);
 
   return (
     <div className={`flex flex-col flex-1 ${showSuggestedCards ? 'h-1/2' : 'h-full'}`}>
@@ -111,50 +149,78 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
           />
         </div>
         
-        <div className={`flex-1 overflow-y-auto`}>
-          <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} />
-          <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-          <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-          <CharacterLinkDisplay matchCount={4} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-          <CharacterLinkDisplay matchCount={3} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-          <CharacterLinkDisplay matchCount={2} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-          <CharacterLinkDisplay matchCount={1} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={ addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+        <div 
+        ref={suggestedCardContainer}
+        className={`flex-1 overflow-y-auto`}>
+          <OrderByStatsBuffed showSuggestedCards={showSuggestedCards} webOfTeam={webOfTeam} handleNewDetails={handleNewDetails} addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} selectedCharacter={selectedCharacter} linkedCharacters={filteredSuggestedCharacters} viewableCharacters={viewableCharacters}/>
+
+            {/* <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} />
+            <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+            <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+            <CharacterLinkDisplay matchCount={4} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+            <CharacterLinkDisplay matchCount={3} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+            <CharacterLinkDisplay matchCount={2} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
+            <CharacterLinkDisplay matchCount={1} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/> */}
         </div>
       </div>
     </div>
   );
 }
 
-// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
-const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions,}) => {
-  return (
-    <>
-    {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
-    <>
-      <h3 className="h-fit py-2 font-header text-center text-md card-sm:text-xl underline decoration-2 underline-offset-4">Characters with {matchCount} Links</h3>
-      <div className="flex flex-wrap min-h-[95px] max-h-fit card-sm:min-h-[95px] card-sm:max-h-fit justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
-        {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
-          <div 
-          id='CharacterCard'
-          key={'suggest' + character.id.toString()}
-          >
-            <SuggestCard
-              character={character}
-              webOfTeam={webOfTeam}
-              selectedCharacter={selectedCharacter}
-              handleNewDetails={handleNewDetails}
-              removeFromWebOfTeam={removeFromWebOfTeam}
-              addToWebOfTeam={addToWebOfTeam}
-              statsSelectedOptions={statsSelectedOptions}
-            />
-          </div>
-        ))}
-      </div>
-    </>
-    : null
+const OrderByStatsBuffed = ({ showSuggestedCards, webOfTeam, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, selectedCharacter, linkedCharacters, viewableCharacters}) => {
+  if(!showSuggestedCards){
+    return null
+  }
+
+  const characterArrayWithStats = linkedCharacters.map(linkedCharacter => {
+    const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatsBoostedFor2Characters_lvl_1(selectedCharacter, linkedCharacter);
+    const characterStats = {
+      id: linkedCharacter.id,
+      ATK: linkSkillStatsBoosted.linkAccumulation.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0),
+      DEF: linkSkillStatsBoosted.linkAccumulation.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0),
+      Ki: linkSkillStatsBoosted.linkAccumulation.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0),
+    };
+    return {...linkedCharacter, ...characterStats};
+  });
+
+  // Define a comparison function that compares characters based on the sort key
+  const compareFunction = (a, b) => {
+    if(statsSelectedOptions === 'None'){
+      return b.id - a.id
+    } else{
+      return b[statsSelectedOptions] - a[statsSelectedOptions]
     }
-    </>
-  );
+  }
+
+  // Sort the array based on the comparison function
+  characterArrayWithStats.sort(compareFunction);
+
+  return(
+    <div className="p-2">
+    <h3 className="h-fit py-2 font-header text-center text-md card-sm:text-xl font-light underline decoration-2 underline-offset-4">Characters Organized By {statsSelectedOptions}</h3>
+    <div className="flex flex-wrap min-h-[95px] max-h-fit card-sm:min-h-[95px] card-sm:max-h-fit justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 relative">
+      {characterArrayWithStats
+      .slice(0, viewableCharacters)
+      .filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id)
+      .map(character => (
+        <div 
+        id='CharacterCard'
+        key={'suggest' + character.id.toString()}
+        >
+          <SuggestCard
+            character={character}
+            webOfTeam={webOfTeam}
+            selectedCharacter={selectedCharacter}
+            handleNewDetails={handleNewDetails}
+            removeFromWebOfTeam={removeFromWebOfTeam}
+            addToWebOfTeam={addToWebOfTeam}
+            statsSelectedOptions={statsSelectedOptions}
+          />
+        </div>
+      ))}
+    </div>
+    </div>
+  )
 }
 
 function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
@@ -166,7 +232,6 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
 }
 
 const getFilteredCharacters = (linkedCharacters, userCharacters, filterData, selectedCategories) => {
-  console.log(linkedCharacters)
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
   return baseChars.filter((character) => {
     return (
@@ -178,6 +243,39 @@ const getFilteredCharacters = (linkedCharacters, userCharacters, filterData, sel
     );
   });
 };
+
+// this first conditional render checks to see if there are characters with matched links, then under the specific # of links matched, it filters out characters with the same name and ID, if there are no characters, then nothing is appended to the page
+// const CharacterLinkDisplay = ({matchCount, webOfTeam, selectedCharacter, charactersWithMatchedLinks, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions,}) => {
+//   return (
+//     <>
+//     {charactersWithMatchedLinks && charactersWithMatchedLinks[matchCount] && charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).length > 0 ? 
+//     <>
+//       <h3 className="h-fit py-2 font-header text-center text-md card-sm:text-xl font-light underline decoration-2 underline-offset-4">Characters with {matchCount} Links</h3>
+//       <div className="flex flex-wrap min-h-[95px] max-h-fit card-sm:min-h-[95px] card-sm:max-h-fit justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 overflow-auto relative">
+//         {charactersWithMatchedLinks[matchCount].filter((character) => character.name !== selectedCharacter.name && character.id !== selectedCharacter.id).map((character) => (
+//           <div 
+//           id='CharacterCard'
+//           key={'suggest' + character.id.toString()}
+//           >
+//             <SuggestCard
+//               character={character}
+//               webOfTeam={webOfTeam}
+//               selectedCharacter={selectedCharacter}
+//               handleNewDetails={handleNewDetails}
+//               removeFromWebOfTeam={removeFromWebOfTeam}
+//               addToWebOfTeam={addToWebOfTeam}
+//               statsSelectedOptions={statsSelectedOptions}
+//             />
+//           </div>
+//         ))}
+//       </div>
+//     </>
+//     : null
+//     }
+//     </>
+//   );
+// }
+
 
 // const SuggestTeam = ({ allCharacters, selectedCharacter, linkedCharacters, userCharacters }) => {
   //   const characterLeadCategories = findCharacterLeaderCategories(selectedCharacter)

@@ -206,9 +206,10 @@ function AllAPI() {
 
 
   return (
-    profileData?.data?._id === process.env.REACT_APP_CONNECT_API_USER && 
-    (<div className="fixed flex flex-col h-full bg-slate-900">
+    <div className="fixed flex flex-col h-full bg-slate-900">
         <Navbar />
+      {profileData?.data?._id === process.env.REACT_APP_CONNECT_API_USER && 
+      <>
         <div className="flex w-screen bg-slate-700">
           <p>What would you like to do?</p>
           <label
@@ -354,9 +355,10 @@ function AllAPI() {
         </div>
         }
       </div>
+      </>
+    }
     </div>
     )
-  );
 }
 
 // returns a new array of characters derived from either allCharacters or userCharacters based on the criteria in filterData

@@ -41,6 +41,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
                 <select
                 className="w-full py-1 text-sm "
                 onChange={(e)=>handleSelectedCategoryRemoval(e.target.value)}>
+                  <option className="w-full truncate" value={'Selected Categories'} key={'Suggested Selected Categories'}>Selected Categories</option>
                   {selectedCategories.map((category) => (
                     <option className="w-full truncate" value={category} key={category}>
                       {category}
@@ -123,7 +124,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
       </form>
 
       <div className="flex justify-center items-center">
-        <p className="text-sm card-sm:text-[.72rem] mr-4 font-bold text-center">stats buffed:</p>
+        <p className="text-sm card-sm:text-[.72rem] mr-4 font-bold text-center">stats filter:</p>
         <div className="">
           <input
             className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"

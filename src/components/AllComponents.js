@@ -298,6 +298,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       const existingCharacter = webOfTeam.find(webCharacter => webCharacter.id === character.id)
       if (existingCharacter) {
         removeFromWebOfTeam(existingCharacter)
+        setCardDetails(character)
       } else {
         addToWebOfTeam(character)
         setCardDetails(character)
@@ -308,26 +309,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       const newIDs = userDeckData.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)) || [];
       setAllCharacterIDsInDeck(newIDs);
     }, [selectedDeck]);
-
-    // this useEffect is for automatically loading characters by increasing the viewableCharacters
-    // const [viewableCharacters, setViewableCharacters] = useState(100);
-    // useEffect(() => {
-    //   if(cardContainerRef.current !== null){
-    //     const cardContainer = cardContainerRef.current;
-    
-    //     const handleScroll = () => {
-    //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 500)) {
-    //         setViewableCharacters(viewableCharacters + 100);
-    //       }
-    //     };
-    
-    //     cardContainer.addEventListener("scroll", handleScroll);
-    
-    //     return () => {
-    //       cardContainer.removeEventListener("scroll", handleScroll);
-    //     };
-    //   }
-    // }, [allCharactersLoading, viewableCharacters]);
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -604,13 +585,22 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 const getFilteredCharacters = (allCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters
   return baseChars.filter((character) => {
-    const leaderNumbers = character.ls_description.match(/\d+/g)
+    
+    const leaderNumbers = character.ls_description.match(/\d+/g) || []
+    let characterLeadCategories
+    if(selectedCategories.length > 0 && leaderNumbers.length > 0 && leaderNumbers.some(num => num >= 150) && leaderNumbers.some(num => num <= 200)){
+      characterLeadCategories = (findCharacterLeaderCategories(character))
+    }
+    
     return (
       (!selectedCategories.length || (filterData.matchAllCategories
         ? selectedCategories.every(category => character.category.includes(category))
         : selectedCategories.some(category => character.category.includes(category))
       )) &&
-      (!filterData.isCommonLeader || (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false)) &&
+      (!filterData.isCommonLeader || (selectedCategories.length > 0 ?
+        selectedCategories.some(category => characterLeadCategories?.includes(category))
+        :
+        (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false))) &&      
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
       (!filterData.characterType || character.type.includes(filterData.characterType)) &&
       (!filterData.characterSuperOrExtreme || character.type.slice(0, 1).includes(filterData.characterSuperOrExtreme)) &&

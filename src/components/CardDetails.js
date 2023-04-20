@@ -26,7 +26,7 @@ function CardDetails({ cardDetails }) {
           <ScrollingDiv divRef={divRef1} text={cardDetails.name}/>
 
           <div>
-            <CharacterCard individualCharacter={cardDetails} mobileSize={'100px'} desktopSize={'170px'}/>
+            <CharacterCard individualCharacter={cardDetails} mobileSize={'100px'} desktopSize={'125px'}/>
           </div>
 
           <button

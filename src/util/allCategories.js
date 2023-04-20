@@ -93,15 +93,20 @@ export const categories =[
 
 export const findCharacterLeaderCategories = (selectedCharacter) => {
   const characterLeaderSkill = selectedCharacter.ls_description.split(';');
-  //TODO: find lead categories
   let characterLeadCategories = [];
   for (let i = 0; i < categories.length; i++) {
-    if (characterLeaderSkill[0].includes(categories[i])) {
-      characterLeadCategories.push(categories[i]);
+    for (let j = 0; j < characterLeaderSkill.length; j++) {
+      if (characterLeaderSkill[j].includes(categories[i])) {
+        const matchedNumbers = characterLeaderSkill[j].match(/\d+/g).map(string => parseInt(string));
+        if (matchedNumbers.some(num => num >= 150 && num <= 200)) {
+          characterLeadCategories.push(categories[i]);
+        }
+      }
     }
   }
-  return characterLeadCategories
-}
+  return characterLeadCategories;
+};
+
 
 export const allCategoryOptions = () => {
     return categories.map((category) => {

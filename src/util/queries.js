@@ -4,6 +4,7 @@ export const QUERY_CHARACTERS = gql`
 query Characters {
   characters {
     id
+    wiki_link
     thumb
     art
     name
@@ -87,21 +88,6 @@ query CharactersWithIds($dokkanIds: [Int]) {
     glb_date
     jp_date_eza
     glb_date_eza
-  }
-}`;
-
-export const QUERY_7LINKS = gql`
-query Characters7Link($link1: String, $link2: String, $link3: String, $link4: String, $link5: String, $link6: String, $link7: String) {
-  characters7Link(link1: $link1, link2: $link2, link3: $link3, link4: $link4, link5: $link5, link6: $link6, link7: $link7) {
-    id
-    name
-    link_skill
-    category
-    thumb
-    art
-    type
-    rarity
-    glb_date
   }
 }`;
 

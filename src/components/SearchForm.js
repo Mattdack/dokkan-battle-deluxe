@@ -64,7 +64,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                   const dx = e.clientX - mouseX;
                   container.scrollTo({
                     top: 0,
-                    left: containerScrollPosition - dx,
+                    left: containerScrollPosition - (dx),
                     behavior: "auto"
                   });
                 }
@@ -180,9 +180,9 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-4 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
                 >
-                  Common Leaders
+                  {selectedCategories.length > 0 ? 'Selected Category Leaders' : 'Common Leaders'}
                 </div>
               </label>
             </div>
@@ -198,7 +198,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-10 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+                  className="py-1 card-sm:py-2 px-2 card-sm:px-6 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
                 >
                   Characters Saved
                 </div>

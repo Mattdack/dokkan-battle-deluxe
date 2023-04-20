@@ -61,6 +61,7 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
                   rows={6}
                   placeholder='null'
                   name='wiki_link'
+                  required
                   value={characterForm?.wiki_link}
                   onChange={(e) => handleCharacterEditInputChange(e)}
                   />
