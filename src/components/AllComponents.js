@@ -18,6 +18,7 @@ import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 import Announcement from "../modals/Announcement";
 
 import * as sort from "../util/sorting";
+import { findCharacterLeaderCategories } from "../util/allCategories";
 
 import { UserContext } from '../App';
 
@@ -572,16 +573,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     mobileSize={'60px'} 
                     desktopSize={'85px'}
                     />
-                    {/* <AllComponentsCard
-                      character={character}
-                      userDeckData={userDeckData}
-                      selectedDeck={selectedDeck}
-                      savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
-                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                      addToWebOfTeam={addToWebOfTeam}
-                      removeFromWebOfTeam={removeFromWebOfTeam}
-                      newCardDetails={newCardDetails}
-                    /> */}
                   </div>
                 ))}
           </div>

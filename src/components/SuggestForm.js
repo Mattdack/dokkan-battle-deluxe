@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import allCategoryOptions from '../util/allCategoryOptions'
+import { allCategoryOptions } from '../util/allCategories'
 
-const SuggestForm = ({
-  onFormChange,
-  statsSelectedOptions,
-  handleStatsSelectedOptions,
-  allCharactersLoading,
-}) => {
+const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
+
+const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval, statsSelectedOptions, handleStatsSelectedOptions, allCharactersLoading, }) => {
   function handleFormChange(e) {
     const formData = Object.fromEntries(new FormData(e.currentTarget));
     onFormChange(formData);
@@ -30,21 +27,59 @@ const SuggestForm = ({
           disabled={allCharactersLoading}
           className="flex flex-col w-full p-1 items-center"
         >
-          {/* input and category selection */}
-          <div className="flex w-full justify-between items-center">
-            <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 rounded-md border-2 border-black text-xsm card-sm:text-[.72rem] text-black font-bold"
-              type="text"
-              placeholder="Character Name"
-              name="searchTermSuggest"
-            />
+        {/* input and category selection */}
+        <div className="flex w-full pt-2 justify-between items-center">
+
+          {/* selected category bar */}
+              <div className="flex flex-row h-fit min-w-[50px] max-w-[150px] w-1/3 card-sm:h-10 px-2 mr-2 items-center bg-white rounded-full border-2 border-gray-400 whitespace-nowrap"
+              >
+                {selectedCategories.length === 0 ?
+                <div className="flex w-full h-fit py-1 card-sm:py-0 text-gray-500 text-xsm card-sm:text-[.72rem] items-center" key={'no category selection'}>
+                  selected categories
+                </div>
+                :
+                <select
+                className="w-full py-1 text-sm "
+                onChange={(e)=>handleSelectedCategoryRemoval(e.target.value)}>
+                  {selectedCategories.map((category) => (
+                    <option className="w-full truncate" value={category} key={category}>
+                      {category}
+                    </option>
+                  ))}
+                  <option value={'Remove All Categories'} className="text-red-400">Remove All Categories</option>
+                </select>
+                }
+              </div>
+              
+              <div className="flex w-1/3 justify-center order-2 bg-orange-300 rounded-md border-2 border-slate-900">
+                <label 
+                className="w-full p-1"
+                htmlFor="suggestMatchAllCategories">
+                  <input
+                    type="checkbox"
+                    name="suggestMatchAllCategories"
+                    id="suggestMatchAllCategories"
+                    className="hidden peer"
+                    value={true}
+                  />
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className="w-full py-1 card-sm:py-2 px-1 card-sm:px-2 text-[.6rem] card-sm:text-[.72rem] font-bold relative text-center lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                  >
+                    Full Match
+                  </div>
+                </label>
+              </div>
+          
 
             <select
-              className="flex w-1/2 order-2 p-1 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/3 p-1.5 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white hover:bg-gray-300 border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
-              name="characterCategorySuggest"
+              name="characterCategory"
+              onChange={(e) => handleNewCategorySelected(e)}
             >
-              {allCategoryOptions.map(category => category)}
+              <option value='' key='all-categories'>All Categories</option>
+              {allCategoryOptions()}
             </select>
           </div>
 
@@ -66,7 +101,7 @@ const SuggestForm = ({
                 defaultChecked
               />
             </div>
-            <div className="flex w-2/5 justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
+            <div className="flex justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
               <label htmlFor="isUserDeckSuggest">
                 <input
                   type="checkbox"
@@ -77,7 +112,7 @@ const SuggestForm = ({
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="m-0.5 py-1 px-2 card-sm:py-2 relative text-[.6rem] card-sm:text-[.72rem] text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+                  className="m-0.5 py-1 px-4 card-sm:px-10 card-sm:py-2 relative text-[.6rem] card-sm:text-[.72rem] text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
                 >
                   Saved
                 </div>
@@ -175,7 +210,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-[.72rem] lg:hover:bg-orange-400 peer-checked:bg-orange-400"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-[.72rem] lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
       >
         {label}
       </div>

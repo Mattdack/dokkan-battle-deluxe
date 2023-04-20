@@ -1,10 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import Web from "./Web";
 import SuggestForm from "./SuggestForm";
 import SuggestCard from "../cards/SuggestCard";
 import CharacterCard from "../cards/CharacterCard";
 
+import { findCharacterLeaderCategories } from "../util/allCategories";
 import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
@@ -15,10 +16,6 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   const handleStatsSelectedOptions = (event) => {
     setStatsSelectedOptions(event.target.value);
   };
-  
-  // this console.log brings up a lot of repatative values, is that okay?
-  // console.log(userCharacters)
-  const [filteredSuggestedCharacters, setFilteredSuggestedCharacters] = useState([])
 
   const selectedLinks = selectedCharacter.link_skill;
 
@@ -28,17 +25,55 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   });
 
   //TODO: this is making a function with filterData passed in, then setting the state for filtered characters to the filterData
-  const filterAndSetSuggestedCharacters = (filterData) => setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData));
-  // console.log(filteredSuggestedCharacters)
+  const [filteredSuggestedCharacters, setFilteredSuggestedCharacters] = useState([])
+  const [selectedCategories, setSelectedCategories] = useState([])
+  const [newFilterData, setNewFilterData] = useState({})
+
+  // this function allows for filtered characters to be set to the reults of the getFilteredCharacters (which is extracted from the search form)
+  const filterAndSetSuggestedCharacters = (filterData) => [setFilteredSuggestedCharacters(getFilteredCharacters(linkedCharacters, userCharacters, filterData, selectedCategories)),setNewFilterData(filterData)]
+
+  const handleNewCategorySelected = (e) => {
+    // setViewableCharacters(100)
+    if(e.target.value === ''){
+      return setSelectedCategories([])
+    }else if(selectedCategories.includes(e.target.value)){
+      return selectedCategories
+    }else{
+      return setSelectedCategories([...selectedCategories, e.target.value])
+    }
+  }
+  
+  const handleSelectedCategoryRemoval = (categoryToRemove) => {
+    if(categoryToRemove === 'Remove All Categories'){
+      return setSelectedCategories([])
+    }
+    setSelectedCategories(selectedCategories.filter(singleCategory => singleCategory !== categoryToRemove))
+  }
+  
+  //This useEffect allows for filtered characters to refresh AFTER a category is added or removed
+  useEffect(() => {
+    const filteredChars = getFilteredCharacters(allCharacters, userCharacters, newFilterData, selectedCategories);
+    setFilteredSuggestedCharacters(filteredChars);
+  }, [selectedCategories]); 
 
   //TODO: this is then the array of arrays (characters paired by how many links match) 
   const charactersWithMatchedLinks = groupCharactersByLinkCount(filteredSuggestedCharacters, selectedCharacter.link_skill);
-  // console.log(charactersWithMatchedLinks)
 
   const [showSuggestedCards, setShowSuggestedCards] = useState(false)
   function handleSetShowSuggestedCards () {
     setShowSuggestedCards(!showSuggestedCards)
   }
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [window.innerWidth]);
 
   return (
     <div className={`flex flex-col flex-1 ${showSuggestedCards ? 'h-1/2' : 'h-full'}`}>
@@ -55,15 +90,20 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       handleSetShowSuggestedCards={handleSetShowSuggestedCards}
       />
 
-    <div className={`flex flex-col ${showSuggestedCards ? 'h-1/2' : 'hidden'}`}>
+    <div className={`flex flex-col ${showSuggestedCards ? (windowWidth < 850 ? 'h-3/4': 'h-[55%]') : 'hidden'}`}>
+
+        {/* <SuggestTeam allCharacters={allCharacters} selectedCharacter={selectedCharacter} linkedCharacters={linkedCharacters} userCharacters={userCharacters}/> */}
+
         <div className="flex justify-around items-center">
-          {/* image on mobile */}
-          <div className="w-[100px] card-sm:w-[120px]">
-              <CharacterCard individualCharacter={selectedCharacter} mobileSize={'85px'} desktopSize={'85px'}/>
+          <div>
+              <CharacterCard individualCharacter={selectedCharacter} mobileSize={'90px'} desktopSize={'85px'}/>
           </div>
 
           <SuggestForm 
           onFormChange={filterAndSetSuggestedCharacters}
+          selectedCategories={selectedCategories}
+          handleNewCategorySelected={handleNewCategorySelected}
+          handleSelectedCategoryRemoval={handleSelectedCategoryRemoval}
           statsSelectedOptions={statsSelectedOptions}
           setStatsSelectedOptions={setStatsSelectedOptions}
           handleStatsSelectedOptions={handleStatsSelectedOptions}
@@ -125,16 +165,89 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
   });
 }
 
-const getFilteredCharacters = (linkedCharacters, userCharacters, filterData) => {
+const getFilteredCharacters = (linkedCharacters, userCharacters, filterData, selectedCategories) => {
+  console.log(linkedCharacters)
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
   return baseChars.filter((character) => {
     return (
-      (!filterData.searchTermSuggest || character.name.toLowerCase().includes(filterData.searchTermSuggest.toLowerCase())) &&
-      (!filterData.characterCategorySuggest || character.category.includes(filterData.characterCategorySuggest)) &&
+      (!selectedCategories.length || (filterData.suggestMatchAllCategories
+        ? selectedCategories.every(category => character.category.includes(category))
+        : selectedCategories.some(category => character.category.includes(category))
+      )) &&
       (!filterData.characterTypeSuggest || character.type.includes(filterData.characterTypeSuggest))
     );
   });
 };
 
+// const SuggestTeam = ({ allCharacters, selectedCharacter, linkedCharacters, userCharacters }) => {
+  //   const characterLeadCategories = findCharacterLeaderCategories(selectedCharacter)
+  //   //TODO: find characters under those categories - ALL, then one and two
+  //   const linkedCharacterWithBothCategory = linkedCharacters.filter(character =>
+  //     characterLeadCategories.some(category =>
+  //       character.category.includes(category)
+  //     )
+  //   );
+  //   const linkedCharactersWithFirstCategory = linkedCharacters.filter(character =>
+  //     character.category.includes(characterLeadCategories[0])
+  //   );
+  //   const linkedCharactersWithSecondCategory = linkedCharacters.filter(character =>
+  //     character.category.includes(characterLeadCategories[1])
+  //   );
+  //   console.log(linkedCharacterWithBothCategory)
+  //   console.log(linkedCharactersWithFirstCategory)
+  //   console.log(linkedCharactersWithSecondCategory)
+  
+  //   //TODO: find user characters with those characters
+  //   const linkedCharacterWithCategoryAndUser = linkedCharacterWithBothCategory.filter(character =>
+  //     userCharacters.some(userCharacter =>
+  //       character.id === userCharacter.id
+  //     )
+  //   );  
+  //   //TODO: find the amount of links between the user characters that are in categories
+  //   const charactersMatchedLinks = groupCharactersByLinkCount(linkedCharacterWithCategoryAndUser, selectedCharacter.link_skill)
+    
+  //   //TODO: team with same categories and high links
+  //   const sameLeaderTeam = [];
+  //   for (let i = 7; i >= 1 && sameLeaderTeam.length < 5; i--) {
+  //     const characters = charactersMatchedLinks[i];
+  //     if (Array.isArray(characters)) {
+  //       for (const character of characters) {
+  //         if (character.id !== selectedCharacter.id && character.name !== selectedCharacter.name) {
+  //           sameLeaderTeam.push(character);
+  //           if (sameLeaderTeam.length >= 5) {
+  //             break;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  
+  //   //TODO: teams with different leaders
+  //   const allOtherLeaders = allCharacters.filter(character => {
+  //     const characterLeaderSkill = character.ls_description.split(';');
+  //     return characterLeaderSkill.some(leaderSkill => {
+  //       return characterLeadCategories.some(category => {
+  //         return leaderSkill.includes(category)
+  //       });
+  //     }) && character.id !== selectedCharacter.id;
+  //   })
+  //   const usersOtherLeaders = userCharacters.filter(character => {
+  //     const characterLeaderSkill = character.ls_description.split(';');
+  //     return characterLeaderSkill.some(leaderSkill => {
+  //       return characterLeadCategories.some(category => {
+  //         return leaderSkill.includes(category)
+  //       });
+  //     }) && character.id !== selectedCharacter.id;
+  //   })
+  
+  //   return(
+  //     <div className="flex flex-row bg-red-500">
+  //       <CharacterCard individualCharacter={selectedCharacter} mobileSize={'60px'} desktopSize={'80px'}/>
+  //       {sameLeaderTeam && sameLeaderTeam.map(character =>
+  //         <CharacterCard key={'suggested-team'+character.id} individualCharacter={character} mobileSize={'60px'} desktopSize={'80px'}/>
+  //       )}
+  //     </div>
+  //   )
+  // }
 
 export default SuggestToWeb;
