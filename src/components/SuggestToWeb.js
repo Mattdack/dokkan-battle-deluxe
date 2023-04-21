@@ -13,6 +13,7 @@ import * as linkSkillInfo from "../util/linkSkillInfo"
 function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
+
   const handleStatsSelectedOptions = (event) => {
     suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
     setViewableCharacters(50)
@@ -85,7 +86,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
     };
   }, [window.innerWidth]);
 
-  const [viewableCharacters, setViewableCharacters] = useState(50);
+  const [viewableCharacters, setViewableCharacters] = useState(100);
   
   const suggestedCardContainer = useRef(null)
   // this useEffect is for automatically loading characters by increasing the viewableCharacters
@@ -97,7 +98,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       const cardContainer = suggestedCardContainer.current;
   
       const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 200)) {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 100)) {
           setViewableCharacters(viewableCharacters + 100);
         }
       };
@@ -108,7 +109,14 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
         cardContainer.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [allCharactersLoading, viewableCharacters]);
+  }, [allCharactersLoading, selectedCharacter, viewableCharacters]);
+  
+  useEffect(() => {
+    if(suggestedCardContainer.current){
+      suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
+      setViewableCharacters(100)
+    }
+  },[selectedCharacter])
 
   return (
     <div className={`flex flex-col flex-1 ${showSuggestedCards ? 'h-1/2' : 'h-full'}`}>

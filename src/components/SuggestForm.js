@@ -123,7 +123,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
         </fieldset>
       </form>
 
-      <div className="flex justify-center items-center">
+      <div className="pt-1 pb-2 flex justify-center items-center">
         <p className="text-sm card-sm:text-[.72rem] mr-4 font-bold text-center">stats filter:</p>
         <div className="">
           <input

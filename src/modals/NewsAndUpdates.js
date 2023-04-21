@@ -17,6 +17,15 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                 <p className="font-header w-full h-fit border-b-4 border-black text-2xl card-sm:text-4xl text-center bg-orange-300">Updates</p>
 
                 <div className="flex flex-wrap justify-around">
+                  <NewsDiv date={'APR/20/2023'} information={<>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Another update coming at ya! The goal of this one is to make team building that much easier </p>
+                    {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
+                    </>}
+                    key={'Update 5'}
+                  />
+                </div>
+
+                <div className="flex flex-wrap justify-around">
                   <NewsDiv date={'APR/16/2023'} information={<>
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Just a little style and processing update. Was making ultimate clash teams in one of my decks on my phone and realized once I had too many teams in a deck, my browser would crash when I tried to 'Gray Characters in Deck'. The issue was that just enough processing power was needed to filter through the characters and add a grayscale effect on them that a computer could do it easily, but on a phone it would crash the browser. I found a quick solution to simply just gray out the entire character when the mode is switched to on. Doesn't look as cool, but works perfectly. Taking a little break this week and then off to add the ability for people to edit team posts (debating adding the ability to edit comments and replies), work on transoforming characters, and then maybe adding SSRs. There is also some back end stuff I want to attend to. Until then, enjoy the app!</p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}

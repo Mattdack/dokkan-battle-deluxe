@@ -298,7 +298,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       const existingCharacter = webOfTeam.find(webCharacter => webCharacter.id === character.id)
       if (existingCharacter) {
         removeFromWebOfTeam(existingCharacter)
-        setCardDetails(character)
       } else {
         addToWebOfTeam(character)
         setCardDetails(character)
