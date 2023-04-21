@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef, useContext } from "rea
 import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
-  useReactFlow,
+  ReactFlowProvider,
 } from "reactflow";
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
@@ -25,7 +25,7 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
-const viewPort = {
+let viewPort = {
   x: 0,
   y: 0,
   zoom: .55,
@@ -143,10 +143,31 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     }
   }
 
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const onLoad = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+
+  const handleTeamCenter = () => {
+    if (reactFlowInstance) {
+      reactFlowInstance.setViewport({x:0, y:0, zoom: .55 });
+      setExistingNodes((prevNode) => {
+        const updatedNodes = combinedNodeData?.map((node) => {
+          return {...node, position:{x:webWidth-125, y:webHeight-125}}
+        });
+        return updatedNodes
+      })
+    }
+  };
+
   return (
+    <ReactFlowProvider>
+
     <div ref={myDivRef} className={`h-full relative`}>
       <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
         <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
+          {webOfTeam.length > 0 && 
+          <button 
+          className="flex w-[80px] h-[80px] card-sm:mr-2 text-sm card-sm:text-base font-bold items-center rounded-lg border-4 border-black text-black bg-white hover:bg-gray-300 z-40"
+          onClick={handleTeamCenter}>Center Team</button>}
           {webOfTeam.map(character => 
             <div
             key={'web'+character.id.toString()}
@@ -187,6 +208,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
         </div>
         <ReactFlow
+          onInit={onLoad}
           nodes={combinedNodeData}
           edges={combinedEdgeData}
           onNodesChange={onNodesChange}
@@ -207,6 +229,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         </ReactFlow>
       </div>
     </div>
+    </ReactFlowProvider>
   );
 }
 
@@ -221,10 +244,17 @@ const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
 };
 
 const startingPosition = (webWidth, webHeight) => {
+  //this is for mobile when selecting character, webWidth doesn't exist because the div is hidden
   if (webWidth === 0 || webHeight === null || typeof webWidth === undefined){
     return {x: window.innerWidth-125, y:window.innerHeight-200}
   } else {
-    return {x: webWidth-125, y: webHeight-125}
+    //this is for mobile so when the suggested card is shown, it doesn't place it out of click range
+    if(window.innerWidth < 850){
+      return {x: window.innerWidth-125, y: window.innerHeight-200}
+    }else{
+      //this is for desktop placement (subtract card dimensions)
+      return {x: webWidth-125, y: webHeight-125}
+    }
   }
 };
 

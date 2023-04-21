@@ -35,7 +35,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
               >
                 {selectedCategories.length === 0 ?
                 <div className="flex w-full h-fit py-1 card-sm:py-0 text-gray-500 text-xsm card-sm:text-[.72rem] items-center" key={'no category selection'}>
-                  selected categories
+                  no selected categories
                 </div>
                 :
                 <select

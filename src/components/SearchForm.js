@@ -88,7 +88,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
             >
               {selectedCategories.length === 0 &&
               <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-[.72rem] justify-center items-center text-center" key={'no category selection'}>
-                selected categories here
+                no selected categories
               </div>
               }
               {selectedCategories.map((category) => (

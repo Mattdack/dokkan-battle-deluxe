@@ -14,6 +14,8 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
   const handleStatsSelectedOptions = (event) => {
+    suggestedCardContainer.current.scrollTo({ top: 0, behavior: "smooth" })
+    setViewableCharacters(50)
     setStatsSelectedOptions(event.target.value);
   };
 
@@ -84,23 +86,18 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
   }, [window.innerWidth]);
 
   const [viewableCharacters, setViewableCharacters] = useState(50);
-  console.log(viewableCharacters)
   
   const suggestedCardContainer = useRef(null)
   // this useEffect is for automatically loading characters by increasing the viewableCharacters
   useEffect(() => {
     if(suggestedCardContainer.current !== null){
-      console.log(viewableCharacters)
-      console.log(filteredSuggestedCharacters.length)
-      console.log(linkedCharacters.length)
       if((viewableCharacters >= filteredSuggestedCharacters.length) || (viewableCharacters >= linkedCharacters.length)){
-        console.log('no more scroll please')
         return
       }
       const cardContainer = suggestedCardContainer.current;
   
       const handleScroll = () => {
-        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 120)) {
+        if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 200)) {
           setViewableCharacters(viewableCharacters + 100);
         }
       };
@@ -133,7 +130,8 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
         {/* <SuggestTeam allCharacters={allCharacters} selectedCharacter={selectedCharacter} linkedCharacters={linkedCharacters} userCharacters={userCharacters}/> */}
 
         <div className="flex justify-around items-center">
-          <div>
+
+          <div className="px-1">
               <CharacterCard individualCharacter={selectedCharacter} mobileSize={'90px'} desktopSize={'85px'}/>
           </div>
 
@@ -152,6 +150,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
         <div 
         ref={suggestedCardContainer}
         className={`flex-1 overflow-y-auto`}>
+
           <OrderByStatsBuffed showSuggestedCards={showSuggestedCards} webOfTeam={webOfTeam} handleNewDetails={handleNewDetails} addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} selectedCharacter={selectedCharacter} linkedCharacters={filteredSuggestedCharacters} viewableCharacters={viewableCharacters}/>
 
             {/* <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} />
@@ -197,7 +196,6 @@ const OrderByStatsBuffed = ({ showSuggestedCards, webOfTeam, handleNewDetails, a
 
   return(
     <div className="p-2">
-    <h3 className="h-fit py-2 font-header text-center text-md card-sm:text-xl font-light underline decoration-2 underline-offset-4">Characters Organized By {statsSelectedOptions}</h3>
     <div className="flex flex-wrap min-h-[95px] max-h-fit card-sm:min-h-[95px] card-sm:max-h-fit justify-evenly bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 relative">
       {characterArrayWithStats
       .slice(0, viewableCharacters)
