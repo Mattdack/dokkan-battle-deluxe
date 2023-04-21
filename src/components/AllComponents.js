@@ -310,6 +310,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       setAllCharacterIDsInDeck(newIDs);
     }, [selectedDeck]);
 
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -598,7 +599,9 @@ const getFilteredCharacters = (allCharacters, userCharacters, filterData, select
         : selectedCategories.some(category => character.category.includes(category))
       )) &&
       (!filterData.isCommonLeader || (selectedCategories.length > 0 ?
-        selectedCategories.some(category => characterLeadCategories?.includes(category))
+        filterData.matchAllCategories
+        ? selectedCategories.every(category => characterLeadCategories?.includes(category))
+        : selectedCategories.some(category => characterLeadCategories?.includes(category))
         :
         (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false))) &&      
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
