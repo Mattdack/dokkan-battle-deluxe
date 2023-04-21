@@ -28,6 +28,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
 
+  const [selectedDeck, setSelectedDeck] = useState("");
+
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
     thumb: 1003310,
@@ -110,7 +112,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
-  const { loading: isUserDataLoading, data: userData } = useQuery(
+  const [getUserData, { loading: isUserDataLoading, data: userData }] = useLazyQuery(
     GET_USERDATA,
     {
       variables: {
@@ -118,9 +120,17 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       },
       onCompleted: (data) => {
         setSavedToMyCharacterDeck(data.findOneUser.savedCharacters);
+        if(selectedDeck !== ''){
+          setAllCharacterIDsInDeck(data.findOneUser.decks.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)))
+        }
       },
     }
   );
+
+  useEffect(() => {
+    getUserData()
+  }, [selectedDeck]);
+
   const userDeckData = userData?.findOneUser?.decks || [];
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
 
@@ -185,7 +195,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }
 
   const [showCardDetails, setShowCardDetails] = useState(true);
-  const [selectedDeck, setSelectedDeck] = useState("");
+
   const handleSelectedDeckOptionClick = (deckId) => {
     if (deckId === ''){
       return
@@ -303,13 +313,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         setCardDetails(character)
       }
     }
-
-    //TODO: for graying out characters in deck
-    useEffect(() => {
-      const newIDs = userDeckData.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)) || [];
-      setAllCharacterIDsInDeck(newIDs);
-    }, [selectedDeck]);
-
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
