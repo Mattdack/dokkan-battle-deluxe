@@ -18,7 +18,8 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
 
                 <div className="flex flex-wrap justify-around">
                   <NewsDiv date={'APR/20/2023'} information={<>
-                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Another update coming at ya! The goal of this one is to make team building that much easier </p>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Another update coming at ya! The goal of this one is to make team building that much easier. When you load in, characters can be filtered by 'Common Leaders'. These are all category leaders that add more than 150% to any stat (felt like that covered more bases and making a search for sub-leaders was just too much). Then, if a category is selected, the 'Common Leaders' actually switches to 'Selected Category Leaders'. Now these characters are leader for ONLY the selected category.</p>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Also, we totally reconstructed the suggested characters. They can now be sorted by ATK, DEF, or Ki gained through links. Organizing the characters by amount of links to each character was nice, but it was unorganized/hard to find the best linker sense they weren't organized by stats gained. Not only that, but we also added the ability to have multiple categories searched in this too. This will make forming teams a breeze. Also, </p>
                     {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>}
                     key={'Update 5'}

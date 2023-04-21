@@ -38,7 +38,7 @@ export default function MakeTeamForm( {team, selectedDeck, open, onClose} ) {
     setRotation1Characters(findRotation1Characters);
     setRotation2Characters(findRotation2Characters);
   }, [open]);
-  
+
   async function handleFormSubmit (event) {
     event.preventDefault()
     const formData = new FormData(makeTeamFormRef.current);

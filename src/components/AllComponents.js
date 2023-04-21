@@ -304,6 +304,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
+    //TODO: for graying out characters in deck
     useEffect(() => {
       const newIDs = userDeckData.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)) || [];
       setAllCharacterIDsInDeck(newIDs);
