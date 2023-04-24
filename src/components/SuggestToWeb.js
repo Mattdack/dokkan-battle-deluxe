@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 
 import Web from "./Web";
 import SuggestForm from "./SuggestForm";
@@ -10,7 +10,11 @@ import { add, countBy, groupBy } from "lodash";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo"
 
+import { UserContext } from "../App";
+
 function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
+  const { showMiddleDiv } = useContext(UserContext);
+
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
 
@@ -137,10 +141,15 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
 
         {/* <SuggestTeam allCharacters={allCharacters} selectedCharacter={selectedCharacter} linkedCharacters={linkedCharacters} userCharacters={userCharacters}/> */}
 
-        <div className="flex justify-around items-center">
+        <div className={`flex justify-around items-center
+        ${(showMiddleDiv && (windowWidth > 850 && windowWidth < 1000)) && 'flex-col'}
+        `}>
 
-          <div className="px-1">
-              <CharacterCard individualCharacter={selectedCharacter} mobileSize={'90px'} desktopSize={'85px'}/>
+          <div className="flex shrink-0 px-1">
+            {/* <p className="text-xsm card-sm:text-[.72rem] font-bold text-center underline underline-offset-2 decoration-solid decoration-2 ">Selected Card</p> */}
+            <div>
+              <CharacterCard individualCharacter={selectedCharacter} mobileSize={'80px'} desktopSize={'80px'}/>
+            </div>
           </div>
 
           <SuggestForm 

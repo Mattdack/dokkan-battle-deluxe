@@ -27,7 +27,6 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
   const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
-
   const [selectedDeck, setSelectedDeck] = useState("");
 
   const [cardDetails, setCardDetails] = useState({
@@ -314,6 +313,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
+    const [hoverCharacterStats, setHoverCharacterStats] = useState(null)
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -334,7 +335,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: card detail styling */}
         <div
           id="SingleCardDetails"
-          className={`${showCardStats || (showMiddleDiv && (windowWidth > 850)) ? '' : 'hidden'} flex flex-col w-screen lg:w-1/4 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
+          className={`${showCardStats || (showMiddleDiv && (windowWidth > 850)) ? '' : 'hidden'} flex flex-col w-screen lg:w-1/4 lg:max-w-[400px] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
           >
 
           <div className="w-full p-2">
@@ -348,15 +349,17 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             }
           </div>
 
-          <div className="flex flex-row w-full px-2 mt-2">
+          <div className="flex flex-row w-full h-fit px-2 mt-2">
+
             <div className="w-1/2">
               <div
                 onClick={() => setShowCardDetails(true)}
-                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
+                className={`flex py-2 px-4 w-full h-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
               >
                 Card Details
               </div>
             </div>
+
             <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
               {Auth.loggedIn() ? (
                 <select
@@ -375,17 +378,18 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   ))}
                 </select>
               ) : (
-                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                <div className="flex w-full h-full border-black border-2 text-base bg-gray-600 rounded-r-lg justify-center items-center text-center">
                   Log In To See Decks
                 </div>
               )}
             </div>
+
           </div>
 
           {showCardDetails ? (
             <CardDetails
               cardDetails={cardDetails}
-              userCharacterIds={userCharacterIds}
+              hoverCharacterStats={hoverCharacterStats}
             />
           ) : (
             <DeckSelection
@@ -541,6 +545,8 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     ${!multiCardSelection && webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
                     ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
                     `}
+                  onMouseEnter={() => setHoverCharacterStats(character)}
+                  onMouseLeave={() => setHoverCharacterStats(null)}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);

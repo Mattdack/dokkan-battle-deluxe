@@ -1,9 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useContext } from "react";
-import ReactFlow, {
-  applyNodeChanges,
-  applyEdgeChanges,
-  ReactFlowProvider,
-} from "reactflow";
+import ReactFlow, {applyNodeChanges,applyEdgeChanges,ReactFlowProvider} from "reactflow";
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
@@ -36,7 +32,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
   
-  const { showSummationLinks, setShowSummationLinks } = useContext(UserContext);
+  const { showSummationLinks, setShowSummationLinks} = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -51,7 +47,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const onNodesChange = useCallback(
     (changes) => {
       setExistingNodes((prevNodes) =>
-        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight, removeFromWebOfTeam))
+        applyNodeChanges(changes, buildAllNodes(webOfTeam, prevNodes, webWidth, webHeight,))
       );
     },
     [setExistingNodes, setExistingEdges, webOfTeam]
@@ -66,8 +62,9 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     [setExistingEdges, webOfTeam]
   );
 
-  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight, removeFromWebOfTeam);
+  const combinedNodeData = buildAllNodes(webOfTeam, existingNodes, webWidth, webHeight,);
   const combinedEdgeData = buildAllEdges(combinedNodeData, existingEdges);
+
 
   //TODO: this needed the webOfTeam to ensure that new nodes added could have edges applied to them. I think the error was coming from new nodes being added and edgees couldn't be attached if they were in the selected mode, causing no edges to be made sense that node was selected on drag
   
@@ -75,17 +72,17 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     setSelectedNode(node)
   };
 
-  const onNodeDrag = (event, node) => {
+  const onNodeDrag = (event, node, nodes) => {
     setSelectedNode(null)
     // console.log('node drag')
   }
   
-  const onNodeDragStart = (event, node) => {
+  const onNodeDragStart = (event, node, nodes) => {
     setSelectedNode(null)
     // console.log('drag start')
   };
 
-  const onNodeDragStop = (event, node) => {
+  const onNodeDragStop = (event, node, nodes) => {
     setSelectedNode(null)
     // console.log('drag stop')
   }
@@ -148,15 +145,83 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   const handleTeamCenter = () => {
     if (reactFlowInstance) {
-      reactFlowInstance.setViewport({x:0, y:0, zoom: .55 });
+      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.55 });
       setExistingNodes((prevNode) => {
-        const updatedNodes = combinedNodeData?.map((node) => {
-          return {...node, position:{x:webWidth-125, y:webHeight-125}}
+        const numNodes = combinedNodeData.length;
+        const minDimension = Math.min(webWidth, webHeight);
+        const radius = (minDimension / 2); // adjust radius to account for half of square dimension
+        const center = { x: webWidth / 1.25, y: webHeight / 1.25 }; // adjust center to account for half of square dimension
+        const angleBetweenNodes = (2 * Math.PI) / numNodes;
+  
+        const updatedNodes = combinedNodeData.map((node, index) => {
+          const angle = index * angleBetweenNodes + Math.PI / 2 + 33;
+          const x = center.x + radius * Math.cos(angle);
+          const y = center.y + radius * Math.sin(angle);
+  
+          return { ...node, position: { x, y } };
         });
-        return updatedNodes
-      })
+        return updatedNodes;
+      });
     }
-  };
+  }; 
+  //TODO: more specific/complex team centering
+  // const handleTeamCenter = () => {
+  //   if (reactFlowInstance) {
+  //     reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.55 });
+  //     setExistingNodes((prevNode) => {
+  //       const numNodes = combinedNodeData.length;
+  //       const minDimension = Math.min(webWidth, webHeight);
+  //       const center = {x:webWidth, y:webHeight}
+  //       const angleBetweenNodes = (2 * Math.PI) / numNodes;
+  //       const radius = (minDimension / 2); // adjust radius to account for half of square dimension
+  //       let updatedNodes = [];
+  //       if (numNodes === 5) {
+  //         const squareDim = minDimension * 1;
+  //         const topLeft = { x: (webWidth - squareDim) / 2, y: (webHeight - squareDim) / 2 };
+  //         updatedNodes = [          { ...combinedNodeData[0], position: { x: topLeft.x, y: topLeft.y } },
+  //           { ...combinedNodeData[1], position: { x: topLeft.x + squareDim, y: topLeft.y } },
+  //           { ...combinedNodeData[2], position: { x: topLeft.x + squareDim, y: topLeft.y + squareDim } },
+  //           { ...combinedNodeData[3], position: { x: topLeft.x, y: topLeft.y + squareDim } },
+  //           { ...combinedNodeData[4], position: { x: topLeft.x + squareDim / 2, y: topLeft.y + squareDim / 2 } },
+  //         ];
+  //       } else if (numNodes === 6) {
+  //         const rectWidth = minDimension * 0.6;
+  //         const rectHeight = minDimension * 0.3;
+  //         const top = (webHeight - rectHeight) / 2;
+  //         const left = (webWidth - rectWidth) / 2;
+  //         updatedNodes = [          { ...combinedNodeData[0], position: { x: left, y: top } },
+  //           { ...combinedNodeData[1], position: { x: left + rectWidth / 2, y: top } },
+  //           { ...combinedNodeData[2], position: { x: left + rectWidth, y: top } },
+  //           { ...combinedNodeData[3], position: { x: left, y: top + rectHeight } },
+  //           { ...combinedNodeData[4], position: { x: left + rectWidth / 2, y: top + rectHeight } },
+  //           { ...combinedNodeData[5], position: { x: left + rectWidth, y: top + rectHeight } },
+  //         ];
+  //       } else if (numNodes === 7) {
+  //         const rectWidth = minDimension * 0.6;
+  //         const rectHeight = minDimension * 0.4;
+  //         const top = (webHeight - rectHeight) / 2;
+  //         const left = (webWidth - rectWidth) / 2;
+  //         updatedNodes = [          
+  //           { ...combinedNodeData[0], position: { x: left, y: top } },
+  //           { ...combinedNodeData[1], position: { x: left + rectWidth / 3, y: top } },
+  //           { ...combinedNodeData[2], position: { x: left + rectWidth * 2 / 3, y: top } },
+  //           { ...combinedNodeData[3], position: { x: left + rectWidth, y: top } },
+  //           { ...combinedNodeData[4], position: { x: left + rectWidth / 2, y: top + rectHeight / 2 } },
+  //           { ...combinedNodeData[5], position: { x: left, y: top + rectHeight } },
+  //           { ...combinedNodeData[6], position: { x: left + rectWidth, y: top + rectHeight } },
+  //         ];
+  //         } else {
+  //         // code for splitting web proportionally
+  //         const updatedNodes = combinedNodeData.map((node, index) => {
+  //         const angle = index * angleBetweenNodes + Math.PI / 2 + 180;
+  //         const x = center.x + radius * Math.cos(angle);
+  //         const y = center.y + radius * Math.sin(angle);
+  //         return { ...node, position: { x, y } };
+  //       });
+  //       return updatedNodes;
+  //     }
+  //     return updatedNodes;
+  //   })}}
 
   return (
     <ReactFlowProvider>
@@ -233,7 +298,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   );
 }
 
-const buildAllNodes = (team, nodes = [], webWidth, webHeight) => {
+const buildAllNodes = (team, nodes = [], webWidth, webHeight,) => {
   const nodeDictionary = Object.fromEntries(
     nodes.map((node) => [node.id, node])
   );

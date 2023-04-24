@@ -34,16 +34,18 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
               <div className="flex flex-row h-fit min-w-[50px] max-w-[150px] w-1/3 card-sm:h-10 px-2 mr-2 items-center bg-white rounded-full border-2 border-gray-400 whitespace-nowrap"
               >
                 {selectedCategories.length === 0 ?
-                <div className="flex w-full h-fit py-1 card-sm:py-0 text-gray-500 text-xsm card-sm:text-[.72rem] items-center" key={'no category selection'}>
-                  no selected categories
-                </div>
+                <select
+                className="w-full py-1 text-sm"
+                >
+                  <option value={'Remove All Categories'} className="text-red-400">No Categories Selected</option>
+                </select>
                 :
                 <select
-                className="w-full py-1 text-sm "
+                className="w-full py-1 text-sm"
                 onChange={(e)=>handleSelectedCategoryRemoval(e.target.value)}>
-                  <option className="w-full truncate" value={'Selected Categories'} key={'Suggested Selected Categories'}>Selected Categories</option>
+                  <option className="truncate" value={'Selected Categories'} key={'Suggested Selected Categories'}>Selected Categories</option>
                   {selectedCategories.map((category) => (
-                    <option className="w-full truncate" value={category} key={category}>
+                    <option className="truncate" value={category} key={category}>
                       {category}
                     </option>
                   ))}
@@ -65,7 +67,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
                   />
                   <div
                     style={{ cursor: "pointer" }}
-                    className="w-full py-1 card-sm:py-2 px-1 card-sm:px-2 text-[.6rem] card-sm:text-[.72rem] font-bold relative text-center lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                    className="w-full py-1 card-sm:py-2 px-1 card-sm:px-2 text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] font-bold relative text-center lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
                   >
                     Full Match
                   </div>
@@ -74,7 +76,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
           
 
             <select
-              className="flex w-1/3 p-1.5 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white hover:bg-gray-300 border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/3 p-1.5 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] text-black font-bold bg-white hover:bg-gray-300 border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}
@@ -113,7 +115,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="m-0.5 py-1 px-4 card-sm:px-10 card-sm:py-2 relative text-[.6rem] card-sm:text-[.72rem] text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+                  className="m-0.5 py-1 px-4 card-sm:px-10 lg:px-5 xl:px-10 card-sm:py-2 relative text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] text-center font-bold lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
                 >
                   Saved
                 </div>
@@ -124,7 +126,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
       </form>
 
       <div className="pt-1 pb-2 flex justify-center items-center">
-        <p className="text-sm card-sm:text-[.72rem] mr-4 font-bold text-center">stats filter:</p>
+        <p className="text-sm card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] mr-4 font-bold text-center">stats filter:</p>
         <div className="">
           <input
             className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
@@ -136,7 +138,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem]"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
             htmlFor="inlineRadio10"
           >
             None
@@ -153,7 +155,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem]"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
             htmlFor="inlineRadio10"
           >
             ATK
@@ -170,7 +172,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem]"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
             htmlFor="inlineRadio20"
           >
             DEF
@@ -187,7 +189,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
             onChange={handleStatsSelectedOptions}
           />
           <label
-            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem]"
+            className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
             htmlFor="inlineRadio30"
           >
             Ki
@@ -211,7 +213,7 @@ const CharacterSelectButton = ({ name, label, ...inputProps }) => {
       />
       <div
         style={{ cursor: "pointer" }}
-        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-[.72rem] lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+        className="flex justify-center m-0.5 py-1 px-2 card-sm:py-2 card-sm:px-4 relative text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
       >
         {label}
       </div>
