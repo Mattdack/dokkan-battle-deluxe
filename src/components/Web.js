@@ -151,28 +151,43 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         let windowHeightToUse;
         if(window.innerWidth < 850){
           windowWidthToUse = window.innerWidth
-          windowHeightToUse = window.innerHeight
+          windowHeightToUse = window.innerHeight-30
         } else {
           windowWidthToUse = webWidth
           windowHeightToUse = webHeight
         }
         const numNodes = combinedNodeData.length;
         const minDimension = Math.min(windowWidthToUse, windowHeightToUse);
-        const radius = (minDimension / 2); // adjust radius to account for half of square dimension
-        const center = { x: windowWidthToUse / 1.25, y: windowHeightToUse / 1.25 }; // adjust center to account for half of square dimension
-        const angleBetweenNodes = (2 * Math.PI) / numNodes;
+        
+        let updatedNodes;
+        if (numNodes === 5) {
+          const squareDim = minDimension;
+          const topLeft = { x: (windowWidthToUse - squareDim/1.4) , y: (windowHeightToUse - squareDim/1)};
+          updatedNodes = [
+            { ...combinedNodeData[0], position: { x: topLeft.x, y: topLeft.y } },
+            { ...combinedNodeData[1], position: { x: topLeft.x + squareDim, y: topLeft.y } },
+            { ...combinedNodeData[2], position: { x: topLeft.x + squareDim, y: topLeft.y + squareDim } },
+            { ...combinedNodeData[3], position: { x: topLeft.x, y: topLeft.y + squareDim } },
+            { ...combinedNodeData[4], position: { x: topLeft.x + squareDim / 2, y: topLeft.y + squareDim / 2 } },
+          ];
+        } else {
+          const radius = (minDimension * 1.4 / 2)
+          const center = { x: windowWidthToUse / 1.33, y: windowHeightToUse / 1.33 }
+          const angleBetweenNodes = (2 * Math.PI) / numNodes;
   
-        const updatedNodes = combinedNodeData.map((node, index) => {
-          const angle = index * angleBetweenNodes + Math.PI / 2 + 33;
-          const x = center.x + radius * Math.cos(angle);
-          const y = center.y + radius * Math.sin(angle);
+          updatedNodes = combinedNodeData.map((node, index) => {
+            const angle = index * angleBetweenNodes + Math.PI / 2 + 33;
+            const x = center.x + radius * Math.cos(angle);
+            const y = center.y + radius * Math.sin(angle);
   
-          return { ...node, position: { x, y } };
-        });
+            return { ...node, position: { x, y } };
+          });
+        }
         return updatedNodes;
       });
     }
-  }; 
+  };
+  
   //TODO: more specific/complex team centering
   // const handleTeamCenter = () => {
   //   if (reactFlowInstance) {
