@@ -32,7 +32,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
   
-  const { showSummationLinks, setShowSummationLinks} = useContext(UserContext);
+  const { showSummationLinks, setShowSummationLinks, showMiddleDiv } = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -42,7 +42,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   useEffect(() => {
     setWebWidth(myDivRef.current.offsetWidth)
     setWebHeight(myDivRef.current.offsetHeight)
-  }, [allCharactersLoading, showSuggestedCards, window.innerWidth]);
+  }, [allCharactersLoading, showSuggestedCards, showMiddleDiv, window.innerWidth]);
   
   const onNodesChange = useCallback(
     (changes) => {
@@ -147,10 +147,19 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
     if (reactFlowInstance) {
       reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.55 });
       setExistingNodes((prevNode) => {
+        let windowWidthToUse;
+        let windowHeightToUse;
+        if(window.innerWidth < 850){
+          windowWidthToUse = window.innerWidth
+          windowHeightToUse = window.innerHeight
+        } else {
+          windowWidthToUse = webWidth
+          windowHeightToUse = webHeight
+        }
         const numNodes = combinedNodeData.length;
-        const minDimension = Math.min(webWidth, webHeight);
+        const minDimension = Math.min(windowWidthToUse, windowHeightToUse);
         const radius = (minDimension / 2); // adjust radius to account for half of square dimension
-        const center = { x: webWidth / 1.25, y: webHeight / 1.25 }; // adjust center to account for half of square dimension
+        const center = { x: windowWidthToUse / 1.25, y: windowHeightToUse / 1.25 }; // adjust center to account for half of square dimension
         const angleBetweenNodes = (2 * Math.PI) / numNodes;
   
         const updatedNodes = combinedNodeData.map((node, index) => {
@@ -225,75 +234,74 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   return (
     <ReactFlowProvider>
-
-    <div ref={myDivRef} className={`h-full relative`}>
-      <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
-        <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
-          {webOfTeam.length > 0 && 
-          <button 
-          className="flex w-[80px] h-[80px] card-sm:mr-2 text-sm card-sm:text-base font-bold items-center rounded-lg border-4 border-black text-black bg-white hover:bg-gray-300 z-40"
-          onClick={handleTeamCenter}>Center Team</button>}
-          {webOfTeam.map(character => 
-            <div
-            key={'web'+character.id.toString()}
-            className="card-sm:min-w-[60px]"
-            >
-              <SuggestCard
-              character={character}
-              webOfTeam={webOfTeam}
-              selectedCharacter={selectedCharacter}
-              handleNewDetails={handleNewDetails}
-              removeFromWebOfTeam={removeFromWebOfTeam}
-              addToWebOfTeam={addToWebOfTeam}
-              statsSelectedOptions={statsSelectedOptions}
-            />  
-            </div>
-          )}
+      <div ref={myDivRef} className={`h-full relative`}>
+        <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
+          <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
+            {webOfTeam.length > 0 && 
+            <button 
+            className="flex w-[80px] h-[80px] card-sm:mr-2 text-sm card-sm:text-base font-bold items-center rounded-lg border-4 border-black text-black bg-white hover:bg-gray-300 z-40"
+            onClick={handleTeamCenter}>Center Team</button>}
+            {webOfTeam.map(character => 
+              <div
+              key={'web'+character.id.toString()}
+              className="card-sm:min-w-[60px]"
+              >
+                <SuggestCard
+                character={character}
+                webOfTeam={webOfTeam}
+                selectedCharacter={selectedCharacter}
+                handleNewDetails={handleNewDetails}
+                removeFromWebOfTeam={removeFromWebOfTeam}
+                addToWebOfTeam={addToWebOfTeam}
+                statsSelectedOptions={statsSelectedOptions}
+              />  
+              </div>
+            )}
+          </div>
+          <img 
+            src={rightArrowIcon}
+            onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
+            className={`${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2 w-[7.5%] card-sm:w-[7%] ' : 'border-r-2 w-3/4'} border-b-2 border-black bg-slate-800 cursor-pointer`}
+            title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
+          />
         </div>
-        <img 
-          src={rightArrowIcon}
-          onClick={() => setShowRemoveFromTeam(!showRemoveFromTeam)}
-          className={`${showRemoveFromTeam ? 'transform scale-x-[-1] border-x-2 w-[7.5%] card-sm:w-[7%] ' : 'border-r-2 w-3/4'} border-b-2 border-black bg-slate-800 cursor-pointer`}
-          title={`${showRemoveFromTeam ? 'click to hide team' : 'click to show team' }`}
-        />
-      </div>
-      <div className="h-full bg-slate-700 row-span-6 relative">
-        <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
-          <button
-          className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
-          onClick={() => handleResetTeam(webOfTeam)}
-          >Reset Team</button>
-          <button
-          className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
-          onClick={() => setShowSummationLinks(!showSummationLinks)}
-          >{showSummationLinks ? '# of Links' : 'Summation'}</button>
-          <button
-          className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
-          onClick={() => handleSetShowSuggestedCards()}
-          >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+        <div className="h-full bg-slate-700 row-span-6 relative">
+          <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
+            <button
+            className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
+            onClick={() => handleResetTeam(webOfTeam)}
+            >Reset Team</button>
+            <button
+            className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
+            onClick={() => setShowSummationLinks(!showSummationLinks)}
+            >{showSummationLinks ? '# of Links' : 'Summation'}</button>
+            <button
+            className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
+            onClick={() => handleSetShowSuggestedCards()}
+            >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
+          </div>
+          <ReactFlow
+            onInit={onLoad}
+            nodes={combinedNodeData}
+            edges={combinedEdgeData}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStart={onNodeDragStart}
+            onNodeDragStop={onNodeDragStop}
+            onNodeClick={onNodeClick}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onEdgeClick={onEdgeClick}
+            onPaneClick={onPaneClick}
+            defaultViewport={viewPort} 
+            zoomOnDoubleClick={false}
+            className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
+          >
+          </ReactFlow>
         </div>
-        <ReactFlow
-          onInit={onLoad}
-          nodes={combinedNodeData}
-          edges={combinedEdgeData}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          onNodeDrag={onNodeDrag}
-          onNodeDragStart={onNodeDragStart}
-          onNodeDragStop={onNodeDragStop}
-          onNodeClick={onNodeClick}
-          onNodeDoubleClick={onNodeDoubleClick}
-          onEdgeClick={onEdgeClick}
-          onPaneClick={onPaneClick}
-          defaultViewport={viewPort} 
-          zoomOnDoubleClick={false}
-          className="bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 border-b-2 border-r-2 border-black"
-        >
-        </ReactFlow>
       </div>
-    </div>
     </ReactFlowProvider>
   );
 }

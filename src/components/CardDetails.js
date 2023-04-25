@@ -26,8 +26,6 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
     setEzaEnabled(false)
   }, [cardDetails, hoverCharacterStats])
 
-  console.log(characterDetails)
-
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-col w-full ">
@@ -70,8 +68,8 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
           <div className="flex flex-wrap w-full p-1 justify-center">
             <p className="w-full h-fit font-header text-center text-lg card-sm:text-2xl">
               Passive Skill:
-              <ScrollingDiv divRef={divRef1} text={characterDetails?.ps_name} />
             </p>
+            <ScrollingDiv divRef={divRef1} text={characterDetails?.ps_name} />
             <div className="flex w-full font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               {!ezaEnabled ? 
                 <CardDescription text={characterDetails?.ps_description} />
