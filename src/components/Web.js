@@ -154,7 +154,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           windowHeightToUse = window.innerHeight-30
         } else {
           windowWidthToUse = webWidth
-          windowHeightToUse = webHeight
+          windowHeightToUse = webHeight+100
         }
         const numNodes = combinedNodeData.length;
         const minDimension = Math.min(windowWidthToUse, windowHeightToUse);
