@@ -37,9 +37,7 @@ const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize
 
     return (
         <div 
-        className={`
-        flex w-fit justify-center items-center relative
-        `}>
+        className={`flex w-fit justify-center items-center relative`}>
             {/* ${grayCharactersInSelectedDeck && SOMETHING && 'grayscale'} */}
             <AdvancedImage
                 className={`w-[${mobileSize}] card-sm:w-[${desktopSize}] bottom-[5%] bg-no-repeat relative z-40`}

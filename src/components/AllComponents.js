@@ -535,15 +535,13 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
-                // .filter((character) => character.glb_date !== null)
-                // .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
                   key={character.id}
                   className={`
                     cursor-pointer relative
-                    ${!multiCardSelection && webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
+                    ${!multiCardSelection ? webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]" : ''}
+                    ${multiCardSelection ? savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-amber-900/[.4]' : ''}
                     `}
                   onMouseEnter={() => setHoverCharacterStats(character)}
                   onMouseLeave={() => setHoverCharacterStats(null)}
