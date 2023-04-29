@@ -17,14 +17,17 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
           [e.target.name]: value,
         });
       }
-    
       async function editCharacterSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         // Check if any values are empty strings and replace them with null
         const updatedCharacter = {};
         Object.entries(characterForm).forEach(([key, value]) => {
           updatedCharacter[key] = value === '' ? null : value;
         });
+      
+        // Split category and link_skill strings into arrays
+        updatedCharacter.category = updatedCharacter.category.split(',').map(str => str.trim());
+        updatedCharacter.link_skill = updatedCharacter.link_skill.split(',').map(str => str.trim());
       
         await editCharacter({
           variables: {
@@ -38,6 +41,7 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
             console.log(error);
           });
       }
+      
 
   return (
             <form 
