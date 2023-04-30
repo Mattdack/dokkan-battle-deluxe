@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
 import { EDIT_CHARACTER } from "../util/mutations";
+import { update } from 'lodash';
 
 
 export default function EditCharacter({ characterForm, setCharacterForm }) {
@@ -25,21 +26,19 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
           updatedCharacter[key] = value === '' ? null : value;
         });
       
-        // Split category and link_skill strings into arrays
-        updatedCharacter.category = updatedCharacter.category.split(',').map(str => str.trim());
-        updatedCharacter.link_skill = updatedCharacter.link_skill.split(',').map(str => str.trim());
-      
+        console.log(updatedCharacter)
+        
         await editCharacter({
           variables: {
             updatedCharacter: updatedCharacter,
           },
         })
-          .then((result) => {
-            console.log(result);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       }
       
 

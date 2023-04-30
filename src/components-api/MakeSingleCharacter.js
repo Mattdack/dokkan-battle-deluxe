@@ -66,10 +66,9 @@ export default function MakeSingleCharacter({ }) {
       [e.target.name]: value,
     });
   }
-
+  
   function handleAddCharacter (e) {
     e.preventDefault();
-    
     // Convert the required values to integers
     const formattedCharacter = {
       ...characterClean,
@@ -77,10 +76,9 @@ export default function MakeSingleCharacter({ }) {
       art: parseInt(characterClean.art) || null,
       thumb: parseInt(characterClean.thumb),
       cost: parseInt(characterClean.cost),
+      link_skill: characterClean.link_skill.split(','),
+      category: characterClean.category.split(',')
     };
-
-    console.log(formattedCharacter);
-    console.log(formattedCharacter.wiki_link)
 
     addCharacter ({
       variables: {
@@ -157,6 +155,7 @@ export default function MakeSingleCharacter({ }) {
                   onChange={(e)=>handleCharacterInputChange(e)}
                   name='id'
                   value={characterClean?.id}
+                  required
                   />
                 </label>
                 <label className="flex p-2">
@@ -167,6 +166,7 @@ export default function MakeSingleCharacter({ }) {
                   onChange={(e)=>handleCharacterInputChange(e)}
                   name='wiki_link'
                   value={characterClean?.wiki_link}
+                  required
                   />
                 </label>
                 <label className="flex p-2">

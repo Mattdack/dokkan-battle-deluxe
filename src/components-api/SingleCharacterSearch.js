@@ -53,8 +53,6 @@ export default function SingleCharacterSearch({ selectedCharacterId }) {
       setCharacterClean(getCharacterInfo(newCharacterInput))
     }
 
-    console.log(characterClean)
-
   return (
     <div className='flex flex-col w-full'>
         <p>CHARACTER INFO FROM WIKI</p>
