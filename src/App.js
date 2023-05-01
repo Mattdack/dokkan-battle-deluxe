@@ -4,6 +4,7 @@ import AllComponents from "./components/AllComponents"
 import AllStrategy from "./components-strategy/AllStrategy"
 import AllAPI from "./components-api/AllAPI"
 import Help from "./components/Help";
+import NoPage from "./components/NoPage";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -66,6 +67,7 @@ function App() {
               <Route exact path='/strategy' element={<AllStrategiesWithData />} />
               <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
               <Route exact path='/help' element={<Help />} />
+              <Route exact path='/*' element={<NoPage />} />
             </Routes>
           </UserContext.Provider>
         </div>

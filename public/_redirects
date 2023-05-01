@@ -3,3 +3,4 @@
 /help         /index.html 200
 /api-connect  /index.html 200
 https://dokkanbattlehelper.com/*  https://dokkan.team/:splat  301!
+/*            /index.html 404

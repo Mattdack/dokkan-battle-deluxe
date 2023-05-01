@@ -25,15 +25,15 @@ const AppNavbar = (
   const currentPath = window.location.pathname;
   
   let linkToRender;
-  if (currentPath === '/strategy') {
-    linkToRender = {
-      url: '/',
-      onClick: handleToTeamBuild
-    };
-  } else {
+  if (currentPath === '/') {
     linkToRender = {
       url: '/strategy',
       onClick: handleToStrategy
+    };
+  } else {
+    linkToRender = {
+      url: '/',
+      onClick: handleToTeamBuild
     };
   }
 
