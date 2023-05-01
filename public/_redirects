@@ -2,3 +2,4 @@
 /strategy     /index.html 200
 /help         /index.html 200
 /api-connect  /index.html 200
+https://dokkanbattlehelper.com/*  https://dokkan.team/:splat  301!
