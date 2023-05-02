@@ -258,8 +258,6 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
 
 const getFilteredCharacters = (linkedCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
-  console.log(!filterData.characterRaritySuggest)
-  console.log(filterData.characterRaritySuggest)
   return baseChars.filter((character) => {
     return (
       (!selectedCategories.length || (filterData.suggestMatchAllCategories

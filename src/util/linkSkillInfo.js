@@ -606,16 +606,7 @@ export const linkSkillStatBoosts = (linkSkills) => {
   const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
   
   linkSkills.forEach(linkSkillStat => {
-    const match = linkSkillStat.match(/\+(\d+)%/);
-    if (!match) return;
-    const stat = parseInt(match[1]);
-    
-    if (linkSkillStat.includes("ATK")) {
-      linkSkillBuffs.ATK.push(stat);
-    }
-    if (linkSkillStat.includes("DEF")) {
-      linkSkillBuffs.DEF.push(stat);
-    }
+    // Ki's need to go first because the match looks only for numbers that have a + AND a %
     if (linkSkillStat.includes("Ki +1")) {
       linkSkillBuffs.Ki.push(1);
     }
@@ -624,6 +615,17 @@ export const linkSkillStatBoosts = (linkSkills) => {
     }
     if (linkSkillStat.includes("Ki +3")) {
       linkSkillBuffs.Ki.push(3);
+    }
+
+    const match = linkSkillStat.match(/\+(\d+)%/)
+    if (!match) return;
+    const stat = parseInt(match[1]);
+    
+    if (linkSkillStat.includes("ATK")) {
+      linkSkillBuffs.ATK.push(stat);
+    }
+    if (linkSkillStat.includes("DEF")) {
+      linkSkillBuffs.DEF.push(stat);
     }
   });
   
@@ -693,9 +695,6 @@ export const linkSkillStatsBoostedForFloatCharacter = (character1, character2, f
 
     const usedLinksStatsBoost = linkSkillStatBoosts(usedLinkStats)
     const uNusedLinksStatsBoost = linkSkillStatBoosts(uNusedLinkStats)
-
-    // console.log(usedLinksStatsBoost)
-    // console.log(uNusedLinksStatsBoost)
 
     return {
       linkNames: {usedLinks, uNusedLinks},

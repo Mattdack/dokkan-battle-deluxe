@@ -294,12 +294,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
     const [announcementOpen, setAnnouncementOpen] = useState(false)
     const [openNewsModal, setOpenNewsModal] = useState(false)
-    const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
-    const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
-    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
+    const firstLogInShowNews = localStorage.getItem('firstLogInShowNews')
+    const timestamp = localStorage.getItem('firstLogInShowNewsTimestamp')
+    if (!firstLogInShowNews || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
-      localStorage.setItem('firstLogInNewShow', 'true');
-      localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
+      localStorage.setItem('firstLogInShowNews', 'true');
+      localStorage.setItem('firstLogInShowNewsTimestamp', Date.now());
     }
 
     function handleCharacterSelection(character){
