@@ -11,17 +11,24 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
      <div 
       onClick={() => onClose()} 
       className="flex fixed top-0 left-0 right-0 bottom-0 bg-black/[.7] z-[999] justify-center items-center">
-        <div className="flex flex-col w-3/4 lg:w-3/4 h-[90vh] lg:max-h-3/4 border-4 border-black rounded-lg shadow-lg fixed bg-gray-100 z-[1000] overflow-y-auto">
+        <div 
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col w-3/4 lg:w-3/5 h-[70vh] lg:max-h-3/4 border-4 border-black rounded-lg shadow-lg fixed bg-gray-100 z-[1000] overflow-y-auto">
           <div className="flex flex-col lg:flex-row w-full h-full bg-orange-200 overflow-y-auto">
               <div className="h-3/4 lg:h-full lg:w-3/5 pb-14 border-2 border-black overflow-y-auto">
                 <p className="font-header w-full h-fit border-b-4 border-black text-2xl card-sm:text-4xl text-center bg-orange-300">Updates</p>
 
                 <div className="flex flex-wrap justify-around">
                   <NewsDiv date={'MAY/1/2023'} information={<>
-                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">After many requests for SSR characters, they are now available! It took some time to download all of them to the database and ensure that there were no errors. Additionally, level 10 links are now available! I have implemented an options menu for the team formation to start freeing up some space (you can access it in the top right-hand corner of the team web page). Also, I had some requests to keep the suggested cards back to the previous version of sorting by the number of links. I enabled a setting to allow people to switch between the two. Also, you may have noticed that our primary domain has changed! We are keeping the name Dokkan Battle Helper but if you search for <a className='text-blue-500' href="https://dokkanbattlehelper.com/">https://dokkanbattlehelper.com/</a>, you will be redirected to <a className='text-blue-500' href="https://dokkan.team/">https://dokkan.team/</a>. Both domains work, and we will be working on having all cases of dokkanbattlehelper.com redirect to dokkan.team. We are working hard to ensure our search engine optimization (SEO) is at its best so that we can reach as many users as possible, and we believe that dokkan.team will help us. Also, it's a much easier website name to remember! Both domains go to the same site, so in the end it doesn't matter which one is used.</p> 
-                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Currently, there is a styling issue on the team web page when character details are shown for screen sizes ranging from 851 to 940 pixels. I need to fine-tune the suggested section to ensure that it fits onto the screen for these sizes, but I wanted to get this update out in the meantime. If you find any other errors, please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>Google Form</a>.</p>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold">TLDR:</p>
+                    <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">new primary domain</li>
+                    <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">added SSR characters</li>
+                    <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">level 10 link stats</li>
+                    <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">suggested card/link options added</li>
+                    <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">allow users to select order suggested characters by number of links or by stats gained</li>
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">After many requests for SSR characters, they are now available! It took some time to download all of them to the database and ensure that there were no errors. With this new update we also added an "infinite scroll" to the character selection. This just allows for smoother UI and doesn't force a ton of processing on page load when it queries for 1,700 characters. I also will need to comb over some character data, as it is not perfect yet. Additionally, level 10 links are now available! I have implemented an options menu for the team formation to start freeing up some space (you can access it in the top right-hand corner of the team web page). Also, I had some requests to keep the suggested cards back to the previous version of sorting by the number of links. I enabled a setting to allow people to switch between the two. Also, you may have noticed that our primary domain has changed! We are keeping the name Dokkan Battle Helper but if you search for <a className='text-blue-500' href="https://dokkanbattlehelper.com/">https://dokkanbattlehelper.com/</a>, you will be redirected to <a className='text-blue-500' href="https://dokkan.team/">https://dokkan.team/</a>. Both domains work, and we will be working on having all cases of dokkanbattlehelper.com redirect to dokkan.team. We are working hard to ensure our search engine optimization (SEO) is at its best so that we can reach as many users as possible, and we believe that dokkan.team will help us. Also, it's a much easier website name to remember! Both domains go to the same site, so in the end it doesn't matter which one is used.</p> 
+                    <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Currently, there is a styling issue on the team web page when character details are shown for screen sizes ranging from 851 to 940 pixels. I need to fine-tune the suggested section to ensure that it fits onto the screen for these sizes, but I wanted to get this update out in the meantime. If you find any other errors, missing characters, or incorrect information please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>Google Form</a>.</p>
                     <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Next on the list is transforming characters and adding the ability to edit teams posted on the strategy section. I'm also working on an auto-generate team option, although this will take some time as the algorithm is proving to be difficult. We hope you are still enjoying the app!</p> 
-                    {/* <li className="py-2 px-2 card-sm:px-4"></li> */}
                     </>}
                     key={'Update 5'}
                   />
@@ -86,19 +93,19 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
               </div>
               <div className="h-1/4 lg:h-full lg:w-2/5 pb-14 border-2 border-black overflow-y-auto">
                 <p className="font-header w-full h-fit border-b-4 border-black text-2xl card-sm:text-4xl text-center bg-orange-300">Upcoming Updates</p>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold">Adding in transformed characters</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold">Team analysis button on posted teams to see how well characters link with each other on the team</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold">Filtering team posted to stages depending on users saved characters</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Adding in SSR units</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Adding in Japan units</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Allowing people to comment on stages their saved characters in order for others to help formulate a team for them</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Adding a remove from team option to character cards in the main container</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Click logo to jump between home and strategy</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Fixing categroy selected size increase off screen</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">New strategy page</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">New help page</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Multi-category search</li>
-                <li className="px-2 card-sm:px-4 py-2 text-lg font-bold line-through decoration-2">Allowing make from scratch team post, making it so that people don't have to make a team at the home page but can construct one from scratch in the strategy page</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold">Adding in transformed characters</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold">Team analysis button on posted teams to see how well characters link with each other on the team</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold">Filtering team posted to stages depending on users saved characters</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Adding in SSR units</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Adding in Japan units</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Allowing people to comment on stages their saved characters in order for others to help formulate a team for them</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Adding a remove from team option to character cards in the main container</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Click logo to jump between home and strategy</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Fixing categroy selected size increase off screen</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">New strategy page</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">New help page</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Multi-category search</li>
+                <li className="px-2 card-sm:px-4 py-2 text-base card-sm:text-lg font-bold line-through decoration-2">Allowing make from scratch team post, making it so that people don't have to make a team at the home page but can construct one from scratch in the strategy page</li>
               </div>
           </div>
         </div>
