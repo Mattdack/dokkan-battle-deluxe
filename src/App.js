@@ -47,6 +47,8 @@ function App() {
   const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
   const [allNodePositions, setAllNodePositions] = useState([])
   const [levelOfLinks, setLevelOfLinks] = useState(1)
+  const [showSuggestedCardsByStats, setShowSuggestedCardsByStats] = useState(true)
+
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
@@ -64,6 +66,8 @@ function App() {
             setAllNodePositions: setAllNodePositions,
             levelOfLinks:levelOfLinks,
             setLevelOfLinks:setLevelOfLinks,
+            showSuggestedCardsByStats:showSuggestedCardsByStats,
+            setShowSuggestedCardsByStats:setShowSuggestedCardsByStats
              }}>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />

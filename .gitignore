@@ -11,6 +11,9 @@
 # production
 /build
 
+# public build
+/public
+
 # misc
 .DS_Store
 .env
@@ -28,6 +31,3 @@ yarn-error.log*
 
 # VS CODE SETTINGS folder
 .vscode
-
-#redirects removed for coverage
-/_redirects

@@ -35,7 +35,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
   
-  const { showMiddleDiv } = useContext(UserContext);
+  const { showMiddleDiv, showSuggestedCardsByStats, setShowSuggestedCardsByStats } = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -231,6 +231,12 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
             className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
             onClick={() => handleResetTeam(webOfTeam)}
             >Reset Team</button>
+            {showSuggestedCards &&
+              <button
+              className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
+              onClick={() => setShowSuggestedCardsByStats(!showSuggestedCardsByStats)}
+              >{showSuggestedCardsByStats ? 'Order By # of Links' : 'Order By Stats'}</button>
+            }
             <button
             className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
             onClick={() => handleSetShowSuggestedCards()}
