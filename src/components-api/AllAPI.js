@@ -370,10 +370,10 @@ const getFilteredCharacters = ( allCharacters, userCharacters, filterData, selec
       (!selectedCategories.length ||
         (filterData.matchAllCategories
           ? selectedCategories.every((category) =>
-              character.category.includes(category)
+            character.category && character.category.includes(category)
             )
           : selectedCategories.some((category) =>
-              character.category.includes(category)
+          character.category && character.category.includes(category)
             ))) &&
       (!filterData.isCommonLeader ||
         (leaderNumbers

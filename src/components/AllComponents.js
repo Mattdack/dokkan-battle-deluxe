@@ -231,7 +231,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const cardContainerRef = useRef(null);
   const handleNewCategorySelected = (e) => {
-    // setViewableCharacters(100)
     if(e.target.value === ''){
       cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
       return setSelectedCategories([])
@@ -314,6 +313,37 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     }
 
     const [hoverCharacterStats, setHoverCharacterStats] = useState(null)
+
+    const [viewableCharacters, setViewableCharacters] = useState(200)
+      // this useEffect is for automatically loading characters by increasing the viewableCharacters
+    useEffect(() => {
+      if(cardContainerRef.current !== null){
+        if((filteredCharacters?.length > 0 && viewableCharacters >= filteredCharacters?.length) || (viewableCharacters >= allCharacters?.length)){
+          return
+        }
+        const cardContainer = cardContainerRef.current;
+    
+        const handleScroll = () => {
+          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 400)) {
+            setViewableCharacters(viewableCharacters + 100);
+          }
+        };
+    
+        cardContainer.addEventListener("scroll", handleScroll);
+    
+        return () => {
+          cardContainer.removeEventListener("scroll", handleScroll);
+        };
+
+      }
+    }, [allCharactersLoading, viewableCharacters, charactersToDisplay]);
+    
+    useEffect(() => {
+      if(cardContainerRef.current){
+        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+        setViewableCharacters(100)
+      }
+    },[selectedCategories])
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -535,6 +565,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
+                .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
                   key={character.id}
@@ -602,8 +633,8 @@ const getFilteredCharacters = (allCharacters, userCharacters, filterData, select
     
     return (
       (!selectedCategories.length || (filterData.matchAllCategories
-        ? selectedCategories.every(category => character.category.includes(category))
-        : selectedCategories.some(category => character.category.includes(category))
+        ? selectedCategories.every(category => character.category && character.category.includes(category))
+        : selectedCategories.some(category => character.category && character.category.includes(category))
       )) &&
       (!filterData.isCommonLeader || (selectedCategories.length > 0 ?
         filterData.matchAllCategories

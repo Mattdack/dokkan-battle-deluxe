@@ -3,6 +3,7 @@ import ReactFlow, {applyNodeChanges,applyEdgeChanges,ReactFlowProvider} from "re
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
+import WebOptionsModal from '../modals/WebOptionsModal.js'
 import WebCard from "../cards/WebCard";
 import CustomEdge from "./CustomEdge";
 
@@ -28,11 +29,13 @@ let viewPort = {
 };
 
 function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCharacter, handleNewDetails, addToWebOfTeam, statsSelectedOptions, showSuggestedCards, handleSetShowSuggestedCards }) {
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+
   const [existingNodes, setExistingNodes] = useState(buildAllNodes(webOfTeam));
   const [existingEdges, setExistingEdges] = useState(buildAllEdges(existingNodes));
   const [selectedNode, setSelectedNode] = useState(null);
   
-  const { showSummationLinks, setShowSummationLinks, showMiddleDiv } = useContext(UserContext);
+  const { showMiddleDiv } = useContext(UserContext);
 
   const myDivRef = useRef(null);
   const [webWidth, setWebWidth] = useState(null)
@@ -187,68 +190,10 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
       });
     }
   };
-  
-  //TODO: more specific/complex team centering
-  // const handleTeamCenter = () => {
-  //   if (reactFlowInstance) {
-  //     reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.55 });
-  //     setExistingNodes((prevNode) => {
-  //       const numNodes = combinedNodeData.length;
-  //       const minDimension = Math.min(webWidth, webHeight);
-  //       const center = {x:webWidth, y:webHeight}
-  //       const angleBetweenNodes = (2 * Math.PI) / numNodes;
-  //       const radius = (minDimension / 2); // adjust radius to account for half of square dimension
-  //       let updatedNodes = [];
-  //       if (numNodes === 5) {
-  //         const squareDim = minDimension * 1;
-  //         const topLeft = { x: (webWidth - squareDim) / 2, y: (webHeight - squareDim) / 2 };
-  //         updatedNodes = [          { ...combinedNodeData[0], position: { x: topLeft.x, y: topLeft.y } },
-  //           { ...combinedNodeData[1], position: { x: topLeft.x + squareDim, y: topLeft.y } },
-  //           { ...combinedNodeData[2], position: { x: topLeft.x + squareDim, y: topLeft.y + squareDim } },
-  //           { ...combinedNodeData[3], position: { x: topLeft.x, y: topLeft.y + squareDim } },
-  //           { ...combinedNodeData[4], position: { x: topLeft.x + squareDim / 2, y: topLeft.y + squareDim / 2 } },
-  //         ];
-  //       } else if (numNodes === 6) {
-  //         const rectWidth = minDimension * 0.6;
-  //         const rectHeight = minDimension * 0.3;
-  //         const top = (webHeight - rectHeight) / 2;
-  //         const left = (webWidth - rectWidth) / 2;
-  //         updatedNodes = [          { ...combinedNodeData[0], position: { x: left, y: top } },
-  //           { ...combinedNodeData[1], position: { x: left + rectWidth / 2, y: top } },
-  //           { ...combinedNodeData[2], position: { x: left + rectWidth, y: top } },
-  //           { ...combinedNodeData[3], position: { x: left, y: top + rectHeight } },
-  //           { ...combinedNodeData[4], position: { x: left + rectWidth / 2, y: top + rectHeight } },
-  //           { ...combinedNodeData[5], position: { x: left + rectWidth, y: top + rectHeight } },
-  //         ];
-  //       } else if (numNodes === 7) {
-  //         const rectWidth = minDimension * 0.6;
-  //         const rectHeight = minDimension * 0.4;
-  //         const top = (webHeight - rectHeight) / 2;
-  //         const left = (webWidth - rectWidth) / 2;
-  //         updatedNodes = [          
-  //           { ...combinedNodeData[0], position: { x: left, y: top } },
-  //           { ...combinedNodeData[1], position: { x: left + rectWidth / 3, y: top } },
-  //           { ...combinedNodeData[2], position: { x: left + rectWidth * 2 / 3, y: top } },
-  //           { ...combinedNodeData[3], position: { x: left + rectWidth, y: top } },
-  //           { ...combinedNodeData[4], position: { x: left + rectWidth / 2, y: top + rectHeight / 2 } },
-  //           { ...combinedNodeData[5], position: { x: left, y: top + rectHeight } },
-  //           { ...combinedNodeData[6], position: { x: left + rectWidth, y: top + rectHeight } },
-  //         ];
-  //         } else {
-  //         // code for splitting web proportionally
-  //         const updatedNodes = combinedNodeData.map((node, index) => {
-  //         const angle = index * angleBetweenNodes + Math.PI / 2 + 180;
-  //         const x = center.x + radius * Math.cos(angle);
-  //         const y = center.y + radius * Math.sin(angle);
-  //         return { ...node, position: { x, y } };
-  //       });
-  //       return updatedNodes;
-  //     }
-  //     return updatedNodes;
-  //   })}}
 
   return (
     <ReactFlowProvider>
+      <WebOptionsModal open={hamburgerOpen} onClose={() => setHamburgerOpen(false)}/>
       <div ref={myDivRef} className={`h-full relative`}>
         <div className={`flex flex-1 ${showRemoveFromTeam ? 'w-full' : ''} absolute z-[995]`}>
           <div className={`flex flex-wrap items-center grow-0 w-full ${showRemoveFromTeam ? 'px-2 max-w-[92.5%] card-sm:max-w-[95%]' : 'max-w-[0px]'} h-[85px] card-sm:h-[89px] border-b-2 border-black bg-gray-500/[.3] overflow-auto`}>
@@ -287,14 +232,44 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
             onClick={() => handleResetTeam(webOfTeam)}
             >Reset Team</button>
             <button
-            className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
-            onClick={() => setShowSummationLinks(!showSummationLinks)}
-            >{showSummationLinks ? '# of Links' : 'Summation'}</button>
-            <button
             className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
             onClick={() => handleSetShowSuggestedCards()}
             >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
           </div>
+          {/* hamburger button */}
+          <div className="flex absolute top-[88px] card-sm:top-[92px] right-[3px]">
+              <button
+              className="flex flex-col h-12 w-12 border-2 border-black rounded justify-center items-center group relative bg-white z-50"
+              onClick={() => setHamburgerOpen(!hamburgerOpen)}
+              >
+                <div
+                  onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                  className={`h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50 ${
+                    hamburgerOpen
+                    ? "rotate-45 translate-y-3 group-hover:opacity-100"
+                    : "group-hover:opacity-100"
+                  }`}
+                  />
+                <div
+                  onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                  className={`h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50 ${
+                    hamburgerOpen ? "opacity-0" : "group-hover:opacity-100"
+                  }`}
+                  />
+                <div
+                  onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                  className={`h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300 z-50 ${
+                    hamburgerOpen
+                    ? "-rotate-45 -translate-y-3 group-hover:opacity-100"
+                    : "group-hover:opacity-100"
+                  }`}
+                  />
+                  <div
+                  onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                  className="absolute w-full h-full p-2 top-0 right-0"
+                  />
+              </button>
+            </div>
           <ReactFlow
             onInit={onLoad}
             nodes={combinedNodeData}

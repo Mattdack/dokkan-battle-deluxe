@@ -605,35 +605,32 @@ export function findMatchingLinks(source, target) {
 export const linkSkillStatBoosts = (linkSkills) => {
   const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
   
-  linkSkills.forEach(lvl1_stats => {
-    //this finds all digits in the link description
-    const match = lvl1_stats.match(/\d+/g);
+  linkSkills.forEach(linkSkillStat => {
+    const match = linkSkillStat.match(/\+(\d+)%/);
     if (!match) return;
-    const stat = parseInt(match[0]);
+    const stat = parseInt(match[1]);
     
-    if (lvl1_stats.includes("ATK")) {
-      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
-        linkSkillBuffs.ATK.push(stat);
-      }
+    if (linkSkillStat.includes("ATK")) {
+      linkSkillBuffs.ATK.push(stat);
     }
-    if (lvl1_stats.includes("DEF")) {
-      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
-        linkSkillBuffs.DEF.push(stat);
-      }
+    if (linkSkillStat.includes("DEF")) {
+      linkSkillBuffs.DEF.push(stat);
     }
-    if (lvl1_stats.includes("Ki +1")) {
+    if (linkSkillStat.includes("Ki +1")) {
       linkSkillBuffs.Ki.push(1);
     }
-    if (lvl1_stats.includes("Ki +2")) {
+    if (linkSkillStat.includes("Ki +2")) {
       linkSkillBuffs.Ki.push(2);
     }
-    if (lvl1_stats.includes("Ki +3")) {
+    if (linkSkillStat.includes("Ki +3")) {
       linkSkillBuffs.Ki.push(3);
     }
   });
   
   return linkSkillBuffs;
 }
+
+
 
 export const linkSkillStatsBoostedFor2Characters_lvl_1 = (character1, character2) => {
   // gets matched links between the selected character and character card
@@ -642,6 +639,23 @@ export const linkSkillStatsBoostedFor2Characters_lvl_1 = (character1, character2
     // gets lvl1 linkskill info of the match links
     for (let i = 0; i < matchedLinks.length; i++) {
       matchedLinkInfo.push(getLvl1LinkSkillInfo(matchedLinks[i]));
+    }
+    // uses the linkSkillInfo function which only grabs the stats that were changed
+    const linkSkillStatsBoosted = linkSkillStatBoosts(matchedLinkInfo)
+    return {
+      linkNames: matchedLinks,
+      linkStats: matchedLinkInfo,
+      linkAccumulation: linkSkillStatsBoosted
+    }
+}
+
+export const linkSkillStatsBoostedFor2Characters_lvl_10 = (character1, character2) => {
+  // gets matched links between the selected character and character card
+    const matchedLinks = findMatchingLinks(character1.link_skill, character2.link_skill) || []
+    let matchedLinkInfo = [];
+    // gets lvl1 linkskill info of the match links
+    for (let i = 0; i < matchedLinks.length; i++) {
+      matchedLinkInfo.push(getLvl10LinkSkillInfo(matchedLinks[i]));
     }
     // uses the linkSkillInfo function which only grabs the stats that were changed
     const linkSkillStatsBoosted = linkSkillStatBoosts(matchedLinkInfo)

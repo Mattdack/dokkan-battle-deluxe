@@ -65,22 +65,22 @@ const AppNavbar = (
               onClick={() => setHamburgerOpen(!hamburgerOpen)}
               className={`${genericHamburgerLine} ${
                 hamburgerOpen
-                ? "rotate-45 translate-y-3 opacity-50 group-hover:opacity-100"
-                : "opacity-50 group-hover:opacity-100"
+                ? "rotate-45 translate-y-3 group-hover:opacity-100"
+                : "group-hover:opacity-100"
               }`}
               />
             <div
               onClick={() => setHamburgerOpen(!hamburgerOpen)}
               className={`${genericHamburgerLine} ${
-                hamburgerOpen ? "opacity-0" : "opacity-50 group-hover:opacity-100"
+                hamburgerOpen ? "opacity-0" : "group-hover:opacity-100"
               }`}
               />
             <div
               onClick={() => setHamburgerOpen(!hamburgerOpen)}
               className={`${genericHamburgerLine} ${
                 hamburgerOpen
-                ? "-rotate-45 -translate-y-3 opacity-50 group-hover:opacity-100"
-                : "opacity-50 group-hover:opacity-100"
+                ? "-rotate-45 -translate-y-3 group-hover:opacity-100"
+                : "group-hover:opacity-100"
               }`}
               />
               <div

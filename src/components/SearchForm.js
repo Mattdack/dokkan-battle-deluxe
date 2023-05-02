@@ -142,6 +142,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               className="flex w-1/2 justify-around pr-2 mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
               id="box-1"
             >
+              <CharacterSelectButton name="characterRarity" label="SSR" />
               <CharacterSelectButton name="characterRarity" label="UR" />
               <CharacterSelectButton name="characterRarity" label="LR" />
               <CharacterSelectButton

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { allCategoryOptions } from '../util/allCategories'
 
-const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
+import { UserContext } from "../App"; 
 
 const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval, statsSelectedOptions, handleStatsSelectedOptions, allCharactersLoading, }) => {
+  const { levelOfLinks, setLevelOfLinks } = useContext(UserContext);
+
   function handleFormChange(e) {
     const formData = Object.fromEntries(new FormData(e.currentTarget));
     onFormChange(formData);
@@ -35,13 +37,13 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
               >
                 {selectedCategories.length === 0 ?
                 <select
-                className="w-full py-1 text-sm"
+                className="w-full py-1 text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
                 >
                   <option value={'Remove All Categories'} className="text-red-400">No Categories Selected</option>
                 </select>
                 :
                 <select
-                className="w-full py-1 text-sm"
+                className="w-full py-1 text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
                 onChange={(e)=>handleSelectedCategoryRemoval(e.target.value)}>
                   <option className="truncate" value={'Selected Categories'} key={'Suggested Selected Categories'}>Selected Categories</option>
                   {selectedCategories.map((category) => (
@@ -88,22 +90,71 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
 
           {/* type and My Deck buttons*/}
           <div className="flex h-fit w-full justify-between items-center">
-            <div
-              className="flex w-full my-1 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
-              id="box-2"
-            >
-              <CharacterSelectButton name="characterTypeSuggest" label="AGL" />
-              <CharacterSelectButton name="characterTypeSuggest" label="TEQ" />
-              <CharacterSelectButton name="characterTypeSuggest" label="INT" />
-              <CharacterSelectButton name="characterTypeSuggest" label="STR" />
-              <CharacterSelectButton name="characterTypeSuggest" label="PHY" />
-              <CharacterSelectButton
-                name="characterTypeSuggest"
-                label="ALL"
-                value=""
-                defaultChecked
-              />
+
+            <div className="flex jusitfy-center items-center">
+              {/* <p className="font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] ml-1 mr-2">RARITY:</p> */}
+              <select
+                name="characterRaritySuggest"
+                id="characterRaritySuggest"
+                className="w-fit max-w-[100px] my-1 p-1.5 bg-orange-300 rounded-md border-2 border-slate-900 font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+              >
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="NO SSRs">
+                  NO SSRs
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="">
+                  ALL
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="LR">
+                  LR
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="UR">
+                  UR
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="SSR">
+                  SSR
+                </option>
+              </select>
             </div>
+
+            <div className="flex jusitfy-center items-center">
+              {/* <p className="font-bold ml-1 mr-2 text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]">TYPE:</p> */}
+              <select
+                name="characterTypeSuggest"
+                id="characterTypeSuggest"
+                className="w-fit my-1 p-1.5 bg-orange-300 rounded-md border-2 border-slate-900 font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+              >
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="">
+                  ALL
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="AGL">
+                  AGL
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="TEQ">
+                  TEQ
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="INT">
+                  INT
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="STR">
+                  STR
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="PHY">
+                  PHY
+                </option>
+              </select>
+            </div>
+
             <div className="flex justify-center items-center order-5 bg-orange-300 rounded-md border-2 border-slate-900">
               <label htmlFor="isUserDeckSuggest">
                 <input
@@ -125,11 +176,14 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
         </fieldset>
       </form>
 
-      <div className="pt-1 pb-2 flex justify-center items-center">
-        <p className="text-sm card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] mr-4 font-bold text-center">stats filter:</p>
+      <div className="flex py-1 px-1 mr-1 mb-1 border-2 border-black bg-white justify-center items-center rounded-lg">
+        <p 
+        title='click to change link level'
+        onClick={() => levelOfLinks === 1 ? setLevelOfLinks(10) : setLevelOfLinks(1)}
+        className="text-[.63rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem] mr-2 card-sm:mr-4 font-bold text-center cursor-pointer">Level {levelOfLinks} Links:</p>
         <div className="">
           <input
-            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            className="appearance-none rounded-full h-4 w-4 mt-1 mr-1.5 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-lef cursor-pointer"
             type="radio"
             name="None"
             id="inlineRadio1"
@@ -146,7 +200,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
         </div>
         <div className="">
           <input
-            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            className="appearance-none rounded-full h-4 w-4 mt-1 mr-1.5 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
             type="radio"
             name="ATK"
             id="inlineRadio1"
@@ -163,7 +217,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
         </div>
         <div className="">
           <input
-            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            className="appearance-none rounded-full h-4 w-4 mt-1 mr-1.5 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
             type="radio"
             name="DEF"
             id="inlineRadio2"
@@ -180,7 +234,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
         </div>
         <div className="">
           <input
-            className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+            className="appearance-none rounded-full h-4 w-4 mt-1 mr-1.5 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
             type="radio"
             name="Ki"
             id="inlineRadio3"

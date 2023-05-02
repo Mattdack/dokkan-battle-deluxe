@@ -13,7 +13,7 @@ import * as linkSkillInfo from "../util/linkSkillInfo"
 import { UserContext } from "../App";
 
 function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handleNewDetails, webOfTeam,  addToWebOfTeam, removeFromWebOfTeam, allCharactersLoading }) {
-  const { showMiddleDiv } = useContext(UserContext);
+  const { levelOfLinks, showMiddleDiv } = useContext(UserContext);
 
   // these allow the selected options in the SuggestForm to be passed into the SuggestCards
   const [statsSelectedOptions, setStatsSelectedOptions] = useState("None");
@@ -137,7 +137,7 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       handleSetShowSuggestedCards={handleSetShowSuggestedCards}
       />
 
-    <div className={`flex flex-col ${showSuggestedCards ? (windowWidth < 850 ? 'h-3/4': 'h-[55%]') : 'hidden'}`}>
+    <div className={`flex flex-col ${showSuggestedCards ? (windowWidth < 850 ? 'h-[70%]': 'h-[55%]') : 'hidden'}`}>
 
         {/* <SuggestTeam allCharacters={allCharacters} selectedCharacter={selectedCharacter} linkedCharacters={linkedCharacters} userCharacters={userCharacters}/> */}
 
@@ -168,28 +168,26 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
         ref={suggestedCardContainer}
         className={`flex-1 overflow-y-auto`}>
 
-          <OrderByStatsBuffed showSuggestedCards={showSuggestedCards} webOfTeam={webOfTeam} handleNewDetails={handleNewDetails} addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} selectedCharacter={selectedCharacter} linkedCharacters={filteredSuggestedCharacters} viewableCharacters={viewableCharacters}/>
-
-            {/* <CharacterLinkDisplay matchCount={7} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} />
-            <CharacterLinkDisplay matchCount={6} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-            <CharacterLinkDisplay matchCount={5} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-            <CharacterLinkDisplay matchCount={4} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-            <CharacterLinkDisplay matchCount={3} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-            <CharacterLinkDisplay matchCount={2} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/>
-            <CharacterLinkDisplay matchCount={1} webOfTeam={webOfTeam} selectedCharacter={selectedCharacter} charactersWithMatchedLinks={charactersWithMatchedLinks} handleNewDetails={handleNewDetails}  addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam}  statsSelectedOptions={statsSelectedOptions}/> */}
+          <OrderByStatsBuffed showSuggestedCards={showSuggestedCards} webOfTeam={webOfTeam} handleNewDetails={handleNewDetails} addToWebOfTeam={addToWebOfTeam} removeFromWebOfTeam={removeFromWebOfTeam} statsSelectedOptions={statsSelectedOptions} selectedCharacter={selectedCharacter} linkedCharacters={filteredSuggestedCharacters} viewableCharacters={viewableCharacters} levelOfLinks={levelOfLinks}/>
+          
         </div>
       </div>
     </div>
   );
 }
 
-const OrderByStatsBuffed = ({ showSuggestedCards, webOfTeam, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, selectedCharacter, linkedCharacters, viewableCharacters}) => {
+const OrderByStatsBuffed = ({ showSuggestedCards, webOfTeam, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions, selectedCharacter, linkedCharacters, viewableCharacters, levelOfLinks}) => {
   if(!showSuggestedCards){
     return null
   }
 
   const characterArrayWithStats = linkedCharacters.map(linkedCharacter => {
-    const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatsBoostedFor2Characters_lvl_1(selectedCharacter, linkedCharacter);
+    let linkSkillStatsBoosted
+    if(levelOfLinks === 1){
+      linkSkillStatsBoosted = linkSkillInfo.linkSkillStatsBoostedFor2Characters_lvl_1(selectedCharacter, linkedCharacter);
+    } else if (levelOfLinks === 10){
+      linkSkillStatsBoosted = linkSkillInfo.linkSkillStatsBoostedFor2Characters_lvl_10(selectedCharacter, linkedCharacter);
+    }
     const characterStats = {
       id: linkedCharacter.id,
       ATK: linkSkillStatsBoosted.linkAccumulation.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0),
@@ -248,13 +246,19 @@ function groupCharactersByLinkCount(otherCharacters, selectedCharacterLinks,) {
 
 const getFilteredCharacters = (linkedCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeckSuggest ? userCharacters : linkedCharacters;
+  console.log(!filterData.characterRaritySuggest)
+  console.log(filterData.characterRaritySuggest)
   return baseChars.filter((character) => {
     return (
       (!selectedCategories.length || (filterData.suggestMatchAllCategories
-        ? selectedCategories.every(category => character.category.includes(category))
-        : selectedCategories.some(category => character.category.includes(category))
+        ? selectedCategories.every(category => character.category && character.category.includes(category))
+        : selectedCategories.some(category => character.category && character.category.includes(category))
       )) &&
-      (!filterData.characterTypeSuggest || character.type.includes(filterData.characterTypeSuggest))
+      (!filterData.characterTypeSuggest || character.type.includes(filterData.characterTypeSuggest)) &&
+      (filterData.characterRaritySuggest === "NO SSRs"
+        ? !character.rarity.includes("SSR")
+        : !filterData.characterRaritySuggest ||
+      character.rarity.includes(filterData.characterRaritySuggest))
     );
   });
 };
