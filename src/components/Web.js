@@ -148,7 +148,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   const handleTeamCenter = () => {
     if (reactFlowInstance) {
-      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.55 });
+      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: (window.innerWidth < 850 ? 0.55 : .6) });
       setExistingNodes((prevNode) => {
         let windowWidthToUse;
         let windowHeightToUse;
