@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Auth from "../util/auth";
-import * as sort from "../util/sorting";
+import { useSortedCharacters } from "../util/sorting";
 
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_EVENT_DATA, GET_ITEMS_DATA, GET_SUPPORT_MEMORY_DATA, } from "../util/queries";
@@ -78,7 +78,7 @@ function AllAPI() {
   const [filterByGame, setFilterByGame] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
 
-  let charactersToDisplay = sort.sortCharacters(allCharacters,filteredCharacters,filterByGame);
+  let charactersToDisplay = useSortedCharacters(allCharacters,filteredCharacters,filterByGame);
 
   if (newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0) {
     charactersToDisplay = [];

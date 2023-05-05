@@ -17,7 +17,7 @@ import Auth from "../util/auth";
 import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
 import Announcement from "../modals/Announcement";
 
-import * as sort from "../util/sorting";
+import { useSortedCharacters } from "../util/sorting";
 import { findCharacterLeaderCategories } from "../util/allCategories";
 
 import { UserContext } from '../App';
@@ -223,7 +223,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const [filterByGame, setFilterByGame] = useState(true);
 
-  let charactersToDisplay = sort.sortCharacters(allCharacters, filteredCharacters, filterByGame)
+  let charactersToDisplay = useSortedCharacters(allCharacters, filteredCharacters, filterByGame)
 
   if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
     charactersToDisplay = []

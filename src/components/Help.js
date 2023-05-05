@@ -27,9 +27,9 @@ function Help() {
   return (
     <div className="flex flex-1 flex-col w-full card-sm:px-20 items-center bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto">
         <Navbar />
-        <p className="font-header w-full text-5xl text-center">Welcome to Dokkan Battle Helper!</p>
+        <h1 className="font-header w-full text-5xl text-center">Welcome to Dokkan Battle Helper!</h1>
         <div className="p-4 m-4 bg-orange-200 border-4 border-black">
-            <p className="font-header text-3xl">Why Dokkan Battle Helper?</p>
+            <h1 className="font-header text-3xl">Why Dokkan Battle Helper?</h1>
             <p className="card-sm:text-xl font-bold indent-10">The biggest reason we wanted to make this web app was to help players make effect teams when playing Dokkan Battle. Whether you are a beginer looking for a team that can complete an event or a long time veteran looking for an easy place to post teams, we believe this app can be used by everyone. We offer a wide range of uses, from initially loading into a page and seeing what characters pair well with others, to logging in to make teams with characters that you have saved to easily complete Ultimate Clash. The team building page can be accessed at <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/`}>www.dokkanbattlehelper.com</a> while the team strategies and team postings can be found at <a className='text-blue-500' href={`${process.env.PUBLIC_URL}/strategy`}>www.dokkanbattlehelper.com/strategy</a>. We hope you enjoy this app. If there is any information missing or is incorrect, please fill out the information in this <a className='text-blue-500' href={'https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link'} target={'_blank'}>form</a>.</p>
         </div>
         <div className="flex flex-row w-full p-4">

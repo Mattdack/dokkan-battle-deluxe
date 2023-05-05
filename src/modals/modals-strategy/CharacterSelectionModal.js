@@ -4,7 +4,7 @@ import ReactDom from "react-dom";
 import CharacterCard from "../../cards/ServerCharacterCard";
 import SearchForm from "../../components/SearchForm";
 
-import * as sort from "../../util/sorting";
+import { useSortedCharacters } from "../../util/sorting";
 
 export default function CharacterSelectionModal( {characterDictionary, userData, handleCharacterSelection, open, onClose} ) {
 
@@ -29,7 +29,7 @@ export default function CharacterSelectionModal( {characterDictionary, userData,
   //this seems complex but isn't when broken down. First, it starts with charactersToDisplay and sets it equal to filteredCharacters. However, if filteredCharacters (anything in the form is filled out) is null then look for the state of the filter and filter based on that
   const [filterByGame, setFilterByGame] = useState(true);
 
-  const charactersToDisplay = sort.sortCharacters(allCharacters, filteredCharacters, filterByGame)
+  const charactersToDisplay = useSortedCharacters(allCharacters, filteredCharacters, filterByGame)
 
   const characterSelectContainerRef = useRef(null)
 
