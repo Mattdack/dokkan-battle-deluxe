@@ -29,6 +29,18 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
                 <p className="font-header pt-2 text-xl card-sm:text-2xl lg:text-4xl font-light text-center underline underline-offset-8 decoration-2">Updates</p>
 
                 <div className="h-full">
+                <div className="flex flex-wrap justify-around">
+                    <NewsDiv date={'MAY/9/2023'} information={<>
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold">TLDR:</p>
+                      <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">Beta ATK Calculator</li>
+                      <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">Styling issues fixed: search form update</li>
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">Back with another smaller update! After a couple of requiests, we are implimenting calculators now just as a fun little addition to the site. Currently we only have the ATK calculator, DEF will be coming next. The fun aspects of the calculator is the link ATK % gain, Ki multiplier, and SA multiplier are all automatically populated when two characters are selected. Also, if a LR character is selected you can vary the Ki collected which will automatically change the Ki multiplier and also the SA multiplier (depending on a super attack or ultra super attack). The left character (with the green dot) is the one being calculated for. We are still working on conditional statements for populating data, so all the information may not be 100% accurate yet. However, when I tested it, I found it to be on average 97-99% accurate. Also you mayhave noticed the styling changes of the search form. I condensed it because when the screen size was below 1000 pixels and the character card details were showing, it was causing everything to be pushed off the screen.</p> 
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4"> I have not played with the calculator on mobile a lot, so apologies if it is hard to use on a phone. As always, if you find any other errors, missing characters, or incorrect information please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>Google Form</a>. We hope you continue to enjoy using this app!</p> 
+                      </>}
+                      key={'Update 5'}
+                    />
+                  </div> 
+
                   <div className="flex flex-wrap justify-around">
                     <NewsDiv date={'MAY/1/2023'} information={<>
                       <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold">TLDR:</p>

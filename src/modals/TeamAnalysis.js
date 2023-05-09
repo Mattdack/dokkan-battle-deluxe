@@ -277,7 +277,7 @@ function TeamAnalysisWeb ( {Rot1Char1, Rot1Char2, Rot2Char1, Rot2Char2, float1, 
         handlePositionRight: Position.Right,
       },
       style:{ width: 100, height: 100},
-      position: { x: rotation1StatsPosition.x, y: 850 },
+      position: { x: rotation1StatsPosition.x, y: 900 },
     },
   ];
 

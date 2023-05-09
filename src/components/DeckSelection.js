@@ -146,7 +146,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
             <div className="font-header flex w-full h-fit py-4 border-black text-2xl card-sm:text-2xl  underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center relative">
               {team.name}
             </div>
-            {/* start at flex row, 850 to 1285 pxls we go to stack, then 1285 after we go back to row*/}
+            {/* start at flex row, 900 to 1285 pxls we go to stack, then 1285 after we go back to row*/}
             <div className="flex lg:flex-col xl:flex-row justify-around">
 
               <div className="grid grid-cols-2 gap-y-6 justify-items-center">

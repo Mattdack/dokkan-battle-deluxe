@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { allCategoryOptions } from '../util/allCategories'
+
+import { UserContext } from '../App';
 
 const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
 
 const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval }) => {
-
+  const { showMiddleDiv } = useContext(UserContext);
   return (
     <div className="flex flex-row flex-wrap justify-around lg:mx-5">
       {/* //search field */}
@@ -22,14 +24,14 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
           {/* input and category selection */}
           <div className="flex w-full justify-between items-center">
             <input
-              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 text-xsm card-sm:text-[.72rem] rounded-md border-2 border-black text-black font-bold"
+              className="flex w-1/2 p-1 card-sm:p-2.5 mr-1 show-middle-div-text rounded-md border-2 border-black text-black font-bold"
               type="text"
               placeholder="Character Name"
               name="searchTerm"
             />
 
             <select
-              className="flex w-1/2 p-1 order-2 card-sm:p-2.5 ml-1 text-xsm card-sm:text-[.72rem] text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
+              className="flex w-1/2 p-1 order-2 card-sm:p-2.5 ml-1 show-middle-div-text text-black font-bold bg-white border-2 border-black rounded-md shadow-sm outline-none appearance-none focus:border-black"
               id="categories"
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}
@@ -87,14 +89,15 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               }}
             >
               {selectedCategories.length === 0 &&
-              <div className="flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 text-sm card-sm:text-[.72rem] justify-center items-center text-center" key={'no category selection'}>
+              <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } flex flex-shrink-0 w-full h-fit pl-1 pr-2 mx-1 text-gray-500 justify-center items-center text-center`} 
+              key={'no category selection'}>
                 no selected categories
               </div>
               }
               {selectedCategories.map((category) => (
                 <div className="flex flex-shrink-0 w-fit h-fit pl-1 pr-2 mx-1 bg-gray-200/[.75] justify-center items-center text-center rounded-full" key={category}>
                   <img className="w-1/4 card-sm:w-full cursor-pointer" src={closeIcon} onClick={() => handleSelectedCategoryRemoval(category)} />
-                  <p className="text-sm card-sm:text-[.72rem]">{category}</p>
+                  <p className="show-middle-div-text">{category}</p>
                 </div>
               ))}
             </div>
@@ -109,7 +112,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-5 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                  className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } py-1 card-sm:py-2 px-2 card-sm:px-5  m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap`}
                 >
                   Full Match
                 </div>
@@ -117,56 +120,87 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
             </div>
           </div>
 
-
+         <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
           {/* type buttons */}
-          <div
-            className="flex w-full pl-1 pr-2 my-1 card-sm:my-2 grid grid-cols-6 order-3 bg-orange-300 rounded-md border-2 border-slate-900 font-bold"
-            id="box-2"
-          >
-            <CharacterSelectButton name="characterType" label="AGL" />
-            <CharacterSelectButton name="characterType" label="TEQ" />
-            <CharacterSelectButton name="characterType" label="INT" />
-            <CharacterSelectButton name="characterType" label="STR" />
-            <CharacterSelectButton name="characterType" label="PHY" />
-            <CharacterSelectButton
-              name="characterType"
-              value=""
-              label="ALL"
-              defaultChecked
-            />
-          </div>
+            <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
+              Type:
+              <select
+                name="characterType"
+                id="characterType"
+                className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+              >
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="">
+                  ALL
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="AGL">
+                  AGL
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="TEQ">
+                  TEQ
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="INT">
+                  INT
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="STR">
+                  STR
+                </option>
+                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                value="PHY">
+                  PHY
+                </option>
+              </select>
+            </div>
 
           {/* rarity buttons */}
-          <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
-            <div
-              className="flex w-1/2 justify-around pr-2 mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold mr-1"
-              id="box-1"
+          <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
+            <label htmlFor="characterRarity">Rarity:
+            <select
+              name="characterRarity"
+              id="characterRarity"
+              className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+              >
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="">
+                All
+              </option>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="LR">
+                LR
+              </option>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="UR">
+                UR
+              </option>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="SSR">
+                SSR
+              </option>
+            </select>
+              </label>
+          </div>
+          </div>
+
+          <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } my-2 pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
+            Super/Extreme:
+            <select
+              name="characterSuperOrExtreme"
+              id="characterSuperOrExtreme"
+              className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
             >
-              <CharacterSelectButton name="characterRarity" label="SSR" />
-              <CharacterSelectButton name="characterRarity" label="UR" />
-              <CharacterSelectButton name="characterRarity" label="LR" />
-              <CharacterSelectButton
-                name="characterRarity"
-                value=""
-                label="ALL"
-                defaultChecked
-              />
-            </div>
-          
-          {/* super and extreme buttons */}
-            <div
-              className="flex w-full justify-around mb-1 order-4 bg-orange-300 rounded-md border-2 border-slate-900 font-bold ml-1"
-              id="box-1"
-            >
-              <CharacterSelectButton name="characterSuperOrExtreme" value="S" label="Super"/>
-              <CharacterSelectButton name="characterSuperOrExtreme" value="E" label="Extreme"/>
-              <CharacterSelectButton
-                name="characterSuperOrExtreme"
-                value=""
-                label="ALL"
-                defaultChecked
-              />
-            </div>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+              value="">
+                ALL
+              </option>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+              value="S">
+                Super
+              </option>
+              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+              value="E">
+                Extreme
+              </option>
+            </select>
           </div>
 
           <div className="flex w-full justify-between order-5">
@@ -181,7 +215,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-4 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap"
+                  className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } py-1 card-sm:py-2 px-2 card-sm:px-4 m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500 whitespace-nowrap`}
                 >
                   {selectedCategories.length > 0 ? 'Selected Category Leaders' : 'Common Leaders'}
                 </div>
@@ -199,7 +233,7 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
                 />
                 <div
                   style={{ cursor: "pointer" }}
-                  className="py-1 card-sm:py-2 px-2 card-sm:px-6 text-sm card-sm:text-[.72rem] m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+                  className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } py-1 card-sm:py-2 px-2 card-sm:px-6 m-0.5 font-bold relative lg:hover:bg-orange-400 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500`}
                 >
                   Characters Saved
                 </div>
@@ -214,25 +248,25 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
   );
 };
 
-const CharacterSelectButton = ({ name, label, ...inputProps }) => {
-  return (
-    <label htmlFor={`${name}-${label}`}>
-      <input
-        type="radio"
-        name={name}
-        id={`${name}-${label}`}
-        className="hidden peer"
-        value={label}
-        {...inputProps}
-      />
-      <div
-        style={{ cursor: "pointer" }}
-        className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative text-sm card-sm:text-[.72rem] lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
-      >
-        {label}
-      </div>
-    </label>
-  );
-};
+// const CharacterSelectButton = ({ name, label, ...inputProps }) => {
+//   return (
+//     <label htmlFor={`${name}-${label}`}>
+//       <input
+//         type="radio"
+//         name={name}
+//         id={`${name}-${label}`}
+//         className="hidden peer"
+//         value={label}
+//         {...inputProps}
+//       />
+//       <div
+//         style={{ cursor: "pointer" }}
+//         className="flex w-full justify-center py-1 px-2 card-sm:py-2 card-sm:px-2 relative show-middle-div-text lg:hover:bg-orange-400 m-0.5 peer-checked:bg-orange-400 peer-checked:hover:bg-orange-500"
+//       >
+//         {label}
+//       </div>
+//     </label>
+//   );
+// };
 
 export default SearchForm;

@@ -24,6 +24,32 @@ img {
   filter: brightness(40%);
 }
 
+.show-middle-div-text {
+  font-size: 0.65rem;
+  @media (min-width: 535px) {
+    font-size: 0.6rem
+  };
+  @media (min-width: 1000px) {
+    font-size: 0.65rem
+  };
+  @media (min-width: 1280px) {
+    font-size: 0.8rem
+  };
+}
+
+.hide-middle-div-text {
+  font-size: 0.65rem;
+  @media (min-width: 535px) {
+    font-size: 0.8rem
+  };
+  @media (min-width: 1000px) {
+    font-size: 0.8rem
+  };
+  @media (min-width: 1280px) {
+    font-size: 0.85rem
+  };
+}
+
 .font-header {
   color: #ffac37;
   text-shadow:

@@ -148,11 +148,11 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
 
   const handleTeamCenter = () => {
     if (reactFlowInstance) {
-      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: (window.innerWidth < 850 ? 0.55 : .6) });
+      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: (window.innerWidth < 900 ? 0.55 : .625) });
       setExistingNodes((prevNode) => {
         let windowWidthToUse;
         let windowHeightToUse;
-        if(window.innerWidth < 850){
+        if(window.innerWidth < 900){
           windowWidthToUse = window.innerWidth
           windowHeightToUse = window.innerHeight-30
         } else {
@@ -174,8 +174,8 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
             { ...combinedNodeData[4], position: { x: topLeft.x + squareDim / 2, y: topLeft.y + squareDim / 2 } },
           ];
         } else {
-          const radius = (minDimension * 1.4 / 2)
-          const center = { x: windowWidthToUse / 1.33, y: windowHeightToUse / 1.33 }
+          const radius = (minDimension * 1.3 / 2)
+          const center = { x: windowWidthToUse / 1.45, y: windowHeightToUse / 1.45 }
           const angleBetweenNodes = (2 * Math.PI) / numNodes;
   
           updatedNodes = combinedNodeData.map((node, index) => {
@@ -228,17 +228,30 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <div className="h-full bg-slate-700 row-span-6 relative">
           <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
             <button
-            className="p-2 text-sm card-sm:text-base border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40"
+            className={`${showMiddleDiv ? 
+              'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+            : 
+              'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
+            } py-1 px-2 border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40`}
             onClick={() => handleResetTeam(webOfTeam)}
             >Reset Team</button>
             {showSuggestedCards &&
               <button
-              className="p-2 text-sm card-sm:text-base border-2 border-black text-black bg-white rounded-t-lg z-40"
+              className={`${showMiddleDiv ? 
+                'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+              : 
+                'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
+              } py-1 px-2 border-2 border-black text-black bg-white rounded-t-lg z-40`}
               onClick={() => setShowSuggestedCardsByStats(!showSuggestedCardsByStats)}
               >{showSuggestedCardsByStats ? 'Order By # of Links' : 'Order By Stats'}</button>
             }
             <button
-            className="p-2 text-sm card-sm:text-base border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40"
+            className={`${showMiddleDiv ? 
+              'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+            : 
+              'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
+            } py-1 px-2 border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40`}
+            
             onClick={() => handleSetShowSuggestedCards()}
             >{showSuggestedCards ? 'Hide Suggested Cards' : 'Show Suggested Cards'}</button>
           </div>
@@ -318,7 +331,7 @@ const startingPosition = (webWidth, webHeight) => {
     return {x: window.innerWidth-125, y:window.innerHeight-200}
   } else {
     //this is for mobile so when the suggested card is shown, it doesn't place it out of click range
-    if(window.innerWidth < 850){
+    if(window.innerWidth < 900){
       return {x: window.innerWidth-125, y: window.innerHeight-200}
     }else{
       //this is for desktop placement (subtract card dimensions)

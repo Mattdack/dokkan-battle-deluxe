@@ -219,9 +219,9 @@ const CardDescription = ({ text }) => {
           {t}
           {i < descriptionArray.length - 1 && (
             <b className="text-md text-orange-600 cursor-pointer relative" 
-            onMouseEnter={(event) => ((window.innerWidth > 850) && handleHover(i + 1, event))}
-            onMouseLeave={(event) => ((window.innerWidth > 850) && handleLeaveHover(i + 1, event))}
-            onClick={(event) => ((window.innerWidth < 850) && handleHover(i + 1, event))}>
+            onMouseEnter={(event) => ((window.innerWidth > 900) && handleHover(i + 1, event))}
+            onMouseLeave={(event) => ((window.innerWidth > 900) && handleLeaveHover(i + 1, event))}
+            onClick={(event) => ((window.innerWidth < 900) && handleHover(i + 1, event))}>
               *
               {hover && hoverIndex === i + 1 ? (
                 <div 

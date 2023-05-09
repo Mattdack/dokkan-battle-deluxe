@@ -242,7 +242,7 @@ function AllAPI() {
             className={`
             flex flex-1 flex-col bg-gradient-radial overflow-y-auto
             `}
-            //   ${windowWidth > 850 ? "" : "hidden"}
+            //   ${windowWidth > 900 ? "" : "hidden"}
           >
             {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 

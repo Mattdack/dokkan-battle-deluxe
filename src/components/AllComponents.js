@@ -294,13 +294,14 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [showFilters, setShowFilters] = useState(true)
 
     const [announcementOpen, setAnnouncementOpen] = useState(false)
+
     const [openNewsModal, setOpenNewsModal] = useState(false)
-    const firstLogInShowNews = localStorage.getItem('firstLogInShowNews')
-    const timestamp = localStorage.getItem('firstLogInShowNewsTimestamp')
+    const firstLogInShowNews = localStorage.getItem('announcement')
+    const timestamp = localStorage.getItem('announcementTimestamp')
     if (!firstLogInShowNews || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
-      localStorage.setItem('firstLogInShowNews', 'true');
-      localStorage.setItem('firstLogInShowNewsTimestamp', Date.now());
+      localStorage.setItem('announcement', 'true');
+      localStorage.setItem('announcementTimestamp', Date.now());
     }
 
     function handleCharacterSelection(character){
@@ -352,8 +353,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         setCardDetails(character)
       }
       setCharacterComparisonForCalculator((prev) => {
-        console.log(prev)
-        console.log(characterComparisonForCalculator)
         if (prev.includes(character)) {
           if (prev[0].id === character.id) {
             const newArray = [{ id: 0, rarity: null, type: null }, prev[1]];
@@ -362,7 +361,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             return prev.filter((characterToRemove) => characterToRemove.id !== character.id);
           }
         } else if(characterComparisonForCalculator[0]?.id === 0){
-          console.log('character 1 is empty')
           return [character, prev[1]]
         } else {
           if (prev.length < 2) {
@@ -386,7 +384,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       <div className={`flex flex-1 h-0 ${showMiddleDiv ? '' : 'lg:px-10 xl:px-20'} relative`}>
 
         {/* this conditional hides the button if showMiddleDiv is false AND window width is greater than the mobile screen break */}
-        {(!showMiddleDiv && (windowWidth > 850)) && 
+        {(!showMiddleDiv && (windowWidth > 900)) && 
         <div className="flex transform rotate-90 origin-bottom-left absolute left-0 -top-10">
 
           <button 
@@ -407,11 +405,11 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: card detail styling */}
         <div
           id="SingleCardDetails"
-          className={`${showCardStats || (showMiddleDiv && (windowWidth > 850)) ? '' : 'hidden'} flex flex-col w-screen lg:w-1/4 lg:max-w-[400px] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
+          className={`${showCardStats || (showMiddleDiv && (windowWidth > 900)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/4 lg:max-w-[400px] lg:min-w-[0px] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
           >
 
           <div className="w-full p-2">
-            {(showMiddleDiv && (window.innerWidth > 850)) &&
+            {(showMiddleDiv && (window.innerWidth > 900)) &&
             <button
             onClick={() => setShowMiddleDiv(false)}
             className="flex py-2 px-4 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
@@ -478,7 +476,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: Card selection styling */}
         <div
           id="CardSelection"
-          className={`${(showCardSelection || (windowWidth > 850)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
+          className={`${(showCardSelection || (windowWidth > 900)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
         >
 
           {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
@@ -499,7 +497,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
             <div className={`max-h-0 overflow-hidden transition-all duration-500 ${showFilters ? 'max-h-[100vh] ease-in-out' : ''}`}>
               <div className="flex pb-2 items-center justify-center">
-                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                <span className="mr-4 flex h-fit items-center justify-center text-center text-md lg:text-sm  <1000px>:text-base font-bold">
                   Game Filter
                 </span>
                 <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -513,7 +511,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     onClick={() => {setFilterByGame(!filterByGame)}}
                     className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                   ></div>
-                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md lg:text-sm  <1000px>:text-base font-bold">
                     Release Date
                   </div>
                 </label>
@@ -614,7 +612,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer relative
                     ${(!multiCardSelection && !showCalculator) ? webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]" : ''}
-                    ${(!multiCardSelection && showCalculator) ? characterComparisonForCalculator.map((char) => char.id).includes(character.id) ? "bg-cyan-600/[.7] hover:bg-cyan-700/[.9]" : "hover:bg-cyan-800/[.3]" : ''}
+                    ${(!multiCardSelection && showCalculator) ? characterComparisonForCalculator.map((char) => char?.id).includes(character.id) ? "bg-cyan-600/[.7] hover:bg-cyan-700/[.9]" : "hover:bg-cyan-800/[.3]" : ''}
                     ${multiCardSelection ? savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-amber-900/[.4]' : ''} b 
                     `}
                   onMouseEnter={() => setHoverCharacterStats(character)}
@@ -646,7 +644,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: team web styling */}
         <div
           id="Team"
-          className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
+          className={`${showTeamWeb || (windowWidth > 900) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
           {showCalculator ?
           <Calculator 

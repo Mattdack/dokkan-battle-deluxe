@@ -137,12 +137,12 @@ function SuggestToWeb({ allCharacters, selectedCharacter, userCharacters, handle
       handleSetShowSuggestedCards={handleSetShowSuggestedCards}
       />
 
-    <div className={`flex flex-col ${showSuggestedCards ? (windowWidth < 850 ? 'h-[70%]': 'h-[55%]') : 'hidden'}`}>
+    <div className={`flex flex-col ${showSuggestedCards ? (windowWidth < 900 ? 'h-[67%]': 'h-[55%]') : 'hidden'}`}>
 
         {/* <SuggestTeam allCharacters={allCharacters} selectedCharacter={selectedCharacter} linkedCharacters={linkedCharacters} userCharacters={userCharacters}/> */}
 
         <div className={`flex justify-around items-center
-        ${(showMiddleDiv && (windowWidth > 850 && windowWidth < 1000)) && 'flex-col'}
+        ${(showMiddleDiv && (windowWidth > 900 && windowWidth < 1000)) && 'flex-col'}
         `}>
 
           <div className="flex shrink-0 px-1">

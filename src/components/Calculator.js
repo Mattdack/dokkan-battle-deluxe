@@ -9,22 +9,23 @@ const closeIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/x-webcard-icon.pn
 const swapIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/swap-icon.png'
 
 export default function Calculator({ showCalculator, setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
-    const [baseAttackStat, setBaseAttackStat] = useState(null)
-    const [kiCollected, setKiCollected] = useState(null)
-    const [kiMultiplier, setKiMultiplier] = useState(null)
-    const [superAttackMultiplier, setSuperAttackMultiplier] = useState(null)
-    const [superAttackHiddenPotentialBoost, setSuperAttackHiddenPotentialBoost] = useState(null)
-    const [leaderSkillIncrease, setLeaderSkillIncrease] = useState(null)
-    const [subLeaderSkillIncrease, setSubLeaderSkillIncrease] = useState(null)
-    const [passiveSkillIncrease, setPassiveSkillIncrease] = useState(null)
-    const [onAttackOrSuperOrActionIncrease, setOnAttackOrSuperOrActionIncrease] = useState(null)
-    const [allyPassiveBoost, setAllyPassiveBoost] = useState(null)
-    const [linkSkillPercentage, setLinkSkillPercentage] = useState(null)
-    const [boostAfterSuper, setBoostAfterSuper] = useState(null)
-    const [numberOfSupers, setNumbersOfSupers] = useState(null)
-    const [raiseAttackOnSuper, setRaiseAttackOnSuper] = useState(null)
-    const [results, setResults] = useState(null)
-    const [itemStats, setItemStats] = useState(null)
+    const [baseAttackStat, setBaseAttackStat] = useState(0)
+    const [leaderSkillIncrease, setLeaderSkillIncrease] = useState(0)
+    const [subLeaderSkillIncrease, setSubLeaderSkillIncrease] = useState(0)
+    const [passiveSkillIncrease, setPassiveSkillIncrease] = useState(0)
+    const [itemStats, setItemStats] = useState(0)
+    const [onAttackOrSuperOrActionIncrease, setOnAttackOrSuperOrActionIncrease] = useState(0)
+    const [linkSkillPercentage, setLinkSkillPercentage] = useState(0)
+    const [allyPassiveBoost, setAllyPassiveBoost] = useState(0)
+    const [kiCollected, setKiCollected] = useState(0)
+    const [kiMultiplier, setKiMultiplier] = useState(0)
+    const [superAttackHiddenPotentialBoost, setSuperAttackHiddenPotentialBoost] = useState(0)
+    const [raiseAttackOnSuper, setRaiseAttackOnSuper] = useState(0)
+    const [superAttackMultiplier, setSuperAttackMultiplier] = useState(0)
+    const [results, setResults] = useState(0)
+    
+    const [boostAfterSuper, setBoostAfterSuper] = useState(0)
+    const [numberOfSupers, setNumbersOfSupers] = useState(0)
     const [linkSkillsToFindSummation, setLinkSkillsToFindSummation] = useState([])
 
     const [levelOfLinks, setLevelOfLinks] = useState(1)
@@ -189,10 +190,10 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
     <div className='flex flex-col flex-1 px-2 border-2 border-black from-slate-500 via-slate-600 to-slate-900 overflow-y-auto'>
         <div 
         onClick={() => setShowCalculator(false)}
-        className='w-full h-fit p-2 my-2 border-2 border-black bg-orange-200 hover:bg-orange-300 text-center'>Show Team Web</div>
+        className='flex py-2 px-4 mt-2 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300'>Show Team Web</div>
 
-        <div className="flex p-2 flex-row justify-between items-center relative">
-            <div className="flex flex-col pr-2 justify-center items-center">
+        <div className="flex p-2 flex-col justify-between items-center relative">
+            <div className="flex flex-row flex-shrink-0 pr-2 justify-center items-center">
                 <div
                 className="relative cursor-pointer"
                 title='click for card details'
@@ -236,8 +237,8 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
             </div>
 
             <div 
-            className="flex flex-col w-[90%] h-full mt-2 border-2 border-black bg-white justify-around z-40">
-                <p className="font-header text-2xl underline decoration-2 underline-offset-3 self-center">Link Skills Shared</p>
+            className="flex flex-col w-[90%] h-full max-h-[200px] card-sm:max-h-full mt-2 border-2 border-black bg-white card-sm:justify-around z-40 overflow-y-auto">
+                <p className="font-header text-2xl underline decoration-2 underline-offset-4 self-center">Link Skills Shared</p>
                 {matchedLinkInfo && matchedLinkInfo.map(singleLink =>
                 <div>
                     <span className="flex flex-row px-1 border-t-2 border-black">
