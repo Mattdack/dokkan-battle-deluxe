@@ -90,7 +90,6 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
           {selectedCharacter.id === character.id && statsSelectedOptions !== 'None' &&
           <div
             className='w-[20px] card-sm:w-[25px] h-[20px] card-sm:h-[25px] border-2 border-black rounded-full bg-green-500 absolute bottom-[5%] right-[7%] z-50'>
-              
           </div>
           }
           {(selectedCharacter.id !== character.id && statsSelectedOptions === "ATK") &&

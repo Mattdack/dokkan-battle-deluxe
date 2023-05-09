@@ -9,6 +9,8 @@ export function useSortedCharacters(allCharacters, filteredCharacters, filterByG
 
     const SSRCharacters = filteredCharacters?.length > 0 ? filteredCharacters.filter(c => c.rarity === 'SSR') : allCharacters.filter(c => c.rarity === 'SSR')
 
+    const charactersSortedByDate = bubbleSortDates(URandLRCharacters, URandLRCharacters.length).reverse().concat(bubbleSortDates(SSRCharacters, SSRCharacters.length).reverse())
+
     function swap(arr, xp, yp) {
       var temp = arr[xp];
       arr[xp] = arr[yp];
@@ -52,7 +54,7 @@ export function useSortedCharacters(allCharacters, filteredCharacters, filterByG
         })
         )
         :
-        bubbleSortDates(URandLRCharacters, URandLRCharacters.length).reverse().concat(bubbleSortDates(SSRCharacters, SSRCharacters.length).reverse())
+        charactersSortedByDate
       )
       :
       (filterByGame ?
@@ -71,7 +73,7 @@ export function useSortedCharacters(allCharacters, filteredCharacters, filterByG
         })
         )
         :
-        bubbleSortDates(URandLRCharacters, URandLRCharacters.length).reverse().concat(bubbleSortDates(SSRCharacters, SSRCharacters.length).reverse())
+        charactersSortedByDate
       )
   }, [allCharacters, filteredCharacters, filterByGame]);
 

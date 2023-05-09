@@ -1,0 +1,462 @@
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
+import CharacterCard from "../cards/CharacterCard";
+
+import * as linkSkillInfo from "../util/linkSkillInfo";
+import superAttackMultipliers from '../util/superAttackMultipliers'
+import kiMultiplierPercentages from "../util/kiMultipliers";
+
+const closeIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/x-webcard-icon.png'
+const swapIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/swap-icon.png'
+
+export default function Calculator({ showCalculator, setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
+    const [baseAttackStat, setBaseAttackStat] = useState(null)
+    const [kiCollected, setKiCollected] = useState(null)
+    const [kiMultiplier, setKiMultiplier] = useState(null)
+    const [superAttackMultiplier, setSuperAttackMultiplier] = useState(null)
+    const [superAttackHiddenPotentialBoost, setSuperAttackHiddenPotentialBoost] = useState(null)
+    const [leaderSkillIncrease, setLeaderSkillIncrease] = useState(null)
+    const [subLeaderSkillIncrease, setSubLeaderSkillIncrease] = useState(null)
+    const [passiveSkillIncrease, setPassiveSkillIncrease] = useState(null)
+    const [onAttackOrSuperOrActionIncrease, setOnAttackOrSuperOrActionIncrease] = useState(null)
+    const [allyPassiveBoost, setAllyPassiveBoost] = useState(null)
+    const [linkSkillPercentage, setLinkSkillPercentage] = useState(null)
+    const [boostAfterSuper, setBoostAfterSuper] = useState(null)
+    const [numberOfSupers, setNumbersOfSupers] = useState(null)
+    const [raiseAttackOnSuper, setRaiseAttackOnSuper] = useState(null)
+    const [results, setResults] = useState(null)
+    const [itemStats, setItemStats] = useState(null)
+    const [linkSkillsToFindSummation, setLinkSkillsToFindSummation] = useState([])
+
+    const [levelOfLinks, setLevelOfLinks] = useState(1)
+    const [isCharacterEZA, setIsCharacterEZA] = useState(false)
+
+    const characterToCompare1 = characterComparisonForCalculator[0]?.link_skill
+    const characterToCompare2 = characterComparisonForCalculator[1]?.link_skill
+
+    const matchedLinks = characterComparisonForCalculator.length === 2 && (linkSkillInfo.findMatchingLinks(characterToCompare1, characterToCompare2)) || []
+
+    let matchedLinkInfo = [];
+    for (let i = 0; i < matchedLinks.length; i++) {
+        matchedLinkInfo.push(linkSkillInfo.getLinkSkillInfoObject(matchedLinks[i]))
+    }
+
+    const level1LinkSkillsToFindSummation = matchedLinkInfo.map(singleLinkInfo => singleLinkInfo.lvl1)
+    const level10LinkSkillsToFindSummation = matchedLinkInfo.map(singleLinkInfo => singleLinkInfo.lvl10)
+
+    const summationLevel1LinkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(level1LinkSkillsToFindSummation)
+    const summationLevel10LinkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(level10LinkSkillsToFindSummation)
+
+    useEffect (() => {
+        if(levelOfLinks === 1){
+            setLinkSkillPercentage(summationLevel1LinkSkillStatsBoosted?.ATK?.reduce((accumulator, currentValue) => accumulator + currentValue, 0))
+        } else {
+            setLinkSkillPercentage(summationLevel10LinkSkillStatsBoosted?.ATK?.reduce((accumulator, currentValue) => accumulator + currentValue, 0))
+        }
+    },[characterComparisonForCalculator, levelOfLinks, setLevelOfLinks])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log('start')
+        let leaderSkillPlusBase = Math.round(baseAttackStat * (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
+        console.log((1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
+        console.log('leader skill added: ' + leaderSkillPlusBase)
+        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + (passiveSkillIncrease/100)))
+        console.log((1 + (passiveSkillIncrease/100)))
+        console.log('passive skill calculated: ' + passiveCalc)
+        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (onAttackOrSuperOrActionIncrease/100)));
+        console.log('build up passive calculated: ' + buildUpPassiveCalc)
+        let linkSkillCalc = Math.round(buildUpPassiveCalc * (1 + (linkSkillPercentage/100)))
+        console.log((1 + (linkSkillPercentage/100)))
+        console.log('link skills calculated: ' + linkSkillCalc)
+        let allyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (allyPassiveBoost/100)))
+        console.log('allies active/passive calculated: ' + allyPassiveBoostCalc)
+        let kiMultiplierCalc = Math.round(allyPassiveBoostCalc * (kiMultiplier/100))
+        console.log('Ki multiplier calculated: ' + kiMultiplierCalc)
+        let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoost * .05) + (raiseAttackOnSuper/100)))
+        console.log((superAttackMultiplier/100) + (superAttackHiddenPotentialBoost * .05) + (raiseAttackOnSuper/100))
+        console.log('super attack calculated: ' + saMultiplierCalc)
+        setResults(saMultiplierCalc)
+    }
+
+    // on character selection set Ki multiplier for UR/LR....no character then set everything to 0
+    useEffect (() => {
+        if(!characterComparisonForCalculator[0] || characterComparisonForCalculator[0]?.id === 0){
+            setKiMultiplier(0)
+            setBaseAttackStat(0)
+            setLeaderSkillIncrease(0)
+            setSubLeaderSkillIncrease(0)
+            setPassiveSkillIncrease(0)
+            setItemStats(0)
+            setAllyPassiveBoost(0)
+            setSuperAttackHiddenPotentialBoost(0)
+            setRaiseAttackOnSuper(0)
+        } else if(characterComparisonForCalculator[0]?.rarity === 'LR'){
+            setKiCollected(24)
+            handleKiCollected(24)
+        } else {
+            setKiMultiplier(characterComparisonForCalculator[0]?.Ki12)
+        }
+    },[characterComparisonForCalculator[0]])
+
+    //calculate SA multiplier based on super description....if LR or EZA then update stats
+    useEffect (() => {
+        let superAttackMultiplier = null
+        if (characterComparisonForCalculator[0]?.rarity === 'UR'){
+            if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
+                if (isCharacterEZA){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('extreme damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mass damage')){
+                if (isCharacterEZA){
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('supreme damage')){
+                if (isCharacterEZA){
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('immense damage')){
+                if (isCharacterEZA){
+                    superAttackMultiplier = superAttackMultipliers.immense[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.immense[10]
+                }
+            }
+        } else if (characterComparisonForCalculator[0]?.rarity === 'LR'){
+            console.log('kiCollected: ' + kiCollected)
+            if ((kiCollected >= 12 && kiCollected < 16)){
+                console.log('regular super: ')
+                if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
+                } 
+                else if(characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mega-colossal damage')){
+                    if (isCharacterEZA){
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
+                    }
+                } 
+                else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('colossal damage')){
+                    if (isCharacterEZA){
+                        superAttackMultiplier = superAttackMultipliers.colossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.colossal[20]
+                    }
+                } 
+            } else if ((kiCollected >= 16 && kiCollected < 25)){
+                console.log('ultra super')
+                if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('destructive damage')){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
+                }
+                else if(characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('mega-colossal damage')){
+                    if (isCharacterEZA){
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
+                    }
+                }
+                else if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('colossal damage')){
+                    if (isCharacterEZA){
+                        superAttackMultiplier = superAttackMultipliers.colossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.colossal[20]
+                    }
+                }
+            }
+        }
+        setSuperAttackMultiplier(superAttackMultiplier*100)
+
+    },[characterComparisonForCalculator[0], isCharacterEZA, kiCollected])
+
+    const handleKiCollected = (value) => {
+        if(value > 24){
+            setKiCollected(24)
+        } else if (value < 12){
+            setKiCollected(12)
+        } else{
+            setKiCollected(value)
+            const character12Ki = characterComparisonForCalculator[0]?.Ki12
+            setKiMultiplier(kiMultiplierPercentages[character12Ki][value]*100)
+        }
+    }
+
+  return (
+    <div className='flex flex-col flex-1 px-2 border-2 border-black from-slate-500 via-slate-600 to-slate-900 overflow-y-auto'>
+        <div 
+        onClick={() => setShowCalculator(false)}
+        className='w-full h-fit p-2 my-2 border-2 border-black bg-orange-200 hover:bg-orange-300 text-center'>Show Team Web</div>
+
+        <div className="flex p-2 flex-row justify-between items-center relative">
+            <div className="flex flex-col pr-2 justify-center items-center">
+                <div
+                className="relative cursor-pointer"
+                title='click for card details'
+                onClick={() => setCardDetails(characterComparisonForCalculator[0])}>
+                    {characterComparisonForCalculator[0] && characterComparisonForCalculator[0].id !== 0 &&
+                    <>
+                        <img 
+                        src={closeIcon} 
+                        title='remove character'
+                        className="w-8 card-sm:w-10 h-8 card-sm:h-10 absolute -top-1 -left-1 z-[100] hover:z-[102]"
+                        onClick={() => handleCharacterComparisonSelection(characterComparisonForCalculator[0])}
+                        />
+                        <div className='w-[20px] card-sm:w-[25px] h-[20px] card-sm:h-[25px] border-2 border-black rounded-full bg-green-500 absolute bottom-[5%] right-[7%] z-50'></div>
+                    </>
+                    }
+                    {/* <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[99] hover:z-[101] opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg">Click for Card Details</div> */}
+                    <CharacterCard individualCharacter={characterComparisonForCalculator[0] || {id:0, rarity:null, type:null}} mobileSize={'80px'} desktopSize={'100px'} EZA={characterComparisonForCalculator[0] && isCharacterEZA}/>
+                </div>
+                    
+                <img 
+                src={swapIcon} 
+                className="w-10 card-sm:w-12 h-10 card-sm:h-12 p-1 my-2 border-2 border-black rounded-lg bg-gray-200 cursor-pointer"
+                onClick={() => setCharacterComparisonForCalculator([characterComparisonForCalculator[1], characterComparisonForCalculator[0]])}
+                />
+
+                <div
+                className="relative cursor-pointer"
+                title='click for card details'
+                onClick={() => setCardDetails(characterComparisonForCalculator[1])}>
+                    {characterComparisonForCalculator[1] && characterComparisonForCalculator[1].id !== 0 &&
+                        <img 
+                        src={closeIcon} 
+                        title='remove character'
+                        className="w-8 card-sm:w-10 h-8 card-sm:h-10 absolute -top-1 -left-1 z-[100] hover:z-[102]"
+                        onClick={() => handleCharacterComparisonSelection(characterComparisonForCalculator[1])}
+                        />
+                    }
+                    {/* <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[99] hover:z-[101] opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg">Click for Card Details</div> */}
+                    <CharacterCard individualCharacter={characterComparisonForCalculator[1] || {id:0, rarity:null, type:null}} mobileSize={'80px'} desktopSize={'100px'}/>
+                </div>
+            </div>
+
+            <div 
+            className="flex flex-col w-[90%] h-full mt-2 border-2 border-black bg-white justify-around z-40">
+                <p className="font-header text-2xl underline decoration-2 underline-offset-3 self-center">Link Skills Shared</p>
+                {matchedLinkInfo && matchedLinkInfo.map(singleLink =>
+                <div>
+                    <span className="flex flex-row px-1 border-t-2 border-black">
+                        <p className="pr-4 font-bold">{singleLink.name}:</p>
+                        <p>{levelOfLinks === 1 ? singleLink.lvl1 : singleLink.lvl10}</p>
+                    </span>
+                </div>
+                )}
+                <div className="flex flex-row p-1 border-t-2 border-black justify-center items-center">
+                    <p className="pr-4 font-bold">Total:</p>
+                    <p className="pr-2">ATK:</p>
+                    <p className="pr-4 text-base"> 
+                    {levelOfLinks === 1 ?
+                    summationLevel1LinkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    :
+                    summationLevel10LinkSkillStatsBoosted.ATK.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    }%
+                    </p>
+                    <p className="pr-2">DEF: </p>
+                    <p className="pr-4 text-base">
+                    {levelOfLinks === 1 ?
+                    summationLevel1LinkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    :
+                    summationLevel10LinkSkillStatsBoosted.DEF.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    }%
+                    </p>
+                    <p className="pr-2">Ki: </p>
+                    <p className="text-base"> 
+                    {levelOfLinks === 1 ?
+                    summationLevel1LinkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    :
+                    summationLevel10LinkSkillStatsBoosted.Ki.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    }
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div className="flex flex-row h-fit justify-around items-center">
+
+            <label className="flex justify-center items-center font-bold">
+            EZA:
+            <input
+                type="checkbox"
+                defaultChecked={isCharacterEZA}
+                onChange={() => setIsCharacterEZA(!isCharacterEZA)}
+                className="ml-2 w-4 h-4"
+            />
+            </label>
+
+            <div className="flex flex-row p-2">
+                <div className="">
+                    <input
+                        className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="Link Level Radio"
+                        id="linkLevelRadio1"
+                        value={1}
+                        checked={levelOfLinks === 1}
+                        onChange={(e) => setLevelOfLinks(parseInt(e.target.value))}
+                    />
+                    <label
+                        className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.8rem] xl:text-[1rem]"
+                        htmlFor="linkLevelRadio1"
+                    >
+                        Level 1 Links
+                    </label>
+                </div>
+
+                <div className="">
+                    <input
+                        className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-white checked:border-2 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="Link Level Radio"
+                        id="linkLevelRadio10"
+                        value={10}
+                        checked={levelOfLinks === 10}
+                        onChange={(e) => setLevelOfLinks(parseInt(e.target.value))}
+                    />
+                    <label
+                        className="form-check-label mr-2 inline-block text-black font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.8rem] xl:text-[1rem]"
+                        htmlFor="linkLevelRadio10"
+                    >
+                        Level 10 Links
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+
+        <form className='flex flex-col pb-14 overflow-y-auto'>
+            <div className='flex flex-col w-full p-2 border-2 border-black bg-orange-200'>
+                <p>Enter the total base attack stat of the unit (including the additions from the hidden potential):</p>
+                <input
+                value={baseAttackStat} 
+                onChange={(e) => setBaseAttackStat(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>ATK % Increase from Leader:</p>
+                <input
+                value={leaderSkillIncrease}
+                onChange={(e) => setLeaderSkillIncrease(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>ATK % Increase from Friend/Sub-Leader:</p>
+                <input
+                value={subLeaderSkillIncrease}
+                onChange={(e) => setSubLeaderSkillIncrease(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Start of turn Passive Skill ATK % Gained:</p>
+                <input
+                value={passiveSkillIncrease}
+                onChange={(e) => setPassiveSkillIncrease(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Item ATK % Increase: </p>
+                <input
+                value={itemStats}
+                onChange={(e) => setItemStats(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Build Up Passive ATK % (actions for after super, attack, evasion, etc...): </p>
+                <input
+                value={onAttackOrSuperOrActionIncrease}
+                onChange={(e) => setOnAttackOrSuperOrActionIncrease(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Link Skill ATK % Gained:</p>
+                <input
+                value={linkSkillPercentage}
+                onChange={(e) => setLinkSkillPercentage(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Ally Passive Boost (non-link ally passive raise ATK%):</p>
+                <input
+                value={allyPassiveBoost}
+                onChange={(e) => setAllyPassiveBoost(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                {characterComparisonForCalculator[0] && characterComparisonForCalculator[0]?.rarity === 'LR' ?
+                <div className="flex flex-col card-sm:flex-row w-full card-sm:items-end">
+                    <div className="card-sm:w-1/5 pr-4">
+                        <p>Ki Collected:</p>
+                        <input
+                        value={kiCollected}
+                        onChange={(e) => handleKiCollected(e.target.value)}
+                        placeholder='0' 
+                        type='number'
+                        className='w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                        </div>
+                    <div className="card-sm:w-4/5">
+                        <p>Ki Multiplier:</p>
+                        <input
+                        value={kiMultiplier}
+                        onChange={(e) => setKiMultiplier(e.target.value)}
+                        placeholder='0' 
+                        type='number'
+                        className='w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                    </div>
+                </div>
+                :
+                <>
+                    <p>Ki Multiplier:</p>
+                    <input
+                    value={kiMultiplier}
+                    onChange={(e) => setKiMultiplier(e.target.value)}
+                    placeholder='0' 
+                    type='number'
+                    className='w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                </>
+                }
+                <p>Enter 'Super Attack Boost' level from the hidden potential system:</p>
+                <input
+                value={superAttackHiddenPotentialBoost}
+                onChange={(e) => setSuperAttackHiddenPotentialBoost(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>ATK Boost % from Super Attack (raise super attack by ??? for ??? turns):</p>
+                <input
+                value={raiseAttackOnSuper}
+                onChange={(e) => setRaiseAttackOnSuper(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                <p>Super Attack Multiplier:</p>
+                <input
+                value={superAttackMultiplier}
+                onChange={(e) => setSuperAttackMultiplier(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
+                {/* <p># of Super Attacks:</p>
+                <p>*this is to calculate how many super attacks are launched*</p>
+                <input
+                value={numberOfSupers}
+                onChange={(e) => setNumbersOfSupers(e.target.value)}
+                placeholder='0' 
+                type='number'
+                className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/> */}
+                <div className="flex flex-row items-center">
+                    <p className="font-header text-2xl py-4 pr-4">Results: </p><p className="text-xl font-bold">{results}</p>
+                </div>
+                <button 
+                className='w-full bg-orange-300 hover:bg-orange-400 border-2 border-black font-bold'
+                onClick={(e) => handleSubmit(e)}
+                >SUBMIT</button>
+            </div>
+        </form>
+    </div>
+  )
+}

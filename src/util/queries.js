@@ -32,6 +32,8 @@ query Characters {
     transform_type
     transform_condition
     transform_condition_eza
+    Ki12
+    Ki24
     link_skill
     category
     jp_date
@@ -82,6 +84,8 @@ query CharactersWithIds($dokkanIds: [Int]) {
     transform_type
     transform_condition
     transform_condition_eza
+    Ki12
+    Ki24
     link_skill
     category
     jp_date

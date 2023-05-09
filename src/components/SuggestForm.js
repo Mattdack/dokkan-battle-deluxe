@@ -97,6 +97,7 @@ const SuggestForm = ({ onFormChange, selectedCategories, handleNewCategorySelect
                 name="characterRaritySuggest"
                 id="characterRaritySuggest"
                 className="w-fit max-w-[100px] my-1 p-1.5 bg-orange-300 rounded-md border-2 border-slate-900 font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+                defaultValue={'NO SSRs'}
               >
                 <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
                 value="NO SSRs">

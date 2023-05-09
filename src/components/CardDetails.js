@@ -219,9 +219,9 @@ const CardDescription = ({ text }) => {
           {t}
           {i < descriptionArray.length - 1 && (
             <b className="text-md text-orange-600 cursor-pointer relative" 
-            onMouseEnter={(event) => handleHover(i + 1, event)}
-            onMouseLeave={(event) => handleLeaveHover(i + 1, event)}
-            onClick={(event) => handleHover(i + 1, event)}>
+            onMouseEnter={(event) => ((window.innerWidth > 850) && handleHover(i + 1, event))}
+            onMouseLeave={(event) => ((window.innerWidth > 850) && handleLeaveHover(i + 1, event))}
+            onClick={(event) => ((window.innerWidth < 850) && handleHover(i + 1, event))}>
               *
               {hover && hoverIndex === i + 1 ? (
                 <div 
@@ -267,7 +267,7 @@ const ScrollingDiv = ({ text }) => {
   let PreviousScrollLeft = 0;
   let ScrollInterval = null;
   
-  const divRef = useRef(null);
+  const divRef = useRef(null)
   const [divClass, setDivClass] = useState("flex px-4 w-full font-header text-lg card-sm:text-2xl whitespace-nowrap justify-center");
     
     useEffect(() => {

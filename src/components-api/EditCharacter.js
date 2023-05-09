@@ -42,7 +42,7 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
         turnOnMutation ?
           await editCharacter({
             variables: {
-              updatedCharacter: updatedCharacter,
+              updatedCharacter: formattedCharacter,
             },
           })
           .then((result) => {

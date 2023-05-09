@@ -15,6 +15,7 @@ import CardDetails from "./CardDetails";
 import DeckSelection from "./DeckSelection.js";
 import Auth from "../util/auth";
 import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
+import Calculator from "./Calculator";
 import Announcement from "../modals/Announcement";
 
 import { useSortedCharacters } from "../util/sorting";
@@ -26,7 +27,7 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, showCalculator, setShowCalculator, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
   const [selectedDeck, setSelectedDeck] = useState("");
 
   const [cardDetails, setCardDetails] = useState({
@@ -315,7 +316,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [hoverCharacterStats, setHoverCharacterStats] = useState(null)
 
     const [viewableCharacters, setViewableCharacters] = useState(200)
-      // this useEffect is for automatically loading characters by increasing the viewableCharacters
+    // this useEffect is for automatically loading characters by increasing the viewableCharacters
     useEffect(() => {
       if(cardContainerRef.current !== null){
         if((filteredCharacters?.length > 0 && viewableCharacters >= filteredCharacters?.length) || (viewableCharacters >= allCharacters?.length)){
@@ -345,6 +346,35 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     },[selectedCategories])
 
+    const [characterComparisonForCalculator, setCharacterComparisonForCalculator] = useState([])
+    function handleCharacterComparisonSelection(character) {
+      if(!characterComparisonForCalculator[0]){
+        setCardDetails(character)
+      }
+      setCharacterComparisonForCalculator((prev) => {
+        console.log(prev)
+        console.log(characterComparisonForCalculator)
+        if (prev.includes(character)) {
+          if (prev[0].id === character.id) {
+            const newArray = [{ id: 0, rarity: null, type: null }, prev[1]];
+            return newArray;
+          } else {
+            return prev.filter((characterToRemove) => characterToRemove.id !== character.id);
+          }
+        } else if(characterComparisonForCalculator[0]?.id === 0){
+          console.log('character 1 is empty')
+          return [character, prev[1]]
+        } else {
+          if (prev.length < 2) {
+            return [...prev, character];
+          } else {
+            return [prev[0], character];
+          }
+        }
+      });
+       
+    }
+
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
       {/* TODO: for important information to announce on page load */}
@@ -355,11 +385,23 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
       <div className={`flex flex-1 h-0 ${showMiddleDiv ? '' : 'lg:px-10 xl:px-20'} relative`}>
 
-        {(!showMiddleDiv && (windowWidth > 850)) && <button 
+        {/* this conditional hides the button if showMiddleDiv is false AND window width is greater than the mobile screen break */}
+        {(!showMiddleDiv && (windowWidth > 850)) && 
+        <div className="flex transform rotate-90 origin-bottom-left absolute left-0 -top-10">
+
+          <button 
           onClick={()=> setShowMiddleDiv(!showMiddleDiv)}
-          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300 transform rotate-90 origin-bottom-left absolute left-0 -top-10">
+          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300">
             Show Cards and Decks
           </button>
+
+          <button 
+          onClick={()=> setShowCalculator(!showCalculator)}
+          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300">
+            {showCalculator ? 'Show Team Web' : 'Show Calculator'}
+          </button>
+          
+        </div>
         }
 
         {/* TODO: card detail styling */}
@@ -572,13 +614,15 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   className={`
                     cursor-pointer relative
                     ${!multiCardSelection ? webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]" : ''}
-                    ${multiCardSelection ? savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-amber-900/[.4]' : ''}
+                    ${multiCardSelection ? savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-amber-900/[.4]' : ''} b 
                     `}
                   onMouseEnter={() => setHoverCharacterStats(character)}
                   onMouseLeave={() => setHoverCharacterStats(null)}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
+                    } else if (!multiCardSelection && showCalculator){
+                      handleCharacterComparisonSelection(character)
                     } else {
                       handleCharacterSelection(character)
                     }
@@ -603,6 +647,16 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           id="Team"
           className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
+          {showCalculator ?
+          <Calculator 
+          showCalculator={showCalculator} 
+          setShowCalculator={setShowCalculator} 
+          characterComparisonForCalculator={characterComparisonForCalculator} 
+          setCharacterComparisonForCalculator={setCharacterComparisonForCalculator}
+          handleCharacterComparisonSelection={handleCharacterComparisonSelection}
+          setCardDetails={setCardDetails}
+          /> 
+          :
           <SuggestToWeb
             selectedCharacter={cardDetails}
             userCharacters={userCharacters}
@@ -613,6 +667,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             allCharacters={allCharacters}
             allCharactersLoading={allCharactersLoading}
           />
+          }
         </div>
       </div>
 

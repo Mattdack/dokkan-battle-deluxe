@@ -595,11 +595,14 @@ export const getLinkSkillInfoObject = (linkskill) => {
   );
   if (!result) return;
   const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
-  return { [linkName]: { lvl1, lvl10 } };
+  return { name:linkskill, lvl1, lvl10 };
 };
 
-export function findMatchingLinks(source, target) {
-  return source.filter((elem) => target.includes(elem));
+export function findMatchingLinks(character1, character2) {
+  if(!character1 || !character2){
+    return
+  }
+  return character1.filter((elem) => character2.includes(elem));
 }
 
 export const linkSkillStatBoosts = (linkSkills) => {

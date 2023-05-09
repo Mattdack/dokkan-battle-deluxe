@@ -10,7 +10,7 @@ import { UserContext } from '../App';
 
 export default function HamburgerModal({open, onClose}) {
 
-  const { showMiddleDiv, setShowMiddleDiv } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, showCalculator, setShowCalculator } = useContext(UserContext);
 
   const [loginOpen, setLoginOpen] = useState(false);
   const [updatesOpen, setUpdatesOpen] = useState(false)
@@ -40,6 +40,12 @@ export default function HamburgerModal({open, onClose}) {
   function handleToStrategy (e) {
     e.stopPropagation()
     window.location.assign(window.location.origin + '/strategy')
+  }
+
+  function handleSetShowCalculator (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowCalculator(!showCalculator)
   }
 
   if (!open){
@@ -81,6 +87,14 @@ export default function HamburgerModal({open, onClose}) {
           >
             Help
           </a>
+          {webLocationObject.pathname === ('/') &&
+          <p
+          onClick={(e) => handleSetShowCalculator(e)}
+          className={`font-header text-lg card-sm:text-2xl flex justify-center items-center text-center h-1/3 w-full col-span-1 p-4 bg-orange-200 border-2 border-black`}
+          >
+            {showCalculator ? 'Show Team Web' : 'Show Calculator'}
+          </p>
+          }
           {(webLocationObject.pathname === ('/') || webLocationObject.pathname === ('/help')) &&
             <a
               className={`font-header text-lg card-sm:text-2xl flex justify-center items-center text-center h-1/3 w-full col-span-1 p-4 bg-orange-200 border-2 border-black`}
