@@ -120,88 +120,95 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
             </div>
           </div>
 
-         <div className="flex w-full mt-2 card-sm:mt-2 justify-between items-center">
+         <div className="flex w-full my-2 card-sm:mt-2 justify-between items-center">
           {/* type buttons */}
-            <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
-              Type:
-              <select
-                name="characterType"
-                id="characterType"
-                className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
-              >
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="">
-                  ALL
-                </option>
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="AGL">
-                  AGL
-                </option>
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="TEQ">
-                  TEQ
-                </option>
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="INT">
-                  INT
-                </option>
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="STR">
-                  STR
-                </option>
-                <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-                value="PHY">
-                  PHY
-                </option>
-              </select>
+            <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } flex justify-center items-center bg-orange-300 border-2 border-black rounded-md font-bold`}>
+              <label className='pl-2' htmlFor="characterType">
+                Type:
+                <select
+                  name="characterType"
+                  id="characterType"
+                  className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+                >
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="">
+                    ALL
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="AGL">
+                    AGL
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="TEQ">
+                    TEQ
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="INT">
+                    INT
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="STR">
+                    STR
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="PHY">
+                    PHY
+                  </option>
+                </select>
+              </label>
             </div>
 
           {/* rarity buttons */}
-          <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
-            <label htmlFor="characterRarity">Rarity:
-            <select
-              name="characterRarity"
-              id="characterRarity"
-              className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
-              >
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="">
-                All
-              </option>
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="LR">
-                LR
-              </option>
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="UR">
-                UR
-              </option>
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="SSR">
-                SSR
-              </option>
-            </select>
+            <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } flex justify-center items-center bg-orange-300 border-2 border-black rounded-md font-bold`}>
+              <label className='pl-2' htmlFor="characterRarity">
+                Rarity:
+                <select
+                  name="characterRarity"
+                  id="characterRarity"
+                  className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+                  >
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="">
+                    All
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="LR">
+                    LR
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="UR">
+                    UR
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" value="SSR">
+                    SSR
+                  </option>
+                </select>
               </label>
-          </div>
+            </div>
+
+            {/* Super and extreme */}
+            <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } flex justify-center items-center bg-orange-300 border-2 border-black rounded-md font-bold`}>
+              <label className='pl-2' htmlFor="characterSuperOrExtreme">
+                S/E:
+                <select
+                  name="characterSuperOrExtreme"
+                  id="characterSuperOrExtreme"
+                  className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
+                >
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="">
+                    ALL
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="S">
+                    Super
+                  </option>
+                  <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
+                  value="E">
+                    Extreme
+                  </option>
+                </select>
+              </label>
+            </div>
           </div>
 
-          <div className={`${showMiddleDiv ? 'show-middle-div-text' : 'hide-middle-div-text' } my-2 pl-2 bg-orange-300 border-2 border-black rounded-md font-bold`}>
-            Super/Extreme:
-            <select
-              name="characterSuperOrExtreme"
-              id="characterSuperOrExtreme"
-              className="w-fit p-2 ml-2 bg-orange-300 rounded-r-md font-bold text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]"
-            >
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-              value="">
-                ALL
-              </option>
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-              value="S">
-                Super
-              </option>
-              <option className="text-[.6rem] card-sm:text-[.72rem] lg:text-[.6rem] xl:text-[.7rem]" 
-              value="E">
-                Extreme
-              </option>
-            </select>
-          </div>
 
           <div className="flex w-full justify-between order-5">
             <div className="flex w-fit justify-center bg-orange-300 rounded-md border-2 border-slate-900">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDom from "react-dom";
 
+const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/close-icon.png";
 
 export default function NewsAndUpdatesModal( {open, onClose} ) {
    
@@ -14,8 +15,8 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
         <div 
         onClick={(e) => e.stopPropagation()}
         className="flex flex-col w-3/4 lg:w-3/5 h-[70vh] lg:max-h-3/4 border-4 border-black rounded-lg shadow-lg fixed bg-gray-100 z-[1000] overflow-y-auto">
-
-          <h1 className="font-header w-full h-fit px-2 border-b-4 border-black text-2xl lg:text-4xl <1000px>:text-5xl text-center bg-orange-300">WELCOME TO DOKKAN BATTLE HELPER!</h1>
+          {/* <img onClick={() => onClose()} src={closeIcon} className="absolute top-2 right-2 rounded-lg transition ease-in-out hover:bg-gray-400/[.6] cursor-pointer"/> */}
+          <h1 className="font-header w-full h-fit px-14 border-b-4 border-black text-2xl lg:text-4xl <1000px>:text-5xl text-center bg-orange-300">WELCOME TO DOKKAN BATTLE HELPER!</h1>
           <div className="flex flex-row">
           </div>
           

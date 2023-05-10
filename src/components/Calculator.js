@@ -14,12 +14,12 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
     const [subLeaderSkillIncrease, setSubLeaderSkillIncrease] = useState(0)
     const [passiveSkillIncrease, setPassiveSkillIncrease] = useState(0)
     const [itemStats, setItemStats] = useState(0)
-    const [onAttackOrSuperOrActionIncrease, setOnAttackOrSuperOrActionIncrease] = useState(0)
+    const [passiveSkillOnAttackOrSuperOrActionIncrease, setPassiveSkillOnAttackOrSuperOrActionIncrease] = useState(0)
     const [linkSkillPercentage, setLinkSkillPercentage] = useState(0)
-    const [allyPassiveBoost, setAllyPassiveBoost] = useState(0)
+    const [noLinkAllyPassiveBoost, setNoLinkAllyPassiveBoost] = useState(0)
     const [kiCollected, setKiCollected] = useState(0)
     const [kiMultiplier, setKiMultiplier] = useState(0)
-    const [superAttackHiddenPotentialBoost, setSuperAttackHiddenPotentialBoost] = useState(0)
+    const [superAttackHiddenPotentialBoostLevel, setSuperAttackHiddenPotentialBoostLevel] = useState(0)
     const [raiseAttackOnSuper, setRaiseAttackOnSuper] = useState(0)
     const [superAttackMultiplier, setSuperAttackMultiplier] = useState(0)
     const [results, setResults] = useState(0)
@@ -58,24 +58,41 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log('start')
+        console.log('base ATK stat: ' + baseAttackStat)
         let leaderSkillPlusBase = Math.round(baseAttackStat * (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
-        console.log((1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
-        console.log('leader skill added: ' + leaderSkillPlusBase)
+        console.log('leader skill multiple used: ' + (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
+        console.log('ATK stat after leader skill added: ' + leaderSkillPlusBase)
+        console.log('')
+
         let passiveCalc = Math.round(leaderSkillPlusBase * (1 + (passiveSkillIncrease/100)))
-        console.log((1 + (passiveSkillIncrease/100)))
-        console.log('passive skill calculated: ' + passiveCalc)
-        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (onAttackOrSuperOrActionIncrease/100)));
-        console.log('build up passive calculated: ' + buildUpPassiveCalc)
+        console.log('passive skill multiple used: ' + (1 + (passiveSkillIncrease/100)))
+        console.log('ATK stat after passive skill calculated: ' + passiveCalc)
+        console.log('')
+
+        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)));
+        console.log('build up passive skill multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
+        console.log('ATK stat after build up passive calculated: ' + buildUpPassiveCalc)
+        console.log('')
+
         let linkSkillCalc = Math.round(buildUpPassiveCalc * (1 + (linkSkillPercentage/100)))
-        console.log((1 + (linkSkillPercentage/100)))
-        console.log('link skills calculated: ' + linkSkillCalc)
-        let allyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (allyPassiveBoost/100)))
-        console.log('allies active/passive calculated: ' + allyPassiveBoostCalc)
-        let kiMultiplierCalc = Math.round(allyPassiveBoostCalc * (kiMultiplier/100))
-        console.log('Ki multiplier calculated: ' + kiMultiplierCalc)
-        let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoost * .05) + (raiseAttackOnSuper/100)))
-        console.log((superAttackMultiplier/100) + (superAttackHiddenPotentialBoost * .05) + (raiseAttackOnSuper/100))
-        console.log('super attack calculated: ' + saMultiplierCalc)
+        console.log('linkskill multiple used: ' + (1 + (linkSkillPercentage/100)))
+        console.log('ATK stat after link skills calculated: ' + linkSkillCalc)
+        console.log('')
+
+        let noLinkAllyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (noLinkAllyPassiveBoost/100)))
+        console.log('non-linked ally passive skill multiple: ' + (1 + (noLinkAllyPassiveBoost/100)))
+        console.log('ATK stat after allies active/passive calculated: ' + noLinkAllyPassiveBoostCalc)
+        console.log('')
+
+        let kiMultiplierCalc = Math.round(noLinkAllyPassiveBoostCalc * (kiMultiplier/100))
+        console.log('Ki multiple used: ' + (kiMultiplier/100))
+        console.log('ATK stat after Ki multiplier calculated: ' + kiMultiplierCalc)
+        console.log('')
+
+        let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
+        console.log('super attack multiple used: ' + ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
+        console.log('ATK stat after super attack calculated: ' + saMultiplierCalc)
+
         setResults(saMultiplierCalc)
     }
 
@@ -88,8 +105,8 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
             setSubLeaderSkillIncrease(0)
             setPassiveSkillIncrease(0)
             setItemStats(0)
-            setAllyPassiveBoost(0)
-            setSuperAttackHiddenPotentialBoost(0)
+            setNoLinkAllyPassiveBoost(0)
+            setSuperAttackHiddenPotentialBoostLevel(0)
             setRaiseAttackOnSuper(0)
         } else if(characterComparisonForCalculator[0]?.rarity === 'LR'){
             setKiCollected(24)
@@ -129,9 +146,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 }
             }
         } else if (characterComparisonForCalculator[0]?.rarity === 'LR'){
-            console.log('kiCollected: ' + kiCollected)
             if ((kiCollected >= 12 && kiCollected < 16)){
-                console.log('regular super: ')
                 if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
                     superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
                 } 
@@ -150,7 +165,6 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                     }
                 } 
             } else if ((kiCollected >= 16 && kiCollected < 25)){
-                console.log('ultra super')
                 if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('destructive damage')){
                     superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
                 }
@@ -369,8 +383,8 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
                 <p>Build Up Passive ATK % (actions for after super, attack, evasion, etc...): </p>
                 <input
-                value={onAttackOrSuperOrActionIncrease}
-                onChange={(e) => setOnAttackOrSuperOrActionIncrease(e.target.value)}
+                value={passiveSkillOnAttackOrSuperOrActionIncrease}
+                onChange={(e) => setPassiveSkillOnAttackOrSuperOrActionIncrease(e.target.value)}
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
@@ -381,10 +395,10 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Ally Passive Boost (non-link ally passive raise ATK%):</p>
+                <p>Non-linked ally passive skill raise ATK%:</p>
                 <input
-                value={allyPassiveBoost}
-                onChange={(e) => setAllyPassiveBoost(e.target.value)}
+                value={noLinkAllyPassiveBoost}
+                onChange={(e) => setNoLinkAllyPassiveBoost(e.target.value)}
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
@@ -400,7 +414,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                         className='w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
                         </div>
                     <div className="card-sm:w-4/5">
-                        <p>Ki Multiplier:</p>
+                        <p>Ki Multiplier %:</p>
                         <input
                         value={kiMultiplier}
                         onChange={(e) => setKiMultiplier(e.target.value)}
@@ -411,7 +425,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 </div>
                 :
                 <>
-                    <p>Ki Multiplier:</p>
+                    <p>Ki Multiplier %:</p>
                     <input
                     value={kiMultiplier}
                     onChange={(e) => setKiMultiplier(e.target.value)}
@@ -422,8 +436,8 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 }
                 <p>Enter 'Super Attack Boost' level from the hidden potential system:</p>
                 <input
-                value={superAttackHiddenPotentialBoost}
-                onChange={(e) => setSuperAttackHiddenPotentialBoost(e.target.value)}
+                value={superAttackHiddenPotentialBoostLevel}
+                onChange={(e) => setSuperAttackHiddenPotentialBoostLevel(e.target.value)}
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
@@ -434,7 +448,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Super Attack Multiplier:</p>
+                <p>Super Attack Multiplier %:</p>
                 <input
                 value={superAttackMultiplier}
                 onChange={(e) => setSuperAttackMultiplier(e.target.value)}
@@ -453,7 +467,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                     <p className="font-header text-2xl py-4 pr-4">Results: </p><p className="text-xl font-bold">{results}</p>
                 </div>
                 <button 
-                className='w-full bg-orange-300 hover:bg-orange-400 border-2 border-black font-bold'
+                className='w-full p-2 bg-orange-300 hover:bg-orange-400 border-2 border-black font-bold'
                 onClick={(e) => handleSubmit(e)}
                 >SUBMIT</button>
             </div>

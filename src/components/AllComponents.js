@@ -349,7 +349,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
     const [characterComparisonForCalculator, setCharacterComparisonForCalculator] = useState([])
     function handleCharacterComparisonSelection(character) {
-      if(!characterComparisonForCalculator[0]){
+      if(!characterComparisonForCalculator[0] || characterComparisonForCalculator[0]?.id === 0){
         setCardDetails(character)
       }
       setCharacterComparisonForCalculator((prev) => {
@@ -408,16 +408,23 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           className={`${showCardStats || (showMiddleDiv && (windowWidth > 900)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/4 lg:max-w-[400px] lg:min-w-[0px] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
           >
 
-          <div className="w-full p-2">
-            {(showMiddleDiv && (window.innerWidth > 900)) &&
+          {(showMiddleDiv && (window.innerWidth > 900)) &&
+          <div className="flex w-full p-2">
             <button
             onClick={() => setShowMiddleDiv(false)}
-            className="flex py-2 px-4 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
+            className="flex py-2 px-4 w-1/2 text-md card-sm:text-base lg:text-sm <1000px>:text-[.77rem] xl:text-[.85rem] font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
             >
               Hide Character Details
             </button>
-            }
+
+            <button
+            onClick={() => setShowCalculator(!showCalculator)}
+            className="flex py-2 px-4 w-1/2 text-md card-sm:text-base lg:text-sm <1000px>:text-[.77rem] xl:text-[.85rem] font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
+            >
+              {showCalculator ? 'Show Team Web' : 'Show Calculator' }
+            </button>
           </div>
+          }
 
           <div className="flex flex-row w-full h-fit px-2 mt-2">
 
