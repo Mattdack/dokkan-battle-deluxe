@@ -32,6 +32,8 @@ query Characters {
     transform_type
     transform_condition
     transform_condition_eza
+    Ki12
+    Ki24
     link_skill
     category
     jp_date
@@ -82,27 +84,14 @@ query CharactersWithIds($dokkanIds: [Int]) {
     transform_type
     transform_condition
     transform_condition_eza
+    Ki12
+    Ki24
     link_skill
     category
     jp_date
     glb_date
     jp_date_eza
     glb_date_eza
-  }
-}`;
-
-export const QUERY_7LINKS = gql`
-query Characters7Link($link1: String, $link2: String, $link3: String, $link4: String, $link5: String, $link6: String, $link7: String) {
-  characters7Link(link1: $link1, link2: $link2, link3: $link3, link4: $link4, link5: $link5, link6: $link6, link7: $link7) {
-    id
-    name
-    link_skill
-    category
-    thumb
-    art
-    type
-    rarity
-    glb_date
   }
 }`;
 

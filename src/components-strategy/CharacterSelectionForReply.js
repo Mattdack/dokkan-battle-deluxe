@@ -8,7 +8,7 @@ import {CloudConfig} from "@cloudinary/url-gen";
 
 import SearchFormForReply from "./SearchFormForReply";
 
-import * as sort from "../util/sorting"
+import { useSortedCharacters } from "../util/sorting";
 
 function CharacterSelectionForReply( {characterDictionary, username, usersSavedCharacterIds, handleCommentCharacterSelection, characterSelection} ) {
   
@@ -28,7 +28,7 @@ function CharacterSelectionForReply( {characterDictionary, username, usersSavedC
 
   const [filterByGame, setFilterByGame] = useState(true);
 
-  let charactersToDisplay = sort.sortCharacters(allCharacters,filteredCharacters,filterByGame)
+  let charactersToDisplay = useSortedCharacters(allCharacters,filteredCharacters,filterByGame)
 
   if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
     charactersToDisplay = []

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Auth from "../util/auth";
-import * as sort from "../util/sorting";
+import { useSortedCharacters } from "../util/sorting";
 
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_CHARACTERS, GET_EVENT_DATA, GET_ITEMS_DATA, GET_SUPPORT_MEMORY_DATA, } from "../util/queries";
@@ -78,7 +78,7 @@ function AllAPI() {
   const [filterByGame, setFilterByGame] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
 
-  let charactersToDisplay = sort.sortCharacters(allCharacters,filteredCharacters,filterByGame);
+  let charactersToDisplay = useSortedCharacters(allCharacters,filteredCharacters,filterByGame);
 
   if (newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0) {
     charactersToDisplay = [];
@@ -206,9 +206,10 @@ function AllAPI() {
 
 
   return (
-    profileData?.data?._id === process.env.REACT_APP_CONNECT_API_USER && 
-    (<div className="fixed flex flex-col h-full bg-slate-900">
+    <div className="fixed flex flex-col h-full bg-slate-900">
         <Navbar />
+      {profileData?.data?._id === process.env.REACT_APP_CONNECT_API_USER && 
+      <>
         <div className="flex w-screen bg-slate-700">
           <p>What would you like to do?</p>
           <label
@@ -241,7 +242,7 @@ function AllAPI() {
             className={`
             flex flex-1 flex-col bg-gradient-radial overflow-y-auto
             `}
-            //   ${windowWidth > 850 ? "" : "hidden"}
+            //   ${windowWidth > 900 ? "" : "hidden"}
           >
             {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
 
@@ -354,9 +355,10 @@ function AllAPI() {
         </div>
         }
       </div>
+      </>
+    }
     </div>
     )
-  );
 }
 
 // returns a new array of characters derived from either allCharacters or userCharacters based on the criteria in filterData
@@ -368,10 +370,10 @@ const getFilteredCharacters = ( allCharacters, userCharacters, filterData, selec
       (!selectedCategories.length ||
         (filterData.matchAllCategories
           ? selectedCategories.every((category) =>
-              character.category.includes(category)
+            character.category && character.category.includes(category)
             )
           : selectedCategories.some((category) =>
-              character.category.includes(category)
+          character.category && character.category.includes(category)
             ))) &&
       (!filterData.isCommonLeader ||
         (leaderNumbers

@@ -595,45 +595,47 @@ export const getLinkSkillInfoObject = (linkskill) => {
   );
   if (!result) return;
   const [linkName, { lvl1_stats: lvl1, lvl10_stats: lvl10 }] = result;
-  return { [linkName]: { lvl1, lvl10 } };
+  return { name:linkskill, lvl1, lvl10 };
 };
 
-export function findMatchingLinks(source, target) {
-  return source.filter((elem) => target.includes(elem));
+export function findMatchingLinks(character1, character2) {
+  if(!character1 || !character2){
+    return
+  }
+  return character1.filter((elem) => character2.includes(elem));
 }
 
 export const linkSkillStatBoosts = (linkSkills) => {
   const linkSkillBuffs = { ATK: [], DEF: [], Ki: [] };
   
-  linkSkills.forEach(lvl1_stats => {
-    //this finds all digits in the link description
-    const match = lvl1_stats.match(/\d+/g);
-    if (!match) return;
-    const stat = parseInt(match[0]);
-    
-    if (lvl1_stats.includes("ATK")) {
-      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
-        linkSkillBuffs.ATK.push(stat);
-      }
-    }
-    if (lvl1_stats.includes("DEF")) {
-      if (lvl1_stats.includes("+") && lvl1_stats.includes("%")) {
-        linkSkillBuffs.DEF.push(stat);
-      }
-    }
-    if (lvl1_stats.includes("Ki +1")) {
+  linkSkills.forEach(linkSkillStat => {
+    // Ki's need to go first because the match looks only for numbers that have a + AND a %
+    if (linkSkillStat.includes("Ki +1")) {
       linkSkillBuffs.Ki.push(1);
     }
-    if (lvl1_stats.includes("Ki +2")) {
+    if (linkSkillStat.includes("Ki +2")) {
       linkSkillBuffs.Ki.push(2);
     }
-    if (lvl1_stats.includes("Ki +3")) {
+    if (linkSkillStat.includes("Ki +3")) {
       linkSkillBuffs.Ki.push(3);
+    }
+
+    const match = linkSkillStat.match(/\+(\d+)%/)
+    if (!match) return;
+    const stat = parseInt(match[1]);
+    
+    if (linkSkillStat.includes("ATK")) {
+      linkSkillBuffs.ATK.push(stat);
+    }
+    if (linkSkillStat.includes("DEF")) {
+      linkSkillBuffs.DEF.push(stat);
     }
   });
   
   return linkSkillBuffs;
 }
+
+
 
 export const linkSkillStatsBoostedFor2Characters_lvl_1 = (character1, character2) => {
   // gets matched links between the selected character and character card
@@ -642,6 +644,23 @@ export const linkSkillStatsBoostedFor2Characters_lvl_1 = (character1, character2
     // gets lvl1 linkskill info of the match links
     for (let i = 0; i < matchedLinks.length; i++) {
       matchedLinkInfo.push(getLvl1LinkSkillInfo(matchedLinks[i]));
+    }
+    // uses the linkSkillInfo function which only grabs the stats that were changed
+    const linkSkillStatsBoosted = linkSkillStatBoosts(matchedLinkInfo)
+    return {
+      linkNames: matchedLinks,
+      linkStats: matchedLinkInfo,
+      linkAccumulation: linkSkillStatsBoosted
+    }
+}
+
+export const linkSkillStatsBoostedFor2Characters_lvl_10 = (character1, character2) => {
+  // gets matched links between the selected character and character card
+    const matchedLinks = findMatchingLinks(character1.link_skill, character2.link_skill) || []
+    let matchedLinkInfo = [];
+    // gets lvl1 linkskill info of the match links
+    for (let i = 0; i < matchedLinks.length; i++) {
+      matchedLinkInfo.push(getLvl10LinkSkillInfo(matchedLinks[i]));
     }
     // uses the linkSkillInfo function which only grabs the stats that were changed
     const linkSkillStatsBoosted = linkSkillStatBoosts(matchedLinkInfo)
@@ -679,9 +698,6 @@ export const linkSkillStatsBoostedForFloatCharacter = (character1, character2, f
 
     const usedLinksStatsBoost = linkSkillStatBoosts(usedLinkStats)
     const uNusedLinksStatsBoost = linkSkillStatBoosts(uNusedLinkStats)
-
-    // console.log(usedLinksStatsBoost)
-    // console.log(uNusedLinksStatsBoost)
 
     return {
       linkNames: {usedLinks, uNusedLinks},

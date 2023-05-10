@@ -10,8 +10,9 @@ const CustomEdge = (props) => {
   
   const [showLinkInfo, setShowLinkInfo] = useState(false);
   const [edgeSelected, setEdgeSelected] = useState(false);
-  const { showSummationLinks, setShowSummationLinks } = useContext(UserContext);
-
+  
+  const { showSummationLinks, levelOfLinks } = useContext(UserContext);
+  
   useEffect(() => {
     setEdgeSelected(props.selected);
   }, [props.selected])
@@ -21,7 +22,11 @@ const CustomEdge = (props) => {
   const matchedLinks = linkSkillInfo.findMatchingLinks(sourceNodeLinks, targetNodeLinks);
   let matchedLinkInfo = [];
   for (let i = 0; i < matchedLinks.length; i++) {
-    matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+    if(levelOfLinks === 1){
+      matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+    } else if (levelOfLinks === 10){
+      matchedLinkInfo.push(linkSkillInfo.getLvl10LinkSkillInfo(matchedLinks[i]));
+    }
   }
   // uses the linkSkillInfo function which only grabs the stats that were changed
   const summationLinkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)

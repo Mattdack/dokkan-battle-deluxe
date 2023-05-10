@@ -15,9 +15,11 @@ import CardDetails from "./CardDetails";
 import DeckSelection from "./DeckSelection.js";
 import Auth from "../util/auth";
 import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
+import Calculator from "./Calculator";
 import Announcement from "../modals/Announcement";
 
-import * as sort from "../util/sorting";
+import { useSortedCharacters } from "../util/sorting";
+import { findCharacterLeaderCategories } from "../util/allCategories";
 
 import { UserContext } from '../App';
 
@@ -25,7 +27,8 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, showCalculator, setShowCalculator, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
+  const [selectedDeck, setSelectedDeck] = useState("");
 
   const [cardDetails, setCardDetails] = useState({
     id: 1331,
@@ -109,7 +112,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
   // call initial query to find savedCharacters (array of IDs from user) the onComplete allows the saved characters to be set to the deck (important for adding and removing characters)
   const profileData = Auth.getProfile() || [];
-  const { loading: isUserDataLoading, data: userData } = useQuery(
+  const [getUserData, { loading: isUserDataLoading, data: userData }] = useLazyQuery(
     GET_USERDATA,
     {
       variables: {
@@ -117,9 +120,17 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       },
       onCompleted: (data) => {
         setSavedToMyCharacterDeck(data.findOneUser.savedCharacters);
+        if(selectedDeck !== ''){
+          setAllCharacterIDsInDeck(data.findOneUser.decks.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)))
+        }
       },
     }
   );
+
+  useEffect(() => {
+    getUserData()
+  }, [selectedDeck]);
+
   const userDeckData = userData?.findOneUser?.decks || [];
   const userCharacterIds = userData?.findOneUser?.savedCharacters || [];
 
@@ -184,7 +195,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   }
 
   const [showCardDetails, setShowCardDetails] = useState(true);
-  const [selectedDeck, setSelectedDeck] = useState("");
+
   const handleSelectedDeckOptionClick = (deckId) => {
     if (deckId === ''){
       return
@@ -213,7 +224,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const [filterByGame, setFilterByGame] = useState(true);
 
-  let charactersToDisplay = sort.sortCharacters(allCharacters, filteredCharacters, filterByGame)
+  let charactersToDisplay = useSortedCharacters(allCharacters, filteredCharacters, filterByGame)
 
   if(newFilterData?.characterCategory?.length > 0 && filteredCharacters?.length === 0){
     charactersToDisplay = []
@@ -221,7 +232,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
   
   const cardContainerRef = useRef(null);
   const handleNewCategorySelected = (e) => {
-    // setViewableCharacters(100)
     if(e.target.value === ''){
       cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
       return setSelectedCategories([])
@@ -284,13 +294,14 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [showFilters, setShowFilters] = useState(true)
 
     const [announcementOpen, setAnnouncementOpen] = useState(false)
+
     const [openNewsModal, setOpenNewsModal] = useState(false)
-    const firstLogInNewShow = localStorage.getItem('firstLogInNewShow')
-    const timestamp = localStorage.getItem('firstLogInNewShowTimestamp')
-    if (!firstLogInNewShow || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
+    const firstLogInShowNews = localStorage.getItem('announcement')
+    const timestamp = localStorage.getItem('announcementTimestamp')
+    if (!firstLogInShowNews || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
-      localStorage.setItem('firstLogInNewShow', 'true');
-      localStorage.setItem('firstLogInNewShowTimestamp', Date.now());
+      localStorage.setItem('announcement', 'true');
+      localStorage.setItem('announcementTimestamp', Date.now());
     }
 
     function handleCharacterSelection(character){
@@ -303,30 +314,64 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       }
     }
 
-    useEffect(() => {
-      const newIDs = userDeckData.find(deck => deck._id === selectedDeck)?.teams.flatMap(team => team.characters.map(character => character.id)) || [];
-      setAllCharacterIDsInDeck(newIDs);
-    }, [selectedDeck]);
+    const [hoverCharacterStats, setHoverCharacterStats] = useState(null)
 
+    const [viewableCharacters, setViewableCharacters] = useState(200)
     // this useEffect is for automatically loading characters by increasing the viewableCharacters
-    // const [viewableCharacters, setViewableCharacters] = useState(100);
-    // useEffect(() => {
-    //   if(cardContainerRef.current !== null){
-    //     const cardContainer = cardContainerRef.current;
+    useEffect(() => {
+      if(cardContainerRef.current !== null){
+        if((filteredCharacters?.length > 0 && viewableCharacters >= filteredCharacters?.length) || (viewableCharacters >= allCharacters?.length)){
+          return
+        }
+        const cardContainer = cardContainerRef.current;
     
-    //     const handleScroll = () => {
-    //       if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 500)) {
-    //         setViewableCharacters(viewableCharacters + 100);
-    //       }
-    //     };
+        const handleScroll = () => {
+          if ((cardContainer.scrollTop + cardContainer.clientHeight) >= (cardContainer.scrollHeight - 400)) {
+            setViewableCharacters(viewableCharacters + 100);
+          }
+        };
     
-    //     cardContainer.addEventListener("scroll", handleScroll);
+        cardContainer.addEventListener("scroll", handleScroll);
     
-    //     return () => {
-    //       cardContainer.removeEventListener("scroll", handleScroll);
-    //     };
-    //   }
-    // }, [allCharactersLoading, viewableCharacters]);
+        return () => {
+          cardContainer.removeEventListener("scroll", handleScroll);
+        };
+
+      }
+    }, [allCharactersLoading, viewableCharacters, charactersToDisplay]);
+    
+    useEffect(() => {
+      if(cardContainerRef.current){
+        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+        setViewableCharacters(100)
+      }
+    },[selectedCategories])
+
+    const [characterComparisonForCalculator, setCharacterComparisonForCalculator] = useState([])
+    function handleCharacterComparisonSelection(character) {
+      if(!characterComparisonForCalculator[0] || characterComparisonForCalculator[0]?.id === 0){
+        setCardDetails(character)
+      }
+      setCharacterComparisonForCalculator((prev) => {
+        if (prev.includes(character)) {
+          if (prev[0].id === character.id) {
+            const newArray = [{ id: 0, rarity: null, type: null }, prev[1]];
+            return newArray;
+          } else {
+            return prev.filter((characterToRemove) => characterToRemove.id !== character.id);
+          }
+        } else if(characterComparisonForCalculator[0]?.id === 0){
+          return [character, prev[1]]
+        } else {
+          if (prev.length < 2) {
+            return [...prev, character];
+          } else {
+            return [prev[0], character];
+          }
+        }
+      });
+       
+    }
 
   return (
     <div className="fixed flex flex-col h-full bg-slate-900">
@@ -338,39 +383,60 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
       {/* TODO: contains all the cardseoection stuff. h is set to zero with a flex-1 because it allows for expansion to fill rest of space */}
       <div className={`flex flex-1 h-0 ${showMiddleDiv ? '' : 'lg:px-10 xl:px-20'} relative`}>
 
-        {(!showMiddleDiv && (windowWidth > 850)) && <button 
+        {/* this conditional hides the button if showMiddleDiv is false AND window width is greater than the mobile screen break */}
+        {(!showMiddleDiv && (windowWidth > 900)) && 
+        <div className="flex transform rotate-90 origin-bottom-left absolute left-0 -top-10">
+
+          <button 
           onClick={()=> setShowMiddleDiv(!showMiddleDiv)}
-          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300 transform rotate-90 origin-bottom-left absolute left-0 -top-10">
+          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300">
             Show Cards and Decks
           </button>
+
+          <button 
+          onClick={()=> setShowCalculator(!showCalculator)}
+          className="flex p-2 font-bold border-t-2 border-r-2 border-black bg-orange-200 hover:bg-orange-300">
+            {showCalculator ? 'Show Team Web' : 'Show Calculator'}
+          </button>
+          
+        </div>
         }
 
         {/* TODO: card detail styling */}
         <div
           id="SingleCardDetails"
-          className={`${showCardStats || (showMiddleDiv && (windowWidth > 850)) ? '' : 'hidden'} flex flex-col w-screen lg:w-1/4 bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
+          className={`${showCardStats || (showMiddleDiv && (windowWidth > 900)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-1/4 lg:max-w-[400px] lg:min-w-[0px] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900 overflow-y-auto`}
           >
 
-          <div className="w-full p-2">
-            {(showMiddleDiv && (window.innerWidth > 850)) &&
+          {(showMiddleDiv && (window.innerWidth > 900)) &&
+          <div className="flex w-full p-2">
             <button
             onClick={() => setShowMiddleDiv(false)}
-            className="flex py-2 px-4 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
+            className="flex py-2 px-4 w-1/2 text-md card-sm:text-base lg:text-sm <1000px>:text-[.77rem] xl:text-[.85rem] font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
             >
               Hide Character Details
             </button>
-            }
-          </div>
 
-          <div className="flex flex-row w-full px-2 mt-2">
+            <button
+            onClick={() => setShowCalculator(!showCalculator)}
+            className="flex py-2 px-4 w-1/2 text-md card-sm:text-base lg:text-sm <1000px>:text-[.77rem] xl:text-[.85rem] font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300"
+            >
+              {showCalculator ? 'Show Team Web' : 'Show Calculator' }
+            </button>
+          </div>
+          }
+
+          <div className="flex flex-row w-full h-fit px-2 mt-2">
+
             <div className="w-1/2">
               <div
                 onClick={() => setShowCardDetails(true)}
-                className={`flex py-2 px-4 w-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
+                className={`flex py-2 px-4 w-full h-full border-black card-sm:text-lg font-bold rounded-l-lg justify-center items-center text-center cursor-pointer ${showCardDetails ? "border-4 bg-orange-400" : "border-2 bg-orange-200"}`}
               >
                 Card Details
               </div>
             </div>
+
             <div className="w-1/2 h-full border-black card-sm:text-lg font-bold">
               {Auth.loggedIn() ? (
                 <select
@@ -389,17 +455,18 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                   ))}
                 </select>
               ) : (
-                <div className="flex w-full h-full border-black border-2 bg-gray-600 rounded-r-lg justify-center items-center text-center">
+                <div className="flex w-full h-full border-black border-2 text-base bg-gray-600 rounded-r-lg justify-center items-center text-center">
                   Log In To See Decks
                 </div>
               )}
             </div>
+
           </div>
 
           {showCardDetails ? (
             <CardDetails
               cardDetails={cardDetails}
-              userCharacterIds={userCharacterIds}
+              hoverCharacterStats={hoverCharacterStats}
             />
           ) : (
             <DeckSelection
@@ -416,7 +483,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: Card selection styling */}
         <div
           id="CardSelection"
-          className={`${(showCardSelection || (windowWidth > 850)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
+          className={`${(showCardSelection || (windowWidth > 900)) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial overflow-y-auto`}
         >
 
           {/* <h1 className="font-header text-2xl text-center lg:m-4">Search by Filters</h1> */}
@@ -437,7 +504,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 
             <div className={`max-h-0 overflow-hidden transition-all duration-500 ${showFilters ? 'max-h-[100vh] ease-in-out' : ''}`}>
               <div className="flex pb-2 items-center justify-center">
-                <span className="mr-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                <span className="mr-4 flex h-fit items-center justify-center text-center text-md lg:text-sm  <1000px>:text-base font-bold">
                   Game Filter
                 </span>
                 <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -451,7 +518,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     onClick={() => {setFilterByGame(!filterByGame)}}
                     className="border border-black w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[24%] card-sm:after:top-[10%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
                   ></div>
-                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md card-sm:text-md font-bold">
+                  <div className="ml-4 flex h-fit items-center justify-center text-center text-md lg:text-sm  <1000px>:text-base font-bold">
                     Release Date
                   </div>
                 </label>
@@ -545,19 +612,23 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           className="characterContainer flex flex-wrap justify-center items-center p-1 border-2 border-black min-h-0 relative bg-orange-100 overflow-y-auto">
             {allCharactersLoading ? (<div>Loading...</div>) 
             : charactersToDisplay
-                // .filter((character) => character.glb_date !== null)
-                // .slice(0, viewableCharacters)
+                .slice(0, viewableCharacters)
                 .map((character) => (
                   <div
                   key={character.id}
                   className={`
                     cursor-pointer relative
-                    ${!multiCardSelection && webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]"}
-                    ${multiCardSelection && savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : multiCardSelection ? 'hover:bg-amber-900/[.4]' : ''}
+                    ${(!multiCardSelection && !showCalculator) ? webOfTeam.map((char) => char.id).includes(character.id) ? "bg-slate-900/[.7] hover:bg-slate-900/[.9]" : "hover:bg-slate-900/[.3]" : ''}
+                    ${(!multiCardSelection && showCalculator) ? characterComparisonForCalculator.map((char) => char?.id).includes(character.id) ? "bg-cyan-600/[.7] hover:bg-cyan-700/[.9]" : "hover:bg-cyan-800/[.3]" : ''}
+                    ${multiCardSelection ? savedToMyCharacterDeck.includes(character.id) ? 'bg-amber-900/[.75] hover:bg-amber-900/[.9]' : 'hover:bg-amber-900/[.4]' : ''} b 
                     `}
+                  onMouseEnter={() => setHoverCharacterStats(character)}
+                  onMouseLeave={() => setHoverCharacterStats(null)}
                   onClick={() => {
                     if (multiCardSelection) {
                       changeDeck(character.id);
+                    } else if (!multiCardSelection && showCalculator){
+                      handleCharacterComparisonSelection(character)
                     } else {
                       handleCharacterSelection(character)
                     }
@@ -572,16 +643,6 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
                     mobileSize={'60px'} 
                     desktopSize={'85px'}
                     />
-                    {/* <AllComponentsCard
-                      character={character}
-                      userDeckData={userDeckData}
-                      selectedDeck={selectedDeck}
-                      savedToMyCharacterDeck={multiCardSelection ? savedToMyCharacterDeck : undefined}
-                      webOfTeam={!multiCardSelection ? webOfTeam : undefined}
-                      addToWebOfTeam={addToWebOfTeam}
-                      removeFromWebOfTeam={removeFromWebOfTeam}
-                      newCardDetails={newCardDetails}
-                    /> */}
                   </div>
                 ))}
           </div>
@@ -590,8 +651,18 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
         {/* TODO: team web styling */}
         <div
           id="Team"
-          className={`${showTeamWeb || (windowWidth > 850) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
+          className={`${showTeamWeb || (windowWidth > 900) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
+          {showCalculator ?
+          <Calculator 
+          showCalculator={showCalculator} 
+          setShowCalculator={setShowCalculator} 
+          characterComparisonForCalculator={characterComparisonForCalculator} 
+          setCharacterComparisonForCalculator={setCharacterComparisonForCalculator}
+          handleCharacterComparisonSelection={handleCharacterComparisonSelection}
+          setCardDetails={setCardDetails}
+          /> 
+          :
           <SuggestToWeb
             selectedCharacter={cardDetails}
             userCharacters={userCharacters}
@@ -602,6 +673,7 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
             allCharacters={allCharacters}
             allCharactersLoading={allCharactersLoading}
           />
+          }
         </div>
       </div>
 
@@ -613,13 +685,24 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
 const getFilteredCharacters = (allCharacters, userCharacters, filterData, selectedCategories) => {
   const baseChars = filterData.isUserDeck ? userCharacters : allCharacters
   return baseChars.filter((character) => {
-    const leaderNumbers = character.ls_description.match(/\d+/g)
+    
+    const leaderNumbers = character.ls_description.match(/\d+/g) || []
+    let characterLeadCategories
+    if(selectedCategories.length > 0 && leaderNumbers.length > 0 && leaderNumbers.some(num => num >= 150) && leaderNumbers.some(num => num <= 200)){
+      characterLeadCategories = (findCharacterLeaderCategories(character))
+    }
+    
     return (
       (!selectedCategories.length || (filterData.matchAllCategories
-        ? selectedCategories.every(category => character.category.includes(category))
-        : selectedCategories.some(category => character.category.includes(category))
+        ? selectedCategories.every(category => character.category && character.category.includes(category))
+        : selectedCategories.some(category => character.category && character.category.includes(category))
       )) &&
-      (!filterData.isCommonLeader || (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false)) &&
+      (!filterData.isCommonLeader || (selectedCategories.length > 0 ?
+        filterData.matchAllCategories
+        ? selectedCategories.every(category => characterLeadCategories?.includes(category))
+        : selectedCategories.some(category => characterLeadCategories?.includes(category))
+        :
+        (leaderNumbers ? leaderNumbers.map(string => parseInt(string)).some(num => num >= 150 && num <= 200) : false))) &&      
       (!filterData.searchTerm || character.name.toLowerCase().includes(filterData.searchTerm.toLowerCase())) &&
       (!filterData.characterType || character.type.includes(filterData.characterType)) &&
       (!filterData.characterSuperOrExtreme || character.type.slice(0, 1).includes(filterData.characterSuperOrExtreme)) &&

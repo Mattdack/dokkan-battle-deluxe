@@ -4,6 +4,7 @@ import AllComponents from "./components/AllComponents"
 import AllStrategy from "./components-strategy/AllStrategy"
 import AllAPI from "./components-api/AllAPI"
 import Help from "./components/Help";
+import NoPage from "./components/NoPage";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -40,10 +41,15 @@ const AllComponentsWithData = withData(AllComponents);
 const AllStrategiesWithData = withData(AllStrategy);
 
 function App() {
-  const [showMiddleDiv, setShowMiddleDiv] = useState(false)
-  const [showSummationLinks, setShowSummationLinks] = useState(false)
+  const [showMiddleDiv, setShowMiddleDiv] = useState(true)
+  const [showCalculator, setShowCalculator] = useState(false)
+  const [showSummationLinks, setShowSummationLinks] = useState(true)
   const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
   const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
+  const [allNodePositions, setAllNodePositions] = useState([])
+  const [levelOfLinks, setLevelOfLinks] = useState(1)
+  const [showSuggestedCardsByStats, setShowSuggestedCardsByStats] = useState(true)
+
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
@@ -51,18 +57,27 @@ function App() {
           <UserContext.Provider value={{ 
             showMiddleDiv: showMiddleDiv, 
             setShowMiddleDiv: setShowMiddleDiv,
+            showCalculator: showCalculator,
+            setShowCalculator: setShowCalculator,
             showSummationLinks: showSummationLinks,
             setShowSummationLinks: setShowSummationLinks,
             grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,
             setGrayCharactersInSelectedDeck: setGrayCharactersInSelectedDeck,
             allCharacterIDsInDeck: allCharacterIDsInDeck,
-            setAllCharacterIDsInDeck, setAllCharacterIDsInDeck
+            setAllCharacterIDsInDeck, setAllCharacterIDsInDeck,
+            allNodePositions: allNodePositions,
+            setAllNodePositions: setAllNodePositions,
+            levelOfLinks:levelOfLinks,
+            setLevelOfLinks:setLevelOfLinks,
+            showSuggestedCardsByStats:showSuggestedCardsByStats,
+            setShowSuggestedCardsByStats:setShowSuggestedCardsByStats
              }}>
             <Routes>
               <Route exact path="/" element={<AllComponentsWithData />} />
               <Route exact path='/strategy' element={<AllStrategiesWithData />} />
               <Route exact path={process.env.REACT_APP_API_CONNECT} element={<AllAPI />} />
               <Route exact path='/help' element={<Help />} />
+              <Route exact path='/*' element={<NoPage />} />
             </Routes>
           </UserContext.Provider>
         </div>

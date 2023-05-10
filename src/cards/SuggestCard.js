@@ -8,7 +8,7 @@ import CharacterCard from './CharacterCard'
 import { UserContext } from "../App";
 
 function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails, addToWebOfTeam, removeFromWebOfTeam, statsSelectedOptions }) {
-  const { grayCharactersInSelectedDeck, allCharacterIDsInDeck } = useContext(UserContext)
+  const { grayCharactersInSelectedDeck, allCharacterIDsInDeck, levelOfLinks } = useContext(UserContext)
 
   const [isInWeb, setIsInWeb] = useState();
   // this useEffect sets the isInWeb (which is originally checking to see if a character is in the web). The map function makes a new array of all characters with just their ids. Then, if this is included, isInWeb is set to true, which will change the state of the ternary to make the background of the card change
@@ -40,7 +40,11 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
   let matchedLinkInfo = [];
   // gets lvl1 linkskill info of the match links
   for (let i = 0; i < matchedLinks.length; i++) {
-    matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+    if(levelOfLinks === 1){
+      matchedLinkInfo.push(linkSkillInfo.getLvl1LinkSkillInfo(matchedLinks[i]));
+    } else if (levelOfLinks === 10){
+      matchedLinkInfo.push(linkSkillInfo.getLvl10LinkSkillInfo(matchedLinks[i]));
+    }
   }
   // uses the linkSkillInfo function which only grabs the stats that were changed
   const linkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(matchedLinkInfo)
@@ -86,7 +90,6 @@ function SuggestCard({ character, webOfTeam, selectedCharacter, handleNewDetails
           {selectedCharacter.id === character.id && statsSelectedOptions !== 'None' &&
           <div
             className='w-[20px] card-sm:w-[25px] h-[20px] card-sm:h-[25px] border-2 border-black rounded-full bg-green-500 absolute bottom-[5%] right-[7%] z-50'>
-              
           </div>
           }
           {(selectedCharacter.id !== character.id && statsSelectedOptions === "ATK") &&

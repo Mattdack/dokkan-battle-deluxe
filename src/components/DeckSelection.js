@@ -134,29 +134,6 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
         {webOfTeam.length < 6 && <p className="w-full border border-black text-sm lg:text-base text-center rounded-lg bg-orange-200/[.75]">*team must have 6 to 7 characters in it to add it to a deck</p>}
       </div>
 
-      {/* <div className="flex p-2 justify-center items-center">
-          <h2 className="pr-3 card-sm:p-3 text-sm card-sm:text-base font-bold">
-            Gray Characters In Deck
-          </h2>
-          <div className="flex items-center">
-            <label className="inline-flex relative items-center mr-5 cursor-pointer">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={grayCharactersInSelectedDeck}
-                readOnly
-              />
-              <div
-                onClick={() => {setGrayCharactersInSelectedDeck(!grayCharactersInSelectedDeck)}}
-                className="w-6 card-sm:w-11 h-3 card-sm:h-6 bg-orange-100 rounded-full peer peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[21%] card-sm:after:top-[8%] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 card-sm:after:h-5 after:w-3 card-sm:after:w-5 after:transition-all peer-checked:bg-orange-500"
-              ></div>
-              <span className="ml-2 text-sm card-sm:text-base font-bold text-gray-900">
-                ON
-              </span>
-            </label>
-          </div>
-      </div> */}
-
       <div className="flex flex-wrap w-full p-2 justify-around" key={allTeams}>
         {allTeams ? allTeams.map(team => (
           <div key={team._id} className='flex flex-col w-full max-w-[400px] lg:max-w-full pb-12 px-4 mb-2 border-4 border-black rounded-lg justify-around bg-orange-200 hover:bg-orange-400 relative'> 
@@ -169,7 +146,7 @@ export default function DeckSelection({ characterDictionary, webOfTeam, userDeck
             <div className="font-header flex w-full h-fit py-4 border-black text-2xl card-sm:text-2xl  underline underline-offset-8 decoration-solid decoration-2 rounded-t-lg justify-center items-center text-center relative">
               {team.name}
             </div>
-            {/* start at flex row, 850 to 1285 pxls we go to stack, then 1285 after we go back to row*/}
+            {/* start at flex row, 900 to 1285 pxls we go to stack, then 1285 after we go back to row*/}
             <div className="flex lg:flex-col xl:flex-row justify-around">
 
               <div className="grid grid-cols-2 gap-y-6 justify-items-center">

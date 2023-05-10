@@ -1,6 +1,6 @@
 import React from "react";
 
-import allCategoryOptions from '../util/allCategoryOptions'
+import { allCategoryOptions } from '../util/allCategories'
 
 const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-icon.png"
 
@@ -34,7 +34,8 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
               name="characterCategory"
               onChange={(e) => handleNewCategorySelected(e)}
             >
-              {allCategoryOptions.map(category => category)}
+              <option value='' key='all-categories'>All Categories</option>
+              {allCategoryOptions()}
             </select>
           </div>
 
