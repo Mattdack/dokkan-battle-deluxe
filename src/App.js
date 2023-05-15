@@ -42,6 +42,7 @@ const AllStrategiesWithData = withData(AllStrategy);
 
 function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(true)
+  const [turnOnEZAStats, setTurnOnEZAStats] = useState(false)
   const [showCalculator, setShowCalculator] = useState(false)
   const [showSummationLinks, setShowSummationLinks] = useState(true)
   const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
@@ -57,6 +58,8 @@ function App() {
           <UserContext.Provider value={{ 
             showMiddleDiv: showMiddleDiv, 
             setShowMiddleDiv: setShowMiddleDiv,
+            turnOnEZAStats:turnOnEZAStats,
+            setTurnOnEZAStats: setTurnOnEZAStats,
             showCalculator: showCalculator,
             setShowCalculator: setShowCalculator,
             showSummationLinks: showSummationLinks,

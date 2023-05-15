@@ -20,6 +20,7 @@ export default function EditCharacter({ characterForm, setCharacterForm }) {
           [e.target.name]: value,
         });
       }
+      
       async function editCharacterSubmit(e) {
         e.preventDefault();
         // Check if any values are empty strings and replace them with null

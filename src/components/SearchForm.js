@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { allCategoryOptions } from '../util/allCategories'
 
@@ -8,6 +8,21 @@ const closeIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/circular-close-ic
 
 const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelected, handleSelectedCategoryRemoval }) => {
   const { showMiddleDiv } = useContext(UserContext);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [window.innerWidth]);
+
+  console.log(windowWidth)
+
   return (
     <div className="flex flex-row flex-wrap justify-around lg:mx-5">
       {/* //search field */}

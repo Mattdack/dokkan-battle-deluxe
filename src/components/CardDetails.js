@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import * as characterStyling from "../util/characterCardStyling";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
@@ -8,7 +8,11 @@ import {URLConfig} from "@cloudinary/url-gen";
 import {CloudConfig} from "@cloudinary/url-gen";
 import CharacterCard from "../cards/CharacterCard";
 
+import { UserContext } from "../App";
+
 function CardDetails({ cardDetails, hoverCharacterStats }) {
+  const { turnOnEZAStats, setTurnOnEZAStats } = useContext(UserContext)
+
   const divRef1 = useRef(null);
   
   const characterDetails = useMemo(() => {
@@ -19,12 +23,19 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
     }
   }, [cardDetails, hoverCharacterStats]);
 
-  const [ezaEnabled, setEzaEnabled] = useState(false)
-  
-  //clears EZA button selection. Withoutit, if EZA is selected, all characters become EZA'd and descriptions become empty if characters are not EZAs
+  const [showEZAStats, setShowEZAStats] = useState(false)
+
   useEffect(() => {
-    setEzaEnabled(false)
-  }, [cardDetails, hoverCharacterStats])
+    if(hoverCharacterStats && turnOnEZAStats && (hoverCharacterStats?.glb_date_eza || hoverCharacterStats?.jp_date_eza)){
+      setShowEZAStats(true)
+    } else if ((hoverCharacterStats && turnOnEZAStats && (!hoverCharacterStats?.glb_date_eza || !hoverCharacterStats?.jp_date_eza))){
+      setShowEZAStats(false)
+    } else if((turnOnEZAStats && (cardDetails.glb_date_eza || cardDetails.jp_date_eza))){
+      setShowEZAStats(true)
+    } else {
+      setShowEZAStats(false)
+    }
+  },[cardDetails, turnOnEZAStats, hoverCharacterStats])
 
   return (
     <div className="flex flex-col w-full">
@@ -39,11 +50,11 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
           </div>
 
           <button
-          disabled={!characterDetails?.glb_date_eza}
-          onClick={() => setEzaEnabled(!ezaEnabled)}
+          disabled={!characterDetails?.jp_date_eza && !characterDetails?.glb_date_eza}
+          onClick={() => setTurnOnEZAStats(!turnOnEZAStats)}
           className={`disabled:text-gray-900 font-header EZA-header text-2xl relative z-50`}>
             EZA
-            {ezaEnabled ? 
+            {showEZAStats ? 
             <img 
             className="absolute max-w-[200%] h-[120%] -bottom-[10%] -right-[50%] z-0 object-contain"
             alt='extreme awakening'
@@ -60,7 +71,7 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
               Leader Skill:
             </p>
             <div className="w-full h-fit px-2 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-              {!ezaEnabled ? characterDetails?.ls_description: characterDetails?.ls_description_eza}
+              {!showEZAStats ? characterDetails?.ls_description: characterDetails?.ls_description_eza}
             </div>
           </div>
 
@@ -71,7 +82,7 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
             </p>
             <ScrollingDiv divRef={divRef1} text={characterDetails?.ps_name} />
             <div className="flex w-full font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-              {!ezaEnabled ? 
+              {!showEZAStats ? 
                 <CardDescription text={characterDetails?.ps_description} />
                 : 
                 <CardDescription text={characterDetails?.ps_description_eza} />
@@ -85,7 +96,7 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
             </p>
             <ScrollingDiv divRef={divRef1} text={characterDetails?.sa_name} />
             <div className="w-full h-fit px-2 font-bold bg-orange-100 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-              {!ezaEnabled ? 
+              {!showEZAStats ? 
                 <CardDescription text={characterDetails?.sa_description} />
                 : 
                 <CardDescription text={characterDetails?.sa_description_eza} />}
@@ -101,7 +112,7 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
             </p>
             <ScrollingDiv divRef={divRef1} text={characterDetails?.ultra_sa_name} />
             <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-            {!ezaEnabled ? 
+            {!showEZAStats ? 
               <CardDescription text={characterDetails?.ultra_sa_description} />
               : 
               <CardDescription text={characterDetails?.ultra_sa_description_eza} />}
@@ -117,10 +128,21 @@ function CardDetails({ cardDetails, hoverCharacterStats }) {
             </p>
             <ScrollingDiv divRef={divRef1} text={characterDetails?.active_skill_name} />
             <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
-              <CardDescription text={characterDetails?.active_skill} />
+              {(characterDetails?.active_skill) && 
+                <CardDescription text={characterDetails?.active_skill} />
+              }
             </div>
             <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
               <CardDescription text={characterDetails?.active_skill_condition} />
+            </div>
+        </div>
+      )}
+
+      {characterDetails?.transform_condition && (
+        <div className="flex flex-wrap w-full pt-1">
+            <ScrollingDiv divRef={divRef1} text={characterDetails?.transform_type + ':'} />
+            <div className="flex font-bold bg-orange-100 m-2 p-2 shadow-[inset_0_-5px_6px_rgba(0,0,0,0.6)] border-2 border-slate-900 text-sm card-sm:text-md">
+              <CardDescription text={characterDetails?.transform_condition} />
             </div>
         </div>
       )}
@@ -194,12 +216,15 @@ const CardDescription = ({ text }) => {
   return null;
   }
   
+  //formats the text to replace < and > with an * then we make the left over text into an array
   const formattedText = text.replace(/<(.*?)>/g, '*');
   const descriptionArray = formattedText.split('*');
 
+  // grabs everything from < to >
   const textBetweenBrackets = text.match(/<(.*?)>/g);
   let hoverTextArray = [];
 
+  // removes the < and > from the text 
   if (textBetweenBrackets) {
     hoverTextArray = textBetweenBrackets.map(t => t.slice(1, -1));
   }
@@ -221,7 +246,7 @@ const CardDescription = ({ text }) => {
             <b className="text-md text-orange-600 cursor-pointer relative" 
             onMouseEnter={(event) => ((window.innerWidth > 900) && handleHover(i + 1, event))}
             onMouseLeave={(event) => ((window.innerWidth > 900) && handleLeaveHover(i + 1, event))}
-            onClick={(event) => ((window.innerWidth < 900) && handleHover(i + 1, event))}>
+            onClick={(event) => (window.innerWidth < 900) && (handleHover(i + 1, event))}>
               *
               {hover && hoverIndex === i + 1 ? (
                 <div 
