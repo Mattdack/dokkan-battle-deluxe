@@ -11,7 +11,7 @@ const subIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/subleader-icon.png"
 const ezaIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/z.png";
 
 const CharacterCard = React.memo(({ individualCharacter, mobileSize, desktopSize, EZA, leaderOrSubLeader }) => {
-    console.log(individualCharacter?.ps_description)
+    // console.log(individualCharacter?.ps_description)
 
     // Set the Cloud configuration and URL configuration
     const cld = new Cloudinary({

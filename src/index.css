@@ -29,8 +29,11 @@ img {
   @media (min-width: 535px) {
     font-size: 0.6rem
   };
+  @media (min-width: 900px) {
+    font-size: 0.75rem
+  };
   @media (min-width: 1000px) {
-    font-size: 0.65rem
+    font-size: 0.68rem
   };
   @media (min-width: 1280px) {
     font-size: 0.8rem
