@@ -11,6 +11,7 @@ import CharacterCard from "../cards/CharacterCard";
 import EditCharacter from "./EditCharacter";
 import SingleCharacterSearch from "./SingleCharacterSearch";
 import MakeSingleCharacter from "./MakeSingleCharacter";
+import AddCharacterEZA from "./AddCharacterEZA";
 
 const addIcon = process.env.PUBLIC_URL + "/dokkanIcons/icons/add-icon.png";
 const arrows = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png";
@@ -52,6 +53,8 @@ function AllAPI() {
     if (e.target.value === "Edit Character") {
       setInitialOption(e.target.value);
       getCharacterData();
+    } else if (e.target.value === "Add EZA To Character") {
+      setInitialOption(e.target.value);
     } else if (e.target.value === "Add Character") {
       setInitialOption(e.target.value);
     }
@@ -225,6 +228,7 @@ function AllAPI() {
               <option value="">Nothing</option>
               <option value="Add Character">Add Character</option>
               <option value="Edit Character">Edit Character</option>
+              <option value="Add EZA To Character">Add EZA To Character</option>
               <option value="New Category Added">New Category Added</option>
               <option value="Add Event">Add event</option>
               <option value="Edit Event">Edit event</option>
@@ -352,6 +356,12 @@ function AllAPI() {
         {(initialOption === "Add Character") &&
         <div className="flex flex-1 bg-white overflow-y-auto">
           <MakeSingleCharacter />
+        </div>
+        }
+
+        {(initialOption === "Add EZA To Character") && 
+        <div className="flex flex-1 bg-white overflow-y-auto">
+          <AddCharacterEZA />
         </div>
         }
       </div>

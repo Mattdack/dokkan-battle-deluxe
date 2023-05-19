@@ -89,7 +89,22 @@ mutation AddCharacter($character: CharacterInput) {
     jp_date_eza
     glb_date_eza
   }
-}`;
+}
+`;
+
+export const ADD_EZA_TO_CHARACTER = gql `mutation AddEZAToCharacter($updatedCharacter: CharacterInput) {
+  addEZAToCharacter(updatedCharacter: $updatedCharacter) {
+    id
+    active_skill_condition_eza
+    jp_date_eza
+    ls_description_eza
+    ps_description_eza
+    sa_description_eza
+    transform_condition_eza
+    ultra_sa_description_eza
+  }
+}
+`;
 
 export const LOGIN_USER = gql`
 mutation Login($username: String!, $password: String!) {

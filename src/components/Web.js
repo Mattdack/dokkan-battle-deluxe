@@ -228,8 +228,11 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         <div className="h-full bg-slate-700 row-span-6 relative">
           <div className="flex flex-row w-full justify-between items-between absolute bottom-0">  
             <button
-            className={`${showMiddleDiv ? 
-              'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+            className={`${showMiddleDiv ?
+              !showSuggestedCards ? 
+              'text-[1.1rem] <1100px>:text-[1rem] xl:text-[1.2rem]'
+              :
+              'text-[.85rem] card-sm:text-[.7rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
             : 
               'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
             } py-1 px-2 border-t-2 border-r-2 border-b-2 border-black text-black bg-white rounded-tr-lg z-40`}
@@ -237,19 +240,25 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
             >Reset Team</button>
             {showSuggestedCards &&
               <button
-              className={`${showMiddleDiv ? 
-                'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+              className={`${showMiddleDiv ?
+                !showSuggestedCards ? 
+                'text-[1.1rem] <1100px>:text-[1rem] xl:text-[1.2rem]'
+                :
+                'text-[.85rem] card-sm:text-[.7rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
               : 
-                'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
+                'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]'
               } py-1 px-2 border-2 border-black text-black bg-white rounded-t-lg z-40`}
               onClick={() => setShowSuggestedCardsByStats(!showSuggestedCardsByStats)}
               >{showSuggestedCardsByStats ? 'Order By # of Links' : 'Order By Stats'}</button>
             }
             <button
-            className={`${showMiddleDiv ? 
-              'text-[.85rem] card-sm:text-[.6rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
+            className={`${showMiddleDiv ?
+              !showSuggestedCards ? 
+              'text-[1.1rem] <1100px>:text-[1rem] xl:text-[1.2rem]'
+              :
+              'text-[.85rem] card-sm:text-[.7rem] <1000px>:text-[.7rem] <1100px>:text-[.82rem] xl:text-[1rem]'
             : 
-              'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]' 
+              'text-[.85rem] card-sm:text-[.9rem] <1000px>:text-[.95rem] <1100px>:text-[1rem] xl:text-[1.2rem]'
             } py-1 px-2 border-t-2 border-l-2 border-b-2 border-black text-black bg-white rounded-tl-lg z-40`}
             
             onClick={() => handleSetShowSuggestedCards()}

@@ -13,6 +13,7 @@
 
 # public build
 /public
+robots.txt
 
 # misc
 .DS_Store
