@@ -12,8 +12,6 @@ const closeIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/x-webcard-icon.pn
 const swapIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/swap-icon.png'
 
 export default function Calculator({ showCalculator, setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
-    console.log(formatText.filterForATKStatsAfterAction((characterComparisonForCalculator[0] && characterComparisonForCalculator[0]?.id !== 0) && characterComparisonForCalculator[0]?.ps_description))
-
     const { turnOnEZAStats, setTurnOnEZAStats } = useContext(UserContext)
 
     const [baseAttackStat, setBaseAttackStat] = useState(0)
