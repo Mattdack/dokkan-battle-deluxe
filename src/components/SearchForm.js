@@ -21,8 +21,6 @@ const SearchForm = ({ onFormChange, selectedCategories, handleNewCategorySelecte
     };
   }, [window.innerWidth]);
 
-  console.log(windowWidth)
-
   return (
     <div className="flex flex-row flex-wrap justify-around lg:mx-5">
       {/* //search field */}

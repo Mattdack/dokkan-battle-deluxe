@@ -44,6 +44,7 @@ function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(true)
   const [turnOnEZAStats, setTurnOnEZAStats] = useState(false)
   const [showCalculator, setShowCalculator] = useState(false)
+  const [showDEFCalculator, setShowDEFCalculator] = useState(false)
   const [showSummationLinks, setShowSummationLinks] = useState(true)
   const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
   const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
@@ -62,6 +63,8 @@ function App() {
             setTurnOnEZAStats: setTurnOnEZAStats,
             showCalculator: showCalculator,
             setShowCalculator: setShowCalculator,
+            showDEFCalculator: showDEFCalculator,
+            setShowDEFCalculator: setShowDEFCalculator,
             showSummationLinks: showSummationLinks,
             setShowSummationLinks: setShowSummationLinks,
             grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,

@@ -52,6 +52,55 @@ export const findAttackPercentageGainAndTurns = (superDescription) => {
     }
 }
 
+export const findDefensePercentageGainAndTurns = (superDescription) => {
+  const description = superDescription?.toLowerCase();
+  
+  const regexPatterns = [
+    /raises def by (\d+)% for (\d+) turn/,
+    /raises atk & def by (\d+)% for (\d+) turn/,
+    /raises atk and def by (\d+)% for (\d+) turn/,
+    /raises super attack & def by (\d+)% for (\d+) turn/,
+    /raises super attack and def by (\d+)% for (\d+) turn/
+  ];
+
+  const superAttackAndDefenseRegexPatterns = [
+    /raises super attack by (\d+)% and def by (\d+)% for (\d+) turn/,
+    /raises super attack by (\d+)% & def by (\d+)% for (\d+) turn/,
+  ];
+
+  let matchFound = false;
+  let DEFPercentage, turns;
+
+  for (const regex of regexPatterns) {
+    const matches = description?.match(regex);
+    if (matches) {
+      DEFPercentage = parseInt(matches[1]);
+      turns = parseInt(matches[2]);
+      matchFound = true;
+      break;
+    }
+  }
+
+  //this is to account for people who super and raise attack and defense on the same line
+  for (const regex of superAttackAndDefenseRegexPatterns) {
+    const matches = description?.match(regex);
+    if (matches) {
+      DEFPercentage = parseInt(matches[2]);
+      turns = parseInt(matches[3]);
+      matchFound = true;
+      break;
+    }
+  }
+
+  if (matchFound) {
+    // console.log(`ATK percentage gained = ${DEFPercentage}%, amount of turns = ${turns}`);
+    return {defensePercentage: DEFPercentage, turns: turns}
+  } else {
+    // console.log("No match found.");
+    return {defensePercentage: 0, turns: 0}
+  }
+}
+
 export const filterForATKPerKiSphere = (passiveSkillDescription) => {
   if (!passiveSkillDescription){
     return null

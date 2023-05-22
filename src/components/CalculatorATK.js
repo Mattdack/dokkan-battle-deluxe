@@ -11,8 +11,8 @@ import { UserContext } from "../App";
 const closeIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/x-webcard-icon.png'
 const swapIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/swap-icon.png'
 
-export default function Calculator({ showCalculator, setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
-    const { turnOnEZAStats, setTurnOnEZAStats } = useContext(UserContext)
+export default function CalculatorATK({ setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
+    const { turnOnEZAStats, setTurnOnEZAStats, showDEFCalculator, setShowDEFCalculator } = useContext(UserContext)
 
     const [baseAttackStat, setBaseAttackStat] = useState(0)
     const [leaderSkillIncrease, setLeaderSkillIncrease] = useState(0)
@@ -206,7 +206,12 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
         console.log('ATK stat after build up passive calculated: ' + buildUpPassiveCalc)
         console.log('')
 
-        let linkSkillCalc = Math.round(buildUpPassiveCalc * (1 + (linkSkillPercentage/100)))
+        let itemCalc = Math.round(buildUpPassiveCalc * (1 + (itemStats/100)))
+        console.log('item multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
+        console.log('ATK stat after item calculated: ' + itemCalc)
+        console.log('')
+
+        let linkSkillCalc = Math.round(itemCalc * (1 + (linkSkillPercentage/100)))
         console.log('linkskill multiple used: ' + (1 + (linkSkillPercentage/100)))
         console.log('ATK stat after link skills calculated: ' + linkSkillCalc)
         console.log('')
@@ -233,13 +238,13 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
   return (
     <div className='flex flex-col flex-1 px-2 border-2 border-black from-slate-500 via-slate-600 to-slate-900 overflow-y-auto'>
-        {window.innerWidth < 900 &&
+        {/* {window.innerWidth < 900 &&
             <div 
             onClick={() => setShowCalculator(false)}
             className='flex py-2 px-4 mt-2 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300'>Show Team Web</div>
-        }
+        } */}
         <div className="flex p-2 flex-col justify-between items-center relative">
-            <div className="flex flex-row flex-shrink-0 pr-2 justify-center items-center">
+            <div className="flex flex-row flex-shrink-0 justify-center items-center">
                 <div
                 className="relative cursor-pointer"
                 title='click for card details'
@@ -284,7 +289,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
             <div 
             className="flex flex-col w-[90%] h-full mt-2 border-2 border-black bg-white card-sm:justify-around z-40">
-                <p className="font-header text-2xl underline decoration-2 underline-offset-4 self-center">Link Skills Shared</p>
+                <p className="font-header text-2xl lg:text-lg xl:text-2xl underline decoration-2 underline-offset-4 self-center">Link Skills Shared</p>
                 <div className="h-1/2 lg:h-full lg:max-h-[225px] overflow-y-auto">
                     {matchedLinkInfo && matchedLinkInfo.map(singleLink =>
                     <div>
@@ -295,7 +300,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                     </div>
                     )}
                 </div>
-                <div className="flex flex-row p-1 border-t-2 border-black justify-center items-center">
+                <div className="flex md:flex-row lg:flex-col <1000px>:flex-row p-1 border-t-2 border-black justify-center items-center">
                     <p className="pr-4 font-bold">Total:</p>
                     <p className="pr-2">ATK:</p>
                     <p className="pr-4 text-base"> 
@@ -326,7 +331,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
         </div>
 
-        <div className="flex flex-row h-fit justify-around items-center">
+        <div className="flex lg:flex-col <1000px>:flex-row h-fit justify-around items-center">
 
             <label className="flex justify-center items-center font-bold">
             EZA:
@@ -380,6 +385,16 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
         <form className='flex flex-col pb-14 overflow-y-auto'>
             <div className='flex flex-col w-full p-2 border-2 border-black bg-orange-200'>
+                <div className="flex flex-row justify-around items-center">
+                    <p 
+                    className={`${showDEFCalculator === true && 'grayscale'} font-header lg:text-lg xl:text-2xl text-center cursor-pointer`}
+                    onClick={() => setShowDEFCalculator(false)}
+                    >Attack Calculation</p>
+                    <p 
+                    className={`${showDEFCalculator === false && 'grayscale'} font-header lg:text-lg xl:text-2xl text-center cursor-pointer`}
+                    onClick={() => setShowDEFCalculator(true)}
+                    >Defense Calculation</p>
+                </div>
                 <p>Enter the total base attack stat of the unit (including the additions from the hidden potential):</p>
                 <input
                 value={baseAttackStat} 
