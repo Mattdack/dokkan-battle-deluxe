@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useContext } from "react";
-import ReactFlow, {applyNodeChanges,applyEdgeChanges,ReactFlowProvider} from "reactflow";
+import ReactFlow, {applyNodeChanges,applyEdgeChanges,ReactFlowProvider,useViewport} from "reactflow";
 import { countBy, set } from "lodash";
 import * as linkSkillInfo from "../util/linkSkillInfo";
 
@@ -146,9 +146,11 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const onLoad = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
+  // console.log(reactFlowInstance.getViewport().zoom)
+
   const handleTeamCenter = () => {
     if (reactFlowInstance) {
-      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: (window.innerWidth < 900 ? 0.55 : .625) });
+      reactFlowInstance.setViewport({ x: 0, y: 0, zoom: (window.innerWidth <= 900 ? 0.55 : .65) });
       setExistingNodes((prevNode) => {
         let windowWidthToUse;
         let windowHeightToUse;
@@ -165,7 +167,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
         let updatedNodes;
         if (numNodes === 5) {
           const squareDim = minDimension;
-          const topLeft = { x: (windowWidthToUse - squareDim/1.4) , y: (windowHeightToUse - squareDim/1)};
+          const topLeft = { x: (windowWidthToUse - squareDim/1.3) , y: (windowHeightToUse - squareDim/1.1)};
           updatedNodes = [
             { ...combinedNodeData[0], position: { x: topLeft.x, y: topLeft.y } },
             { ...combinedNodeData[1], position: { x: topLeft.x + squareDim, y: topLeft.y } },
@@ -175,7 +177,7 @@ function Web({ webOfTeam, removeFromWebOfTeam, allCharactersLoading, selectedCha
           ];
         } else {
           const radius = (minDimension * 1.3 / 2)
-          const center = { x: windowWidthToUse / 1.45, y: windowHeightToUse / 1.45 }
+          const center = { x: windowWidthToUse / ((window.innerWidth >= 900) ? 1.50 : 1.45), y: windowHeightToUse / 1.45 }
           const angleBetweenNodes = (2 * Math.PI) / numNodes;
   
           updatedNodes = combinedNodeData.map((node, index) => {

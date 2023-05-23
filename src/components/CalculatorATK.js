@@ -196,8 +196,8 @@ export default function CalculatorATK({ setShowCalculator, characterComparisonFo
         console.log('ATK stat after leader skill added: ' + leaderSkillPlusBase)
         console.log('')
 
-        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + (passiveSkillIncrease/100)))
-        console.log('passive skill multiple used: ' + (1 + (passiveSkillIncrease/100)))
+        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + ((passiveSkillIncrease/100)+(noLinkAllyPassiveBoost/100))))
+        console.log('passive skill multiple used: ' + (1 + ((passiveSkillIncrease/100)+(noLinkAllyPassiveBoost/100))))
         console.log('ATK stat after passive skill calculated: ' + passiveCalc)
         console.log('')
 
@@ -216,20 +216,13 @@ export default function CalculatorATK({ setShowCalculator, characterComparisonFo
         console.log('ATK stat after link skills calculated: ' + linkSkillCalc)
         console.log('')
 
-        let noLinkAllyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('non-linked ally passive skill multiple: ' + (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('ATK stat after allies active/passive calculated: ' + noLinkAllyPassiveBoostCalc)
-        console.log('')
-
-        let kiMultiplierCalc = Math.round(noLinkAllyPassiveBoostCalc * (kiMultiplier/100))
+        let kiMultiplierCalc = Math.round(linkSkillCalc * (kiMultiplier/100))
         console.log('Ki multiple used: ' + (kiMultiplier/100))
         console.log('ATK stat after Ki multiplier calculated: ' + kiMultiplierCalc)
         console.log('')
 
         let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
-        console.log(superAttackMultiplier)
-        console.log(superAttackHiddenPotentialBoostLevel)
-        console.log(raiseAttackOnSuper)
+        console.log('attack before applying super attack multiplier: ' + kiMultiplierCalc)
         console.log('super attack multiple used: ' + ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
         console.log('ATK stat after super attack calculated: ' + saMultiplierCalc)
 
@@ -430,7 +423,7 @@ export default function CalculatorATK({ setShowCalculator, characterComparisonFo
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Build Up Passive ATK % (actions for after super, attack, evasion, etc...): </p>
+                <p>ATK % gain after action (after super, attack, evasion, etc...): </p>
                 <input
                 value={passiveSkillOnAttackOrSuperOrActionIncrease}
                 onChange={(e) => setPassiveSkillOnAttackOrSuperOrActionIncrease(e.target.value)}
@@ -444,7 +437,7 @@ export default function CalculatorATK({ setShowCalculator, characterComparisonFo
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Non-linked ally passive skill raise ATK%:</p>
+                <p>Ally support raise ATK% (any ally who has a support passive skill):</p>
                 <input
                 value={noLinkAllyPassiveBoost}
                 onChange={(e) => setNoLinkAllyPassiveBoost(e.target.value)}
@@ -490,7 +483,7 @@ export default function CalculatorATK({ setShowCalculator, characterComparisonFo
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>ATK Boost % from Super Attack (raise super attack by ??? for ??? turns):</p>
+                <p>ATK Boost % from Super Attack (raise super attack/ATK by ??? for ??? turns):</p>
                 <input
                 value={raiseAttackOnSuper}
                 onChange={(e) => setRaiseAttackOnSuper(e.target.value)}

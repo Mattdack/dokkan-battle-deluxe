@@ -126,23 +126,24 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
         e.preventDefault()
         console.log('start')
         console.log('base DEF stat: ' + baseDefenseStat)
+
         let leaderSkillPlusBase = Math.round(baseDefenseStat * (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
         console.log('leader skill multiple used: ' + (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
         console.log('DEF stat after leader skill added: ' + leaderSkillPlusBase)
         console.log('')
-
-        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + (passiveSkillIncrease/100)))
-        console.log('passive skill multiple used: ' + (1 + (passiveSkillIncrease/100)))
-        console.log('DEF stat after passive skill calculated: ' + passiveCalc)
+        
+        let passiveAndSupportCalc = Math.round(leaderSkillPlusBase * (1 + ((passiveSkillIncrease/100)+(noLinkAllyPassiveBoost/100))))
+        console.log('passive skill + ally support multiple used: ' + (1 + (passiveSkillIncrease/100)))
+        console.log('DEF stat after passive skill + ally support calculated: ' + passiveAndSupportCalc)
         console.log('')
 
-        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)));
+        let buildUpPassiveCalc = Math.round(passiveAndSupportCalc * (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)));
         console.log('build up passive skill multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
         console.log('DEF stat after build up passive calculated: ' + buildUpPassiveCalc)
         console.log('')
 
         let itemCalc = Math.round(buildUpPassiveCalc * (1 + (itemStats/100)))
-        console.log('item multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
+        console.log('item multiple used: ' + (1 + (itemStats/100)))
         console.log('DEF stat after item calculated: ' + itemCalc)
         console.log('')
 
@@ -151,9 +152,9 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
         console.log('DEF stat after link skills calculated: ' + linkSkillCalc)
         console.log('')
 
-        let noLinkAllyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('non-linked ally passive skill multiple: ' + (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('DEF stat after allies active/passive calculated: ' + noLinkAllyPassiveBoostCalc)
+        let raiseDefenseOnSuperCalc = Math.round(linkSkillCalc * (1 + (raiseDefenseOnSuper/100)))
+        console.log('raise defense on super multiple: ' + (1 + (raiseDefenseOnSuper/100)))
+        console.log('DEF stat after allies active/passive calculated: ' + raiseDefenseOnSuperCalc)
         console.log('')
 
         // let kiMultiplierCalc = Math.round(noLinkAllyPassiveBoostCalc * (kiMultiplier/100))
@@ -168,7 +169,7 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
         // console.log('super attack multiple used: ' + ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseDefenseOnSuper/100)))
         // console.log('DEF stat after super attack calculated: ' + saMultiplierCalc)
 
-        setResults(noLinkAllyPassiveBoostCalc)
+        setResults(raiseDefenseOnSuperCalc)
     }
 
   return (
@@ -334,6 +335,7 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
                 <input
                 value={baseDefenseStat} 
                 onChange={(e) => setBaseDefenseStat(e.target.value)}
+                onWheel={(e) => e.preventDefault()}
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
@@ -358,14 +360,14 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Item DEF % Increase: </p>
+                <p>Item + Support Memory DEF % Increase: </p>
                 <input
                 value={itemStats}
                 onChange={(e) => setItemStats(e.target.value)}
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Build Up Passive DEF % (actions for after super, attack, evasion, etc...): </p>
+                <p>DEF % gain after action (after super, attack, evasion, etc...):: </p>
                 <input
                 value={passiveSkillOnAttackOrSuperOrActionIncrease}
                 onChange={(e) => setPassiveSkillOnAttackOrSuperOrActionIncrease(e.target.value)}
@@ -379,7 +381,7 @@ export default function CalculatorDEF({ setShowCalculator, characterComparisonFo
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Non-linked ally passive skill raise DEF%:</p>
+                <p>Ally support raise DEF% (any ally who has a support passive skill):</p>
                 <input
                 value={noLinkAllyPassiveBoost}
                 onChange={(e) => setNoLinkAllyPassiveBoost(e.target.value)}
