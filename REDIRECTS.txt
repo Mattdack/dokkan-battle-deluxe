@@ -1,6 +1,0 @@
-/             /index.html 200
-/strategy     /index.html 200
-/help         /index.html 200
-
-
-make sure to add the last redirect and also to paste it into public folder before running 'npm run build'

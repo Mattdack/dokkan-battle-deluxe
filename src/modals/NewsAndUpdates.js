@@ -22,14 +22,25 @@ export default function NewsAndUpdatesModal( {open, onClose} ) {
           
           <div className="flex flex-col w-full bg-orange-200">
               <div className="pb-4">
-                <h1 className="font-header pt-2 text-xl card-sm:text-2xl lg:text-4xl font-light text-center underline underline-offset-8 decoration-2">Build Teams</h1>
-                <p className="px-4 pt-2 text-base border-r-4 card-sm:text-lg font-bold indent-10">The biggest reason we wanted to make this web app was to help players build effect teams that link well. Whether you are a beginer looking for a team that can complete an event or a long time veteran looking for an easy place to post teams on our strategy page, we believe this app can be used by everyone. A couple of use cases for the app include seeing what characters link well with others, saving teams to a deck to easily complete Ultimate Clash, and  The team building page can be accessed at <a className='text-blue-500' href={`https://dokkan.team/`}>dokkan.team</a> while the team strategies and team postings can be found at <a className='text-blue-500' href={`https://dokkan.team/strategy`}>dokkan.team/strategy</a>. We hope you enjoy this app. If there is any information missing or is incorrect, please fill out the information in this <a className='text-blue-500' href={'https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link'} target={'_blank'}>form</a>.</p>
+                <h1 className="font-header pt-2 text-xl card-sm:text-2xl lg:text-4xl font-light text-center underline underline-offset-8 decoration-2">The Best Dokkan Link Helper</h1>
+                <p className="px-4 pt-2 text-base border-r-4 card-sm:text-lg font-bold indent-10">The biggest reason we wanted to make this web app was to help players build effect teams that link well. Whether you are a beginer looking for a team that can complete an event or a long time veteran looking for an easy place to post teams on our strategy page, we believe this app can be used by everyone. A couple of use cases for the app include seeing what characters link well with others, saving teams to a deck (great feature to help those looking to make teams to complete Ultimate Clash), and seeing/posting teams on specific stages for others to see. The team building page can be accessed at <a className='text-blue-500' href={`https://dokkan.team/`}>dokkan.team</a> while the team strategies and team postings can be found at <a className='text-blue-500' href={`https://dokkan.team/strategy`}>dokkan.team/strategy</a>. We hope you enjoy this app. If there is any information missing or is incorrect, please fill out the information in this <a className='text-blue-500' href={'https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link'} target={'_blank'}>form</a>.</p>
               </div>
 
               <div className="pb-14">
                 <p className="font-header pt-2 text-xl card-sm:text-2xl lg:text-4xl font-light text-center underline underline-offset-8 decoration-2">Updates</p>
 
                 <div className="h-full">
+                  <div className="flex flex-wrap justify-around">
+                    <NewsDiv date={'MAY/21/2023'} information={<>
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold">TLDR:</p>
+                      <li className="px-2 card-sm:px-4 text-md card-sm:text-base font-bold">Beta DEF Calculator added</li>
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">After a long break I am here with a tiny update, the defense calculator! Sorry for those that came from reddit and didn't have access to it, only the attack calculator was up. Next will be calculating damage done/taken....if you know how to calculate an enemies attack, damage reduction, etc, please contact me on reddit or fill out the form below with your email or @. </p> 
+                      <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold indent-4">I have not played with the calculator on mobile a lot, so apologies if it is hard to use on a phone. As always, if you find any other errors, missing characters, or incorrect information please fill out this <a className='text-blue-500' href="https://docs.google.com/forms/d/e/1FAIpQLSdmglG-bsdZL1R41EYEsfrnN5tgJyK-CPfs1D4cNwNBpcxfxg/viewform?usp=sf_link" target={'_blank'}>Google Form</a>. We hope you continue to enjoy using this app!</p> 
+                      </>}
+                      key={'Update 5'}
+                    />
+                  </div> 
+
                 <div className="flex flex-wrap justify-around">
                     <NewsDiv date={'MAY/9/2023'} information={<>
                       <p className="px-2 card-sm:px-4 py-2 text-md card-sm:text-base font-bold">TLDR:</p>

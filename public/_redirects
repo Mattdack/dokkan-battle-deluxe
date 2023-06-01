@@ -1,8 +1,0 @@
-/             /index.html 200
-/strategy     /index.html 200
-/help         /index.html 200
-/api-connect  /index.html 200
-dokkanbattlehelper.com/*  https://dokkan.team/:splat  301!
-www.dokkanbattlehelper.com/*  https://dokkan.team/:splat  301!
-https://dokkanbattlehelper.com/*  https://dokkan.team/:splat  301!
-/*            /index.html 404

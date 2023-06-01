@@ -15,7 +15,8 @@ import CardDetails from "./CardDetails";
 import DeckSelection from "./DeckSelection.js";
 import Auth from "../util/auth";
 import NewsAndUpdatesModal from "../modals/NewsAndUpdates";
-import Calculator from "./Calculator";
+import CalculatorATK from "./CalculatorATK";
+import CalculatorDEF from "./CalculatorDEF";
 import Announcement from "../modals/Announcement";
 
 import { useSortedCharacters } from "../util/sorting";
@@ -27,7 +28,7 @@ const arrow = process.env.PUBLIC_URL + "/dokkanIcons/icons/right-arrow-icon.png"
 
 function AllComponents({ allCharacters, allCharactersLoading, characterDictionary }) {
 
-  const { showMiddleDiv, setShowMiddleDiv, showCalculator, setShowCalculator, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
+  const { showMiddleDiv, setShowMiddleDiv, showCalculator, setShowCalculator, showDEFCalculator, setShowDEFCalculator, grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck, allCharacterIDsInDeck, setAllCharacterIDsInDeck } = useContext(UserContext);
   const [selectedDeck, setSelectedDeck] = useState("");
 
   const [cardDetails, setCardDetails] = useState({
@@ -296,12 +297,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [announcementOpen, setAnnouncementOpen] = useState(false)
 
     const [openNewsModal, setOpenNewsModal] = useState(false)
-    const firstLogInShowNews = localStorage.getItem('announcement')
-    const timestamp = localStorage.getItem('announcementTimestamp')
+    const firstLogInShowNews = localStorage.getItem('announcement2')
+    const timestamp = localStorage.getItem('announcement2Timestamp')
     if (!firstLogInShowNews || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
-      localStorage.setItem('announcement', 'true');
-      localStorage.setItem('announcementTimestamp', Date.now());
+      localStorage.setItem('announcement2', 'true');
+      localStorage.setItem('announcement2Timestamp', Date.now());
     }
 
     function handleCharacterSelection(character){
@@ -654,14 +655,27 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
           className={`${showTeamWeb || (windowWidth > 900) ? '' : 'hidden'} flex flex-1 flex-col w-screen lg:w-[45%] bg-gradient-radial from-slate-500 via-slate-600 to-slate-900`}
         >
           {showCalculator ?
-          <Calculator 
-          showCalculator={showCalculator} 
-          setShowCalculator={setShowCalculator} 
-          characterComparisonForCalculator={characterComparisonForCalculator} 
-          setCharacterComparisonForCalculator={setCharacterComparisonForCalculator}
-          handleCharacterComparisonSelection={handleCharacterComparisonSelection}
-          setCardDetails={setCardDetails}
-          /> 
+          (showDEFCalculator ?
+            <CalculatorDEF 
+            showCalculator={showCalculator} 
+            setShowCalculator={setShowCalculator} 
+            setShowDEFCalculator={setShowDEFCalculator}
+            characterComparisonForCalculator={characterComparisonForCalculator} 
+            setCharacterComparisonForCalculator={setCharacterComparisonForCalculator}
+            handleCharacterComparisonSelection={handleCharacterComparisonSelection}
+            setCardDetails={setCardDetails}
+            />
+            :
+            <CalculatorATK 
+            showCalculator={showCalculator} 
+            setShowCalculator={setShowCalculator}
+            setShowDEFCalculator={setShowDEFCalculator}
+            characterComparisonForCalculator={characterComparisonForCalculator} 
+            setCharacterComparisonForCalculator={setCharacterComparisonForCalculator}
+            handleCharacterComparisonSelection={handleCharacterComparisonSelection}
+            setCardDetails={setCardDetails}
+            />
+          )
           :
           <SuggestToWeb
             selectedCharacter={cardDetails}

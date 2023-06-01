@@ -13,6 +13,10 @@
 
 # public build
 /public
+.robots.txt
+
+# netlify.toml for endpoints
+.netlify.toml
 
 # misc
 .DS_Store

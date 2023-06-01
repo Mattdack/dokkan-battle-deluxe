@@ -2,13 +2,18 @@ import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import CharacterCard from "../cards/CharacterCard";
 
 import * as linkSkillInfo from "../util/linkSkillInfo";
+import * as formatText from '../util/formatText'
 import superAttackMultipliers from '../util/superAttackMultipliers'
 import kiMultiplierPercentages from "../util/kiMultipliers";
+
+import { UserContext } from "../App";
 
 const closeIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/x-webcard-icon.png'
 const swapIcon = process.env.PUBLIC_URL + '/dokkanIcons/icons/swap-icon.png'
 
-export default function Calculator({ showCalculator, setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
+export default function CalculatorATK({ setShowCalculator, characterComparisonForCalculator, setCharacterComparisonForCalculator, handleCharacterComparisonSelection, setCardDetails}) {
+    const { turnOnEZAStats, setTurnOnEZAStats, showDEFCalculator, setShowDEFCalculator } = useContext(UserContext)
+
     const [baseAttackStat, setBaseAttackStat] = useState(0)
     const [leaderSkillIncrease, setLeaderSkillIncrease] = useState(0)
     const [subLeaderSkillIncrease, setSubLeaderSkillIncrease] = useState(0)
@@ -29,7 +34,6 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
     const [linkSkillsToFindSummation, setLinkSkillsToFindSummation] = useState([])
 
     const [levelOfLinks, setLevelOfLinks] = useState(1)
-    const [isCharacterEZA, setIsCharacterEZA] = useState(false)
 
     const characterToCompare1 = characterComparisonForCalculator[0]?.link_skill
     const characterToCompare2 = characterComparisonForCalculator[1]?.link_skill
@@ -47,6 +51,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
     const summationLevel1LinkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(level1LinkSkillsToFindSummation)
     const summationLevel10LinkSkillStatsBoosted = linkSkillInfo.linkSkillStatBoosts(level10LinkSkillsToFindSummation)
 
+    // set percentage gain by links to calculated stats when new characters are selected or level of links changes
     useEffect (() => {
         if(levelOfLinks === 1){
             setLinkSkillPercentage(summationLevel1LinkSkillStatsBoosted?.ATK?.reduce((accumulator, currentValue) => accumulator + currentValue, 0))
@@ -55,46 +60,98 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
         }
     },[characterComparisonForCalculator, levelOfLinks, setLevelOfLinks])
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log('start')
-        console.log('base ATK stat: ' + baseAttackStat)
-        let leaderSkillPlusBase = Math.round(baseAttackStat * (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
-        console.log('leader skill multiple used: ' + (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
-        console.log('ATK stat after leader skill added: ' + leaderSkillPlusBase)
-        console.log('')
+    //calculate SA multiplier based on super description....if LR or EZA then update stats
+    useEffect (() => {
+        let superAttackMultiplier = null
+        let attackGainedFromSuperAttack = null
+        if (characterComparisonForCalculator[0]?.rarity === 'UR'){
+            // calculate the attack gained from super
+            attackGainedFromSuperAttack = characterComparisonForCalculator[0]?.sa_description
+            // calculate SA mutliplier
+            if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
+                if (turnOnEZAStats){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('extreme damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mass damage')){
+                if (turnOnEZAStats){
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('supreme damage')){
+                if (turnOnEZAStats){
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
+                }
+            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('immense damage')){
+                if (turnOnEZAStats){
+                    superAttackMultiplier = superAttackMultipliers.immense[15]
+                } else {
+                    superAttackMultiplier = superAttackMultipliers.immense[10]
+                }
+            }
+        } else if (characterComparisonForCalculator[0]?.rarity === 'LR'){
+            if ((kiCollected >= 12 && kiCollected < 16)){
+                // calculate the attack gained from super
+                if(turnOnEZAStats){
+                    attackGainedFromSuperAttack = characterComparisonForCalculator[0]?.sa_description_eza
+                } else {
+                    attackGainedFromSuperAttack = characterComparisonForCalculator[0]?.sa_description
+                }
+                // calculate SA mutliplier
+                if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
+                } 
+                else if(characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mega-colossal damage')){
+                    if (turnOnEZAStats){
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
+                    }
+                } 
+                else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('colossal damage')){
+                    if (turnOnEZAStats){
+                        superAttackMultiplier = superAttackMultipliers.colossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.colossal[20]
+                    }
+                } 
+            } else if ((kiCollected >= 16 && kiCollected < 25)){
+                // calculate the attack gained from super
+                if(turnOnEZAStats){
+                    attackGainedFromSuperAttack = characterComparisonForCalculator[0]?.ultra_sa_description_eza
+                } else {
+                    attackGainedFromSuperAttack = characterComparisonForCalculator[0]?.ultra_sa_description
+                }
+                // calculate SA mutliplier
+                if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('destructive damage')){
+                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
+                }
+                else if(characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('mega-colossal damage')){
+                    if (turnOnEZAStats){
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
+                    }
+                }
+                else if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('colossal damage')){
+                    if (turnOnEZAStats){
+                        superAttackMultiplier = superAttackMultipliers.colossal[25]
+                    } else {
+                        superAttackMultiplier = superAttackMultipliers.colossal[20]
+                    }
+                }
+            }
+        }
+        // sets the SA Multiplier to what ever was found above
+        setSuperAttackMultiplier(superAttackMultiplier*100)
+        // setting the raise atk on super percentage to the found attack percentage in the exported function
+        setRaiseAttackOnSuper(formatText.findAttackPercentageGainAndTurns(attackGainedFromSuperAttack)?.attackPercentage)
 
-        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + (passiveSkillIncrease/100)))
-        console.log('passive skill multiple used: ' + (1 + (passiveSkillIncrease/100)))
-        console.log('ATK stat after passive skill calculated: ' + passiveCalc)
-        console.log('')
-
-        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)));
-        console.log('build up passive skill multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
-        console.log('ATK stat after build up passive calculated: ' + buildUpPassiveCalc)
-        console.log('')
-
-        let linkSkillCalc = Math.round(buildUpPassiveCalc * (1 + (linkSkillPercentage/100)))
-        console.log('linkskill multiple used: ' + (1 + (linkSkillPercentage/100)))
-        console.log('ATK stat after link skills calculated: ' + linkSkillCalc)
-        console.log('')
-
-        let noLinkAllyPassiveBoostCalc = Math.round(linkSkillCalc * (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('non-linked ally passive skill multiple: ' + (1 + (noLinkAllyPassiveBoost/100)))
-        console.log('ATK stat after allies active/passive calculated: ' + noLinkAllyPassiveBoostCalc)
-        console.log('')
-
-        let kiMultiplierCalc = Math.round(noLinkAllyPassiveBoostCalc * (kiMultiplier/100))
-        console.log('Ki multiple used: ' + (kiMultiplier/100))
-        console.log('ATK stat after Ki multiplier calculated: ' + kiMultiplierCalc)
-        console.log('')
-
-        let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
-        console.log('super attack multiple used: ' + ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
-        console.log('ATK stat after super attack calculated: ' + saMultiplierCalc)
-
-        setResults(saMultiplierCalc)
-    }
+    },[characterComparisonForCalculator[0], turnOnEZAStats, kiCollected])
 
     // on character selection set Ki multiplier for UR/LR....no character then set everything to 0
     useEffect (() => {
@@ -116,78 +173,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
         }
     },[characterComparisonForCalculator[0]])
 
-    //calculate SA multiplier based on super description....if LR or EZA then update stats
-    useEffect (() => {
-        let superAttackMultiplier = null
-        if (characterComparisonForCalculator[0]?.rarity === 'UR'){
-            if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
-                if (isCharacterEZA){
-                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[15]
-                } else {
-                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[10]
-                }
-            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('extreme damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mass damage')){
-                if (isCharacterEZA){
-                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
-                } else {
-                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
-                }
-            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('supreme damage')){
-                if (isCharacterEZA){
-                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[15]
-                } else {
-                    superAttackMultiplier = superAttackMultipliers.extremeAndMass[10]
-                }
-            } else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('immense damage')){
-                if (isCharacterEZA){
-                    superAttackMultiplier = superAttackMultipliers.immense[15]
-                } else {
-                    superAttackMultiplier = superAttackMultipliers.immense[10]
-                }
-            }
-        } else if (characterComparisonForCalculator[0]?.rarity === 'LR'){
-            if ((kiCollected >= 12 && kiCollected < 16)){
-                if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('destructive damage')){
-                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
-                } 
-                else if(characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('mega-colossal damage')){
-                    if (isCharacterEZA){
-                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
-                    } else {
-                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
-                    }
-                } 
-                else if (characterComparisonForCalculator[0]?.sa_description?.toLowerCase()?.includes('colossal damage')){
-                    if (isCharacterEZA){
-                        superAttackMultiplier = superAttackMultipliers.colossal[25]
-                    } else {
-                        superAttackMultiplier = superAttackMultipliers.colossal[20]
-                    }
-                } 
-            } else if ((kiCollected >= 16 && kiCollected < 25)){
-                if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('huge damage') || characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('destructive damage')){
-                    superAttackMultiplier = superAttackMultipliers.hugeAndDestructive[20]
-                }
-                else if(characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('mega-colossal damage')){
-                    if (isCharacterEZA){
-                        superAttackMultiplier = superAttackMultipliers.megaColossal[25]
-                    } else {
-                        superAttackMultiplier = superAttackMultipliers.megaColossal[20]
-                    }
-                }
-                else if (characterComparisonForCalculator[0]?.ultra_sa_description?.toLowerCase()?.includes('colossal damage')){
-                    if (isCharacterEZA){
-                        superAttackMultiplier = superAttackMultipliers.colossal[25]
-                    } else {
-                        superAttackMultiplier = superAttackMultipliers.colossal[20]
-                    }
-                }
-            }
-        }
-        setSuperAttackMultiplier(superAttackMultiplier*100)
-
-    },[characterComparisonForCalculator[0], isCharacterEZA, kiCollected])
-
+    // when Ki collected is changed, set the Ki Multiplier to value, then set KiMultiplier to value in KiPercentages 
     const handleKiCollected = (value) => {
         if(value > 24){
             setKiCollected(24)
@@ -200,14 +186,58 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
         }
     }
 
+    //handle form submit
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log('start')
+        console.log('base ATK stat: ' + baseAttackStat)
+        let leaderSkillPlusBase = Math.round(baseAttackStat * (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
+        console.log('leader skill multiple used: ' + (1 + (leaderSkillIncrease/100) + (subLeaderSkillIncrease/100)))
+        console.log('ATK stat after leader skill added: ' + leaderSkillPlusBase)
+        console.log('')
+
+        let passiveCalc = Math.round(leaderSkillPlusBase * (1 + ((passiveSkillIncrease/100)+(noLinkAllyPassiveBoost/100))))
+        console.log('passive skill multiple used: ' + (1 + ((passiveSkillIncrease/100)+(noLinkAllyPassiveBoost/100))))
+        console.log('ATK stat after passive skill calculated: ' + passiveCalc)
+        console.log('')
+
+        let buildUpPassiveCalc = Math.round(passiveCalc * (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)));
+        console.log('build up passive skill multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
+        console.log('ATK stat after build up passive calculated: ' + buildUpPassiveCalc)
+        console.log('')
+
+        let itemCalc = Math.round(buildUpPassiveCalc * (1 + (itemStats/100)))
+        console.log('item multiple used: ' + (1 + (passiveSkillOnAttackOrSuperOrActionIncrease/100)))
+        console.log('ATK stat after item calculated: ' + itemCalc)
+        console.log('')
+
+        let linkSkillCalc = Math.round(itemCalc * (1 + (linkSkillPercentage/100)))
+        console.log('linkskill multiple used: ' + (1 + (linkSkillPercentage/100)))
+        console.log('ATK stat after link skills calculated: ' + linkSkillCalc)
+        console.log('')
+
+        let kiMultiplierCalc = Math.round(linkSkillCalc * (kiMultiplier/100))
+        console.log('Ki multiple used: ' + (kiMultiplier/100))
+        console.log('ATK stat after Ki multiplier calculated: ' + kiMultiplierCalc)
+        console.log('')
+
+        let saMultiplierCalc = Math.round(kiMultiplierCalc * ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
+        console.log('attack before applying super attack multiplier: ' + kiMultiplierCalc)
+        console.log('super attack multiple used: ' + ((superAttackMultiplier/100) + (superAttackHiddenPotentialBoostLevel * .05) + (raiseAttackOnSuper/100)))
+        console.log('ATK stat after super attack calculated: ' + saMultiplierCalc)
+
+        setResults(saMultiplierCalc)
+    }
+
   return (
     <div className='flex flex-col flex-1 px-2 border-2 border-black from-slate-500 via-slate-600 to-slate-900 overflow-y-auto'>
-        <div 
-        onClick={() => setShowCalculator(false)}
-        className='flex py-2 px-4 mt-2 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300'>Show Team Web</div>
-
+        {/* {window.innerWidth < 900 &&
+            <div 
+            onClick={() => setShowCalculator(false)}
+            className='flex py-2 px-4 mt-2 w-full text-md font-bold justify-center items-center text-center cursor-pointer border-2 border-black bg-orange-200 hover:bg-orange-300'>Show Team Web</div>
+        } */}
         <div className="flex p-2 flex-col justify-between items-center relative">
-            <div className="flex flex-row flex-shrink-0 pr-2 justify-center items-center">
+            <div className="flex flex-row flex-shrink-0 justify-center items-center">
                 <div
                 className="relative cursor-pointer"
                 title='click for card details'
@@ -224,7 +254,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                     </>
                     }
                     {/* <div className="flex w-full h-full bg-black/[.9] border-2 border-black text-white font-bold justify-center items-center text-center absolute top-0 left-0 z-[99] hover:z-[101] opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg">Click for Card Details</div> */}
-                    <CharacterCard individualCharacter={characterComparisonForCalculator[0] || {id:0, rarity:null, type:null}} mobileSize={'80px'} desktopSize={'100px'} EZA={characterComparisonForCalculator[0] && isCharacterEZA}/>
+                    <CharacterCard individualCharacter={characterComparisonForCalculator[0] || {id:0, rarity:null, type:null}} mobileSize={'80px'} desktopSize={'100px'} EZA={characterComparisonForCalculator[0] && characterComparisonForCalculator[0]?.id !==0  && turnOnEZAStats}/>
                 </div>
                     
                 <img 
@@ -251,17 +281,19 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
             </div>
 
             <div 
-            className="flex flex-col w-[90%] h-full max-h-[200px] card-sm:max-h-full mt-2 border-2 border-black bg-white card-sm:justify-around z-40 overflow-y-auto">
-                <p className="font-header text-2xl underline decoration-2 underline-offset-4 self-center">Link Skills Shared</p>
-                {matchedLinkInfo && matchedLinkInfo.map(singleLink =>
-                <div>
-                    <span className="flex flex-row px-1 border-t-2 border-black">
-                        <p className="pr-4 font-bold">{singleLink.name}:</p>
-                        <p>{levelOfLinks === 1 ? singleLink.lvl1 : singleLink.lvl10}</p>
-                    </span>
+            className="flex flex-col w-[90%] h-full mt-2 border-2 border-black bg-white card-sm:justify-around z-40">
+                <p className="font-header text-2xl lg:text-lg xl:text-2xl underline decoration-2 underline-offset-4 self-center">Link Skills Shared</p>
+                <div className="h-1/2 lg:h-full lg:max-h-[225px] overflow-y-auto">
+                    {matchedLinkInfo && matchedLinkInfo.map(singleLink =>
+                    <div>
+                        <span className="flex flex-row px-1 border-t-2 border-black">
+                            <p className="pr-4 font-bold text-md lg:text-base">{singleLink.name}:</p>
+                            <p className="text-md lg:text-base">{levelOfLinks === 1 ? singleLink.lvl1 : singleLink.lvl10}</p>
+                        </span>
+                    </div>
+                    )}
                 </div>
-                )}
-                <div className="flex flex-row p-1 border-t-2 border-black justify-center items-center">
+                <div className="flex md:flex-row lg:flex-col <1000px>:flex-row p-1 border-t-2 border-black justify-center items-center">
                     <p className="pr-4 font-bold">Total:</p>
                     <p className="pr-2">ATK:</p>
                     <p className="pr-4 text-base"> 
@@ -292,14 +324,14 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
         </div>
 
-        <div className="flex flex-row h-fit justify-around items-center">
+        <div className="flex lg:flex-col <1000px>:flex-row h-fit justify-around items-center">
 
             <label className="flex justify-center items-center font-bold">
             EZA:
             <input
                 type="checkbox"
-                defaultChecked={isCharacterEZA}
-                onChange={() => setIsCharacterEZA(!isCharacterEZA)}
+                defaultChecked={turnOnEZAStats}
+                onChange={() => setTurnOnEZAStats(!turnOnEZAStats)}
                 className="ml-2 w-4 h-4"
             />
             </label>
@@ -346,6 +378,16 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
 
         <form className='flex flex-col pb-14 overflow-y-auto'>
             <div className='flex flex-col w-full p-2 border-2 border-black bg-orange-200'>
+                <div className="flex flex-row justify-around items-center">
+                    <p 
+                    className={`${showDEFCalculator === true && 'grayscale'} font-header lg:text-lg xl:text-2xl text-center cursor-pointer`}
+                    onClick={() => setShowDEFCalculator(false)}
+                    >Attack Calculation</p>
+                    <p 
+                    className={`${showDEFCalculator === false && 'grayscale'} font-header lg:text-lg xl:text-2xl text-center cursor-pointer`}
+                    onClick={() => setShowDEFCalculator(true)}
+                    >Defense Calculation</p>
+                </div>
                 <p>Enter the total base attack stat of the unit (including the additions from the hidden potential):</p>
                 <input
                 value={baseAttackStat} 
@@ -381,7 +423,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Build Up Passive ATK % (actions for after super, attack, evasion, etc...): </p>
+                <p>ATK % gain after action (after super, attack, evasion, etc...): </p>
                 <input
                 value={passiveSkillOnAttackOrSuperOrActionIncrease}
                 onChange={(e) => setPassiveSkillOnAttackOrSuperOrActionIncrease(e.target.value)}
@@ -395,7 +437,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>Non-linked ally passive skill raise ATK%:</p>
+                <p>Ally support raise ATK% (any ally who has a support passive skill):</p>
                 <input
                 value={noLinkAllyPassiveBoost}
                 onChange={(e) => setNoLinkAllyPassiveBoost(e.target.value)}
@@ -441,7 +483,7 @@ export default function Calculator({ showCalculator, setShowCalculator, characte
                 placeholder='0' 
                 type='number'
                 className='bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 inset-shadow-md focus:outline-none focus:shadow-outline-gray'/>
-                <p>ATK Boost % from Super Attack (raise super attack by ??? for ??? turns):</p>
+                <p>ATK Boost % from Super Attack (raise super attack/ATK by ??? for ??? turns):</p>
                 <input
                 value={raiseAttackOnSuper}
                 onChange={(e) => setRaiseAttackOnSuper(e.target.value)}

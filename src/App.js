@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
 import AllComponents from "./components/AllComponents"
 import AllStrategy from "./components-strategy/AllStrategy"
 import AllAPI from "./components-api/AllAPI"
@@ -42,7 +41,9 @@ const AllStrategiesWithData = withData(AllStrategy);
 
 function App() {
   const [showMiddleDiv, setShowMiddleDiv] = useState(true)
+  const [turnOnEZAStats, setTurnOnEZAStats] = useState(false)
   const [showCalculator, setShowCalculator] = useState(false)
+  const [showDEFCalculator, setShowDEFCalculator] = useState(false)
   const [showSummationLinks, setShowSummationLinks] = useState(true)
   const [grayCharactersInSelectedDeck, setGrayCharactersInSelectedDeck] = useState(false)
   const [allCharacterIDsInDeck, setAllCharacterIDsInDeck] = useState([])
@@ -57,8 +58,12 @@ function App() {
           <UserContext.Provider value={{ 
             showMiddleDiv: showMiddleDiv, 
             setShowMiddleDiv: setShowMiddleDiv,
+            turnOnEZAStats:turnOnEZAStats,
+            setTurnOnEZAStats: setTurnOnEZAStats,
             showCalculator: showCalculator,
             setShowCalculator: setShowCalculator,
+            showDEFCalculator: showDEFCalculator,
+            setShowDEFCalculator: setShowDEFCalculator,
             showSummationLinks: showSummationLinks,
             setShowSummationLinks: setShowSummationLinks,
             grayCharactersInSelectedDeck: grayCharactersInSelectedDeck,
