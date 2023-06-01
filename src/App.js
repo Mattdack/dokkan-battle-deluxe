@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
 import AllComponents from "./components/AllComponents"
 import AllStrategy from "./components-strategy/AllStrategy"
 import AllAPI from "./components-api/AllAPI"

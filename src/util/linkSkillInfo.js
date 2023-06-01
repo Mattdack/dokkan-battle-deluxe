@@ -620,15 +620,36 @@ export const linkSkillStatBoosts = (linkSkills) => {
       linkSkillBuffs.Ki.push(3);
     }
 
-    const match = linkSkillStat.match(/\+(\d+)%/)
-    if (!match) return;
-    const stat = parseInt(match[1]);
+    const regexATKPattern = [
+      /ATK & DEF (\+\d+)%/,
+      /ATK (\+\d+)%/
+    ];
+    const regexDEFPattern = [
+      /ATK & DEF (\+\d+)%/,
+      /DEF (\+\d+)%/
+    ]
     
-    if (linkSkillStat.includes("ATK")) {
-      linkSkillBuffs.ATK.push(stat);
+    let ATKPercentage, DEFPercentage;
+    let matchFound = false;
+    
+    for (const regex of regexATKPattern) {
+      const matches = linkSkillStat?.match(regex)
+      if (matches) {
+        ATKPercentage = parseInt(matches[1])
+        linkSkillBuffs.ATK.push(ATKPercentage);
+        matchFound = true;
+        break;
+      }
     }
-    if (linkSkillStat.includes("DEF")) {
-      linkSkillBuffs.DEF.push(stat);
+
+    for (const regex of regexDEFPattern) {
+      const matches = linkSkillStat?.match(regex)
+      if (matches) {
+        DEFPercentage = parseInt(matches[1])
+        linkSkillBuffs.DEF.push(DEFPercentage);
+        matchFound = true;
+        break;
+      }
     }
   });
   

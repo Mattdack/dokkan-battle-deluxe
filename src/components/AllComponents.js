@@ -297,12 +297,12 @@ function AllComponents({ allCharacters, allCharactersLoading, characterDictionar
     const [announcementOpen, setAnnouncementOpen] = useState(false)
 
     const [openNewsModal, setOpenNewsModal] = useState(false)
-    const firstLogInShowNews = localStorage.getItem('announcement')
-    const timestamp = localStorage.getItem('announcementTimestamp')
+    const firstLogInShowNews = localStorage.getItem('announcement2')
+    const timestamp = localStorage.getItem('announcement2Timestamp')
     if (!firstLogInShowNews || (timestamp && Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000)) {
       setOpenNewsModal(true);
-      localStorage.setItem('announcement', 'true');
-      localStorage.setItem('announcementTimestamp', Date.now());
+      localStorage.setItem('announcement2', 'true');
+      localStorage.setItem('announcement2Timestamp', Date.now());
     }
 
     function handleCharacterSelection(character){
